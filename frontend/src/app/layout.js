@@ -22,9 +22,29 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
 
-      <h1>hello world</h1>
+        <h1>Hello, World?!?!?!?!?!?!?</h1>
+
+        <button
+          className="p-2 mx-8 rounded border bg-gray-100 hover:bg-gray-200"
+          onclick="clickedFunction()"
+        >
+            Delete an item
+        </button>
+
+        {/* <Button
+          onPress={onPressLearnMore}
+          title="Learn More"
+          color="#841584"
+          accessibilityLabel="Learn more about this purple button"
+        /> */}
+
+
 
       </body>
     </html>
   );
+}
+
+function clickedFunction() {
+  console.log("button clicked");
 }
