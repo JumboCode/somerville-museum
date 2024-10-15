@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
 
-      <h1>hello world</h1>
+      <h1>lmao</h1>
 
       </body>
     </html>
