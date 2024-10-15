@@ -1,5 +1,8 @@
+import React from "react";
 import localFont from "next/font/local";
 import "./globals.css";
+import SelectItem from "../components/SelectItem";
+import DeleteItemButton from "../components/DeleteItemButton";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -24,27 +27,11 @@ export default function RootLayout({ children }) {
 
         <h1>Hello, World?!?!?!?!?!?!?</h1>
 
-        <button
-          className="p-2 mx-8 rounded border bg-gray-100 hover:bg-gray-200"
-          onclick="clickedFunction()"
-        >
-            Delete an item
-        </button>
-
-        {/* <Button
-          onPress={onPressLearnMore}
-          title="Learn More"
-          color="#841584"
-          accessibilityLabel="Learn more about this purple button"
-        /> */}
-
-
+        <div>
+            <DeleteItemButton />
+        </div>
 
       </body>
     </html>
   );
-}
-
-function clickedFunction() {
-  console.log("button clicked");
 }
