@@ -22,7 +22,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
 
-      <h1>Hello World</h1>
+      <form class="user-input">
+      <input class="submit-btn" type="submit" value="Submit Beans"></input>
+      </form>
 
       </body>
     </html>
