@@ -17,18 +17,14 @@ export const metadata = {
   description: "good luck team!!",
 };
 
-import AddTagButton from './components/AddTagButton'; // Ensure correct import
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <h1>Good morning Sommerville</h1>
-        <AddTagButton/> {/* Add the AddTagButton component */}
+
+      <h1>hello world</h1>
+
       </body>
     </html>
   );
 }
-
-
-

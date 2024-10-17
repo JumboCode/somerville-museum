@@ -2,5 +2,3 @@
 const nextConfig = {};
 
 export default nextConfig;
-
-// TEST
