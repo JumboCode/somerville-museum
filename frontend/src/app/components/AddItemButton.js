@@ -4,44 +4,6 @@
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 
-
-// export default function App( ) {
-
-//     const clickMe = () => {
-
-//     }
-
-//     return (
-//         <> 
-//             <h1>Buttons?</h1>  
-//             <div>
-//                 <button onClick={clickMe}>Add Item</button>
-//             </div>
-//         </>
-        
-//     )
-// }
-
-// const App = () => {
-//     const handleClick = () => {
-//         PopUp(); 
-
-//     }; 
-//     return (
-//         <>
-//             <h1> button </h1>
-//         <div>
-//             <button type="button" onClick={handleClick}>
-//                 Add Item
-//             </button>
-//         </div>
-//         </>
-        
-//     );
-//   };
-  
-// export default App;
-
 function popUp() {
     return (
         <>
