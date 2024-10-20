@@ -1,5 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
+import EditNoteButton from "@/components/EditNoteButton";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -17,15 +18,13 @@ export const metadata = {
   description: "good luck team!!",
 };
 
+//on click method
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-
-      <form class="user-input">
-      <input class="submit-btn" type="submit" value="Submit Beans"></input>
-      </form>
-
+        <EditNoteButton /> {/* Use the button component here */}
       </body>
     </html>
   );
