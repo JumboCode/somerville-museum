@@ -41,29 +41,32 @@ a {
   }
 }
 
+/* EditNoteButtonComponents*/
+
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.527);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .modal-content {
-  background-color: white;
+  background-color: rgb(44, 42, 42);
   padding: 20px;
   border-radius: 8px;
   text-align: center;
+  color: #000000; /* Change this value to the color you want for the text */
 }
 
 .modal-content button {
   margin-top: 20px;
   padding: 10px;
-  background-color: #0070f3;
+  background-color: #57616d;
   color: white;
   border: none;
   border-radius: 4px;
