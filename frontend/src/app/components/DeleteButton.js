@@ -1,31 +1,41 @@
-"use client";
+"use client"; // This file is client-side
+
+import { useState } from 'react';
 
 function DeleteButton() {
 
-    const handleClick = () => {
+    const [data, setData] = useState(null);
 
-        const response = await fetch('http://localhost:5432/query');
+  // Function to handle the button click
+    const handleClick = async () => {
+        try {
+        const response = await fetch('http://localhost:3000/query');
         if (!response.ok) {
-            throw new Error('Network response was not ok: ${response.statusText');
+            throw new Error('Network response was not ok');
         }
 
-    }
+        console.log("Delete button clicked");
 
-    return(
-        <>
+        const result = await response.json();
+        setData(result[0]); // Return the first element of the result
+        } catch (error) {
+        console.error('Error fetching data:', error);
+        }
+    };
 
-        <button className = "DeleteButton" onClick={handleClick}>
-            Click to delete!
-        </button>
-
-        <div className = "Data">
-            Data will go here!
-            {response[0].name}
+    return (
+        <> {/* React fragment to return multiple elements */}
+        <div className="tag">
+          <button className="DeleteButton" onClick={handleClick}>
+            Click me!
+          </button>
+          <div className="data">
+            {data ? JSON.stringify(data) : 'The data will go here'}
+          </div>
+          <p>More info</p>
         </div>
-
         </>
-
-    );
+      );
 }
 
 export default DeleteButton;
