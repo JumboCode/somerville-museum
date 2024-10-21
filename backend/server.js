@@ -2,7 +2,12 @@ require('dotenv').config();
 
 const express = require('express');
 const app = express();
+const cors = require('cors'); // Import CORS middleware
 
+// Use CORS middleware
+app.use(cors({
+    origin: 'http://localhost:3001' // Allow only your frontend domain
+}));
 
 const { neon } = require("@neondatabase/serverless");
 
@@ -51,6 +56,19 @@ app.get('/select', async (req, res) => {
   try {
       // Query the 'dummy_data' table
       const result = await sql`SELECT id FROM dummy_data WHERE name = ${req.query.name}`;
+      
+      // Send the result back to the client
+      res.json(result); // Send the result as a JSON response
+    } catch (error) {
+      console.error('Error querying the database:', error);
+      res.status(500).send('Internal Server Error'); // Send an error response
+    }
+});
+
+app.get('/delete', async (req, res) => {
+  try {
+      // Query the 'dummy_data' table
+      const result = await sql`DELETE FROM dummy_data WHERE id = ${req.query.id}`;
       
       // Send the result back to the client
       res.json(result); // Send the result as a JSON response

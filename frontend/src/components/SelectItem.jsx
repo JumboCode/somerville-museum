@@ -8,28 +8,27 @@ export default function SelectItemButton() {
         // Replace the alert with your actual functionality.
         let name = prompt("Please enter item name", "");
 
-
         let text;
         if (name == null || name == "") {
             text = "User cancelled the prompt.";
         } else {
             // Making a GET request to the 'select' endpoint 
-            fetch('http://localhost:3000/select?name=${encodeURIComponent(name)}', { 
+            fetch(`http://localhost:3000/select?name=${name}`, { 
                 method: 'GET',
-                }) 
+                })
                 // Handling the response by converting it to JSON 
                 .then(response => response.json()) 
-                // Handling the data obtained from the response 
+
+                // Print out the returned IDs from the response
                 .then(data => {
-                    console.log("Select item!!");
-                    // Handle the returned item ID from the response
-                    if (result.length > 0) {
-                        const itemId = result[0].id;
-                        alert(`The ID for the item '${itemName}' is: ${itemId}`);
+                    if (data.length > 0) {
+                        const itemIds = data.map(item => item.id).join(", ");
+                        alert(`Item ID(s): ${itemIds}`);
                     } else {
-                        alert(`Item '${itemName}' not found.`);
+                        alert("Item not found.");
                     }
                 })
+
                 .catch(error => {
                     console.error('Error fetching item:', error);
                     alert('Error fetching item. Please try again later.');
