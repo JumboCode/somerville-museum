@@ -18,12 +18,15 @@ export default function DeleteItemButton() {
             // Send the ID to the delete route
             .then(data => {
                 if (data.length > 0) {
-                    const itemIds = data.map(item => item.id).join(", ");
-                    for (let i = 0; i < itemIds.length; i++) {
-                        fetch(`http://localhost:3000/delete?id=${itemIds[i]}`, {
+                    // Map the data to get the item IDs
+                    const itemIds = data.map(item => item.id);
+
+                    // For each item ID, make a GET request to the 'delete' endpoint
+                    itemIds.forEach(id => {
+                        fetch(`http://localhost:3000/delete?id=${id}`, {
                             method: 'GET',
                         })
-                    }
+                    });
                 } else {
                     alert("Item(s) not found.");
                 }
