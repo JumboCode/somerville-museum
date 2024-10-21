@@ -1,8 +1,12 @@
 import localFont from "next/font/local";
 import "./globals.css";
+
+import './components/Popup.css'; // Ensure this is imported after Bootstrap CSS
+
 import DeleteButton from './components/DeleteButton.js';
 import AddTagButton from "./components/AddTagButton";
 import Popup from "./components/Popup";
+import SelectDropdown from "./components/SelectDropdown";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
