@@ -2,6 +2,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import DeleteButton from './components/DeleteButton.js';
 import AddTagButton from "./components/AddTagButton";
+import Popup from "./components/Popup";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,6 +28,7 @@ export default function RootLayout({ children }) {
       <h1>hello world</h1>
       <DeleteButton/>
       <AddTagButton/>
+      <Popup/>
 
       </body>
     </html>
