@@ -1,5 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
+import SortAlphaButton from "../components/SortAlphaButton.jsx"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -23,7 +24,7 @@ export default function RootLayout({ children }) {
       <body>
 
       <h1>hello world</h1>
-
+      <SortAlphaButton /> 
       </body>
     </html>
   );
