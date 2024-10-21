@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
         <h1>Hello, World?!?!?!?!?!?!?</h1>
 
         <div>
-          <SelectItem />
+            <SelectItem />
             <DeleteItemButton />
         </div>
 

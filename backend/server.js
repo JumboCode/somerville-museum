@@ -47,3 +47,15 @@ app.get('/query', async (req, res) => {
       }
 });
 
+app.get('/select', async (req, res) => {
+  try {
+      // Query the 'dummy_data' table
+      const result = await sql`SELECT id FROM dummy_data WHERE name = ${req.query.name}`;
+      
+      // Send the result back to the client
+      res.json(result); // Send the result as a JSON response
+    } catch (error) {
+      console.error('Error querying the database:', error);
+      res.status(500).send('Internal Server Error'); // Send an error response
+    }
+});
