@@ -1,5 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
+import DeleteButton from './components/DeleteButton.js';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
       <body>
 
       <h1>hello world</h1>
+      <DeleteButton/>
 
       </body>
     </html>
