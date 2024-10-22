@@ -10,9 +10,6 @@ function PopUp({ handleAdd, close }) {
   const [note, setnote] = useState('');
   const [id, setId] = useState(' ');
 
-  // const hardName = 'angie'; 
-  //   const hardDesc = 'she might be a dev';
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     await handleAdd(id, itemName, note); 
@@ -62,21 +59,6 @@ function PopUp({ handleAdd, close }) {
 export default function MyForm() {
   const [items, setItems] = useState([]);
   
-  // const singleInsert = async (hardName, hardDesc) => { 
-  //   try {
-
-  //     const result = await sql`INSERT INTO dummy_data (id, name, note) 
-  //       VALUES (999, 'angie', 'might be a dev')
-  //       RETURNING *;`; 
-
-  //       console.log("item inserted with name =", result[0].name);
-  //       return result[0]; // Return the inserted item
-  //     }
-    
-  //    catch (err) {
-  //       console.error('Error inserting into database:', err);
-  //     }
-  //   };
   
   const handleAdd = async (id, name, note) => {
     console.log(id, name, note);
@@ -94,11 +76,7 @@ export default function MyForm() {
       },
       body: body
   });
-    // if (newItem) {
-    //   setItems((items) => [...items, newItem]); // Add the newly added item
-    //   console.log('Item Added:', newItem);
-    // }
-      
+
   };
       
 
@@ -121,16 +99,6 @@ export default function MyForm() {
         )}
       </Popup>
 
-      {/* <div>
-        <h3>Items:</h3>
-        <ul>
-          {items.map((item, index) => (
-            <li key={index}>
-              {item.name}: {item.note}
-            </li>
-          ))}
-        </ul>
-      </div> */}
     </div>
   );
 }
