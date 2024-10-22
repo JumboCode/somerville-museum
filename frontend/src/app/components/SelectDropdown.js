@@ -2,17 +2,16 @@
 
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
-import { v4 as uuidv4 } from 'uuid';
 
-const SelectDropdown = () => {
+const SelectDropdown = ({ onKeywordsChange }) => {
     const [select_Courses, set_Select_Courses] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const courses = [
-        { id: 1, label: 'GATE' },
-        { id: 2, label: 'DSA' },
-        { id: 3, label: 'JAVA' },
-        { id: 4, label: 'C++' },
-        { id: 5, label: 'Web Development' }
+        { id: 1, label: 'cat' },
+        { id: 2, label: 'dog' },
+        { id: 3, label: 'apple' },
+        { id: 4, label: 'banana' },
+        { id: 5, label: 'Holden and Zach' }
     ];
     const dropDownShow = () => {
         setIsOpen(!isOpen);
@@ -21,20 +20,21 @@ const SelectDropdown = () => {
         const courseId = parseInt(event.target.value);
         const choosen = event.target.checked;
 
+        let updatedCourses;
         if (choosen) {
-            set_Select_Courses([...select_Courses, courseId]);
+            updatedCourses = [...select_Courses, courses.find(course => course.id === courseId).label];
         } else {
-            set_Select_Courses(select_Courses.filter((id) => id !== courseId));
+            updatedCourses = select_Courses.filter((label) => label !== courses.find(course => course.id === courseId).label);
         }
+        set_Select_Courses(updatedCourses);
+        onKeywordsChange(updatedCourses); // Pass the updated keywords to the parent component
     };
-
-    const uniqueId = uuidv4(); // Generate a unique ID
 
     return (
         <div>
             <h1>Select Courses</h1>
-            <button onClick={dropDownShow} aria-describedby={`popup-${uniqueId}`}>
-                {isOpen ? 'Hide Courses' : 'Show Courses'}
+            <button onClick={dropDownShow}>
+                {isOpen ? 'Hide Tags' : 'Show Tags'}
             </button>
             {isOpen && (
                 <Form>
@@ -46,7 +46,6 @@ const SelectDropdown = () => {
                             label={course.label}
                             value={course.id}
                             onChange={courseChange}
-                            aria-describedby={`popup-${uniqueId}`}
                         />
                     ))}
                 </Form>
