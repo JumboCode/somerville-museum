@@ -8,9 +8,8 @@ export default function SelectItemButton() {
         // Replace the alert with your actual functionality.
         let name = prompt("Please enter item name", "");
 
-        let text;
         if (name == null || name == "") {
-            text = "User cancelled the prompt.";
+            alert("User cancelled the prompt.");
         } else {
             // Making a GET request to the 'select' endpoint 
             fetch(`http://localhost:3000/select?name=${name}`, { 
