@@ -1,18 +1,20 @@
-require('dotenv').config(); // Load environment variables from .env file
-
 const express = require('express');
 const cors = require('cors');
 const { neon } = require("@neondatabase/serverless");
+require('dotenv').config(); // Load environment variables from .env file
 
 const app = express();
 const port = process.env.PORT || 5432;
 
-const sql = neon(process.env.DATABASE_URL); // Ensure DATABASE_URL is set in your environment
+const sql = neon(process.env.DATABASE_URL); // Ensure DATABASE_URL is set in the environment
 
 // Enable CORS with specific origin
 app.use(cors({
     origin: 'http://localhost:3000' // Replace with your frontend's URL
 }));
+
+// Middleware to parse JSON bodies
+app.use(express.json());
 
 const requestHandler = async (req, res) => {
   try {
@@ -70,6 +72,40 @@ app.get('/item/:id', async (req, res) => {
       res.json(result[0]); // Send the item as a JSON response
   } catch (error) {
       console.error('Error querying the database:', error);
+      res.status(500).send('Internal Server Error'); // Send an error response
+  }
+});
+
+app.put('/item/:id/tags', async (req, res) => {
+  const { id } = req.params;
+  const { tags } = req.body; // THIS LINE HERE I NEED TO SOMEHOW DEBUG
+
+  // Debugging statement
+  console.log('req.body:', req.body);
+
+  // Ensure tags is an array
+  if (!Array.isArray(tags)) {
+    return res.status(400).send('Tags must be an array');
+  }
+
+  try {
+      // Convert the array to a string
+    const tagsString = `{${tags.join(',')}}`;
+
+    // Update the 'tag' attribute of the item with the specified ID
+    const result = await sql`
+      UPDATE dummy_data
+      SET tags = ${tagsString}
+      WHERE id = ${id}
+      RETURNING *;
+    `;
+      if (result.length === 0) {
+          return res.status(404).send('Item not found');
+      }
+      // Send the updated item back to the client
+      res.json(result[0]); // Send the updated item as a JSON response
+  } catch (error) {
+      console.error('Error updating tags:', error);
       res.status(500).send('Internal Server Error'); // Send an error response
   }
 });

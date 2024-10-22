@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
 
-      <h1>hello world</h1>
+      <h1>Martyna and Will's Buttons!</h1>
       <DeleteButton/>
       <AddTagButton/>
       <Popup/>
