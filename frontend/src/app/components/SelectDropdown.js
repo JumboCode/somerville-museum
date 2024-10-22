@@ -1,52 +1,100 @@
 "use client"; // This file is client-side
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 
-const SelectDropdown = ({ onKeywordsChange }) => {
-    const [select_Courses, set_Select_Courses] = useState([]);
+const SelectDropdown = ({ selectedTags, onKeywordsChange }) => {
+    const [select_tags, set_Select_tags] = useState(selectedTags || []);
     const [isOpen, setIsOpen] = useState(false);
-    const courses = [
-        { id: 1, label: 'cat' },
-        { id: 2, label: 'dog' },
-        { id: 3, label: 'apple' },
-        { id: 4, label: 'banana' },
-        { id: 5, label: 'Holden and Zach' }
+    const tags = [
+        { id: 1, label: 'XS' },
+        { id: 2, label: 'S' },
+        { id: 3, label: 'M' },
+        { id: 4, label: 'L' },
+        { id: 5, label: 'XL' },
+        { id: 6, label: 'Red' },
+        { id: 7, label: 'Blue' },
+        { id: 8, label: 'Yellow' },
+        { id: 9, label: 'Old' },
+        { id: 10, label: 'New' },
     ];
+
+    useEffect(() => {
+        set_Select_tags(selectedTags || []);
+    }, [selectedTags]);
+
     const dropDownShow = () => {
         setIsOpen(!isOpen);
     };
-    const courseChange = (event) => {
-        const courseId = parseInt(event.target.value);
-        const choosen = event.target.checked;
 
-        let updatedCourses;
+    const tagChange = (event) => {
+        const tagId = parseInt(event.target.value);
+        const choosen = event.target.checked;
+        const tagLabel = tags.find(tag => tag.id === tagId).label;
+
+        let updatedtags;
         if (choosen) {
-            updatedCourses = [...select_Courses, courses.find(course => course.id === courseId).label];
+            updatedtags = [...select_tags, tagLabel];
         } else {
-            updatedCourses = select_Courses.filter((label) => label !== courses.find(course => course.id === courseId).label);
+            updatedtags = select_tags.filter((label) => label !== tagLabel);
         }
-        set_Select_Courses(updatedCourses);
-        onKeywordsChange(updatedCourses); // Pass the updated keywords to the parent component
+        set_Select_tags(updatedtags);
+        onKeywordsChange(updatedtags); // Pass the updated keywords to the parent component
     };
 
     return (
         <div>
-            <h1>Select Courses</h1>
+            <br></br>
+            <h1>Select Tags</h1>
             <button onClick={dropDownShow}>
                 {isOpen ? 'Hide Tags' : 'Show Tags'}
             </button>
             {isOpen && (
                 <Form>
-                    {courses.map((course) => (
+                    {tags.map((tag) => (
+                        <div key={tag.id} style={{ display: 'flex', alignItems: 'center' }}>
                         <Form.Check
-                            key={course.id}
                             type="checkbox"
-                            id={`course-${course.id}`}
-                            label={course.label}
-                            value={course.id}
-                            onChange={courseChange}
+                            id={`tag-${tag.id}`}
+                            label={` ${tag.label}`}
+                            value={tag.id}
+                            checked={select_tags.includes(tag.label)}
+                            onChange={tagChange}
                         />
+                        {tag.id === 6 && (
+                            <div
+                                style={{
+                                    width: "10px",
+                                    height: "10px",
+                                    borderRadius: "10px",
+                                    backgroundColor: "#FF0000",
+                                    marginLeft: "10px"
+                                }}
+                            ></div>
+                        )}
+                        {tag.id === 7 && (
+                            <div
+                                style={{
+                                    width: "10px",
+                                    height: "10px",
+                                    borderRadius: "10px",
+                                    backgroundColor: "#0023FF",
+                                    marginLeft: "10px"
+                                }}
+                            ></div>
+                        )}
+                        {tag.id === 8 && (
+                            <div
+                                style={{
+                                    width: "10px",
+                                    height: "10px",
+                                    borderRadius: "10px",
+                                    backgroundColor: "#F7FF00",
+                                    marginLeft: "10px"
+                                }}
+                            ></div>
+                        )}
+                    </div>
                     ))}
                 </Form>
             )}

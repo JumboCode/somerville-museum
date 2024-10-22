@@ -3,10 +3,7 @@ import "./globals.css";
 
 import './components/Popup.css'; // Ensure this is imported after Bootstrap CSS
 
-import DeleteButton from './components/DeleteButton.js';
-import AddTagButton from "./components/AddTagButton";
 import Popup from "./components/Popup";
-import SelectDropdown from "./components/SelectDropdown";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,9 +26,8 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
 
-      <h1>Martyna and Will's Buttons!</h1>
-      <DeleteButton/>
-      <AddTagButton/>
+      <h1>Martyna and Will's Button!</h1>
+      <br></br>
       <Popup/>
 
       </body>

@@ -78,7 +78,7 @@ app.get('/item/:id', async (req, res) => {
 
 app.put('/item/:id/tags', async (req, res) => {
   const { id } = req.params;
-  const { tags } = req.body; // THIS LINE HERE I NEED TO SOMEHOW DEBUG
+  const { tags } = req.body;
 
   // Debugging statement
   console.log('req.body:', req.body);
@@ -89,7 +89,7 @@ app.put('/item/:id/tags', async (req, res) => {
   }
 
   try {
-      // Convert the array to a string
+    // Convert the array to a string
     const tagsString = `{${tags.join(',')}}`;
 
     // Update the 'tag' attribute of the item with the specified ID
@@ -99,14 +99,14 @@ app.put('/item/:id/tags', async (req, res) => {
       WHERE id = ${id}
       RETURNING *;
     `;
-      if (result.length === 0) {
-          return res.status(404).send('Item not found');
-      }
-      // Send the updated item back to the client
-      res.json(result[0]); // Send the updated item as a JSON response
+    if (result.length === 0) {
+      return res.status(404).send('Item not found');
+    }
+    // Send the updated item back to the client
+    res.json(result[0]); // Send the updated item as a JSON response
   } catch (error) {
-      console.error('Error updating tags:', error);
-      res.status(500).send('Internal Server Error'); // Send an error response
+    console.error('Error updating tags:', error);
+    res.status(500).send('Internal Server Error'); // Send an error response
   }
 });
 

@@ -1,9 +1,9 @@
 "use client"; // This file is client-side
 // Filename: App.js
 import React, { useState } from 'react';
-import SelectDropdown from './SelectDropdown';
 import Popup from 'reactjs-popup';
-import 'reactjs-popup/dist/index.css'; // Ensure this is imported
+import 'reactjs-popup/dist/index.css';
+import SelectDropdown from './SelectDropdown'; // Ensure this is the correct path
 import { v4 as uuidv4 } from 'uuid';
 
 export default function PopupGfg() {
@@ -23,7 +23,12 @@ export default function PopupGfg() {
                 throw new Error(`Network response was not ok: ${response.statusText}`);
             }
             const result = await response.json();
+    
+            // Ensure result.tags is a string before calling split
+            const tags = typeof result.tags === 'string' ? result.tags.split(',') : [];
+    
             setItemData(result);
+            setKeywords(tags);
             setError(null);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -31,14 +36,14 @@ export default function PopupGfg() {
             setItemData(null);
         }
     };
-
+    
     const handleKeywordsChange = (newKeywords) => {
         setKeywords(newKeywords);
     };
-
+    
     const handleUpdateTags = async () => {
         if (!itemData) return;
-
+    
         try {
             const response = await fetch(`http://localhost:5432/item/${itemData.id}/tags`, {
                 method: 'PUT',
@@ -67,10 +72,11 @@ export default function PopupGfg() {
                 {close => (
                     <div className='modal'>
                         <div className='content'>
-                            <h2>Search for some data!</h2>
+                            <h2>Search</h2>
+                            <br></br>
                             <input
                                 type="text"
-                                placeholder="Enter ID"
+                                placeholder="Enter Data ID#"
                                 value={inputValue}
                                 onChange={handleInputChange}
                                 className="form-control"
@@ -82,15 +88,20 @@ export default function PopupGfg() {
                                 <div className="item-data">
                                     <p>ID: {itemData.id}</p>
                                     <p>Name: {itemData.name}</p>
-                                    <p>Tags: {itemData.tags}</p>
-                                    {/* Add more fields as needed */}
-                                    <SelectDropdown onKeywordsChange={handleKeywordsChange} />
-                                    <button onClick={handleUpdateTags} className="btn btn-success">Update Tags</button>
+                                    <p>Tags: {itemData.tags.join(', ')}</p>
+                                    <SelectDropdown selectedTags={keywords} onKeywordsChange={handleKeywordsChange} />
+                                    <button 
+                                        onClick={handleUpdateTags} 
+                                        className="btn btn-success"
+                                        style={{ backgroundColor: '#FF8EE7', color: '#000000', borderRadius: '5px', padding: '5px' }}
+                                    >
+                                        Update Tags
+                                    </button>
                                 </div>
                             )}
                         </div>
                         <div>
-                            <button onClick={() => close()} className="btn btn-secondary">Close modal</button>
+                            <button onClick={() => close()} className="btn btn-secondary">Close Popup</button>
                         </div>
                     </div>
                 )}
