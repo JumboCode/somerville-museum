@@ -3,6 +3,9 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 
+const cors = require('cors');
+app.use(cors()); // Enable CORS for all routes
+app.use(express.json())
 
 const { neon } = require("@neondatabase/serverless");
 
@@ -47,3 +50,23 @@ app.get('/query', async (req, res) => {
       }
 });
 
+app.post('/additembutton', async (req, res) => {
+  console.log(req.body);
+  const { id, name, note } = req.body;
+
+  try {
+      // Query the 'dummy_data' table
+      await sql`INSERT INTO dummy_data (id, name, note)
+        VALUES (${id}, ${name}, ${note})`;
+      
+      // Send the result back to the client
+      res.json({ message: 'Item added successfully!'}); // Send the result as a JSON response
+    } catch (error) {
+      
+      console.error('Error querying the database:', error);
+      res.status(500).send('Internal Server Error'); // Send an error response
+    }
+});
+
+//ADD ID AND PUSH CHANGES 
+//AWAIT WILL BE DIFFERENT THAN THE /QUERY
