@@ -22,7 +22,7 @@ const requestHandler = async (req, res) => {
   };
 
 //initialize the port we are listening on and let us ping it
-const port = 3000; // You can use environment variables for port configuration
+const port = 3001; // You can use environment variables for port configuration
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
