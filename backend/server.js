@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
 
 app.get('/version', requestHandler);
 
-app.post('localhost://3001/query', async (req, res) => {
+app.post('http://localhost:3001/query', async (req, res) => {
     const { id } = req.body; // Get ID from the request body
     console.log('Received ID:', id); // Print the received ID
     try {
