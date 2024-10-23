@@ -25,7 +25,7 @@ app.post('/query', async (req, res) => {
 
 // Other routes...
 
-const port = process.env.PGPORT || 3001;
+const port = 3001;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
