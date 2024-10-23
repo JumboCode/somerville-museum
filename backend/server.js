@@ -47,3 +47,21 @@ app.get('/query', async (req, res) => {
       }
 });
 
+// New route to get an item by ID
+app.get('/items/:id', async (req, res) => {
+    const itemId = req.params.id; // Get the ID from the URL
+    try {
+        // Query the 'dummy_data' table for the item with the specified ID
+        const result = await sql`SELECT * FROM dummy_data WHERE id = ${itemId}`;
+        
+        if (result.length === 0) {
+            return res.status(404).json({ message: `No item found with ID ${itemId}` });
+        }
+
+        res.json(result[0]); // Return the first matching item as JSON
+    } catch (error) {
+        console.error('Error querying the database:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
