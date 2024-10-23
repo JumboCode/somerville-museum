@@ -22,7 +22,7 @@ export default function EditNoteButton() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(`http://localhost:5432/items/${inputValue}`);
+      const response = await fetch(`http://localhost:3001/items/${inputValue}`);
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
