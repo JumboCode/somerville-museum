@@ -1,4 +1,4 @@
-"use client";
+"use client"; // This tells Next.js to treat this file as a Client Component
 
 import { useState } from "react";
 
@@ -42,19 +42,11 @@ export default function EditNoteButton() {
         }
 
         setInputValue(""); // Clear input
-        setIsOpen(false); // Close modal after submitting
     };
 
     return (
         <>
-            <form className="user-input">
-                <input
-                    className="submit-btn"
-                    type="submit"
-                    value="Edit Note"
-                    onClick={handleClick}
-                />
-            </form>
+            <button onClick={handleClick}>Edit Note</button>
 
             {isOpen && (
                 <div className="modal-overlay">
