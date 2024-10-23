@@ -34,33 +34,16 @@ app.get('/', (req, res) => {
 
 app.get('/version', requestHandler);
 
-app.get('/query', async (req, res) => {
+app.post('/query', async (req, res) => {
+    const { id } = req.body; // Get ID from the request body
     try {
-        // Query the 'dummy_data' table
-        const result = await sql`SELECT * FROM dummy_data`;
-        
-        // Send the result back to the client
-        res.json(result); // Send the result as a JSON response
-      } catch (error) {
-        console.error('Error querying the database:', error);
-        res.status(500).send('Internal Server Error'); // Send an error response
-      }
-});
-
-app.get('/items/:id', async (req, res) => {
-    const itemId = req.params.id; // Get the item ID from the URL parameters
-  
-    try {
-      // Query the database for the item with the given ID
-      const result = await sql`SELECT * FROM dummy_data WHERE id = ${itemId}`;
-      
-      if (result.length === 0) {
-        return res.status(404).json({ message: "Item not found." });
-      }
-  
-      res.json(result[0]); // Send the found item back to the client as JSON
+        const result = await sql`SELECT * FROM dummy_data WHERE id = ${id}`;
+        if (result.length === 0) {
+            return res.status(404).json({ message: 'Item not found' });
+        }
+        res.json(result[0]); // Send the first item back as JSON
     } catch (error) {
-      console.error('Error querying the database:', error);
-      res.status(500).send('Internal Server Error');
+        console.error('Error querying the database:', error);
+        res.status(500).send('Internal Server Error');
     }
-  });
+});
