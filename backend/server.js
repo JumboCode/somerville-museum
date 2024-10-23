@@ -22,7 +22,7 @@ const requestHandler = async (req, res) => {
   };
 
 //initialize the port we are listening on and let us ping it
-const port = process.env.PGPORT || 3000; // You can use environment variables for port configuration
+const port = 3000; // You can use environment variables for port configuration
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
@@ -47,21 +47,20 @@ app.get('/query', async (req, res) => {
       }
 });
 
-// New route to get an item by ID
 app.get('/items/:id', async (req, res) => {
-    const itemId = req.params.id; // Get the ID from the URL
+    const itemId = req.params.id; // Get the item ID from the URL parameters
+  
     try {
-        // Query the 'dummy_data' table for the item with the specified ID
-        const result = await sql`SELECT * FROM dummy_data WHERE id = ${itemId}`;
-        
-        if (result.length === 0) {
-            return res.status(404).json({ message: `No item found with ID ${itemId}` });
-        }
-
-        res.json(result[0]); // Return the first matching item as JSON
+      // Query the database for the item with the given ID
+      const result = await sql`SELECT * FROM dummy_data WHERE id = ${itemId}`;
+      
+      if (result.length === 0) {
+        return res.status(404).json({ message: "Item not found." });
+      }
+  
+      res.json(result[0]); // Send the found item back to the client as JSON
     } catch (error) {
-        console.error('Error querying the database:', error);
-        res.status(500).send('Internal Server Error');
+      console.error('Error querying the database:', error);
+      res.status(500).send('Internal Server Error');
     }
-});
-
+  });
