@@ -34,10 +34,16 @@ app.get('/', (req, res) => {
 
 app.get('/version', requestHandler);
 
-app.post('/query', async (req, res) => {
+app.post('localhost://3001/query', async (req, res) => {
     const { id } = req.body; // Get ID from the request body
+    console.log('Received ID:', id); // Print the received ID
     try {
+        console.log('Executing SQL query to find item with ID:', id);
+
         const result = await sql`SELECT * FROM dummy_data WHERE id = ${id}`;
+
+        console.log('Query Result:', result); // Print the result of the query
+
         if (result.length === 0) {
             return res.status(404).json({ message: 'Item not found' });
         }
