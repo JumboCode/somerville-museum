@@ -97,7 +97,7 @@ export default function EditNoteButton() {
                                 <h3>Item Information</h3>
                                 <p><strong>ID:</strong> {itemInfo.id}</p>
                                 <p><strong>Name:</strong> {itemInfo.name}</p>
-                                <p><strong>Tags:</strong> {itemInfo.tags.join(', ')}</p>
+                                <p><strong>Tags:</strong> {itemInfo.tags ? itemInfo.tags.join(', ') : 'No tags available'}</p> {/* Handle null case */}
                                 <p><strong>Note:</strong> 
                                     <input
                                         type="text"
