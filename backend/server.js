@@ -9,6 +9,18 @@ const sql = neon(process.env.DATABASE_URL);
 app.use(cors()); // Enable CORS for all requests
 app.use(express.json()); // To parse JSON request bodies
 
+// Example route for version check (if needed)
+const requestHandler = async (req, res) => {
+    try {
+        const result = await sql`SELECT version()`;
+        const { version } = result[0];
+        res.status(200).send(version);
+    } catch (error) {
+        console.error('Error querying the Neon database:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
 // Route to query an item by ID
 app.post('/query', async (req, res) => {
     const { id } = req.body; // Get ID from the request body
@@ -44,18 +56,6 @@ app.put('/update-note', async (req, res) => {
 app.get('/', (req, res) => {
     res.send('<h1>Welcome to backend server!</h1>');
 });
-
-// Example route for version check (if needed)
-const requestHandler = async (req, res) => {
-    try {
-        const result = await sql`SELECT version()`;
-        const { version } = result[0];
-        res.status(200).send(version);
-    } catch (error) {
-        console.error('Error querying the Neon database:', error);
-        res.status(500).send('Internal Server Error');
-    }
-};
 
 // Version route
 app.get('/version', requestHandler);
