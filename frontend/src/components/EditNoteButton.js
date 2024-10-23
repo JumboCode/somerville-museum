@@ -4,6 +4,7 @@ import { useState } from "react";
 
 export default function EditNoteButton() {
   const [isOpen, setIsOpen] = useState(false);
+  const [note, setNote] = useState(""); // State to store the note input
 
   const handleClick = (event) => {
     event.preventDefault();
@@ -12,6 +13,17 @@ export default function EditNoteButton() {
 
   const closeModal = () => {
     setIsOpen(false); // Close the modal when clicking the close button
+  };
+
+  const handleInputChange = (event) => {
+    setNote(event.target.value); // Update the note as the user types
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("Submitted note:", note); // Log the note when submitted
+    setIsOpen(false); // Close modal after submission
+    // You can add further logic here to send the note to the backend or handle it further
   };
 
   return (
@@ -29,8 +41,17 @@ export default function EditNoteButton() {
         <div className="modal-overlay">
           <div className="modal-content">
             <h2>Edit your note</h2>
-            <p>You can add or modify the note content here.</p>
-            <button onClick={closeModal}>Close</button>
+            <form onSubmit={handleSubmit}>
+              <textarea
+                value={note}
+                onChange={handleInputChange}
+                placeholder="Type your note here..."
+                required
+              />
+              <br />
+              <button type="submit">Submit Note</button>
+              <button type="button" onClick={closeModal}>Close</button>
+            </form>
           </div>
         </div>
       )}
