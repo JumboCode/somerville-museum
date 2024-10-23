@@ -4,19 +4,25 @@ import { useState } from "react";
 
 export default function EditNoteButton() {
     const [isOpen, setIsOpen] = useState(false);
-    const [inputValue, setInputValue] = useState("");
+    const [inputValue, setInputValue] = useState(""); // For item ID
+    const [noteValue, setNoteValue] = useState(""); // For the new note
     const [itemInfo, setItemInfo] = useState(null);
     const [error, setError] = useState(null);
 
     const handleTogglePopup = () => {
         setIsOpen(!isOpen);
         setInputValue("");
+        setNoteValue("");
         setItemInfo(null);
         setError(null);
     };
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
+    };
+
+    const handleNoteChange = (event) => {
+        setNoteValue(event.target.value);
     };
 
     const handleSubmit = async (event) => {
@@ -37,7 +43,31 @@ export default function EditNoteButton() {
 
             const data = await response.json();
             setItemInfo(data);
+            setNoteValue(data.note); // Pre-fill the note input with the current note
             setError(null);
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+
+    const handleUpdateNote = async (event) => {
+        event.preventDefault();
+
+        try {
+            const response = await fetch("http://localhost:3001/update-note", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ id: itemInfo.id, note: noteValue }), // Update the note
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update note');
+            }
+
+            alert('Note updated successfully!'); // Notify the user of success
+            handleTogglePopup(); // Close the popup after successful update
         } catch (error) {
             setError(error.message);
         }
@@ -68,7 +98,14 @@ export default function EditNoteButton() {
                                 <p><strong>ID:</strong> {itemInfo.id}</p>
                                 <p><strong>Name:</strong> {itemInfo.name}</p>
                                 <p><strong>Tags:</strong> {itemInfo.tags.join(', ')}</p>
-                                <p><strong>Note:</strong> {itemInfo.note}</p>
+                                <p><strong>Note:</strong> 
+                                    <input
+                                        type="text"
+                                        value={noteValue}
+                                        onChange={handleNoteChange}
+                                    />
+                                </p>
+                                <button onClick={handleUpdateNote}>Update Note</button>
                             </div>
                         )}
                         {error && <p style={{ color: 'red' }}>{error}</p>}
