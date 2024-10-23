@@ -29,7 +29,7 @@ export default function EditNoteButton() {
         event.preventDefault();
         
         try {
-            const response = await fetch("http://localhost:3001/query", {
+            const response = await fetch("http://localhost:5432/query", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -54,7 +54,7 @@ export default function EditNoteButton() {
         event.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:3001/update-note", {
+            const response = await fetch("http://localhost:5432/update-note", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
