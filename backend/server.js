@@ -36,6 +36,17 @@ app.post('/query', async (req, res) => {
     }
 });
 
+// Route to get all items in the dummy_data table (GET)
+app.get('/query', async (req, res) => {
+    try {
+        const result = await sql`SELECT * FROM dummy_data`;
+        res.json(result); // Send the result as a JSON response
+    } catch (error) {
+        console.error('Error querying the database:', error);
+        res.status(500).send('Internal Server Error'); // Send an error response
+    }
+});
+
 // Route to update the note
 app.put('/update-note', async (req, res) => {
     const { id, note } = req.body; // Get ID and new note from the request body
