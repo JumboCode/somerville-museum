@@ -1,12 +1,8 @@
 
 require('dotenv').config();
-
 const express = require('express');
-
 const cors = require('cors');
 const { neon } = require("@neondatabase/serverless");
-require('dotenv').config(); // Load environment variables from .env file
-
 const app = express();
 const sql = neon(process.env.DATABASE_URL);
 const port = process.env.PORT || 5432;
@@ -14,10 +10,6 @@ const port = process.env.PORT || 5432;
 app.use(cors()); // Enable CORS for all requests
 app.use(express.json()); // To parse JSON request bodies
 
-// Enable CORS with specific origin
-app.use(cors({
-    origin: 'http://localhost:3000' // Replace with your frontend's URL
-}));
 
 // Example route for version check (if needed)
 const requestHandler = async (req, res) => {
@@ -115,6 +107,19 @@ app.get('/item/:id', async (req, res) => {
   }
 });
 
+app.post('/additembutton', async (req, res) => {
+  console.log(req.body);
+  const { id, name, note } = req.body;
+
+  try {
+      // Query the 'dummy_data' table
+      await sql`INSERT INTO dummy_data (id, name, note)
+        VALUES (${id}, ${name}, ${note})`;
+      
+      // Send the result back to the client
+      res.json({ message: 'Item added successfully!'}); // Send the result as a JSON response
+    } catch (error) {
+      
 app.get('/sortalphaquery', async (req, res) => {
   try {
       // Query the 'dummy_data' table
