@@ -1,6 +1,10 @@
+
 import localFont from "next/font/local";
 import "./globals.css";
 import SortAlphaButton from "../components/SortAlphaButton.jsx"
+import EditNoteButton from "@/components/EditNoteButton";
+import './components/Popup.css'; // Ensure this is imported after Bootstrap CSS
+import Popup from "./components/Popup";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -18,14 +22,16 @@ export const metadata = {
   description: "good luck team!!",
 };
 
+//on click method
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-
-      <h1>hello world</h1>
       <SortAlphaButton /> 
+      <EditNoteButton /> {/* Use the button component here */}
+      <Popup/>
       </body>
     </html>
   );
-}
+  }
