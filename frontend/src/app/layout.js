@@ -1,6 +1,9 @@
+
 import localFont from "next/font/local";
 import "./globals.css";
 import EditNoteButton from "@/components/EditNoteButton";
+import './components/Popup.css'; // Ensure this is imported after Bootstrap CSS
+import Popup from "./components/Popup";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,7 +28,10 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <EditNoteButton /> {/* Use the button component here */}
+      <h1>Martyna and Will's Button!</h1>
+      <br></br>
+      <Popup/>
       </body>
     </html>
   );
-}
+  }
