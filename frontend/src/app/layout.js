@@ -1,6 +1,7 @@
 
 import localFont from "next/font/local";
 import "./globals.css";
+import SortAlphaButton from "../components/SortAlphaButton.jsx"
 import EditNoteButton from "@/components/EditNoteButton";
 import './components/Popup.css'; // Ensure this is imported after Bootstrap CSS
 import Popup from "./components/Popup";
@@ -27,8 +28,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <EditNoteButton /> {/* Use the button component here */}
-      <br></br>
+      <SortAlphaButton /> 
+      <EditNoteButton /> {/* Use the button component here */}
       <Popup/>
       </body>
     </html>
