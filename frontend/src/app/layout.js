@@ -1,3 +1,4 @@
+
 import localFont from "next/font/local";
 import "./globals.css";
 import './components/Popup.css'; // Ensure this is imported after Bootstrap CSS
@@ -31,4 +32,3 @@ export default function RootLayout({ children }) {
       </body>
     </html>
   );
-}
