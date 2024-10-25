@@ -1,3 +1,4 @@
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -39,4 +40,64 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+/* EditNoteButtonComponents*/
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.527);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: rgb(44, 42, 42);
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  color: #000000; /* Change this value to the color you want for the text */
+}
+
+.modal-content button {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #57616d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/*----------martyna css----------*/
+
+.custom-button {
+  background-color: green;
+  color: white;
+  margin-top: 10px;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.custom-button:hover {
+  background-color: darkgreen;
+}
+
+.tag{
+  background-color: #f1f1f1;
+  color: #333;
+  border: 2px solid #333;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-right: 5px;
+  margin-top: 5px;
+  display: inline-block;
 }
