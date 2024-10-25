@@ -29,7 +29,7 @@ export default function EditNoteButton() {
         event.preventDefault();
         
         try {
-            const response = await fetch("http://localhost:5432/query", {
+            const response = await fetch("http://localhost:5432/queryone", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

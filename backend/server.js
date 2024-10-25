@@ -31,8 +31,8 @@ const requestHandler = async (req, res) => {
     }
 };
 
-// Route to query an item by ID
-app.post('/query', async (req, res) => {
+// // Route to query an item by ID
+app.post('/queryone', async (req, res) => {
     const { id } = req.body; // Get ID from the request body
     try {
         const result = await sql`SELECT * FROM dummy_data WHERE id = ${id}`;
@@ -45,6 +45,21 @@ app.post('/query', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
+// Endpoint to query all data
+app.get('/query', async (req, res) => {
+  try {
+      // Query the 'dummy_data' table
+      const result = await sql`SELECT * FROM dummy_data`;
+      
+      // Send the result back to the client
+      res.json(result); // Send the result as a JSON response
+  } catch (error) {
+      console.error('Error querying the database:', error);
+      res.status(500).send('Internal Server Error'); // Send an error response
+  }
+});
+
 
 // Example endpoint
 app.get('/version', requestHandler);
