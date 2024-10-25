@@ -68,7 +68,7 @@ export default function PopupGfg() {
 
     return (
         <div>
-            <Popup trigger={<button className="btn btn-primary"> Click to open popup </button>} modal nested>
+            <Popup trigger={<button className="btn btn-primary"> Add/delete tags </button>} modal nested>
                 {close => (
                     <div className='modal'>
                         <div className='content'>
