@@ -1,5 +1,8 @@
+
 import localFont from "next/font/local";
 import "./globals.css";
+import './components/Popup.css'; // Ensure this is imported after Bootstrap CSS
+import Popup from "./components/Popup";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -17,18 +20,15 @@ export const metadata = {
   description: "good luck team!!",
 };
 
-import AddTagButton from './components/AddTagButton'; // Ensure correct import
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <h1>Good morning Sommerville</h1>
-        <AddTagButton/> {/* Add the AddTagButton component */}
+
+      <h1>Martyna and Will's Button!</h1>
+      <br></br>
+      <Popup/>
+
       </body>
     </html>
   );
-}
-
-
-
