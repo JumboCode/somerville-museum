@@ -1,6 +1,7 @@
 
 import localFont from "next/font/local";
 import "./globals.css";
+import EditNoteButton from "@/components/EditNoteButton";
 import './components/Popup.css'; // Ensure this is imported after Bootstrap CSS
 import Popup from "./components/Popup";
 
@@ -20,15 +21,16 @@ export const metadata = {
   description: "good luck team!!",
 };
 
+//on click method
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-
+        <EditNoteButton /> {/* Use the button component here */}
       <h1>Martyna and Will's Button!</h1>
       <br></br>
       <Popup/>
-
       </body>
     </html>
   );
