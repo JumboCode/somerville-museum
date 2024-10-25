@@ -6,6 +6,8 @@ import EditNoteButton from "@/components/EditNoteButton";
 import './components/Popup.css'; // Ensure this is imported after Bootstrap CSS
 import Popup from "./components/Popup";
 
+import AddItemButton from "./components/AddItemButton";
+
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -28,10 +30,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
+      <AddItemButton/>
       <SortAlphaButton /> 
       <EditNoteButton /> {/* Use the button component here */}
       <Popup/>
       </body>
     </html>
   );
-  }
+ }
