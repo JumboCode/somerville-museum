@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
       <body>
       <AddItemButton/>
       <SortAlphaButton /> 
-      <EditNoteButton /> {/* Use the button component here */}
+      <EditNoteButton />
       <Popup/>
       </body>
     </html>
