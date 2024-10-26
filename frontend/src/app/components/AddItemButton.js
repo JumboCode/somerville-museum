@@ -69,7 +69,7 @@ export default function MyForm() {
   });
   console.log('Body:', body); // Should log the body with hardcoded values
 
-  const response = await fetch('http://localhost:3000/additembutton', {
+  const response = await fetch('http://localhost:5432/additembutton', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
