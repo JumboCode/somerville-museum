@@ -9,12 +9,12 @@ function AddTagButton() {
   // Function to handle the button click
   const handleClick = async () => {
     try {
-      const response = await fetch('http://localhost:5432/first-item');
+      const response = await fetch('http://localhost:5432/query');
       if (!response.ok) {
         throw new Error(`Network response was not ok: ${response.statusText}`);
       }
 
-      console.log("clicked");
+      console.log("clicked"); 
 
       const result = await response.json();
       setData(result); // Set the data
