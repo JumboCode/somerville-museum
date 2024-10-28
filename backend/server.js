@@ -118,7 +118,8 @@ app.post('/additembutton', async (req, res) => {
       
       // Send the result back to the client
       res.json({ message: 'Item added successfully!'}); // Send the result as a JSON response
-    } catch (error) {
+    } catch (error) {}
+});
       
 app.get('/sortalphaquery', async (req, res) => {
   try {
