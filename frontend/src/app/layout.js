@@ -7,6 +7,7 @@ import './components/Popup.css'; // Ensure this is imported after Bootstrap CSS
 import Popup from "./components/Popup";
 import SelectItemButton from "./components/SelectItem";
 import DeleteItemButton from "./components/DeleteItemButton";
+import ExpandedEntry from "./components/ExpandedEntry";
 
 import AddItemButton from "./components/AddItemButton";
 
@@ -38,6 +39,7 @@ export default function RootLayout({ children }) {
       <SortAlphaButton /> 
       <EditNoteButton />
       <Popup/>
+      <ExpandedEntry/>
       </body>
     </html>
   );
