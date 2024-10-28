@@ -23,6 +23,33 @@ const requestHandler = async (req, res) => {
     }
 };
 
+app.get('/select', async (req, res) => {
+  try {
+      console.log("reached me!");
+      // Query the 'dummy_data' table
+      const result = await sql`SELECT id FROM dummy_data WHERE name = ${req.query.name}`;
+
+       // Send the result back to the client
+       res.json(result); // Send the result as a JSON response
+     } catch (error) {
+       console.error('Error querying the database:', error);
+       res.status(500).send('Internal Server Error'); // Send an error response
+     }
+ });
+
+ app.get('/delete', async (req, res) => {
+   try {
+       // Query the 'dummy_data' table
+       const result = await sql`DELETE FROM dummy_data WHERE id = ${req.query.id}`;
+
+       // Send the result back to the client
+       res.json(result); // Send the result as a JSON response
+     } catch (error) {
+       console.error('Error querying the database:', error);
+       res.status(500).send('Internal Server Error'); // Send an error response
+     }
+  });
+
 // // Route to query an item by ID
 app.post('/queryone', async (req, res) => {
     const { id } = req.body; // Get ID from the request body
@@ -119,6 +146,10 @@ app.post('/additembutton', async (req, res) => {
       // Send the result back to the client
       res.json({ message: 'Item added successfully!'}); // Send the result as a JSON response
     } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error'); // Send an error response
+    }
+});
       
 app.get('/sortalphaquery', async (req, res) => {
   try {
