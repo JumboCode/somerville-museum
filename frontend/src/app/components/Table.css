@@ -1,0 +1,47 @@
+/* Filename - Table.css*/
+/* to do db */
+.Table {
+    width: 50vw;
+    height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: antiquewhite;
+}
+
+thead {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    background-color: grey;
+
+}
+
+.Searchbar {
+    
+}
+
+.Header {
+    width: 100%;
+    height: 20vh;
+    background-color: aqua;
+}
+
+tbody {
+    background-color: grey;
+}
+
+table {
+    border: 2px solid forestgreen;
+    width: 50vw;
+    height: 30vh;
+}
+
+th {
+    border-bottom: 1px solid black;
+}
+
+td {
+    text-align: center;
+}

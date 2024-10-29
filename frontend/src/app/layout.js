@@ -1,4 +1,5 @@
 
+import Table from "./components/Table";
 import localFont from "next/font/local";
 import "./globals.css";
 import SortAlphaButton from "../components/SortAlphaButton.jsx";
@@ -32,6 +33,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
+      <Table/>
       <SelectItemButton />
       <DeleteItemButton />
       <AddItemButton/>
