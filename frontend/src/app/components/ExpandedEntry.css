@@ -124,3 +124,40 @@
 .button-return {
     background: #888787;
 }
+
+/* Responsive styles */
+@media (max-width: 600px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .image-placeholder {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .item-details {
+        width: 100%;
+    }
+
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .tag {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .borrower-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .borrower-info p {
+        margin-bottom: 10px;
+    }
+}
