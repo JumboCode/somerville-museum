@@ -18,7 +18,8 @@ export default function Table() {
                         <input type="text" placeholder="Search..."/>
                     </div>
                         <div className='buttons'> 
-                            
+                            <button className='addBtn'>ADD</button>
+                            <button className='brwBtn'>BORROW</button>
                         </div>
                     </div>
             </div>
