@@ -1,13 +1,14 @@
 /* Filename - Table.css*/
 /* to do db */
 .Table {
-    width: 50vw;
-    height: 50vh;
+    width: 80vw;
+    height: 80vh;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    background-color: antiquewhite;
+    background-color: rgb(152, 139, 122);
+    padding: 10vw 10vh;
 }
 
 thead {
@@ -15,7 +16,6 @@ thead {
     align-items: center;
     align-content: center;
     background-color: grey;
-
 }
 
 .Searchbar {
@@ -34,8 +34,9 @@ tbody {
 
 table {
     border: 2px solid forestgreen;
-    width: 50vw;
-    height: 30vh;
+    width: 60vw;
+    height: 60vh;
+    margin: 10vw 10vh;
 }
 
 th {

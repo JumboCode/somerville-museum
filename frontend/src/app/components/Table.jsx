@@ -22,6 +22,11 @@ export default function Table() {
                         </div>
                     </div>
             </div>
+            <div className="Itembars">
+                <input type="checkbox" className="checkbox" />
+                <img class="artwork__image" src="/" />
+                <button className="dropdown"></button>
+            </div>
             <table>
                 <thead>
                     <tr>
