@@ -25,9 +25,9 @@ const requestHandler = async (req, res) => {
 
 app.get('/select', async (req, res) => {
   try {
-      console.log("reached me!");
+    console.log(req.query);
       // Query the 'dummy_data' table
-      const result = await sql`SELECT id FROM dummy_data WHERE name = ${req.query.name}`;
+      const result = await sql`SELECT * FROM dummy_data WHERE id = ${req.query.id}`;
 
        // Send the result back to the client
        res.json(result); // Send the result as a JSON response
