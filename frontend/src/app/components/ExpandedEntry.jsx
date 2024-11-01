@@ -9,9 +9,11 @@ import 'reactjs-popup/dist/index.css';
 import './ExpandedEntry.css';
 
 function ExpandedEntry({ itemData, onClose }) {
+    const [error, setError] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [newName, setNewName] = useState('');
     const [newNote, setNewNote] = useState('');
+    const [newID, setNewID] = useState('');
     const [showSaveButton, setShowSaveButton] = useState(false);
     const [showDiscardButton, setShowDiscardButton] = useState(false);
     const [showEditButton, setShowEditButton] = useState(true);
@@ -21,6 +23,7 @@ function ExpandedEntry({ itemData, onClose }) {
         if (itemData) {
             setNewName(itemData.name);
             setNewNote(itemData.note || '');
+            setNewID(itemData.id);
         }
     }, [itemData]);
 
@@ -36,6 +39,7 @@ function ExpandedEntry({ itemData, onClose }) {
         // Save the new name and note (you can add your API call here)
         itemData.name = newName;
         itemData.note = newNote;
+        itemData.id = newID;
         setIsEditing(false);
         setShowSaveButton(false);
         setShowDiscardButton(false);
@@ -47,11 +51,94 @@ function ExpandedEntry({ itemData, onClose }) {
         // Discard the changes and reset the state
         setNewName(itemData.name);
         setNewNote(itemData.note || '');
+        setNewID(itemData.id);
         setIsEditing(false);
         setShowSaveButton(false);
         setShowDiscardButton(false);
         setShowEditButton(true);
         setShowReturnButton(true);
+    };
+
+    const handleUpdateNote = async (event) => {
+        try {
+            const response = await fetch("http://localhost:5432/update-note", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ id: itemData.id, note: newNote }), // Update the note
+            });
+            if (!response.ok) {
+                throw new Error('Failed to update note');
+            }
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+    
+    const handleUpdateName = async (event) => {
+        try {
+            const response = await fetch("http://localhost:5432/update-name", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ id: itemData.id, name: newName }), // Update the note
+            });
+            if (!response.ok) {
+                throw new Error('Failed to update name');
+            }
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+    
+    const handleUpdateID = async (event) => {
+        try {
+            const response = await fetch("http://localhost:5432/update-id", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id: itemData.id,
+                    newId: newID,
+                    data: {
+                        name: itemData.name,
+                        note: itemData.note,
+                        tags: itemData.tags
+                    }
+                }),
+            });
+    
+            const data = await response.json();
+    
+            if (!response.ok) {
+                throw new Error(data.message || 'Failed to update ID');
+            }
+
+            // Update UI based on whether it was an update or creation
+            if (response.status === 201) {
+                // Handle new record creation
+                console.log('New record created');
+                // You might want to refresh your data or update state
+                // refreshData();
+            } else {
+                // Handle successful update
+                console.log('ID updated successfully');
+                // updateLocalState();
+            }
+            
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+
+    const handleSaveAndUpdate = () => {
+        onSave();
+        handleUpdateNote();
+        handleUpdateName();
+        handleUpdateID();
     };
 
     return (
@@ -78,22 +165,35 @@ function ExpandedEntry({ itemData, onClose }) {
                                                     type="text"
                                                     value={newName}
                                                     onChange={(e) => setNewName(e.target.value)}
-                                                    className="form-control"
+                                                    className="content form-control"
+                                                />
+                                                <input
+                                                    type="text"
+                                                    value={newID}
+                                                    onChange={(e) => setNewID(e.target.value)}
+                                                    className="content form-control"
+                                                    placeholder="Enter new ID"
                                                 />
                                             </div>
                                         ) : (
                                             <div>
-                                                <h2 className="item-title">{itemData.name}</h2>                                                                                
+                                                <h2 className="item-title">{itemData.name}</h2> 
+                                                <div className="item-id">ID: {itemData.id}</div>                                                                               
                                             </div>
                                         )}
-                                        <div className="item-id">ID: {itemData.id}</div>
+                                        
                                         <div className="status">Status: N/A</div>
+
+                                        
+
                                         <div className="tags">
                                             Tags:
                                             {itemData.tags && itemData.tags.map((tag, index) => (
                                                 <div key={index} className="tag">{tag}</div>
                                             ))}
                                         </div>
+
+
                                     </div>
                                 
                             </div>
@@ -114,7 +214,7 @@ function ExpandedEntry({ itemData, onClose }) {
                                 <textarea
                                     value={newNote}
                                     onChange={(e) => setNewNote(e.target.value)}
-                                    className="form-control"
+                                    className="content form-control"
                                     placeholder="Enter note"
                                 />
                             </div>
@@ -126,7 +226,7 @@ function ExpandedEntry({ itemData, onClose }) {
 
                         <div className="actions">
                             {showEditButton && <button onClick={onEdit} className="button button-edit">🖊️ Edit</button>}
-                            {showSaveButton && <button onClick={onSave} className="button button-save">✔️ Save Changes</button>}
+                            {showSaveButton && <button onClick={handleSaveAndUpdate} className="button button-save">✔️ Save Changes</button>}
                             {showDiscardButton && <button onClick={onDiscard} className="button button-edit">❌ Discard Changes</button>}
                             {showReturnButton && <button onClick={onClose} className="button button-return">Return</button>}
                         </div>
