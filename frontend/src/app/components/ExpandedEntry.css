@@ -104,6 +104,12 @@
     margin: 20px 0;
 }
 
+.form-control {
+    width: 100%;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 .actions {
     display: flex;
     justify-content: flex-end;
