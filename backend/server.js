@@ -117,39 +117,29 @@ app.put('/update-name', async (req, res) => {
 
 // Route to update the id
 app.put('/update-id', async (req, res) => {
-  const { id, newId, data } = req.body;  // Added data parameter for new record creation
-
+  const { id, newId, data } = req.body; // Get ID and new ID from the request body
   try {
     // Check if the current ID exists or if it's the same as the new ID
-    const existingId = await sql`SELECT id FROM dummy_data WHERE id = ${newId}`;
+    const currentRecord = await sql`SELECT * FROM dummy_data WHERE id = ${newId}`;
 
+    //implement later
     let isSame = false;
     if (id === newId) {
       isSame = true;
     }
-    //implement later
 
-    if (existingId.length > 0) {
-      return res.status(404).json({ message: 'New ID already exists' });
-    } else {
-      if (existingId.length === 0) {
+    // If the current ID exists and is different from the new ID, create a new record
+    if (currentRecord.length === 0) {
+      const result1 = await sql`INSERT INTO dummy_data (id, name, tags, note) VALUES (${newId}, ${data.name}, ${data.tags}, ${data.note})`;
+      const result = await sql`UPDATE dummy_data SET id = ${newId} WHERE id = ${id}`;
 
-        await sql`INSERT INTO dummy_data (id, name, tags, note) VALUES (${newId}, ${data.name}, ${data.tags}, ${data.note})`;
-        const result = await sql`UPDATE dummy_data SET id = ${newId} WHERE id = ${id}`;
-
-        return res.status(200).json({ 
-          message: 'ID updated successfully', 
-          newId,
-          updatedRecord: result 
-        });
+      if (result.rowCount === 0 || result1.rowCount === 0) {
+        return res.status(404).json({ message: 'Item not found' });
       }
     }
   } catch (error) {
-      console.error('Error updating/creating record:', error);
-      return res.status(500).json({ 
-          message: 'Internal Server Error', 
-          error: error.message 
-      });
+    console.error('Error querying the database:', error);
+    res.status(500).send('Internal Server Error'); // Send an error response
   }
 });
 

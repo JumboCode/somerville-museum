@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import './ExpandedEntry.css';
+import SelectDropdown from './SelectDropdown';
 
 function ExpandedEntry({ itemData, onClose }) {
     const [error, setError] = useState(null);
@@ -14,6 +15,7 @@ function ExpandedEntry({ itemData, onClose }) {
     const [newName, setNewName] = useState('');
     const [newNote, setNewNote] = useState('');
     const [newID, setNewID] = useState('');
+    const [keywords, setKeywords] = useState([]);
     const [showSaveButton, setShowSaveButton] = useState(false);
     const [showDiscardButton, setShowDiscardButton] = useState(false);
     const [showEditButton, setShowEditButton] = useState(true);
@@ -92,6 +94,33 @@ function ExpandedEntry({ itemData, onClose }) {
             setError(error.message);
         }
     };
+
+    const handleKeywordsChange = (newKeywords) => {
+        setKeywords(newKeywords);
+    };
+    
+    const handleUpdateTags = async () => {
+        if (!itemData) return;
+    
+        try {
+            const response = await fetch(`http://localhost:5432/item/${itemData.id}/tags`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ tags: keywords }),
+            });
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.statusText}`);
+            }
+            const result = await response.json();
+            setItemData(result);
+            setError(null);
+        } catch (error) {
+            console.error('Error updating tags:', error);
+            setError(error.message);
+        }
+    };
     
     const handleUpdateID = async (event) => {
         try {
@@ -138,8 +167,10 @@ function ExpandedEntry({ itemData, onClose }) {
         onSave();
         handleUpdateNote();
         handleUpdateName();
-        handleUpdateID();
+        handleUpdateTags();
+        // handleUpdateID();
     };
+
 
     return (
         <Popup open={true} onClose={onClose} modal nested>
@@ -157,45 +188,41 @@ function ExpandedEntry({ itemData, onClose }) {
                             </div>
                             
                             <div className="item-details">
-
-                                    <div>
-                                        {isEditing ? (
-                                            <div>
-                                                <input
-                                                    type="text"
-                                                    value={newName}
-                                                    onChange={(e) => setNewName(e.target.value)}
-                                                    className="content form-control"
-                                                />
-                                                <input
-                                                    type="text"
-                                                    value={newID}
-                                                    onChange={(e) => setNewID(e.target.value)}
-                                                    className="content form-control"
-                                                    placeholder="Enter new ID"
-                                                />
-                                            </div>
-                                        ) : (
-                                            <div>
-                                                <h2 className="item-title">{itemData.name}</h2> 
-                                                <div className="item-id">ID: {itemData.id}</div>                                                                               
-                                            </div>
-                                        )}
-                                        
-                                        <div className="status">Status: N/A</div>
-
-                                        
-
-                                        <div className="tags">
+                                <div>
+                                    {isEditing ? (
+                                        <div>
+                                            <p>Name: </p>
+                                            <input
+                                                type="text"
+                                                value={newName}
+                                                onChange={(e) => setNewName(e.target.value)}
+                                                className="content form-control"
+                                            />
+                                            <p>ID: </p>
+                                            <input
+                                                type="text"
+                                                value={newID}
+                                                onChange={(e) => setNewID(e.target.value)}
+                                                className="content form-control"
+                                                placeholder="Enter new ID"
+                                            />
+                                            <p>Tags: </p>
+                                            <SelectDropdown selectedTags={keywords} onKeywordsChange={handleKeywordsChange} />
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <h2 className="item-title">{itemData.name}</h2> 
+                                            <div className="item-id">ID: {itemData.id}</div>   
+                                            <div className="status">Status: N/A</div>     
+                                            <div className="tags">
                                             Tags:
                                             {itemData.tags && itemData.tags.map((tag, index) => (
                                                 <div key={index} className="tag">{tag}</div>
                                             ))}
+                                        </div>                                                                       
                                         </div>
-
-
-                                    </div>
-                                
+                                    )}
+                                </div>
                             </div>
                             
                             {/*ADD THE DATA CALLS TO FILL IN THIS FORMATION LATER WHEN THESE ATTRIBUTES EXIST-->*/}
@@ -211,6 +238,7 @@ function ExpandedEntry({ itemData, onClose }) {
                         
                         {isEditing ? (
                             <div>
+                                <p>Note: </p>
                                 <textarea
                                     value={newNote}
                                     onChange={(e) => setNewNote(e.target.value)}
@@ -220,7 +248,7 @@ function ExpandedEntry({ itemData, onClose }) {
                             </div>
                         ) : (
                             <div className="content">
-                                <p>Note: {itemData.note}</p>
+                                <p>{itemData.note}</p>
                             </div>
                         )}
 
