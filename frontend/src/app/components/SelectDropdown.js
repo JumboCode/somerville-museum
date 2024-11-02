@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
+import './SelectDropdown.css';
 
 const SelectDropdown = ({ selectedTags, onKeywordsChange }) => {
     const [select_tags, set_Select_tags] = useState(selectedTags || []);
-    const [isOpen, setIsOpen] = useState(false);
+
     const tags = [
         { id: 1, label: 'XS' },
         { id: 2, label: 'S' },
@@ -23,9 +24,6 @@ const SelectDropdown = ({ selectedTags, onKeywordsChange }) => {
         set_Select_tags(selectedTags || []);
     }, [selectedTags]);
 
-    const dropDownShow = () => {
-        setIsOpen(!isOpen);
-    };
 
     const tagChange = (event) => {
         const tagId = parseInt(event.target.value);
@@ -45,59 +43,30 @@ const SelectDropdown = ({ selectedTags, onKeywordsChange }) => {
     return (
         <div>
             <br></br>
-            <h1>Select Tags</h1>
-            <button onClick={dropDownShow}>
-                {isOpen ? 'Hide Tags' : 'Show Tags'}
-            </button>
-            {isOpen && (
-                <Form>
-                    {tags.map((tag) => (
-                        <div key={tag.id} style={{ display: 'flex', alignItems: 'center' }}>
-                        <Form.Check
-                            type="checkbox"
-                            id={`tag-${tag.id}`}
-                            label={` ${tag.label}`}
-                            value={tag.id}
-                            checked={select_tags.includes(tag.label)}
-                            onChange={tagChange}
-                        />
-                        {tag.id === 6 && (
-                            <div
-                                style={{
-                                    width: "10px",
-                                    height: "10px",
-                                    borderRadius: "10px",
-                                    backgroundColor: "#FF0000",
-                                    marginLeft: "10px"
-                                }}
-                            ></div>
-                        )}
-                        {tag.id === 7 && (
-                            <div
-                                style={{
-                                    width: "10px",
-                                    height: "10px",
-                                    borderRadius: "10px",
-                                    backgroundColor: "#0023FF",
-                                    marginLeft: "10px"
-                                }}
-                            ></div>
-                        )}
-                        {tag.id === 8 && (
-                            <div
-                                style={{
-                                    width: "10px",
-                                    height: "10px",
-                                    borderRadius: "10px",
-                                    backgroundColor: "#F7FF00",
-                                    marginLeft: "10px"
-                                }}
-                            ></div>
-                        )}
-                    </div>
-                    ))}
-                </Form>
-            )}
+            <Form className="tags">
+                {tags.map((tag) => (
+                    <div key={tag.id} className="tag">
+                    <Form.Check
+                        type="checkbox"
+                        id={`tag-${tag.id}`}
+                        label={` ${tag.label}`}
+                        value={tag.id}
+                        checked={select_tags.includes(tag.label)}
+                        onChange={tagChange}
+                        className="checkbox"
+                    />
+                    {tag.id === 6 && (
+                        <div className="indicator" style={{ backgroundColor: "#FF0000" }}></div>
+                    )}
+                    {tag.id === 7 && (
+                         <div className="indicator" style={{ backgroundColor: "#0000FF" }}></div>
+                    )}
+                    {tag.id === 8 && (
+                        <div className="indicator" style={{ backgroundColor: "#F7FF00" }}></div>
+                    )}
+                </div>
+                ))}
+            </Form>
         </div>
     );
 };
