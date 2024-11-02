@@ -7,6 +7,7 @@ import './components/Popup.css'; // Ensure this is imported after Bootstrap CSS
 import Popup from "./components/Popup";
 import SelectItemButton from "./components/SelectItem";
 import DeleteItemButton from "./components/DeleteItemButton";
+import BorrowButton from "./components/BorrowButton.js";
 
 import AddItemButton from "./components/AddItemButton";
 
@@ -37,6 +38,7 @@ export default function RootLayout({ children }) {
       <AddItemButton/>
       <SortAlphaButton /> 
       <EditNoteButton />
+      <BorrowButton/>
       <Popup/>
       </body>
     </html>
