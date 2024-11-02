@@ -26,6 +26,7 @@ function ExpandedEntry({ itemData, onClose }) {
             setNewName(itemData.name);
             setNewNote(itemData.note || '');
             setNewID(itemData.id);
+            setKeywords(itemData.tags || []);
         }
     }, [itemData]);
 
@@ -42,6 +43,7 @@ function ExpandedEntry({ itemData, onClose }) {
         itemData.name = newName;
         itemData.note = newNote;
         itemData.id = newID;
+        itemData.tags = keywords;
         setIsEditing(false);
         setShowSaveButton(false);
         setShowDiscardButton(false);
@@ -54,6 +56,7 @@ function ExpandedEntry({ itemData, onClose }) {
         setNewName(itemData.name);
         setNewNote(itemData.note || '');
         setNewID(itemData.id);
+        setKeywords(itemData.tags || []);
         setIsEditing(false);
         setShowSaveButton(false);
         setShowDiscardButton(false);
