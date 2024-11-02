@@ -10,7 +10,6 @@ import './ExpandedEntry.css';
 import SelectDropdown from './SelectDropdown';
 
 function ExpandedEntry({ itemData, onClose }) {
-    const [error, setError] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [newName, setNewName] = useState('');
     const [newNote, setNewNote] = useState('');
@@ -20,12 +19,13 @@ function ExpandedEntry({ itemData, onClose }) {
     const [showDiscardButton, setShowDiscardButton] = useState(false);
     const [showEditButton, setShowEditButton] = useState(true);
     const [showReturnButton, setShowReturnButton] = useState(true);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         if (itemData) {
             setNewName(itemData.name);
             setNewNote(itemData.note || '');
-            setNewID(itemData.id);
+            setNewID(itemData.id); 
             setKeywords(itemData.tags || []);
         }
     }, [itemData]);
@@ -39,10 +39,8 @@ function ExpandedEntry({ itemData, onClose }) {
     };
 
     const onSave = () => {
-        // Save the new name and note (you can add your API call here)
         itemData.name = newName;
         itemData.note = newNote;
-        itemData.id = newID;
         itemData.tags = keywords;
         setIsEditing(false);
         setShowSaveButton(false);
@@ -52,7 +50,6 @@ function ExpandedEntry({ itemData, onClose }) {
     };
 
     const onDiscard = () => {
-        // Discard the changes and reset the state
         setNewName(itemData.name);
         setNewNote(itemData.note || '');
         setNewID(itemData.id);
@@ -117,7 +114,6 @@ function ExpandedEntry({ itemData, onClose }) {
                 throw new Error(`Network response was not ok: ${response.statusText}`);
             }
             const result = await response.json();
-            setItemData(result);
             setError(null);
         } catch (error) {
             console.error('Error updating tags:', error);
@@ -148,21 +144,13 @@ function ExpandedEntry({ itemData, onClose }) {
             if (!response.ok) {
                 throw new Error(data.message || 'Failed to update ID');
             }
-
-            // Update UI based on whether it was an update or creation
             if (response.status === 201) {
-                // Handle new record creation
-                console.log('New record created');
-                // You might want to refresh your data or update state
-                // refreshData();
+                console.log(data.message);
             } else {
-                // Handle successful update
                 console.log('ID updated successfully');
-                // updateLocalState();
             }
-            
         } catch (error) {
-            setError(error.message);
+            console.error(error.message);
         }
     };
 
@@ -171,7 +159,7 @@ function ExpandedEntry({ itemData, onClose }) {
         handleUpdateNote();
         handleUpdateName();
         handleUpdateTags();
-        // handleUpdateID();
+        handleUpdateID();
     };
 
 
@@ -200,6 +188,7 @@ function ExpandedEntry({ itemData, onClose }) {
                                                 value={newName}
                                                 onChange={(e) => setNewName(e.target.value)}
                                                 className="content form-control"
+                                                placeholder="Enter name"
                                             />
                                             <p>ID: </p>
                                             <input
@@ -207,7 +196,7 @@ function ExpandedEntry({ itemData, onClose }) {
                                                 value={newID}
                                                 onChange={(e) => setNewID(e.target.value)}
                                                 className="content form-control"
-                                                placeholder="Enter new ID"
+                                                placeholder={itemData.id}
                                             />
                                             <p>Tags: </p>
                                             <SelectDropdown selectedTags={keywords} onKeywordsChange={handleKeywordsChange} />

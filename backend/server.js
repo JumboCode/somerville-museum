@@ -115,33 +115,47 @@ app.put('/update-name', async (req, res) => {
   }
 });
 
-// Route to update the id
 app.put('/update-id', async (req, res) => {
-  const { id, newId, data } = req.body; // Get ID and new ID from the request body
+  const { id, newId, data } = req.body;
+  console.error('ID: ', id, ' New ID: ', newId, ' Data: ', data);
+
   try {
-    // Check if the current ID exists or if it's the same as the new ID
-    const currentRecord = await sql`SELECT * FROM dummy_data WHERE id = ${newId}`;
+    // Check if the new ID already exists
+    const existingRecord = await sql`SELECT * FROM dummy_data WHERE id = ${newId}`;
 
-    //implement later
-    let isSame = false;
-    if (id === newId) {
-      isSame = true;
-    }
-
-    // If the current ID exists and is different from the new ID, create a new record
-    if (currentRecord.length === 0) {
-      const result1 = await sql`INSERT INTO dummy_data (id, name, tags, note) VALUES (${newId}, ${data.name}, ${data.tags}, ${data.note})`;
-      const result = await sql`UPDATE dummy_data SET id = ${newId} WHERE id = ${id}`;
-
-      if (result.rowCount === 0 || result1.rowCount === 0) {
-        return res.status(404).json({ message: 'Item not found' });
+    if (existingRecord.length > 0) {
+      if (newId !== id) {
+        // Case 1: New ID already exists, and it's not the same as the current ID
+        return res.status(404).json({ message: 'Error: Trying to overwrite an existing ID. Update aborted.' });
+      }
+      else{
+        // Case 2: New ID exists, and it's the same as the current ID (perform update)
+        const updateResult = await sql`
+        UPDATE dummy_data 
+        SET name = ${data.name}, note = ${data.note}, tags = ${data.tags}
+        WHERE id = ${id}
+      `;
+      
+        return res.status(200).json({ message: 'ID updated successfully', rowCount: updateResult.rowCount });
       }
     }
+    else {
+      // Case 3: New ID does not exist (create a new record)
+      const insertResult = await sql`
+        INSERT INTO dummy_data (id, name, tags, note) 
+        VALUES (${newId}, ${data.name}, ${data.tags}, ${data.note})
+      `;
+      const deleteOld = await sql `DELETE FROM dummy_data WHERE id = ${id}`;
+
+      return res.status(201).json({ message: 'New record created and old record deleted.' });
+    }  
   } catch (error) {
     console.error('Error querying the database:', error);
-    res.status(500).send('Internal Server Error'); // Send an error response
+    res.status(500).send('Internal Server Error');
   }
 });
+
+
 
 // Root route
 app.get('/', (req, res) => {
