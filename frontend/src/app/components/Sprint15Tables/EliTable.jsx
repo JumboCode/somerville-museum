@@ -22,12 +22,18 @@ export default function ELiTable() {
                 </div>
             </div>
             <div className="ItemBarHolder">
-                <div className="Itembars">
+                <div className="Itembar">
                     <input type="checkbox" className="checkbox" />
                     <img class="artwork__image" src="/" />
+                    <div className="TableLabels">
+                        <div className="TableLabel"> ID </div>
+                        <div className="TableLabel"> Name </div>
+                        <div className="TableLabel"> Status </div>
+                        <div className="TableLabel"> Tags </div>
+                     </div>
                     <button className="dropdown"></button>
                 </div>
             </div>
-            </div>
+        </div>
     );
 }
