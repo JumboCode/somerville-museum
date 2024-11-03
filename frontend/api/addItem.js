@@ -11,19 +11,4 @@ export default async function handler(req, res) {
   }
 }
 
-// app.post('/additembutton', async (req, res) => {
-//         console.log(req.body);
-//         const { id, name, note } = req.body;
-      
-//         try {
-//             // Query the 'dummy_data' table
-//             await sql`INSERT INTO dummy_data (id, name, note)
-//               VALUES (${id}, ${name}, ${note})`;
-            
-//             // Send the result back to the client
-//             res.json({ message: 'Item added successfully!'}); // Send the result as a JSON response
-//           } catch (error) {
-//             console.error(error);
-//             res.status(500).send('Internal Server Error'); // Send an error response
-//           }
-//       });
+//
