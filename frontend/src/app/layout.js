@@ -7,7 +7,7 @@ import './components/Popup.css'; // Ensure this is imported after Bootstrap CSS
 import Popup from "./components/Popup";
 import SelectItemButton from "./components/SelectItem";
 import DeleteItemButton from "./components/DeleteItemButton";
-import BorrowButton from "./components/BorrowButton.js";
+import BorrowButton from "./components/BorrowButton.jsx";
 
 import AddItemButton from "./components/AddItemButton";
 

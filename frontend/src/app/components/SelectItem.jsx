@@ -1,7 +1,7 @@
 "use client";  // This directive marks the component as a Client Component
 
 
- export default function SelectItemButton() {
+ export default function SelectItemButton({onSelect}) {
      const handleClick = () => {
 
          // Replace the alert with your actual functionality.
@@ -22,6 +22,7 @@
             if (data.length > 0) {
                 const itemIds = data.map(item => item.id).join(", ");
                 alert(`Item ID(s): ${itemIds}`);
+                onSelect(itemIds); 
             } else {
                 alert("Item not found.");
             }
