@@ -1,6 +1,6 @@
 //Table.jsx
 "use client";  // This directive marks the component as a Client Component
-import './Table.css';
+
 
 const data = [
     { id: 123, name: "Anom", status: 19, tags: "Male" },
@@ -23,11 +23,14 @@ export default function Table() {
                         </div>
                     </div>
             </div>
+            <div className="itemBarHolder">
             <div className="Itembars">
                 <input type="checkbox" className="checkbox" />
                 <img class="artwork__image" src="/" />
                 <button className="dropdown"></button>
             </div>
+            </div>
+            
             <table>
                 <thead>
                     <tr>
