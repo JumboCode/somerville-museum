@@ -117,8 +117,6 @@ app.put('/update-name', async (req, res) => {
 
 app.put('/update-id', async (req, res) => {
   const { id, newId, data } = req.body;
-  console.error('ID: ', id, ' New ID: ', newId, ' Data: ', data);
-
   try {
     // Check if the new ID already exists
     const existingRecord = await sql`SELECT * FROM dummy_data WHERE id = ${newId}`;
