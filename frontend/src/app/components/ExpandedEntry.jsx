@@ -152,6 +152,7 @@ function ExpandedEntry({ itemData, onClose }) {
                 alert('ID updated successfully');
             }
         } catch (error) {
+            alert(error.message);
             console.error(error.message);
         }
     };

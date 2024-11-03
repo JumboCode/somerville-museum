@@ -122,7 +122,7 @@ app.put('/update-id', async (req, res) => {
     const existingRecord = await sql`SELECT * FROM dummy_data WHERE id = ${newId}`;
 
     if (existingRecord.length > 0) {
-      if (newId !== id) {
+      if (newId != id) {
         // Case 1: New ID already exists, and it's not the same as the current ID
         return res.status(404).json({ message: 'Error: Trying to overwrite an existing ID. Update aborted.' });
       }
