@@ -2,7 +2,6 @@ import { query } from './db.js';
 
 export default async function handler(req, res) {
   const { id, note } = req.body;
-  console.log(id, note);
   try {
     const result = await query('UPDATE dummy_data SET note = $1 WHERE id = $2', [note, id]);
     if (result.rowCount === 0) {
