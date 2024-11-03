@@ -9,7 +9,13 @@ function AddTagButton() {
   // Function to handle the button click
   const handleClick = async () => {
     try {
-      const response = await fetch('http://localhost:5432/first-item');
+      const response = await fetch(`../../api/selectId`, { 
+        method: 'PUT',
+        headers: {
+        'Content-Type': 'application/json' // Specify the content type
+        },
+        body: JSON.stringify({ id: inputValue }) // Send the id as a JSON object
+      });
       if (!response.ok) {
         throw new Error(`Network response was not ok: ${response.statusText}`);
       }

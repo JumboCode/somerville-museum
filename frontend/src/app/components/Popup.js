@@ -18,10 +18,13 @@ export default function PopupGfg() {
 
     const handleFetchData = async () => {
         try {
-            const response = await fetch(`http://localhost:5432/item/${inputValue}`);
-            if (!response.ok) {
-                throw new Error(`Network response was not ok: ${response.statusText}`);
-            }
+            const response = await fetch(`../../api/selectId`, { 
+                method: 'PUT',
+                headers: {
+                'Content-Type': 'application/json' // Specify the content type
+                },
+                body: JSON.stringify({ id: inputValue }) // Send the id as a JSON object
+              })
             const result = await response.json();
     
             // Ensure result.tags is a string before calling split
@@ -45,13 +48,13 @@ export default function PopupGfg() {
         if (!itemData) return;
     
         try {
-            const response = await fetch(`http://localhost:5432/item/${itemData.id}/tags`, {
+            const response = await fetch(`../../api/updateTags`, { 
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json',
+                'Content-Type': 'application/json' // Specify the content type
                 },
-                body: JSON.stringify({ tags: keywords }),
-            });
+                body: JSON.stringify({ id: inputValue, tags : keywords }) // Send the id as a JSON object
+              })
             if (!response.ok) {
                 throw new Error(`Network response was not ok: ${response.statusText}`);
             }

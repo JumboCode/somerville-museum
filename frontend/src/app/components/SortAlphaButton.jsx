@@ -8,7 +8,9 @@ const SortAlphaButton = () => {
 
   const handleFetchClick = async () => {
     try {
-      const response = await fetch('http://localhost:5432/query'); // Get dump of dummy_data
+      const response = await fetch(`../../api/queryAll`, { 
+        method: 'GET',
+      }); // Get dump of dummy_data
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
