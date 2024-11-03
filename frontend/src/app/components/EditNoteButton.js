@@ -29,13 +29,13 @@ export default function EditNoteButton() {
         event.preventDefault();
         
         try {
-            const response = await fetch("http://localhost:5432/queryone", {
-                method: "POST",
+            const response = await fetch(`../../api/selectId`, { 
+                method: 'PUT',
                 headers: {
-                    "Content-Type": "application/json",
+                'Content-Type': 'application/json' // Specify the content type
                 },
-                body: JSON.stringify({ id: parseInt(inputValue) }),
-            });
+                body: JSON.stringify({ id: inputValue }) // Send the id as a JSON object
+              });
 
             if (!response.ok) {
                 throw new Error('Item not found.');
@@ -46,6 +46,7 @@ export default function EditNoteButton() {
             setNoteValue(data.note); // Pre-fill the note input with the current note
             setError(null);
         } catch (error) {
+            console.log("I am here bro what the flip");
             setError(error.message);
         }
     };
@@ -54,13 +55,13 @@ export default function EditNoteButton() {
         event.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:5432/update-note", {
-                method: "PUT",
+            const response = await fetch(`../../api/updateNote`, { 
+                method: 'PUT',
                 headers: {
-                    "Content-Type": "application/json",
+                'Content-Type': 'application/json' // Specify the content type
                 },
-                body: JSON.stringify({ id: itemInfo.id, note: noteValue }), // Update the note
-            });
+                body: JSON.stringify({ id: itemInfo.id, note: noteValue }) // Send the id as a JSON object
+              });
 
             if (!response.ok) {
                 throw new Error('Failed to update note');
