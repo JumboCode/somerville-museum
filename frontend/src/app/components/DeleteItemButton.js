@@ -12,10 +12,13 @@
              alert("User cancelled the prompt.");
          } else {
                  // Call the 'select' endpoint to get the item ID
-                 fetch(`http://localhost:5432/select?name=${name}`, {
-                     method: 'GET',
-                     })
-
+                 fetch(`../../api/selectByName`, { 
+                    method: 'PUT',
+                    headers: {
+                    'Content-Type': 'application/json' // Specify the content type
+                    },
+                    body: JSON.stringify({ name }) // Send the name as a JSON object
+                  })
                      .then(response => response.json()) // Convert the response to JSON
 
                      // Send the ID to the delete route
@@ -28,10 +31,13 @@
                              if (confirm("Do you really want to delete the selected item(s)? \nSelected Item(s): " + itemIds)) {
                                  // For each item ID, make a GET request to the 'delete' endpoint
                                  itemIds.forEach(id => {
-                                        fetch(`http://localhost:5432/delete?id=${id}`, {
-                                            method: 'GET',
-                                        })
-                                    });
+                                    fetch(`../../api/delete`, { 
+                                        method: 'PUT',
+                                        headers: {
+                                        'Content-Type': 'application/json' // Specify the content type
+                                        },
+                                        body: JSON.stringify({ id }) // Send the name as a JSON object
+                                      })})
                                 } else {
                                     alert('User cancelled the deletion.');
                                 }

@@ -61,7 +61,6 @@ export default function MyForm() {
   
   
   const handleAdd = async (id, name, note) => {
-    console.log(id, name, note);
     const body = JSON.stringify({
       name: name,
       id: id,
@@ -69,12 +68,12 @@ export default function MyForm() {
   });
   console.log('Body:', body); // Should log the body with hardcoded values
 
-  const response = await fetch('http://localhost:5432/additembutton', {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: body
+  const response = await fetch(`../../api/addItem`, { 
+    method: 'PUT',
+    headers: {
+    'Content-Type': 'application/json' // Specify the content type
+    },
+    body: JSON.stringify({ id: id, name: name, note: note}) // Send the id as a JSON object
   });
 
   };

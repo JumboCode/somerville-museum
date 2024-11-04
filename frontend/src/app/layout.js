@@ -1,14 +1,15 @@
 
 import localFont from "next/font/local";
 import "./globals.css";
-import SortAlphaButton from "../components/SortAlphaButton.jsx";
-import EditNoteButton from "@/components/EditNoteButton";
-import './components/Popup.css'; // Ensure this is imported after Bootstrap CSS
+import SortAlphaButton from "./components/SortAlphaButton.jsx";
+import EditNoteButton from "./components/EditNoteButton";
+import './components/Popup.css'; 
 import Popup from "./components/Popup";
 import SelectItemButton from "./components/SelectItem";
 import DeleteItemButton from "./components/DeleteItemButton";
 import ELiTable from "./components/Sprint15Tables/EliTable";
 import AddItemButton from "./components/AddItemButton";
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
