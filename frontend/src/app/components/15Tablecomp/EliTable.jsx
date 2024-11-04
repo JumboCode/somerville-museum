@@ -23,7 +23,7 @@ export default function ELiTable() {
 
     const goToNextPage = () => {
         setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
-    };S
+    };
 
     return (
         <>

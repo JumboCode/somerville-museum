@@ -8,6 +8,7 @@ import Popup from "./components/Popup";
 import SelectItemButton from "./components/SelectItem";
 import DeleteItemButton from "./components/DeleteItemButton";
 import AddItemButton from "./components/AddItemButton";
+import ELiTable from "./components/15Tablecomp/EliTable";
 
 
 const geistSans = localFont({
@@ -32,13 +33,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        
-      <SelectItemButton />
-      <DeleteItemButton />
-      <EditNoteButton />
-      <Popup/>
-      <AddItemButton/>
-      <SortAlphaButton />
+        <ELiTable/>
       </body>
     </html>
   );
