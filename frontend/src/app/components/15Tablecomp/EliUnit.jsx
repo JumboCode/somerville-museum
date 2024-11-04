@@ -1,8 +1,10 @@
 "use client";
 import "./EliUnit.css";
 
-// Add props to this component if needed
-export default function ELiUnit() {
+// Add unit to this component if needed
+export default function ELiUnit( { unit } ) {
+    const { id, name, status, tags } = unit;
+
     return (
         <div className="unit"> 
             <div className="left-section">
@@ -15,9 +17,9 @@ export default function ELiUnit() {
                     </div>
                 </div>
             </div>
-            <div className="id">123XYZ</div>
-            <div className="name">Big Chungus</div>
-            <div className="status">Available</div>
+            <div className="id"> {unit.id} </div>
+            <div className="name">{unit.name}</div>
+            <div className="status">{unit.status}</div>
             <div className="tags"></div>
             <div className="drop-down">
                 {/* to do ask about icons fontawesome?*/}
