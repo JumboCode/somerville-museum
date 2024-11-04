@@ -1,5 +1,4 @@
 
-import Table from "./components/Table";
 import localFont from "next/font/local";
 import "./globals.css";
 import SortAlphaButton from "../components/SortAlphaButton.jsx";
@@ -8,7 +7,7 @@ import './components/Popup.css'; // Ensure this is imported after Bootstrap CSS
 import Popup from "./components/Popup";
 import SelectItemButton from "./components/SelectItem";
 import DeleteItemButton from "./components/DeleteItemButton";
-
+import ELiTable from "./components/Sprint15Tables/EliTable";
 import AddItemButton from "./components/AddItemButton";
 
 const geistSans = localFont({
@@ -33,13 +32,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-      <Table/>
-      <SelectItemButton />
-      <DeleteItemButton />
-      <AddItemButton/>
-      <SortAlphaButton /> 
-      <EditNoteButton />
-      <Popup/>
+        <ELiTable/>
       </body>
     </html>
   );
