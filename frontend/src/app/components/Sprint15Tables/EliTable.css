@@ -84,14 +84,16 @@
     flex-direction: column;
 }
 
-
-.slider-container {
-
-    margin: 1vh 0;
-    text-align: center;
+.pagination-controls button {
+    padding: 0.5vh 1vh;
+    cursor: pointer;
+    color: #ffffff;
+    border: 1px solid #000000;
+    background-color: #000000;
+    border-radius: 4px;
 }
 
-#unitSlider {
-    width: 80%;
-    margin-top: 1vh;
+.pagination-controls button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
 }
