@@ -8,6 +8,8 @@ import Popup from "./components/Popup";
 import SelectItemButton from "./components/SelectItem";
 import DeleteItemButton from "./components/DeleteItemButton";
 import AddItemButton from "./components/AddItemButton";
+import Dashboard from "./components/Dashboard";
+import Filters from "./components/Filters";
 
 
 const geistSans = localFont({
@@ -39,6 +41,9 @@ export default function RootLayout({ children }) {
       <Popup/>
       <AddItemButton/>
       <SortAlphaButton />
+      <br></br>
+      <Dashboard />
+      <Filters />
       </body>
     </html>
   );

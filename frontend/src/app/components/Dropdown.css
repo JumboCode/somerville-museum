@@ -1,0 +1,46 @@
+
+.dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-content: flex-start;
+    background-color: #d9d9d9;
+    padding: 10px 0px 10px 0px;
+}
+
+.dropdown-title {
+    color: black;
+    padding-bottom: 10px;
+    padding-left: 10px;
+}
+
+.dropdown-select {
+    background-color: white;
+    color: #d9d9d9;
+    width: 80%;
+    height: 40px;
+    margin: auto;
+}
+
+.dropdown-option {
+    color: black;
+}
+
+/* Style the arrow inside the select element: */
+.select-selected:after {
+    position: absolute;
+    content: "";
+    top: 14px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-color: #fff transparent transparent transparent;
+  }
+
+  /* Point the arrow upwards when the select box is open (active): */
+.select-selected.select-arrow-active:after {
+    border-color: transparent transparent #fff transparent;
+    top: 7px;
+  }
+
