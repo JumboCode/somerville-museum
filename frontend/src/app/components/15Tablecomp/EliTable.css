@@ -83,15 +83,3 @@
     border-radius: 10px;
     flex-direction: column;
 }
-
-
-.slider-container {
-
-    margin: 1vh 0;
-    text-align: center;
-}
-
-#unitSlider {
-    width: 80%;
-    margin-top: 1vh;
-}
