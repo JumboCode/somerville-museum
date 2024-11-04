@@ -9,6 +9,7 @@ import SelectItemButton from "./components/SelectItem";
 import DeleteItemButton from "./components/DeleteItemButton";
 import ELiTable from "./components/Sprint15Tables/EliTable";
 import AddItemButton from "./components/AddItemButton";
+import ELiUnit from "./components/Sprint15Tables/EliUnit";
 
 
 const geistSans = localFont({
@@ -33,6 +34,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
+        <ELiUnit/>
         <ELiTable/>
       </body>
     </html>
