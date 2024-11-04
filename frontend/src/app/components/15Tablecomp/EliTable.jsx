@@ -1,29 +1,32 @@
 "use client";
 import './EliTable.css';
-import ELiUnit from './EliUnit';
+import ELiUnit from '../15Tablecomp/EliUnit';
 import { useState } from "react";
 
 export default function ELiTable() {
        
-        const [unitCount, setUnitCount] = useState(1);
-        const handleSliderChange = (event) => {
-            setUnitCount(parseInt(event.target.value));
-        };
+    const [unitCount, setUnitCount] = useState(23);
+    const [currentPage, setCurrentPage] = useState(1);
+    const unitsPerPage = 5;
 
+    const totalPages = Math.ceil(unitCount / unitsPerPage);
+
+    const startIndex = (currentPage - 1) * unitsPerPage;
+
+    const currentUnits = Array.from({ length: unitCount })
+        .slice(startIndex, startIndex + unitsPerPage)
+        .map((_, index) => <ELiUnit key={startIndex + index} />);
+
+    const goToPreviousPage = () => {
+        setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+    };
+
+    const goToNextPage = () => {
+        setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+    };S
 
     return (
         <>
-            <div className="slider-container">
-                <label htmlFor="unitSlider">Number of Items: {unitCount}</label>
-                <input
-                    type="range"
-                    id="unitSlider"
-                    min="1"
-                    max="10"
-                    value={unitCount}
-                    onChange={handleSliderChange}
-                />
-            </div>
             <div className="Table">
                 <div className="Header">
                     <div className="Items">
@@ -43,9 +46,16 @@ export default function ELiTable() {
                     </div>
                 </div>
                 <div className="ItemBarHolder">
-                    {Array.from({ length: unitCount }).map((_, index) => (
-                                <ELiUnit key={index} />
-                            ))}
+                    {currentUnits}
+                </div>
+                <div className="pagination-controls">
+                    <button onClick={goToPreviousPage} disabled={currentPage === 1}>
+                        Previous
+                    </button>
+                    <span>Page {currentPage} of {totalPages}</span>
+                    <button onClick={goToNextPage} disabled={currentPage === totalPages}>
+                        Next
+                    </button>
                 </div>
             </div>
         </>
