@@ -23,28 +23,36 @@ export default function Table() {
                         </div>
                     </div>
             </div>
-            <div className="Itembars">
+            {/* <div className="Itembars">
                 <input type="checkbox" className="checkbox" />
                 <img class="artwork__image" src="/" />
-                <button className="dropdown"></button>
-            </div>
+                
+                <button className="dropdown">&#9660;</button>
+            </div> */}
             <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Status</th>
-                        <th>Tags</th>
-                    </tr>
-                </thead>
+            <colgroup>
+                <col />
+                <col span="2" class="batman" />
+                <col span="2" class="flash" />
+            </colgroup>
+                        <th></th>
+                        <th></th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Tags</th>
+                        <th></th>
                 <tbody>   
                     {data.map((val, key) => {
                         return (
                             <tr key={key}>
-                                <td >{val.id}</td>
+                                <td><input type="checkbox" className="checkbox" /></td>
+                                <td><img class="artwork__image" src="/" /></td>
+                                <td>{val.id}</td>
                                 <td>{val.name}</td>
                                 <td>{val.status}</td>
                                 <td>{val.tags}</td>
+                                <td><button className="dropdown">&#9660;</button></td>
                             </tr>
                         )
                     })}
