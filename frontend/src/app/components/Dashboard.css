@@ -1,0 +1,36 @@
+
+li {
+    border-radius: 3px;
+}
+
+.nav-links {
+  /* center the words on the bar! */
+  display: flex;
+  justify-content: center;
+  background-color:#d9d9d9;
+  /* positioning */
+  margin: auto;
+  width: 50%;
+  height: auto;
+  /* removing the bullet points that normally come with a list*/
+  list-style: none;
+  /* I liked the way my font looked bold better */
+  flex-basis: 0;
+  column-gap: 0px;
+}
+
+.last-element {
+  border-right: 0px;
+}
+
+p:hover { /*for when you hover over a link!*/
+    color: #F92C85;
+}
+
+.nav-items {
+  border-right: 1px solid black;
+  padding: 3% 5% 3% 5%;
+  color: black;
+  text-decoration: none;
+  height: auto;
+}

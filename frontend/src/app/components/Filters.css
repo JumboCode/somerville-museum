@@ -1,0 +1,7 @@
+.filters {
+    display: flex;
+    flex-direction: column;
+    background-color: #d9d9d9;
+    height: 100%;
+    width: 16%;
+}
