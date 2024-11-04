@@ -201,3 +201,32 @@ app.put('/item/:id/tags', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+
+app.patch('/borrowbutton', async (req, res) => {
+  console.log(req.body);
+
+  console.log("in borrow!");
+  
+  const {  
+    borrowedInfo } = req.body;
+
+  try {
+    const borrowerInfoString = `{${Object.values(borrowedInfo).join(', ')}}`;
+
+      // Query the 'dummy_data' table
+      await sql`UPDATE dummy_data \
+        SET note = ${borrowerInfoString}
+        WHERE id = 54
+        RETURNING *;
+         `;
+      
+      // Send the result back to the client
+      res.json({ message: 'Item borrowed successfully!'}); // Send the result as a JSON response
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error'); // Send an error response
+    }
+});
+
+
