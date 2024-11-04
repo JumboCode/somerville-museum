@@ -1,21 +1,52 @@
 "use client";
 import './EliTable.css';
 import ELiUnit from '../15Tablecomp/EliUnit';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function ELiTable() {
-       
-    const [unitCount, setUnitCount] = useState(23);
+    const [units, setUnits] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
+
+    useEffect (() => {
+        async function fetchData() {
+            try {            
+                const response = await fetch(`../../api/queryAll`, { 
+                    method: 'GET',
+                    headers: {
+                    'Content-Type': 'application/json' // Specify the content type
+                    },
+                    body: JSON.stringify({ id: id, name: name, status: status, tags: tags})
+                });
+
+                if (response.ok) {
+                    const data = await response.json;
+                    console.log("data selected" + data);
+                    setUnits(data);
+                } else {
+                    console.log("failed to fetch data");
+                }
+                
+            } catch (error) {
+                console.log(error);
+            }
+            
+        }
+
+            fetchData();
+
+        }, []);
+        
+        
     const unitsPerPage = 5;
-
-    const totalPages = Math.ceil(unitCount / unitsPerPage);
-
     const startIndex = (currentPage - 1) * unitsPerPage;
 
-    const currentUnits = Array.from({ length: unitCount })
+    const currentUnits = units
         .slice(startIndex, startIndex + unitsPerPage)
-        .map((_, index) => <ELiUnit key={startIndex + index} />);
+        .map((unit) => 
+            <ELiUnit key={unit.id} unit={unit} />
+    );
+
+    const totalPages = Math.ceil(currentUnits.length / unitsPerPage);
 
     const goToPreviousPage = () => {
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
