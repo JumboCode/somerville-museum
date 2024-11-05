@@ -78,4 +78,21 @@
     border-radius: 4px; 
 }
 
+.pagination-controls {
+    display: flex;
+    justify-content:space-around;
+    flex-direction: row;
+    padding-bottom: 5%;
+}
+
+.num-items {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding-left: 3%;
+}
+
+.page-selection {
+    padding-right: 5%;
+}
 
