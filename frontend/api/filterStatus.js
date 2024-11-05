@@ -4,9 +4,6 @@ export default async function handler(req, res) {
     // fetch status array and tags array from request
     const { status, tags } = req.body;
 
-    console.log('Status:', status);
-    console.log('Tags:', tags);
-
     // build query string starting with a blanket WHERE statement
     let queryStr = 'SELECT * FROM dummy_data WHERE 1=1';
 
