@@ -1,8 +1,10 @@
 import { query } from './db.js';
 
 export default async function handler(req, res) {
-    // fetch filters from request
-    const { filters } = req.body;
+
+    // fetch status array and tags array from request
+    const { status } = req.body;
+    const { tags } = req.body;
 
     // build query string starting with a blanket WHERE statement
     let queryStr = 'SELECT * FROM dummy_data WHERE 1=1';
@@ -11,7 +13,7 @@ export default async function handler(req, res) {
     let firstFilter = false;
 
     // for every additional filter, append it to the query string
-    for (const key in filters) {
+    for (const key in status) {
         // If this is the first filter, add an AND
         if (!firstFilter) {
             queryStr += ' AND';
@@ -19,7 +21,18 @@ export default async function handler(req, res) {
         }
 
         // Add current filter to the query string
-        queryStr += ` status = '${filters[key]}' OR`;
+        queryStr += ` status = '${status[key]}' OR`;
+    }
+
+    for (const key in tags) {
+        // If this is the first filter, add an AND
+        if (!firstFilter) {
+            queryStr += ' AND';
+            firstFilter = true;
+        }
+
+        // Add current filter to the query string
+        queryStr += ` tags = '${tags[key]}' OR`;
     }
 
     // Close off the query string with a false statement

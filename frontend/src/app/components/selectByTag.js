@@ -1,22 +1,9 @@
 "use client"; // This file is client-side
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const checkboxStatus = {};
 const filters = {};
-
-// // Function to update the checkbox status
-// function updateCheckboxStatus() {
-//   document.querySelectorAll(".checkbox").forEach((checkbox) => {
-//     checkboxStatus[checkbox.id] = checkbox.checked;
-//   });
-//   console.log(checkboxStatus); // Log the status for demonstration
-// }
-
-// // Add event listeners to each checkbox
-// document.querySelectorAll(".checkbox").forEach((checkbox) => {
-//   checkbox.addEventListener("change", updateCheckboxStatus);
-// });
 
 function getCheckedCheckboxes() {
     const checkedCheckboxes = [];
@@ -27,28 +14,47 @@ function getCheckedCheckboxes() {
 }
 
 export default function SelectByTag() {
-    const [data, setData] = useState(null);
+    const [tags, setTags] = useState([]);
     const [error, setError] = useState(null);
     const [entries, setEntries] = useState([]);
 
+    useEffect(() => {
+        console.log("Inside fetching tags.");
+        const fetchTags = async () => {
+            try {
+                const response = await fetch('/api/fetchTags');
+                if (!response.ok) throw new Error('Network response was not ok');
+                const data = await response.json();
+
+                // Convert the array of objects to an array of strings
+                const tagsArray = data.map(item => item.tag);
+
+                // Save the tags in state
+                setTags(tagsArray);
+            } catch (error) {
+                console.error('Error fetching tags:', error);
+                setError(error.message);
+            }
+        };
+        
+        fetchTags();
+    }, []);
+
     const handleClick = async () => {
-
-        console.log("clicked");
-
         // Get checked checkbox IDs and create the filters object
         const checkedCheckboxes = getCheckedCheckboxes();
         const filters = checkedCheckboxes.reduce((acc, id) => {
             acc[id] = true; // Set each checked ID to true in the filters object
             return acc;
         }, {});
-    
+
         try {
             const response = await fetch (`../../api/filterStatus`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ filters: checkedCheckboxes })
+                body: JSON.stringify({ status: checkedCheckboxes })
             });
             if (!response.ok) {
                 throw new Error(`Network response was not ok: ${response.statusText}`);
@@ -75,8 +81,20 @@ export default function SelectByTag() {
                 <input type="checkbox" class="checkbox" id="Overdue"></input> Overdue
                 <span class="checkmark"></span>
             </label>
+
+            <label htmlFor="multiSelect">Choose tags:</label>
+            <select id="multiSelect">
+                {tags.map((tag) => (
+                    <option key={tag} value={tag}>
+                        {tag}
+                    </option>
+                ))}
+            </select>
+
+            {/* Button to apply selections */}
             <button onClick={handleClick}>Apply</button>
 
+            {/* Printing out the entries after selection */}
             {entries.length > 0 ? (
             <ul>
                 {entries.map((entry) => (
