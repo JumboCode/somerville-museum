@@ -2,9 +2,6 @@
 
 import { useState, useEffect } from 'react';
 
-const checkboxStatus = {};
-const filters = {};
-
 function getCheckedCheckboxes() {
     const checkedCheckboxes = [];
     document.querySelectorAll(".checkbox:checked").forEach((checkbox) => {
@@ -13,10 +10,23 @@ function getCheckedCheckboxes() {
     return checkedCheckboxes;
 }
 
+function getSelectedTags() {
+    const selectedOptions = [];
+    const dropdown = document.getElementById("multiSelect");
+
+    // Loop through each selected option in the dropdown
+    Array.from(dropdown.selectedOptions).forEach((option) => {
+        selectedOptions.push(option.value); // Collect the value of each selected option
+    });
+
+    return selectedOptions;
+}
+
 export default function SelectByTag() {
     const [tags, setTags] = useState([]);
     const [error, setError] = useState(null);
     const [entries, setEntries] = useState([]);
+    const [selectedTags, setSelectedTags] = useState([]);
 
     useEffect(() => {
         console.log("Inside fetching tags.");
@@ -43,10 +53,12 @@ export default function SelectByTag() {
     const handleClick = async () => {
         // Get checked checkbox IDs and create the filters object
         const checkedCheckboxes = getCheckedCheckboxes();
-        const filters = checkedCheckboxes.reduce((acc, id) => {
-            acc[id] = true; // Set each checked ID to true in the filters object
-            return acc;
-        }, {});
+        const selectedTags = getSelectedTags();
+
+        const data = {
+            status: checkedCheckboxes,
+            tags: selectedTags
+        }
 
         try {
             const response = await fetch (`../../api/filterStatus`, {
@@ -54,7 +66,7 @@ export default function SelectByTag() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ status: checkedCheckboxes })
+                body: JSON.stringify(data)
             });
             if (!response.ok) {
                 throw new Error(`Network response was not ok: ${response.statusText}`);
@@ -67,6 +79,17 @@ export default function SelectByTag() {
         }
     }
 
+    const handleSelect = (e) => {
+        // Get selected options as an array
+        const selectedOptions = Array.from(e.target.selectedOptions); 
+
+        // Extract values
+        const values = selectedOptions.map(option => option.value); 
+        
+        // Update state with the selected values
+        setSelectedTags(values); 
+    };
+    
     return (
         <div>
             <label class="checkbox-container">
@@ -82,8 +105,17 @@ export default function SelectByTag() {
                 <span class="checkmark"></span>
             </label>
 
+            {/* <label htmlFor="multiSelect">Choose tags:</label>
+                <select id="multiSelect" multiple>
+                    {tags.map((tag) => (
+                        <option key={tag} value={tag}>
+                            {tag}
+                        </option>
+                    ))}
+                </select> */}
+
             <label htmlFor="multiSelect">Choose tags:</label>
-            <select id="multiSelect">
+            <select id="multiSelect" multiple onChange={(e) => handleSelect(e)}>
                 {tags.map((tag) => (
                     <option key={tag} value={tag}>
                         {tag}
