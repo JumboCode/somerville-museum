@@ -1,79 +1,17 @@
 'use client'
 
 import Popup from 'reactjs-popup';
+import React, { useState, useEffect } from "react";
 
-import React, { useState } from "react";
-import SelectItemButton from "./SelectItem";
-
-// const { Client } = require('pg');
-// const client = new Client({ connectionString: 'http://127.0.0.1:5432/borrowbutton' });
-
-// async function borrowItems(itemIds) {
-//    await client.connect();
-
-//    const APPROVER_NAME = "temp approver";
-//    const APPROVER_EMAIL = "approver@example.com"; 
-
-    
-//      try {
-//         const unavailableItems = [];
-//         const dateBorrowed = new Date().toISOString().split('T')[0]; // Current date in YYYY-MM-DD format
-    
-//         // Start a transaction to ensure atomicity
-//         await client.query('BEGIN');
-    
-//         // Check and update each item
-//         for (const itemId of itemIds) {
-//         const { rows } = await client.query(
-//          `SELECT id, status FROM items WHERE id = $1 FOR UPDATE`, 
-//           [itemId]
-//          );
-//         const item = rows[0];
-    
-//          // Check if item is available
-//           if (item.status !== 'available') {
-//          unavailableItems.push(itemId);
-//           continue;
-//          }
-    
-//         // Update item details to mark as borrowed
-//         await client.query(
-//         `UPDATE items 
-//         SET status = 'borrowed', 
-//         date_borrowed = $1, 
-//             approver_name = $2, 
-//             approver_email = $3 
-//             WHERE id = $4`,
-//           [dateBorrowed, APPROVER_NAME, APPROVER_EMAIL, itemId]
-//         );
-//         }
-    
-//         // Commit the transaction
-//         await client.query('COMMIT');
-    
-//          if (unavailableItems.length > 0) {
-//           return {
-//           success: false,
-//           message: `The following items are not available for borrowing: ${unavailableItems.join(', ')}`
-//           };
-//       }
-    
-//        return { success: true, message: "Items borrowed successfully." };
-//       } catch (error) {
-//         // Rollback the transaction if there’s an error
-//         await client.query('ROLLBACK');
-//         console.error("Error borrowing items:", error);
-//         return { success: false, message: "An error occurred while borrowing items." };
-//       } finally {
-//          await client.end();
-//       }
-//     }
 
 const BorrowButton = () => {
-    const [selectedItems, setSelectedItems] = useState(''); 
+    const [id, setId] = useState('');
+    const [selectedItems, setSelectedItems] = useState([]); 
+    const [selectedItemIds, setSelectedItemIds] = useState([]); 
     const [isOpen, setIsOpen] = useState(false); 
     const [borrowerName, setBorrowerName] = useState(' ');
     const [borrowerEmail, setBorrowerEmail] = useState(' '); 
+    const [dateBorrowed, setDateBorrowed] = useState(' ');
     const [returnWeeks, setReturnWeeks] = useState(1);
     const isEmailValid = borrowerEmail.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
 
@@ -85,124 +23,161 @@ const BorrowButton = () => {
         };
 
     const returnDate = calculateReturnDate(returnWeeks);
-
-    // const itemIds = [1, 2, 3]; // Example selected items
-
-    //     borrowItems(itemIds)
-    //     .then((result) => {
-    //         console.log(result.message);
-    //     })
-    //     .catch((error) => {
-    //         console.error("Error:", error);
-    //     });
     
-  
-    const handleSubmit = async () => {
+    const calculateBorrowDay = () => {
+        const today = new Date();
+        return today.toISOString().split('T')[0];
+    }
+    
+    useEffect(() => {
+        setDateBorrowed(calculateBorrowDay());
+    }, []);
+
+    const fetchItemById = async () => {
+        if (!id) return;
+        try {
+            const response = await fetch(`../../api/selectId`, { 
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify({ id }) 
+              })
+    
+              if (!response.ok) {
+                // Handle specific response statuses
+                if (response.status === 404) {
+                    console.error("Item not found");
+                    alert("Item not found. Please check the ID and try again.");
+                    return; // Exit if item not found
+                }
+                throw new Error(`Fetch error: ${response.status}`);
+            }
+    
+            const data = await response.json();
+            console.log('Fetched data:', data); 
+    
+            if (data) {
+                setSelectedItems((prevItems) => [...prevItems, data]); 
+                setSelectedItemIds((prevIds) => [...prevIds, data.id]);
+                setId(''); 
+
+            } 
+        }
+        catch (error) {
+            console.error("Error fetching item:", error);
+        }
+    };
+    
+    const handleSubmit = async (e) => {
+        console.log("kosdfnoakfnkw");
+        // e.preventDefault();
         if (!isEmailValid) {
             alert('Please enter valid email');
             return; 
-        }
+        }   
 
-        const borrowedInfo = {
-            borrowerName,
-            borrowerEmail,
-            returnDate,
-            selectedItems,
-        };
-        console.log('reached!'); 
-        console.log(borrowedInfo); //SEND DATA TO API?
-
-    
-            const body = JSON.stringify({
-              borrowedInfo: borrowedInfo
-          });
-
-          console.log('Body:', body); // Should log the body with hardcoded values
+          const response = await fetch('../../api/borrow', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                dateBorrowed,
+                borrowerName,
+                borrowerEmail,
+                returnDate,
+                selectedItems: selectedItemIds
+            }) 
+        });
         
-           await fetch('http://127.0.0.1:5432/borrowbutton', {
-              method: 'PATCH',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: body
-          });
-
-          
-
+        if (!response.ok) {
+            throw new Error(`Fetch error: ${response.status} - ${response.statusText}`);
+        }
+    
         closePopup(); 
+        resetFeilds(); 
     }
 
     // Function to open and close the popup
     const openPopup = () => setIsOpen(true);
     const closePopup = () => setIsOpen(false);
 
-    // const handleSelectItem 
+    const resetFeilds = () => {
+        setId('');
+        setSelectedItems([]);
+        setBorrowerName('');
+        setBorrowerEmail('');
+        setReturnWeeks(1);
+        setDateBorrowed(''); 
+    }
 
     return (
         <div> 
            <button onClick={openPopup}> Borrow </button>
-            <Popup 
-                open={isOpen}
-                onClose={closePopup}
-                modal
-                nested> 
-
-                <form> 
-                    <label> 
-                       <SelectItemButton onSelect={setSelectedItems} />
-                    </label>
-                </form>
-                <hr/>
-
-                <ls>
-                    <label> Selected Items:{selectedItems} </label>
-                    {/* display selected Items */}
-                </ls>
-                
-                <form> 
-                    <hr/>
-                    <label>
-                        Borrower Name: 
-                        <input
-                            name="borrowerName"
-                            value={borrowerName}
-                            onChange={(e) => setBorrowerName(e.target.value)}
+           <Popup open={isOpen} modal nested> 
+               {/* Attach onSubmit directly to prevent form submission */}
+               <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}> 
+                   <label> 
+                       {/* <SelectItemButton onSelect={setSelectedItems} /> */}
+                       Enter Item Id: 
+                       <input
+                         type="text"
+                         placeholder="Enter Item ID"
+                         value={id}
+                         onChange={(e) => setId(e.target.value)}
                         />
-                        
-                    </label>
-                    <hr/>
-                    <label>
-                        Borrower Email: 
-                        <input
-                            type="email"
-                            placeholder="Borrower's Email"
-                            value={borrowerEmail}
-                            onChange={(e) => setBorrowerEmail(e.target.value)}
-                            style={{ borderColor: isEmailValid || !borrowerEmail ? 'initial' : 'red' }}
-                        />
-                    </label>
-                    <hr/>
-                    <label>
-                        Return Date: 
-                        <select value={returnWeeks} onChange={(e) => setReturnWeeks(Number(e.target.value))}>
-                        <option value={1}>1 week</option>
-                        <option value={2}>2 weeks</option>
-                        <option value={3}>3 weeks</option>
-                        </select>
+                        <button type="button" onClick={fetchItemById}>Add Item</button>
+                   </label>
 
-                    </label>
+                   <div>
+                       <h4>Selected Items:</h4>
+                       {selectedItems.length > 0 ? (
+                           <ul>
+                               {selectedItems.map((item, index) => (
+                                   <li key={index}>{item.id} - {item.name || "Item Name"}</li> // Adjust 'name' if necessary
+                               ))}
+                           </ul>
+                       ) : (
+                           <p>No items selected.</p>
+                       )}
 
-                    
-                        <button onClick={handleSubmit}>Confirm Borrow</button> 
-                    
-
-                </form>
-
-                <div>
-                    <button onClick={closePopup}>Exit</button>
-                </div>
-
-            </Popup>
+                   </div>
+                   <label>
+                       Borrower Name: 
+                       <input
+                           name="borrowerName"
+                           value={borrowerName}
+                           onChange={(e) => setBorrowerName(e.target.value)}
+                       />
+                   </label>
+                   <hr/>
+                   <label>
+                       Borrower Email: 
+                       <input
+                           type="email"
+                           placeholder="Borrower's Email"
+                           value={borrowerEmail}
+                           onChange={(e) => setBorrowerEmail(e.target.value)}
+                           style={{ borderColor: isEmailValid || !borrowerEmail ? 'initial' : 'red' }}
+                       />
+                   </label>
+                   <hr/>
+                   <label>
+                       Return Date: 
+                       <select value={returnWeeks} onChange={(e) => setReturnWeeks(Number(e.target.value))}>
+                           <option value={1}>1 week</option>
+                           <option value={2}>2 weeks</option>
+                           <option value={3}>3 weeks</option>
+                       </select>
+                   </label>
+                   <button type="submit">Confirm Borrow</button> 
+                   <button 
+                   type="button" 
+                   onClick={closePopup}> 
+                    Exit</button>
+               </form>
+           </Popup>
         </div>
     )
 }
