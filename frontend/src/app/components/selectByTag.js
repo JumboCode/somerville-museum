@@ -29,7 +29,6 @@ export default function SelectByTag() {
     const [selectedTags, setSelectedTags] = useState([]);
 
     useEffect(() => {
-        console.log("Inside fetching tags.");
         const fetchTags = async () => {
             try {
                 const response = await fetch('/api/fetchTags');
@@ -51,6 +50,9 @@ export default function SelectByTag() {
     }, []);
 
     const handleClick = async () => {
+        // Clear entries in state setEntries([])
+        setEntries([]);
+
         // Get checked checkbox IDs and create the filters object
         const checkedCheckboxes = getCheckedCheckboxes();
         const selectedTags = getSelectedTags();
@@ -104,15 +106,6 @@ export default function SelectByTag() {
                 <input type="checkbox" class="checkbox" id="Overdue"></input> Overdue
                 <span class="checkmark"></span>
             </label>
-
-            {/* <label htmlFor="multiSelect">Choose tags:</label>
-                <select id="multiSelect" multiple>
-                    {tags.map((tag) => (
-                        <option key={tag} value={tag}>
-                            {tag}
-                        </option>
-                    ))}
-                </select> */}
 
             <label htmlFor="multiSelect">Choose tags:</label>
             <select id="multiSelect" multiple onChange={(e) => handleSelect(e)}>
