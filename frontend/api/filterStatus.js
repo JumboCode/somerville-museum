@@ -1,0 +1,36 @@
+import { query } from './db.js';
+
+export default async function handler(req, res) {
+    // fetch filters from request
+    const { filters } = req.body;
+
+    // build query string starting with a blanket WHERE statement
+    let queryStr = 'SELECT * FROM dummy_data WHERE 1=1';
+
+    // Bool to track if the first filter
+    let firstFilter = false;
+
+    // for every additional filter, append it to the query string
+    for (const key in filters) {
+        // If this is the first filter, add an AND
+        if (!firstFilter) {
+            queryStr += ' AND';
+            firstFilter = true;
+        }
+
+        // Add current filter to the query string
+        queryStr += ` status = '${filters[key]}' OR`;
+    }
+
+    // Close off the query string with a false statement
+    queryStr += ' 1=0';
+
+    // execute the query
+    try {
+        const result = await query(queryStr);
+        res.status(200).json(result.rows); // Send the result back to the frontend
+    } catch (error) {
+        console.error("Database query error:", error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+}
