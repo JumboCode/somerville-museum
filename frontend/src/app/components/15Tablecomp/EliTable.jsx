@@ -80,13 +80,24 @@ export default function ELiTable() {
                     {currentUnits}
                 </div>
                 <div className="pagination-controls">
-                    <button onClick={goToPreviousPage} disabled={currentPage === 1}>
-                        Previous
-                    </button>
-                    <span>Page {currentPage} of {totalPages}</span>
-                    <button onClick={goToNextPage} disabled={currentPage === totalPages}>
-                        Next
-                    </button>
+                    <div className="num-items">
+                        <p>View</p>
+                        <select name="select-num" id="select-num">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                    <div className="page-selection">
+                        <button onClick={goToPreviousPage} disabled={currentPage === 1}>
+                            Previous
+                        </button>
+                        <span>Page {currentPage} of {totalPages}</span>
+                        <button onClick={goToNextPage} disabled={currentPage === totalPages}>
+                            Next
+                        </button>
+                    </div>
                 </div>
             </div>
         </>
