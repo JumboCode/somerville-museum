@@ -11,33 +11,44 @@ export default async function handler(req, res) {
     let queryStr = 'SELECT * FROM dummy_data WHERE 1=1';
 
     // Bool to track if the first filter
-    let firstFilter = false;
+    let hasStatus = false;
 
     // for every additional filter, append it to the query string
     for (const key in status) {
         // If this is the first filter, add an AND
-        if (!firstFilter) {
-            queryStr += ' AND';
-            firstFilter = true;
+        if (!hasStatus) {
+            queryStr += ' AND ( ';
+            hasStatus = true;
         }
 
         // Add current filter to the query string
         queryStr += ` status = '${status[key]}' OR`;
     }
 
+    // Close parenthesis if there were status filters
+    if (hasStatus) {
+        queryStr += ' 1=0 )';
+    }
+
+    // Bool to track if there are tags in the input selection
+    let hasTags = false;
+
+    // Loop through each of the selected tags, apending to query string
     for (const key in tags) {
         // If this is the first filter, add an AND
-        if (!firstFilter) {
-            queryStr += ' AND';
-            firstFilter = true;
+        if (!hasTags) {
+            queryStr += ' AND ( ';
+            hasTags = true;
         }
 
         // Add current filter to the query string
         queryStr += ` '${tags[key]}' = ANY(tags) OR`;
     }
 
-    // Close off the query string with a false statement
-    queryStr += ' 1=0';
+    // Close parenthesis if there were tag filters
+    if (hasTags) {
+        queryStr += ' 1=0 )';
+    }
 
     // execute the query
     try {
