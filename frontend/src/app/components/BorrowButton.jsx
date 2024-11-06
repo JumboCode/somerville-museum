@@ -70,48 +70,53 @@ const BorrowButton = () => {
     };
     
     const handleSubmit = async (e) => {
-        console.log("kosdfnoakfnkw");
-        // e.preventDefault();
         if (!isEmailValid) {
-            alert('Please enter valid email');
+            alert('Please enter a valid email');
             return; 
-        }   
-
-          const response = await fetch('../../api/borrow', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ 
-                dateBorrowed,
-                borrowerName,
-                borrowerEmail,
-                returnDate,
-                selectedItems: selectedItemIds
-            }) 
-        });
-        
-        if (!response.ok) {
-            throw new Error(`Fetch error: ${response.status} - ${response.statusText}`);
         }
-    
-        closePopup(); 
-        resetFeilds(); 
-    }
+
+        try {
+            console.log(selectedItemIds); 
+            const response = await fetch('../../api/borrow', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    dateBorrowed,
+                    borrowerName,
+                    borrowerEmail,
+                    returnDate,
+                    
+                    selectedItems: selectedItemIds
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Fetch error: ${response.status} - ${response.statusText}`);
+            }
+
+            closePopup();
+            resetFields();  // Ensure this function is spelled correctly
+
+        } catch (error) {
+            console.error("Error submitting data:", error);
+        }
+    };
+
+    const resetFields = () => {
+        setId('');
+        setSelectedItems([]);
+        setSelectedItemIds([]);
+        setBorrowerName('');
+        setBorrowerEmail('');
+        setReturnWeeks(1);
+    };
+
 
     // Function to open and close the popup
     const openPopup = () => setIsOpen(true);
     const closePopup = () => setIsOpen(false);
-
-    const resetFeilds = () => {
-        setId('');
-        setSelectedItems([]);
-        setBorrowerName('');
-        setBorrowerEmail('');
-        setReturnWeeks(1);
-        setDateBorrowed(''); 
-    }
-
     return (
         <div> 
            <button onClick={openPopup}> Borrow </button>
