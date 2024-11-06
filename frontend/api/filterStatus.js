@@ -1,16 +1,16 @@
 import { query } from './db.js';
 
 export default async function handler(req, res) {
-    // fetch status array and tags array from request
+    // Fetch status array and tags array from request
     const { status, tags } = req.body;
 
-    // build query string starting with a blanket WHERE statement
+    // Build query string starting with a blanket WHERE statement
     let queryStr = 'SELECT * FROM dummy_data WHERE 1=1';
 
     // Bool to track if the first filter
     let hasStatus = false;
 
-    // for every additional filter, append it to the query string
+    // For every additional filter, append it to the query string
     for (const key in status) {
         // If this is the first filter, add an AND
         if (!hasStatus) {
@@ -47,10 +47,12 @@ export default async function handler(req, res) {
         queryStr += ' 1=0 )';
     }
 
-    // execute the query
+    // Execute the query string
     try {
         const result = await query(queryStr);
-        res.status(200).json(result.rows); // Send the result back to the frontend
+        
+        // Send the result back to the frontend
+        res.status(200).json(result.rows); 
     } catch (error) {
         console.error("Database query error:", error);
         res.status(500).json({ error: 'Internal Server Error' });
