@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
+// Function to get an array of the names of the checked checkboxes
 function getCheckedCheckboxes() {
     const checkedCheckboxes = [];
     document.querySelectorAll(".checkbox:checked").forEach((checkbox) => {
@@ -10,6 +11,7 @@ function getCheckedCheckboxes() {
     return checkedCheckboxes;
 }
 
+// Function to get the array of selected tags 
 function getSelectedTags() {
     const selectedOptions = [];
     const dropdown = document.getElementById("multiSelect");
@@ -22,15 +24,18 @@ function getSelectedTags() {
     return selectedOptions;
 }
 
+// Main function to render the component 
 export default function SelectByTag() {
     const [tags, setTags] = useState([]);
     const [error, setError] = useState(null);
     const [entries, setEntries] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
 
+    // Fetch the tags from the API (automatically on load)
     useEffect(() => {
         const fetchTags = async () => {
             try {
+                // Fetch all tags from the API
                 const response = await fetch('/api/fetchTags');
                 if (!response.ok) throw new Error('Network response was not ok');
                 const data = await response.json();
@@ -46,6 +51,7 @@ export default function SelectByTag() {
             }
         };
         
+        // Call the fetchTags function
         fetchTags();
     }, []);
 
@@ -57,23 +63,28 @@ export default function SelectByTag() {
         const checkedCheckboxes = getCheckedCheckboxes();
         const selectedTags = getSelectedTags();
 
+        // Create the data object to send to the API
         const data = {
             status: checkedCheckboxes,
             tags: selectedTags
         }
 
+        // Run the request to get the filtered items
         try {
             const response = await fetch (`../../api/filterStatus`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(data)
+                // Send the data object as JSON
+                body: JSON.stringify(data) 
             });
             if (!response.ok) {
                 throw new Error(`Network response was not ok: ${response.statusText}`);
             }
             const result = await response.json();
+
+            // Set the resulting entries in state
             setEntries(result);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -81,6 +92,7 @@ export default function SelectByTag() {
         }
     }
 
+    // Function to handle the multi-selection of tags
     const handleSelect = (e) => {
         // Get selected options as an array
         const selectedOptions = Array.from(e.target.selectedOptions); 
@@ -91,46 +103,62 @@ export default function SelectByTag() {
         // Update state with the selected values
         setSelectedTags(values); 
     };
-    
+
     return (
         <div>
-            <label class="checkbox-container">
-                <input type="checkbox" class="checkbox" id="Available"></input> Available
-                <span class="checkmark"></span>
-            </label>
-            <label class="checkbox-container">
-                <input type="checkbox" class="checkbox" id="Borrowed"></input> Borrowed
-                <span class="checkmark"></span>
-            </label>
-            <label class="checkbox-container">
-                <input type="checkbox" class="checkbox" id="Overdue"></input> Overdue
-                <span class="checkmark"></span>
-            </label>
+            {/* Checkboxes for status */}
+            <div>
+                <label class="checkbox-container">
+                    <input type="checkbox" class="checkbox" id="Available"></input> Available
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            <div>
+                <label class="checkbox-container">
+                    <input type="checkbox" class="checkbox" id="Borrowed"></input> Borrowed
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            <div>
+                <label class="checkbox-container">
+                    <input type="checkbox" class="checkbox" id="Overdue"></input> Overdue
+                    <span class="checkmark"></span>
+                </label>
+            </div>
 
-            <label htmlFor="multiSelect">Choose tags:</label>
-            <select id="multiSelect" multiple onChange={(e) => handleSelect(e)}>
-                {tags.map((tag) => (
-                    <option key={tag} value={tag}>
-                        {tag}
-                    </option>
-                ))}
-            </select>
+            {/* Multi-select dropdown for tags */}
+            <div>
+                <div>
+                    <label htmlFor="multiSelect">Choose tags:</label>
+                </div>
+                <select id="multiSelect" multiple onChange={(e) => handleSelect(e)}>
+                    {tags.map((tag) => (
+                        <option key={tag} value={tag}>
+                            {tag}
+                        </option>
+                    ))}
+                </select>
+            </div>
 
             {/* Button to apply selections */}
-            <button onClick={handleClick}>Apply</button>
+            <div>
+                <button onClick={handleClick}>Apply</button>
+            </div>
 
             {/* Printing out the entries after selection */}
-            {entries.length > 0 ? (
-            <ul>
-                {entries.map((entry) => (
-                <li key={entry.id}>
-                    <strong>ID:</strong> {entry.id} <strong>Name:</strong> {entry.name}
-                </li>
-                ))}
-            </ul>
-            ) : (
-            <p>No entries available.</p>
-            )}
+            <div>
+                {entries.length > 0 ? (
+                <ul>
+                    {entries.map((entry) => (
+                    <li key={entry.id}>
+                        <strong>ID:</strong> {entry.id} <strong>Name:</strong> {entry.name}
+                    </li>
+                    ))}
+                </ul>
+                ) : (
+                <p>No entries available.</p>
+                )}
+            </div>
         </div>
     );
 }
