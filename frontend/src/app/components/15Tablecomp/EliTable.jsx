@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 export default function ELiTable() {
     const [units, setUnits] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [unitsPerPage, setUnitsPerPage] = useState(10); //default units per page is 10
 
     useEffect (() => {
         async function fetchData() {
@@ -36,8 +37,6 @@ export default function ELiTable() {
 
         }, []);
         
-        
-    const unitsPerPage = 5;
     const startIndex = (currentPage - 1) * unitsPerPage;
 
     const currentUnits = units
@@ -46,7 +45,10 @@ export default function ELiTable() {
             <ELiUnit key={unit.id} unit={unit} />
     );
 
-    const totalPages = Math.ceil(currentUnits.length / unitsPerPage);
+    //const totalPages = Math.ceil(currentUnits.length / unitsPerPage);
+
+    //tesing piece of code
+    const totalPages = Math.ceil(20 / unitsPerPage);
 
     const goToPreviousPage = () => {
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
@@ -55,6 +57,16 @@ export default function ELiTable() {
     const goToNextPage = () => {
         setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
     };
+
+    // event handler for the select dropdown, return to page one and 
+    // set units to the selected value
+    const handleUnitsPerPageChange = (event) => {
+        setUnitsPerPage(Number(event.target.value));
+        setCurrentPage(1); //by default set the current page to 1
+    };
+
+    // an array of buttons for page selection
+    const buttons = Array.from({ length: totalPages}, (_, index) => index + 1);
 
     return (
         <>
@@ -82,7 +94,7 @@ export default function ELiTable() {
                 <div className="pagination-controls">
                     <div className="num-items">
                         <p>View</p>
-                        <select name="select-num" id="select-num">
+                        <select name="select-num" id="select-num" onChange = {handleUnitsPerPageChange}>
                             <option value="10">10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
@@ -91,11 +103,18 @@ export default function ELiTable() {
                     </div>
                     <div className="page-selection">
                         <button onClick={goToPreviousPage} disabled={currentPage === 1}>
-                            Previous
+                            &lt;
                         </button>
-                        <span>Page {currentPage} of {totalPages}</span>
+                        {/* <span>Page {currentPage} of {totalPages}</span> */}
+                        
+                            {buttons.map((number) => (
+                                <button key={number} onClick={() => setCurrentPage(number)}>
+                                    {number}
+                                </button>
+                            ))}
+                        
                         <button onClick={goToNextPage} disabled={currentPage === totalPages}>
-                            Next
+                            &gt;
                         </button>
                     </div>
                 </div>
