@@ -4,6 +4,11 @@ import Popup from 'reactjs-popup';
 import React, { useState, useEffect } from "react";
 
 
+//TOOOODOOOOOOOOOOOOO::: CAN I ADD A PARAMETER TO ADD ITEM THAT TAKES IN THE STATUS? 
+// SO ITEM ENTERER CAN DETERMINE WHETHER OR NOT IT CAN BE BORROWED, AND WE CAN SEE IF ITS UNAVAILABLE
+//HOW AND IN WHICH COLUMN DO WE SET THE APPROVER EMAIL AND NAME? 
+
+
 const BorrowButton = () => {
     const [id, setId] = useState('');
     const [selectedItems, setSelectedItems] = useState([]); 
@@ -87,13 +92,19 @@ const BorrowButton = () => {
                     borrowerName,
                     borrowerEmail,
                     returnDate,
-                    
                     selectedItems: selectedItemIds
                 })
             });
             
             if (!response.ok) {
                 throw new Error(`Fetch error: ${response.status} - ${response.statusText}`);
+            }
+
+            const result = await response.json(); 
+
+            if (result.message) {
+                console.log(result.message);  // For debugging purpose
+                alert(result.message);  // Show the message to the user
             }
 
             closePopup();
@@ -116,7 +127,10 @@ const BorrowButton = () => {
 
     // Function to open and close the popup
     const openPopup = () => setIsOpen(true);
-    const closePopup = () => setIsOpen(false);
+    const closePopup = () => {
+        setIsOpen(false)
+        resetFields()};
+
     return (
         <div> 
            <button onClick={openPopup}> Borrow </button>
