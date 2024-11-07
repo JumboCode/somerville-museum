@@ -7,6 +7,7 @@ export default function ELiTable() {
     const [units, setUnits] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [unitsPerPage, setUnitsPerPage] = useState(10); //default units per page is 10
+    const [totalPages, setTotalPages] = useState( Math.ceil(units.length / unitsPerPage));
 
     useEffect (() => {
         async function fetchData() {
@@ -16,11 +17,10 @@ export default function ELiTable() {
                     headers: {
                     'Content-Type': 'application/json' // Specify the content type
                     },
-                    body: JSON.stringify({ id: id, name: name, status: status, tags: tags})
                 });
 
                 if (response.ok) {
-                    const data = await response.json;
+                    const data = await response.json();
                     console.log("data selected" + data);
                     setUnits(data);
                 } else {
@@ -45,10 +45,10 @@ export default function ELiTable() {
             <ELiUnit key={unit.id} unit={unit} />
     );
 
-    //const totalPages = Math.ceil(currentUnits.length / unitsPerPage);
+    
 
     //tesing piece of code
-    const totalPages = Math.ceil(20 / unitsPerPage);
+    // const totalPages = Math.ceil(20 / unitsPerPage);
 
     const goToPreviousPage = () => {
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
@@ -62,7 +62,8 @@ export default function ELiTable() {
     // set units to the selected value
     const handleUnitsPerPageChange = (event) => {
         setUnitsPerPage(Number(event.target.value));
-        setCurrentPage(1); //by default set the current page to 1
+        setCurrentPage(1); 
+        setTotalPages(Math.ceil(units.length/ Number(event.target.value)));//by default set the current page to 1
     };
 
     // an array of buttons for page selection
