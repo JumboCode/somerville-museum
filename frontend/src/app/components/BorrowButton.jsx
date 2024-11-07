@@ -4,11 +4,12 @@ import Popup from 'reactjs-popup';
 import React, { useState, useEffect } from "react";
 
 
-//TOOOODOOOOOOOOOOOOO::: CAN I ADD A PARAMETER TO ADD ITEM THAT TAKES IN THE STATUS? 
-// SO ITEM ENTERER CAN DETERMINE WHETHER OR NOT IT CAN BE BORROWED, AND WE CAN SEE IF ITS UNAVAILABLE
-//HOW AND IN WHICH COLUMN DO WE SET THE APPROVER EMAIL AND NAME? 
+//WE DID NOT IMPLEMENT AUTOMATICALLY UPDATING IF AN ITEM IS OVERDUE
+//THE APPROVER INFORMATION IS CURRENTLY STORED AS A GLOBAL VARIABLE
+//THE DATE() REACT FUNCTION LOGS ONE DAY AHEAD
 
-
+//This is the entire borrow button component, it includes the popup, text feilds
+//and handling submission and fetching items 
 const BorrowButton = () => {
     const [id, setId] = useState('');
     const [selectedItems, setSelectedItems] = useState([]); 
@@ -20,7 +21,11 @@ const BorrowButton = () => {
     const [returnWeeks, setReturnWeeks] = useState(1);
     const isEmailValid = borrowerEmail.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
 
-   
+    //global vars for approver, temporary
+    const APPROVER_NAME = 'Holden Kittleberger';
+    const APPROVER_EMAIL = 'XXXXXXXX@slitherio.com'; 
+
+    //calculates the return date based on users selection
     const calculateReturnDate = (weeks) => {
           const today = new Date();
           today.setDate(today.getDate() + weeks * 7);
@@ -29,6 +34,7 @@ const BorrowButton = () => {
 
     const returnDate = calculateReturnDate(returnWeeks);
     
+    //calculates the current day NOTEEEEEE this for some reason logs one day after
     const calculateBorrowDay = () => {
         const today = new Date();
         return today.toISOString().split('T')[0];
@@ -38,6 +44,7 @@ const BorrowButton = () => {
         setDateBorrowed(calculateBorrowDay());
     }, []);
 
+    //fetches the item by ID, sets the items and their IDS in variables
     const fetchItemById = async () => {
         if (!id) return;
         try {
@@ -60,20 +67,20 @@ const BorrowButton = () => {
             }
     
             const data = await response.json();
-            console.log('Fetched data:', data); 
-    
+
+            //if the data was retrieved add it to vars 
             if (data) {
                 setSelectedItems((prevItems) => [...prevItems, data]); 
                 setSelectedItemIds((prevIds) => [...prevIds, data.id]);
                 setId(''); 
-
             } 
         }
         catch (error) {
             console.error("Error fetching item:", error);
         }
     };
-    
+
+    //submits the information, updates all data columns with appropriate information
     const handleSubmit = async (e) => {
         if (!isEmailValid) {
             alert('Please enter a valid email');
@@ -81,7 +88,6 @@ const BorrowButton = () => {
         }
 
         try {
-            console.log(selectedItemIds); 
             const response = await fetch('../../api/borrow', {
                 method: 'PUT',
                 headers: {
@@ -92,6 +98,8 @@ const BorrowButton = () => {
                     borrowerName,
                     borrowerEmail,
                     returnDate,
+                    APPROVER_NAME,
+                    APPROVER_EMAIL, 
                     selectedItems: selectedItemIds
                 })
             });
@@ -101,20 +109,20 @@ const BorrowButton = () => {
             }
 
             const result = await response.json(); 
-
             if (result.message) {
-                console.log(result.message);  // For debugging purpose
-                alert(result.message);  // Show the message to the user
+                alert(result.message);  
             }
 
+            //close and reset feilds when user exits
             closePopup();
-            resetFields();  // Ensure this function is spelled correctly
+            resetFields();  
 
         } catch (error) {
             console.error("Error submitting data:", error);
         }
     };
 
+    //reset feild when user exits or submits
     const resetFields = () => {
         setId('');
         setSelectedItems([]);
@@ -154,7 +162,7 @@ const BorrowButton = () => {
                        {selectedItems.length > 0 ? (
                            <ul>
                                {selectedItems.map((item, index) => (
-                                   <li key={index}>{item.id} - {item.name || "Item Name"}</li> // Adjust 'name' if necessary
+                                   <li key={index}>{item.id} - {item.name || "Item Name"}</li> 
                                ))}
                            </ul>
                        ) : (
