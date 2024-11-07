@@ -71,7 +71,7 @@ export default function SelectByTag() {
 
         // Run the request to get the filtered items
         try {
-            const response = await fetch (`../../api/filterStatus`, {
+            const response = await fetch (`../../api/filterStatusTags`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
