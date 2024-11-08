@@ -7,7 +7,9 @@ export default function ELiTable() {
     const [units, setUnits] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [unitsPerPage, setUnitsPerPage] = useState(10); //default units per page is 10
-    const [totalPages, setTotalPages] = useState( Math.ceil(units.length / unitsPerPage));
+    const [unitLength, setUnitLength] = useState(0);
+    const [totalPages, setTotalPages] = useState();
+
 
     useEffect (() => {
         async function fetchData() {
@@ -23,6 +25,8 @@ export default function ELiTable() {
                     const data = await response.json();
                     console.log("data selected" + data);
                     setUnits(data);
+                    setUnitLength(data.length);
+                    setTotalPages(Math.ceil(data.length / 10));
                 } else {
                     console.log("failed to fetch data");
                 }
