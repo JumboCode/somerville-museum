@@ -1,21 +1,65 @@
 "use client";
 
-import React from "react";
-import "./Dashboard.css"
+import React, { useState, useEffect } from "react";
+import "./Dashboard.css";
 
 const Dashboard = () => {
-    return (
+  // State to store the counts for each status
+  const [counts, setCounts] = useState({
+    Total: null,
+    Overdue: null,
+    Borrowed: null,
+    Available: null,
+  });
+
+  // Function to fetch the count from the backend for a specific status
+  const fetchCountForStatus = async (status) => {
+    try {
+      const response = await fetch(`../../api/selectCounts`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: status }), // Status to query
+      });
+      
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+
+      // Update the state with the count for this status
+      setCounts((prevCounts) => ({
+        ...prevCounts,
+        [status]: data.count,
+      }));
+    } catch (error) {
+      console.error(`Error fetching count for ${status}:`, error);
+    }
+  };
+
+  // Fetch counts for each status when the component mounts
+  useEffect(() => {  // TO DO: UPDATE TOTAL; QUERY FILTERS BY STATUS CURRENTLY
+    const statuses = ['Total', 'Overdue', 'Borrowed', 'Available'];
+
+    statuses.forEach((status) => {
+      fetchCountForStatus(status);
+    });
+  }, []); // Only run once when the component mounts
+
+  return (
     <nav className="nav-bar">
-      <li className="nav-links">
-        <p className="nav-items"># of items</p>
-        <p className="nav-items"># overdue</p>
-        <p className="nav-items"># borrowed</p>
-        <p className="nav-items"># missing</p>
-        {/* ADD last-element PROPERTY TO LAST ELEMENT IN LIST */}
-        <p className="nav-items last-element"># available</p>
-      </li>
+      <ul className="nav-links">
+        {Object.entries(counts).map(([status, count]) => (
+          <li key={status} className="nav-items">
+            <p>{status}: {count !== null ? count : "Loading..."}</p>
+          </li>
+        ))}
+      </ul>
     </nav>
-    );
+  );
 };
 
 export default Dashboard;
+

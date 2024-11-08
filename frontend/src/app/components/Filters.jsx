@@ -10,14 +10,21 @@ const Filter = () => {
 
     return (
         <div className="filters" >
-          <Checkbox label="All" />
-          <Checkbox label="Available" />
-          <Checkbox label="Borrowed" />
-          <Checkbox label="Overdue" />
-          <Dropdown label="Type" />
-          <Dropdown label="Size" /> 
-          <Dropdown label="Color" />
-          <Dropdown label="Gender" />
+          <p className="filters-title">Filters</p>
+          <div className="checkboxes">
+            <Checkbox label="All" />
+            <Checkbox label="Available" />
+            <Checkbox label="Borrowed" />
+            <Checkbox label="Overdue" />
+            <Checkbox label="Missing" />
+          </div>
+          <div className="dropdowns">
+            <Dropdown label="Century" />
+            <Dropdown label="Type" />
+            <Dropdown label="Size" /> 
+            <Dropdown label="Color" />
+            <Dropdown label="Gender" />
+          </div>
         </div>
     );
 };
