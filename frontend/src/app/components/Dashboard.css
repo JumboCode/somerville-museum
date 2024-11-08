@@ -1,22 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Akatab:wght@400;500;600;700;800;900&family=Handjet&display=swap');
+
+* {
+  font-family: "Akatab", sans-serif;
+  color: #000000;
+}
 
 li {
-    border-radius: 3px;
+    border-radius: 3%;
 }
 
 .nav-links {
   /* center the words on the bar! */
   display: flex;
-  justify-content: center;
   background-color:#d9d9d9;
+  justify-content: center;
   /* positioning */
   margin: auto;
-  width: 50%;
+  width: 60vw;
+  text-align: center;
   height: auto;
   /* removing the bullet points that normally come with a list*/
   list-style: none;
   /* I liked the way my font looked bold better */
-  flex-basis: 0;
-  column-gap: 0px;
 }
 
 .last-element {
@@ -28,9 +33,13 @@ p:hover { /*for when you hover over a link!*/
 }
 
 .nav-items {
+  /* constant border width */
   border-right: 1px solid black;
+  text-align: center;
   padding: 3% 5% 3% 5%;
   color: black;
   text-decoration: none;
+  width: 8vw;
   height: auto;
+  flex-grow: 1;
 }
