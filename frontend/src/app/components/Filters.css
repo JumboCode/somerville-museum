@@ -1,0 +1,22 @@
+.filters {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    /* Change height and width to fit container as needed */
+    height: 100%; 
+    width: 18%;
+    padding-left: 2vw;
+    padding-bottom: 5vh;
+    padding-top: 5vh;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+.filters-title {
+    font-size: 16pt;
+    font-weight: bold;
+}
+
+.checkboxes {
+    padding-bottom: 2vh;
+}

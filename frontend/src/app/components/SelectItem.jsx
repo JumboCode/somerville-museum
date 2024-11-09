@@ -11,7 +11,7 @@ export default function SelectItemButton() {
       fetch(`../../api/selectByName`, { 
         method: 'PUT',
         headers: {
-        'Content-Type': 'application/json' // Specify the content type
+          'Content-Type': 'application/json' // Specify the content type
         },
         body: JSON.stringify({ name }) // Send the name as a JSON object
       })
