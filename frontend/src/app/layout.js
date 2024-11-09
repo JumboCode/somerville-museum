@@ -9,6 +9,10 @@ import SelectItemButton from "./components/SelectItem";
 import DeleteItemButton from "./components/DeleteItemButton";
 import AddItemButton from "./components/AddItemButton";
 import SelectByTag from "./components/selectByTag";
+import Dashboard from "./components/Dashboard";
+import Filters from "./components/Filters";
+import BorrowButton from "./components/BorrowButton.jsx";
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -40,6 +44,9 @@ export default function RootLayout({ children }) {
       <AddItemButton/>
       <SortAlphaButton />
       <SelectByTag />
+      <BorrowButton />
+      <Dashboard />
+      <Filters />
       </body>
     </html>
   );
