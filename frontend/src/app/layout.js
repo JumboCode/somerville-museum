@@ -10,6 +10,7 @@ import DeleteItemButton from "./components/DeleteItemButton";
 import AddItemButton from "./components/AddItemButton";
 import Dashboard from "./components/Dashboard";
 import Filters from "./components/Filters";
+import BorrowButton from "./components/BorrowButton.jsx";
 
 
 const geistSans = localFont({
@@ -41,7 +42,7 @@ export default function RootLayout({ children }) {
       <Popup/>
       <AddItemButton/>
       <SortAlphaButton />
-      <br></br>
+      <BorrowButton />
       <Dashboard />
       <Filters />
       </body>
