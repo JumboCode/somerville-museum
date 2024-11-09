@@ -13,6 +13,7 @@ function ExpandedEntry({ itemData, onClose }) {
     const [isEditing, setIsEditing] = useState(false);
     const [newName, setNewName] = useState('');
     const [newNote, setNewNote] = useState('');
+    const [newStatus, setNewStatus] = useState('');
     const [newID, setNewID] = useState('');
     const [keywords, setKeywords] = useState([]);
     const [showSaveButton, setShowSaveButton] = useState(false);
@@ -27,6 +28,7 @@ function ExpandedEntry({ itemData, onClose }) {
             setNewNote(itemData.note || '');
             setNewID(itemData.id); 
             setKeywords(itemData.tags || []);
+            setNewStatus(itemData.status || '');
         }
     }, [itemData]);
 
@@ -42,6 +44,7 @@ function ExpandedEntry({ itemData, onClose }) {
         itemData.name = newName;
         itemData.note = newNote;
         itemData.tags = keywords;
+        itemData.status = newStatus;
         setIsEditing(false);
         setShowSaveButton(false);
         setShowDiscardButton(false);
@@ -51,6 +54,7 @@ function ExpandedEntry({ itemData, onClose }) {
 
     const onDiscard = () => {
         setNewName(itemData.name);
+        setNewStatus(itemData.status || '');
         setNewNote(itemData.note || '');
         setNewID(itemData.id);
         setKeywords(itemData.tags || []);
@@ -89,6 +93,23 @@ function ExpandedEntry({ itemData, onClose }) {
             });
             if (!response.ok) {
                 throw new Error('Failed to update name');
+            }
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+
+    const handleUpdateStatus = async (event) => {
+        try {
+            const response = await fetch("../../api/updateStatus", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ id: itemData.id, status: newStatus }), // Update the status
+            });
+            if (!response.ok) {
+                throw new Error('Failed to update status');
             }
         } catch (error) {
             setError(error.message);
@@ -161,6 +182,7 @@ function ExpandedEntry({ itemData, onClose }) {
         onSave();
         handleUpdateNote();
         handleUpdateName();
+        handleUpdateStatus();
         handleUpdateTags();
         handleUpdateID();
     };
@@ -201,6 +223,14 @@ function ExpandedEntry({ itemData, onClose }) {
                                                 className="content form-control"
                                                 placeholder={itemData.id}
                                             />
+                                            <p>Status: </p>
+                                            <input
+                                                type="text"
+                                                value={newStatus}
+                                                onChange={(e) => setNewStatus(e.target.value)}
+                                                className="content form-control"
+                                                placeholder={itemData.status}
+                                            />
                                             <p>Tags: </p>
                                             <SelectDropdown selectedTags={keywords} onKeywordsChange={handleKeywordsChange} />
                                         </div>
@@ -208,7 +238,7 @@ function ExpandedEntry({ itemData, onClose }) {
                                         <div>
                                             <h2 className="item-title">{itemData.name}</h2> 
                                             <div className="item-id">ID: {itemData.id}</div>   
-                                            <div className="status">Status: N/A</div>     
+                                            <div className="status">Status: {itemData.status}</div>     
                                             <div className="tags">
                                             Tags:
                                             {itemData.tags && itemData.tags.map((tag, index) => (
