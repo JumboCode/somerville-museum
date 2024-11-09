@@ -1,10 +1,18 @@
 import { query } from './db.js';
 
 export default async function handler(req, res) {
+  console.log('in selectId api'); 
   const { id } = req.body;
   try {
     const result = await query('SELECT * FROM dummy_data WHERE id = $1', [id]);
+
+    if (result.rows.length === 0) {
+      // No item found with the provided ID
+      return res.status(404).json({ error: 'Item not found' });
+    }
+    
     res.status(200).json(result.rows[0]); // Send the result back to the frontend
+
   } catch (error) {
     console.error("Database query error:", error);
     res.status(500).json({ error: 'Internal Server Error' });
