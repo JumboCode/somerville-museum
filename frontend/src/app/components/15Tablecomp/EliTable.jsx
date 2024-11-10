@@ -7,7 +7,6 @@ export default function ELiTable() {
     const [units, setUnits] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [unitsPerPage, setUnitsPerPage] = useState(10); //default units per page is 10
-    const [unitLength, setUnitLength] = useState(0);
     const [totalPages, setTotalPages] = useState();
 
 
@@ -25,7 +24,6 @@ export default function ELiTable() {
                     const data = await response.json();
                     console.log("data selected" + data);
                     setUnits(data);
-                    setUnitLength(data.length);
                     setTotalPages(Math.ceil(data.length / 10));
                 } else {
                     console.log("failed to fetch data");
@@ -74,7 +72,7 @@ export default function ELiTable() {
     const buttons = Array.from({ length: totalPages}, (_, index) => index + 1);
 
     return (
-        <>
+        
             <div className="Table">
                 <div className="Header">
                     <div className="Items">
@@ -124,6 +122,6 @@ export default function ELiTable() {
                     </div>
                 </div>
             </div>
-        </>
+        
     );
 }
