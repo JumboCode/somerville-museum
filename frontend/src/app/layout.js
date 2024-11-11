@@ -9,6 +9,10 @@ import SelectItemButton from "./components/SelectItem";
 import DeleteItemButton from "./components/DeleteItemButton";
 import AddItemButton from "./components/AddItemButton";
 import ELiTable from "./components/15Tablecomp/EliTable";
+import SelectByTag from "./components/selectByTag";
+import Dashboard from "./components/Dashboard";
+import Filters from "./components/Filters";
+import BorrowButton from "./components/BorrowButton.jsx";
 
 
 const geistSans = localFont({
@@ -33,7 +37,17 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <ELiTable/>
+      <SelectItemButton />
+      <DeleteItemButton />
+      <EditNoteButton />
+      <Popup/>
+      <AddItemButton/>
+      <SortAlphaButton />
+      <SelectByTag />
+      <BorrowButton />
+      <Dashboard />
+      <ELiTable/>  
+      <Filters />
       </body>
     </html>
   );
