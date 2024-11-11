@@ -8,6 +8,7 @@ import Popup from "./components/Popup";
 import SelectItemButton from "./components/SelectItem";
 import DeleteItemButton from "./components/DeleteItemButton";
 import AddItemButton from "./components/AddItemButton";
+import ELiTable from "./components/15Tablecomp/EliTable";
 import SelectByTag from "./components/selectByTag";
 import Dashboard from "./components/Dashboard";
 import Filters from "./components/Filters";
@@ -36,7 +37,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        
       <SelectItemButton />
       <DeleteItemButton />
       <EditNoteButton />
@@ -46,6 +46,7 @@ export default function RootLayout({ children }) {
       <SelectByTag />
       <BorrowButton />
       <Dashboard />
+      <ELiTable/>  
       <Filters />
       </body>
     </html>
