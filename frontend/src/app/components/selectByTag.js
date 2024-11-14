@@ -108,21 +108,21 @@ export default function SelectByTag() {
         <div>
             {/* Checkboxes for status */}
             <div>
-                <label class="checkbox-container">
-                    <input type="checkbox" class="checkbox" id="Available"></input> Available
-                    <span class="checkmark"></span>
+                <label className="checkbox-container">
+                    <input type="checkbox" className="checkbox" id="Available"></input> Available
+                    <span className="checkmark"></span>
                 </label>
             </div>
             <div>
-                <label class="checkbox-container">
-                    <input type="checkbox" class="checkbox" id="Borrowed"></input> Borrowed
-                    <span class="checkmark"></span>
+                <label className="checkbox-container">
+                    <input type="checkbox" className="checkbox" id="Borrowed"></input> Borrowed
+                    <span className="checkmark"></span>
                 </label>
             </div>
             <div>
-                <label class="checkbox-container">
-                    <input type="checkbox" class="checkbox" id="Overdue"></input> Overdue
-                    <span class="checkmark"></span>
+                <label className="checkbox-container">
+                    <input type="checkbox" className="checkbox" id="Overdue"></input> Overdue
+                    <span className="checkmark"></span>
                 </label>
             </div>
 
