@@ -2,6 +2,7 @@
 
 import Popup from 'reactjs-popup';
 import React, { useState, useEffect } from "react";
+import StylishButton from './StylishButton.jsx'; //import css file
 
 
 //WE DID NOT IMPLEMENT AUTOMATICALLY UPDATING IF AN ITEM IS OVERDUE
@@ -141,7 +142,9 @@ const BorrowButton = () => {
 
     return (
         <div> 
-           <button onClick={openPopup}> Borrow </button>
+           
+           <StylishButton label="Borrow" styleType="style1" onClick={openPopup} />
+
            <Popup open={isOpen} modal nested> 
                {/* Attach onSubmit directly to prevent form submission */}
                <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}> 
