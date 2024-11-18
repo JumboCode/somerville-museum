@@ -1,6 +1,7 @@
 "use client";
 import './EliTable.css';
 import ELiUnit from '../15Tablecomp/EliUnit';
+import BorrowButton from '../BorrowButton';
 import { useState, useEffect } from "react";
 
 export default function ELiTable() {
@@ -8,46 +9,69 @@ export default function ELiTable() {
     const [currentPage, setCurrentPage] = useState(1);
     const [unitsPerPage, setUnitsPerPage] = useState(10); //default units per page is 10
     const [totalPages, setTotalPages] = useState();
+    const [selectedItems, setSelectedItems] = useState([]); 
 
 
     useEffect (() => {
-        async function fetchData() {
-            try {            
-                const response = await fetch(`../../api/queryAll`, { 
-                    method: 'GET',
-                    headers: {
-                    'Content-Type': 'application/json' // Specify the content type
-                    },
-                });
+        fetchData();
+    }, []);
 
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log("data selected" + data);
-                    setUnits(data);
-                    setTotalPages(Math.ceil(data.length / 10));
-                } else {
-                    console.log("failed to fetch data");
-                }
-                
-            } catch (error) {
-                console.log(error);
+
+    async function fetchData() {
+        try {            
+            const response = await fetch(`../../api/queryAll`, { 
+                method: 'GET',
+                headers: {
+                'Content-Type': 'application/json' // Specify the content type
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log("data selected" + data);
+                setUnits(data);
+                setTotalPages(Math.ceil(data.length / 10));
+            } else {
+                console.log("failed to fetch data");
             }
             
+        } catch (error) {
+            console.log(error);
         }
 
-            fetchData();
-
-        }, []);
         
+    };
+
+    const handleBorrowSuccess = () => {
+        // Refetch data to update the table after borrowing
+        fetchData();
+        };
+
+    const handleCheckboxChange = (unit) => {
+        console.log(unit.id, 'has been checked');
+        
+        setSelectedItems((prevSelected) => {
+            if (prevSelected.some((item) => item.id === unit.id)) {
+                return prevSelected.filter((item) => item.id !== unit.id);
+            } else {
+                return [...prevSelected, unit];
+            }
+        });
+
+    };
+
     const startIndex = (currentPage - 1) * unitsPerPage;
 
     const currentUnits = units
         .slice(startIndex, startIndex + unitsPerPage)
         .map((unit) => 
-            <ELiUnit key={unit.id} unit={unit} />
+            <ELiUnit key={unit.id} 
+            unit={unit} 
+            onChange={() => handleCheckboxChange(unit)}
+            checked={selectedItems.includes(unit)}
+            />
+           
     );
-
-    
 
     //tesing piece of code
     // const totalPages = Math.ceil(20 / unitsPerPage);
@@ -81,7 +105,11 @@ export default function ELiTable() {
                         </div>
                             <div className='buttons'> 
                                 <button className='addBtn'>ADD</button>
-                                <button className='brwBtn'>BORROW</button>
+                                <BorrowButton 
+                                className='brwBtn'
+                                selectedItems = {selectedItems} 
+                                onSuccess = {handleBorrowSuccess}
+                                >BORROW</BorrowButton>
                             </div>
                     </div>
                     <div className="TableLabels">
