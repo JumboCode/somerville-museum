@@ -37,17 +37,17 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-      <SelectItemButton />
+      {/* <SelectItemButton /> */}
       <DeleteItemButton />
-      <EditNoteButton />
+      {/* <EditNoteButton /> */}
       <Popup/>
-      <AddItemButton/>
-      <SortAlphaButton />
-      <SelectByTag />
+      {/* <AddItemButton/> */}
+      {/* <SortAlphaButton /> */}
+      {/* <SelectByTag /> */}
       <BorrowButton />
-      <Dashboard />
+      {/* <Dashboard /> */}
       <ELiTable/>  
-      <Filters />
+      {/* <Filters /> */}
       </body>
     </html>
   );

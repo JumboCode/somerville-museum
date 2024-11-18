@@ -2,7 +2,7 @@
 
 import Popup from 'reactjs-popup';
 import React, { useState, useEffect } from "react";
-
+import StylishButton from './StylishButton.jsx'; //import css file
 
 //WE DID NOT IMPLEMENT AUTOMATICALLY UPDATING IF AN ITEM IS OVERDUE
 //THE APPROVER INFORMATION IS CURRENTLY STORED AS A GLOBAL VARIABLE
@@ -10,16 +10,17 @@ import React, { useState, useEffect } from "react";
 
 //This is the entire borrow button component, it includes the popup, text feilds
 //and handling submission and fetching items 
-const BorrowButton = () => {
-    const [id, setId] = useState('');
-    const [selectedItems, setSelectedItems] = useState([]); 
-    const [selectedItemIds, setSelectedItemIds] = useState([]); 
+const BorrowButton = ( {selectedItems = [], onSuccess } ) => {
+    // const [id, setId] = useState('');
+    // const [selectedItems, setSelectedItems] = useState([]); 
+    // const [selectedItemIds, setSelectedItemIds] = useState([]); 
     const [isOpen, setIsOpen] = useState(false); 
     const [borrowerName, setBorrowerName] = useState(' ');
     const [borrowerEmail, setBorrowerEmail] = useState(' '); 
     const [dateBorrowed, setDateBorrowed] = useState(' ');
     const [returnWeeks, setReturnWeeks] = useState(1);
     const isEmailValid = borrowerEmail.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+    // const itemsArray = Array.isArray(selectedItems) ? selectedItems : Object.values(selectedItems);
 
     //global vars for approver, temporary
     const APPROVER_NAME = 'Holden Kittleberger';
@@ -37,48 +38,51 @@ const BorrowButton = () => {
     //calculates the current day NOTEEEEEE this for some reason logs one day after
     const calculateBorrowDay = () => {
         const today = new Date();
-        return today.toISOString().split('T')[0];
+        return today.toLocaleDateString().split('T')[0];
     }
     
     useEffect(() => {
         setDateBorrowed(calculateBorrowDay());
     }, []);
 
-    //fetches the item by ID, sets the items and their IDS in variables
-    const fetchItemById = async () => {
-        if (!id) return;
-        try {
-            const response = await fetch(`../../api/selectId`, { 
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json' 
-                },
-                body: JSON.stringify({ id }) 
-              })
-    
-              if (!response.ok) {
-                // Handle specific response statuses
-                if (response.status === 404) {
-                    console.error("Item not found");
-                    alert("Item not found. Please check the ID and try again.");
-                    return; // Exit if item not found
-                }
-                throw new Error(`Fetch error: ${response.status}`);
-            }
-    
-            const data = await response.json();
+    console.log(typeof selectedItems);
+    console.log('the selected items are: ', selectedItems);
 
-            //if the data was retrieved add it to vars 
-            if (data) {
-                setSelectedItems((prevItems) => [...prevItems, data]); 
-                setSelectedItemIds((prevIds) => [...prevIds, data.id]);
-                setId(''); 
-            } 
-        }
-        catch (error) {
-            console.error("Error fetching item:", error);
-        }
-    };
+    // //fetches the item by ID, sets the items and their IDS in variables
+    // const fetchItemById = async () => {
+    //     if (!id) return;
+    //     try {
+    //         const response = await fetch(`../../api/selectId`, { 
+    //             method: 'POST',
+    //             headers: {
+    //             'Content-Type': 'application/json' 
+    //             },
+    //             body: JSON.stringify({ id }) 
+    //           })
+    
+    //           if (!response.ok) {
+    //             // Handle specific response statuses
+    //             if (response.status === 404) {
+    //                 console.error("Item not found");
+    //                 alert("Item not found. Please check the ID and try again.");
+    //                 return; // Exit if item not found
+    //             }
+    //             throw new Error(`Fetch error: ${response.status}`);
+    //         }
+    
+    //         const data = await response.json();
+
+    //         //if the data was retrieved add it to vars 
+    //         if (data) {
+    //             setSelectedItems((prevItems) => [...prevItems, data]); 
+    //             setSelectedItemIds((prevIds) => [...prevIds, data.id]);
+    //             setId(''); 
+    //         } 
+    //     }
+    //     catch (error) {
+    //         console.error("Error fetching item:", error);
+    //     }
+    // };
 
     //submits the information, updates all data columns with appropriate information
     const handleSubmit = async (e) => {
@@ -100,7 +104,7 @@ const BorrowButton = () => {
                     returnDate,
                     APPROVER_NAME,
                     APPROVER_EMAIL, 
-                    selectedItems: selectedItemIds
+                    selectedItems: selectedItems.map(item => item.id)
                 })
             });
             
@@ -111,6 +115,10 @@ const BorrowButton = () => {
             const result = await response.json(); 
             if (result.message) {
                 alert(result.message);  
+            }
+
+            if (onSuccess) {
+                onSuccess(); 
             }
 
             //close and reset feilds when user exits
@@ -124,9 +132,9 @@ const BorrowButton = () => {
 
     //reset feild when user exits or submits
     const resetFields = () => {
-        setId('');
-        setSelectedItems([]);
-        setSelectedItemIds([]);
+        // setId('');
+        // setSelectedItems([]);
+        // setSelectedItemIds([]);
         setBorrowerName('');
         setBorrowerEmail('');
         setReturnWeeks(1);
@@ -141,21 +149,12 @@ const BorrowButton = () => {
 
     return (
         <div> 
-           <button onClick={openPopup}> Borrow </button>
+             <StylishButton label="Borrow" styleType="style1" onClick={openPopup} />
+           {/* <button onClick={openPopup}> Borrow </button> */}
            <Popup open={isOpen} modal nested> 
                {/* Attach onSubmit directly to prevent form submission */}
                <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}> 
-                   <label> 
-                       {/* <SelectItemButton onSelect={setSelectedItems} /> */}
-                       Enter Item Id: 
-                       <input
-                         type="text"
-                         placeholder="Enter Item ID"
-                         value={id}
-                         onChange={(e) => setId(e.target.value)}
-                        />
-                        <button type="button" onClick={fetchItemById}>Add Item</button>
-                   </label>
+
 
                    <div>
                        <h4>Selected Items:</h4>
@@ -209,6 +208,19 @@ const BorrowButton = () => {
     )
 }
 
+//the code for selecting and item by entering its ID, would go right before
+//selected items
+// <label> 
+//     {/* <SelectItemButton onSelect={setSelectedItems} /> */}
+//     Enter Item Id: 
+//     <input
+//         type="text"
+//         placeholder="Enter Item ID"
+//         value={id}
+//         onChange={(e) => setId(e.target.value)}
+//     />
+//     <button type="button" onClick={fetchItemById}>Add Item</button>
+// </label> 
 
 
 export default BorrowButton; 
