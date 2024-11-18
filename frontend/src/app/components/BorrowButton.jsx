@@ -149,8 +149,9 @@ const BorrowButton = ( {selectedItems = [], onSuccess } ) => {
 
     return (
         <div> 
-             <StylishButton label="Borrow" styleType="style1" onClick={openPopup} />
-           {/* <button onClick={openPopup}> Borrow </button> */}
+           
+           <StylishButton label="Borrow" styleType="style1" onClick={openPopup} />
+
            <Popup open={isOpen} modal nested> 
                {/* Attach onSubmit directly to prevent form submission */}
                <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}> 
