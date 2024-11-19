@@ -19,15 +19,34 @@
 'use client';
 
 import React, { useState } from 'react';
-import Filter from './Filters';
-import Dashboard from "./components/Dashboard";
-import ELiTable from "./components/15Tablecomp/EliTable";
+import Gear from '../assets/Gear.jsx';
+import Pie from '../assets/Pie.jsx';
+import Filter from '../assets/Filter.jsx';
+import Brick from '../assets/Brick.jsx';
+import './Tabs.css';
+
+// import Filter from './Filters';
+// import Dashboard from "./components/Dashboard";
+// import ELiTable from "./components/15Tablecomp/EliTable";
 
 
 const Tabs = () => {
-    <div>
-        
-    </div>
+    return (
+        <div>
+            <div className="sidenav">
+                <a href="#">Logo</a>
+                {/*add functionality later!!*/}
+                <Pie />
+                <Brick />
+                <Filter />
+                <Gear />
+            </div>
+
+            <div className="main">
+                <h1>All of the page content will go here!</h1>
+            </div>
+        </div>
+    );
 };
 
 export default Tabs;

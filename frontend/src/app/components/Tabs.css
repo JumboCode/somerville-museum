@@ -1,0 +1,63 @@
+/* The sidebar */
+.sidenav {
+    width: 4rem;
+    background-color: #adaaaa;
+    padding-top: 20px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+.sidenav a {
+    display: block;
+    color: #000000;
+    font-size: 1rem;
+    font-weight: normal;
+    padding: 6px 0;
+    text-align: center;
+    background-color: #ffffff;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.sidenav a:hover {
+    font-weight: bold;
+}
+
+.sidenav svg {
+    display: block;
+    margin: 0 auto;
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+    height: 25px;
+    width: 25px;
+    fill: #000000;
+}
+
+.sidenav svg:hover {
+    fill: #f1f1f1;
+    cursor: pointer;
+}
+
+.sidenav svg path:hover {
+    fill: #f1f1f1;
+}
+
+#gear {
+    position: absolute;
+    bottom: 0;
+    left: 30%;
+}
+
+.main {
+    margin-left: 4rem;
+    background-color: #f1f1f1;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
