@@ -80,8 +80,8 @@ export default function ELiTable() {
                             <input type="text" placeholder="Search..."/>
                         </div>
                             <div className='buttons'> 
-                                <button className='addBtn'>ADD</button>
-                                <button className='brwBtn'>BORROW</button>
+                                <button className='addBtn'>+item</button>
+                                <button className='brwBtn'>Borrow</button>
                             </div>
                     </div>
                     <div className="TableLabels">
@@ -96,8 +96,8 @@ export default function ELiTable() {
                 </div>
                 <div className="pagination-controls">
                     <div className="num-items">
-                        <p>View</p>
-                        <select name="select-num" id="select-num" onChange = {handleUnitsPerPageChange}>
+                        <p className="view">View </p>
+                        <select className="select-num" id="select-num" onChange = {handleUnitsPerPageChange}>
                             <option value="10">10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
@@ -105,18 +105,16 @@ export default function ELiTable() {
                         </select>
                     </div>
                     <div className="page-selection">
-                        <button onClick={goToPreviousPage} disabled={currentPage === 1}>
+                        <button className="leftBtn" onClick={goToPreviousPage} disabled={currentPage === 1}>
                             &lt;
                         </button>
-                        {/* <span>Page {currentPage} of {totalPages}</span> */}
-                        
                             {buttons.map((number) => (
-                                <button key={number} onClick={() => setCurrentPage(number)}>
+                                <button className="pageNum" key={number} onClick={() => setCurrentPage(number)}>
                                     {number}
                                 </button>
                             ))}
                         
-                        <button onClick={goToNextPage} disabled={currentPage === totalPages}>
+                        <button className="rightBtn" onClick={goToNextPage} disabled={currentPage === totalPages}>
                             &gt;
                         </button>
                     </div>

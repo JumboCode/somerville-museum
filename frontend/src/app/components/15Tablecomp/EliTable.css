@@ -8,7 +8,7 @@ body, html {
 
 .Table {
     background-color: aliceblue;
-    height: 80vh;
+    height: 100vh;
     width: 90vw;
     display: flex;
     flex-direction: column; 
@@ -18,8 +18,8 @@ body, html {
 }
 
 .Header {
-    background-color: beige;
-    height: 20%;
+    background-color: white;
+    height: 15%;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -34,10 +34,11 @@ body, html {
     display: flex; 
     align-items: center;
     justify-content: space-between;
-    width: 80%;
+    width: 100%;
     position: absolute;
     top: 30%;
-    margin-right: 80px;
+    padding: 0% 2% 1% 2%;
+    gap: 5%;
 }
 
 .Searchbar input[type="text"] {
@@ -45,21 +46,36 @@ body, html {
     border: 1px solid #ccc;
     flex-grow: 2;
     margin-right: 15px;
-    min-width: 60vw;
+    min-width: 30vw;
+    height:5vh;
+    background-color: #D9D9D9;
 }
 
 .buttons {
     display: flex;
     gap: 10px;
+    height: 5vh;
+    align-items: center;
 }
 
-.addBtn, .brwBtn {
+.addBtn {
     padding: 8px 12px;
     border: none;
-    background-color: #6e7781;
+    background-color: #418CFE;
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
+    border-radius: 2px;
+}
+
+.brwBtn {
+    padding: 8px 12px;
+    border: none;
+    background-color: #D9D9D9;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 2px;
 }
 
 .addBtn:hover, .brwBtn:hover {
@@ -108,6 +124,7 @@ body, html {
     border-radius: 10px;
 }
 
+
 .num-items {
     display: flex;
     flex-direction: row;
@@ -117,4 +134,24 @@ body, html {
 
 .page-selection {
     padding-right: 5%;
+}
+
+.leftBtn, .rightBtn, .pageNum {
+    padding: 8px 12px;
+    border: none;
+    color: black;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 2px;
+    background: none;
+}
+
+.view {
+    padding: 10%
+}
+
+.select-num {
+    padding: 10% 15% 10% 15%;
+    background-color: #D9D9D9;
+    border: none;
 }
