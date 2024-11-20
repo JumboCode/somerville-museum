@@ -49,15 +49,25 @@ const Dashboard = () => {
   }, []); // Only run once when the component mounts
 
   return (
-    <nav className="nav-bar">
-      <ul className="nav-links">
-        {Object.entries(counts).map(([status, count]) => (
-          <li key={status} className="nav-items">
-            <p>{status}: {count !== null ? count : "Loading..."}</p>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <div>
+      <h1>Inventory Dashboard</h1>
+      <div className="wrapper">
+        <div className="placeholder"></div><div className="placeholder"></div><div className="placeholder"></div>
+      </div>
+      <br></br>
+      <h2>Overview</h2>
+      <nav className="nav-bar">
+        <ul className="nav-links">
+          {Object.entries(counts).map(([status, count]) => (
+            <li key={status} className="nav-items">
+              <p>{status}: {count !== null ? count : "Loading..."}</p>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <br></br>
+      <h2>Recent Borrows</h2>
+    </div>
   );
 };
 

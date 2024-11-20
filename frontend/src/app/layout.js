@@ -45,7 +45,6 @@ export default function RootLayout({ children }) {
       <SortAlphaButton />
       <SelectByTag />
       <BorrowButton />
-      <Dashboard />
       <ELiTable/>  
       <Filters /> */}
       <Tabs />
