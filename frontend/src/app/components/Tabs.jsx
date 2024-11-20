@@ -26,7 +26,7 @@ import Brick from '../assets/Brick.jsx';
 import './Tabs.css';
 
 // import Filter from './Filters';
-// import Dashboard from "./components/Dashboard";
+import Dashboard from "./Dashboard.jsx";
 // import ELiTable from "./components/15Tablecomp/EliTable";
 
 
@@ -43,7 +43,7 @@ const Tabs = () => {
             </div>
 
             <div className="main">
-                <h1>All of the page content will go here!</h1>
+                <Dashboard />
             </div>
         </div>
     );
