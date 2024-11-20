@@ -23,7 +23,7 @@ export default function ELiUnit( { unit } ) {
             <div className="tags"></div>
             <div className="drop-down">
                 {/* to do ask about icons fontawesome?*/}
-                <button></button>
+                <button className="drop-downBtn">•••</button>
             </div>
         </div>
     );
