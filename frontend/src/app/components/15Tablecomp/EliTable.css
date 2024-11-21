@@ -7,7 +7,7 @@ body, html {
 }
 
 .Table {
-    background-color: aliceblue;
+    background-color: white;
     height: 100vh;
     width: 90vw;
     display: flex;
@@ -72,7 +72,7 @@ body, html {
     padding: 8px 12px;
     border: none;
     background-color: #D9D9D9;
-    color: white;
+    color: black;
     cursor: pointer;
     transition: background-color 0.3s;
     border-radius: 2px;
@@ -90,8 +90,9 @@ body, html {
     padding-right: 10%;
     position: absolute;
     bottom: -2px; 
-    gap: -2vh;
+    gap: 2vh;
     font-size: 1rem;
+    margin-top: 2vh;
 }
 
 .TableLabel {
@@ -102,19 +103,20 @@ body, html {
 }
 
 .ItemBarHolder {
-    background-color: aliceblue;
-    width: 100%;
+    background-color: white;
+    width: 96%;
+    border: 1px solid #ccc;
     display: flex;
     height: 80%;
-    border-radius: 10px;
     flex-direction: column;
     max-height: 100%; 
     overflow-y: auto;
+    margin-left: 2%;
+    margin-right: 2%;
 }
 
 .pagination-controls {
     display: flex;
-    justify-content:space-around;
     flex-direction: row;
     position: sticky;
     bottom: 0;
@@ -122,18 +124,24 @@ body, html {
     padding: 10px;
     text-align: center;
     border-radius: 10px;
+    justify-content: space-between;
 }
 
 
 .num-items {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
     padding-left: 3%;
+    margin-right: auto;
+    flex: 0; 
 }
 
 .page-selection {
+    display: flex;
     padding-right: 5%;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
 }
 
 .leftBtn, .rightBtn, .pageNum {
