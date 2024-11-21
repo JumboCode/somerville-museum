@@ -2,6 +2,8 @@
 import './EliTable.css';
 import ELiUnit from '../15Tablecomp/EliUnit';
 import { useState, useEffect } from "react";
+import BorrowButton from '../BorrowButton.jsx';
+import Popup from '../AddItemButton';
 
 export default function ELiTable() {
     const [units, setUnits] = useState([]);
@@ -80,14 +82,14 @@ export default function ELiTable() {
                             <input type="text" placeholder="Search..."/>
                         </div>
                             <div className='buttons'> 
-                                <button className='addBtn'>+item</button>
-                                <button className='brwBtn'>Borrow</button>
+                                <Popup className='addBtn'>+item</Popup>
+                                <BorrowButton className='brwBtn' >Borrow</BorrowButton>
                             </div>
                     </div>
                     <div className="TableLabels">
                         <div className="TableLabel"> ID </div>
+                        <div className="TableLabel"> Availability </div>
                         <div className="TableLabel"> Name </div>
-                        <div className="TableLabel"> Status </div>
                         <div className="TableLabel"> Tags </div>
                     </div>
                 </div>

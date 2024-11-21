@@ -19,13 +19,13 @@
     "next": "^14.2.15",
     "pg": "^8.13.1",
     "random": "^5.1.1",
-    "react": "^18",
+    "react": "^18.3.1",
     "react-bootstrap": "^2.10.5",
-    "react-dom": "^18",
-    "react-scripts": "^5.0.1",
+    "react-dom": "^18.3.1",
+    "react-scripts": "^3.0.1",
     "reactjs-popup": "^2.0.6",
     "uuid": "^10.0.0",
-    "vercel": "^37.14.0",
+    "vercel": "^32.3.0",
     "web-vitals": "^2.1.4"
   }
 }
