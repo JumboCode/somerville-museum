@@ -10,7 +10,7 @@ import React, { useState, useEffect } from "react";
 
 //This is the entire borrow button component, it includes the popup, text feilds
 //and handling submission and fetching items 
-const BorrowButton = () => {
+const BorrowButton = ({ className, children }) => {
     const [id, setId] = useState('');
     const [selectedItems, setSelectedItems] = useState([]); 
     const [selectedItemIds, setSelectedItemIds] = useState([]); 
@@ -141,7 +141,7 @@ const BorrowButton = () => {
 
     return (
         <div> 
-           <button onClick={openPopup}> Borrow </button>
+           <button className={className} onClick={openPopup}> Borrow </button>
            <Popup open={isOpen} modal nested> 
                {/* Attach onSubmit directly to prevent form submission */}
                <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}> 

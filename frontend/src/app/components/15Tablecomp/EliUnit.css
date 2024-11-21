@@ -2,11 +2,11 @@
     display: flex;
     background-color: white;
     width: 100%;
-    min-height: 7vh;
+    min-height: 8vh;
     justify-content: space-around;
     align-items: center;
     color: #000000;
-    font-size: 2vh;
+    font-size: 1rem;
     border-bottom: 1px solid #c5bcbc;
     padding: 0 2vh;
     flex-shrink: 0;
@@ -16,7 +16,9 @@
     display: flex;
     align-items: center;
     gap: 1vh;
-    margin-left: 1vh
+    margin-left: 1vh;
+    width:9vw;
+    justify-content: space-between;
 }
 
 .checkbox-input {
@@ -28,6 +30,8 @@
     cursor: pointer;
     background-color: white;
     transition: background-color 0.2s;
+    margin-left: 2vh;
+    
 }
 
 /* Checkbox checked style */
@@ -37,8 +41,8 @@
 }
 
 .picture .image-container {
-    width: 7vh; 
-    height: 7vh; 
+    width: 6vh; 
+    height: 6vh; 
     border-radius: 50%;
     overflow: hidden; 
     background-color: aqua;
@@ -53,17 +57,55 @@
     object-fit: cover; /* Scales the image to cover the container without distortion */
 }
 
+.center-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5vh;
+    justify-content: center;
+    width: 63vw;
+}
+
+.circle {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.Borrowed {
+    background-color: red;
+}
+
+.Available {
+    background-color: green;
+}
+
+.Overdue {
+    background-color: orange;
+}
+
+.Missing {
+    background-color: red;
+}
 
 .id, .name, .status, .tags, .drop-down {
     flex: 1; 
-    min-width: 10vh;
+    width: 5%;
     text-align: center;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 1.5vh;
+    justify-content: center;
 }
 
 .drop-down {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    width:5vw;
 }
 
 .drop-downBtn {
@@ -72,7 +114,7 @@
     justify-content: center;
     padding: 10px;
     background-color: none;
-    margin-top: 1vh;
+    margin: 1vh;
     width:11vh;
     height: 4vh;
     background-color: white;

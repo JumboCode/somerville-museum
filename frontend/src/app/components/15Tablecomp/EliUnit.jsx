@@ -17,12 +17,16 @@ export default function ELiUnit( { unit } ) {
                     </div>
                 </div>
             </div>
-            <div className="id"> {unit.id} </div>
-            <div className="name">{unit.name}</div>
-            <div className="status">{unit.status}</div>
-            <div className="tags"></div>
+            <div className="center-section">
+                <div className="id"> {unit.id} </div>
+                <div className="status">
+                    <div className={`circle ${unit.status}`} ></div>
+                    {unit.status}
+                </div>
+                <div className="name">{unit.name}</div>
+                <div className="tags"></div>
+            </div>
             <div className="drop-down">
-                {/* to do ask about icons fontawesome?*/}
                 <button className="drop-downBtn">•••</button>
             </div>
         </div>

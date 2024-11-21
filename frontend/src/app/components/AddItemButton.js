@@ -56,7 +56,7 @@ function PopUp({ handleAdd, close }) {
   );
 }
 
-export default function MyForm() {
+export default function MyForm({className, children}) {
   const [items, setItems] = useState([]);
   
   
@@ -82,7 +82,7 @@ export default function MyForm() {
   return (
     <div>
       <Popup
-        trigger={<button> Add Item </button>}
+        trigger={<button className={className}> {children} </button>}
         modal
         nested
       >
