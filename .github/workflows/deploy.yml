@@ -17,4 +17,4 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
       - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --cwd=frontend
