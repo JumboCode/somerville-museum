@@ -27,6 +27,7 @@ import './Tabs.css';
 
 // import Filter from './Filters';
 import Dashboard from "./Dashboard.jsx";
+import Link from 'next/link'
 // import ELiTable from "./components/15Tablecomp/EliTable";
 
 
@@ -37,14 +38,18 @@ const Tabs = () => {
                 <a href="#">Logo</a>
                 {/*add functionality later!!*/}
                 <Pie />
+                {/* <Brick /> */}
+                {/* <li> */}
                 <Brick />
+                    {/* <Link href="/inventory"></Link> */}
+                {/* </li> */}
                 <Filter />
                 <Gear />
             </div>
 
-            <div className="main">
+            {/* <div className="main">
                 <Dashboard />
-            </div>
+            </div> */}
         </div>
     );
 };
