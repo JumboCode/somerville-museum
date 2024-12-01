@@ -23,27 +23,12 @@
     margin: 0 auto;
 }
 
-.sidenav a:hover {
-    font-weight: bold;
-}
-
 .sidenav svg {
     display: block;
-    margin: 0 auto;
-    margin-top: 2.5rem;
-    margin-bottom: 2.5rem;
+    margin: 2.5rem auto;
     height: 25px;
     width: 25px;
     fill: #000000;
-}
-
-.sidenav svg:hover {
-    fill: #f1f1f1;
-    cursor: pointer;
-}
-
-.sidenav svg path:hover {
-    fill: #f1f1f1;
 }
 
 #gear {
@@ -52,12 +37,59 @@
     left: 30%;
 }
 
-.main {
-    margin-left: 4rem;
-    background-color: #f1f1f1;
+/* Main content area */
+.main-content {
+    margin-left: 4rem; /* Offset for the sidebar */
+    display: flex;
+    height: 100vh; /* Full height of the viewport */
+    overflow: hidden; /* Prevent content overflow */
 }
 
-@media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
+/* Filter and Inventory sections */
+.filter-section {
+    flex: 0 0 25%; /* 25% of the main content width */
+    max-width: 25%;
+    overflow-y: auto;
+    padding: 16px;
+    background-color: #f8f8f8;
+    box-sizing: border-box;
+    border-right: 1px solid #ddd;
 }
+
+.inventory-section {
+    flex: 1; /* Takes the remaining width */
+    overflow-y: auto;
+    padding: 16px;
+    background-color: #ffffff;
+    box-sizing: border-box;
+}
+
+/* Wrapper for the entire app */
+.app-layout {
+    display: flex; /* Align items horizontally */
+    height: 100vh; /* Full viewport height */
+    overflow: hidden; /* Prevent any overflow issues */
+}
+
+/* Sidebar (Tabs) */
+.sidenav {
+    width: 4rem; /* Fixed width for the Tabs component */
+    background-color: #adaaaa;
+    position: fixed; /* Make it fixed to the left side */
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 1000; /* Ensure it stays on top */
+    overflow-x: hidden;
+}
+
+/* Main content next to the sidebar */
+.main-content {
+    margin-left: 4rem; /* Leave space for the Tabs component */
+    display: flex; /* Allow horizontal alignment of children */
+    flex-direction: row; /* Ensure Filters and Inventory are side-by-side */
+    flex: 1;
+    height: 100%; /* Take up the remaining height */
+    overflow: hidden; /* Prevent any overflow */
+}
+
