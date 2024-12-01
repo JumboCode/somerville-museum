@@ -27,13 +27,13 @@ const BorrowButton = ( {selectedItems = [], onSuccess } ) => {
     const APPROVER_EMAIL = 'XXXXXXXX@slitherio.com'; 
 
     //calculates the return date based on users selection
-    const calculateReturnDate = (weeks) => {
+    const calculateDueDate = (weeks) => {
           const today = new Date();
           today.setDate(today.getDate() + weeks * 7);
-          return today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+          return today.toLocaleDateString().split('T')[0]; // Format as YYYY-MM-DD
         };
 
-    const returnDate = calculateReturnDate(returnWeeks);
+    const dueDate = calculateDueDate(returnWeeks);
     
     //calculates the current day NOTEEEEEE this for some reason logs one day after
     const calculateBorrowDay = () => {
@@ -45,7 +45,6 @@ const BorrowButton = ( {selectedItems = [], onSuccess } ) => {
         setDateBorrowed(calculateBorrowDay());
     }, []);
 
-    console.log(typeof selectedItems);
     console.log('the selected items are: ', selectedItems);
 
     // //fetches the item by ID, sets the items and their IDS in variables
@@ -101,7 +100,7 @@ const BorrowButton = ( {selectedItems = [], onSuccess } ) => {
                     dateBorrowed,
                     borrowerName,
                     borrowerEmail,
-                    returnDate,
+                    dueDate,
                     APPROVER_NAME,
                     APPROVER_EMAIL, 
                     selectedItems: selectedItems.map(item => item.id)
