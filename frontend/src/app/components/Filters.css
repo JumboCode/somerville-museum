@@ -1,22 +1,27 @@
 .filters {
     display: flex;
     flex-direction: column;
-    background-color: #ffffff;
-    /* Change height and width to fit container as needed */
-    height: 100%; 
-    width: 18%;
-    padding-left: 2vw;
-    padding-bottom: 5vh;
-    padding-top: 5vh;
-    border-radius: 5px;
-    border: 1px solid black;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-left: 4rem; /* Matches the width of the Tabs component */
+    width: calc(100% - 4rem); /* Adjust width to prevent overflow */
+    max-height: 100%;
+    overflow-y: auto;
+    box-sizing: border-box; /* Include padding in the width calculation */
+    padding: 16px;
+    background-color: #f8f8f8; /* Optional: Match the background */
 }
 
 .filters-title {
-    font-size: 16pt;
+    font-size: 1.5rem;
     font-weight: bold;
+    margin-bottom: 16px;
 }
 
-.checkboxes {
-    padding-bottom: 2vh;
+.checkboxes,
+.dropdowns {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
 }
