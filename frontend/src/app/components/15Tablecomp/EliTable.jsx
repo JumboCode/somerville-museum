@@ -2,6 +2,7 @@
 import './EliTable.css';
 import ELiUnit from '../15Tablecomp/EliUnit';
 import BorrowButton from '../BorrowButton';
+import ReturnButton from '../ReturnButton';
 import { useState, useEffect } from "react";
 
 export default function ELiTable() {
@@ -16,7 +17,6 @@ export default function ELiTable() {
         fetchData();
     }, []);
 
-
     async function fetchData() {
         try {            
             const response = await fetch(`../../api/queryAll`, { 
@@ -28,7 +28,6 @@ export default function ELiTable() {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log("data selected" + data);
                 setUnits(data);
                 setTotalPages(Math.ceil(data.length / 10));
             } else {
@@ -38,7 +37,6 @@ export default function ELiTable() {
         } catch (error) {
             console.log(error);
         }
-
         
     };
 
@@ -46,7 +44,7 @@ export default function ELiTable() {
         // Refetch data to update the table after borrowing
         fetchData();
         };
-
+        
     const handleCheckboxChange = (unit) => {
         console.log(unit.id, 'has been checked');
         
@@ -59,6 +57,7 @@ export default function ELiTable() {
         });
 
     };
+
 
     const startIndex = (currentPage - 1) * unitsPerPage;
 
@@ -105,12 +104,17 @@ export default function ELiTable() {
                         </div>
                             <div className='buttons'> 
                                 <button className='addBtn'>ADD</button>
-                                <BorrowButton 
-                                className='brwBtn'
+                                <BorrowButton className='brwBtn'
                                 selectedItems = {selectedItems} 
                                 onSuccess = {handleBorrowSuccess}
                                 >BORROW</BorrowButton>
+                                <ReturnButton className='brwBtn'
+                                selectedItems = {selectedItems}
+                                onSuccess={handleBorrowSuccess}
+                                >RETURN</ReturnButton>
+
                             </div>
+                        
                     </div>
                     <div className="TableLabels">
                         <div className="TableLabel"> ID </div>
