@@ -4,7 +4,7 @@
     justify-content: flex-start;
     align-items: flex-start;
     padding-left: 4rem; /* Matches the width of the Tabs component */
-    width: calc(100% - 4rem); /* Adjust width to prevent overflow */
+    width: 100%; /* Adjust width to prevent overflow */
     max-height: 100%;
     overflow-y: auto;
     box-sizing: border-box; /* Include padding in the width calculation */
