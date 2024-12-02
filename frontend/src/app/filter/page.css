@@ -1,20 +1,26 @@
-.page-container {
+.wrapper {
   display: flex;
-  flex-direction: row;
-  height: 100vh;
+  margin-left: 4rem + 18rem;/* Matches sidebar width */
+  height: 100%;
+  width: 100%;
 }
 
 .filter-section {
-  flex: 1;
-  max-width: 300px;
+  width: 18rem;
+  min-width: 16rem;
   overflow-y: auto;
   border-right: 1px solid #ddd;
-  padding: 16px;
   background-color: #f8f8f8;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 4rem;
 }
 
 .inventory-section {
-  flex: 3;
-  overflow-y: auto;
-  padding: 16px;
+  flex: 1;
+  margin: auto;
+  margin-left: 18rem;
+  width: calc(100% - 18rem - 4rem); /* Take remaining width */
+  overflow-x: hidden;
 }

@@ -5,7 +5,7 @@ import './page.css'; // Ensure styles are imported
 
 const Page = () => {
     return (
-        <div className="main-content">
+        <div className="wrapper">
             <div className="filter-section">
                 <Filter />
             </div>

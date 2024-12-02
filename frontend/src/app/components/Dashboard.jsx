@@ -68,7 +68,7 @@ const Dashboard = () => {
       </nav>
       <br></br>
       <h2>Recent Borrows</h2>
-      <RecentBorrows />
+      {/* <RecentBorrows /> */}
     </div>
   );
 };
