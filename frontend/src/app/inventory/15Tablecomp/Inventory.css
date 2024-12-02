@@ -7,9 +7,11 @@ body, html {
 }
 
 .Table {
+    margin: auto;
     background-color: aliceblue;
     height: 80vh;
-    width: 90vw;
+    /* width: 100%; */
+    width: 70vw;
     display: flex;
     flex-direction: column; 
     border: 3px solid black;
@@ -27,7 +29,7 @@ body, html {
     justify-content: flex-start;
     position: relative;
     border-radius: 10px;
-    padding: 3%;
+    padding: 0;
 }
 
 .Items {
@@ -45,7 +47,8 @@ body, html {
     border: 1px solid #ccc;
     flex-grow: 2;
     margin-right: 15px;
-    min-width: 60vw;
+    width: 100%;
+    min-width: auto;
 }
 
 .buttons {
