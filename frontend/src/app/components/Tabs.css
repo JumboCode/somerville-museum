@@ -47,6 +47,12 @@
     transform: scale(1.05);
 }
 
+.sidenav #logo {
+    height: 3.5rem; 
+    width: 3.5rem;   
+    margin: 1rem auto; 
+}
+
 #gear {
     position: absolute;
     bottom: 0;
