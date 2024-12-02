@@ -28,17 +28,72 @@ export default function ELiTable() {
 
             if (response.ok) {
                 const data = await response.json();
-                setUnits(data);
-                setTotalPages(Math.ceil(data.length / 10));
+                
+                // Add overdue calculation
+                const currentDate = new Date();
+                //logic for checking overdue? Does not automatically update table
+                const updatedData = data.map((item) => {
+                    if (item.status === 'Borrowed' && item.dueDate && new Date(item.dueDate) < currentDate) {
+                        return { ...item, status: 'Overdue' };
+                    }
+                    return item;
+                });
+
+
+                setUnits(updatedData);
+                setTotalPages(Math.ceil(updatedData.length / unitsPerPage));
+
+                // if (overdueItems.length > 0) {
+                //     await updateOverdueItems(overdueItems);
+                // }
+
+               
             } else {
                 console.log("failed to fetch data");
             }
             
         } catch (error) {
-            console.log(error);
+            console.log(error); 
         }
         
     };
+
+    //POSSIBLE ASYNC FUNCTION FOR OVERDUE 
+    // async function updateOverdueItems(items, currentDate = new Date()) {
+    //     if (!Array.isArray(items)) {
+    //         throw new Error("Invalid input: items must be an array.");
+    //     }
+    
+    //     return items.map((item) => {
+    //         if (item.status === 'Borrowed' && item.dueDate && new Date(item.dueDate) < currentDate) {
+    //             return { ...item, status: 'Overdue' };
+    //         }
+    //         return item;
+    //     });
+    // }
+
+    //POSSIBLE FUNCTION FOR UPDATING WITH AN 'OVERDUE' API
+
+    // async function syncOverdueStatus(overdueItems) {
+    //     if (overdueItems.length === 0) return; // No overdue items to update
+    
+    //     try {
+    //         const response = await fetch(`../../api/overdue`, {
+    //             method: 'PUT',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify(overdueItems),
+    //         });
+    
+    //         if (!response.ok) {
+    //             console.log('Failed to update overdue status in the database');
+    //         }
+    //     } catch (error) {
+    //         console.log('Error updating overdue status:', error);
+    //     }
+    // }
+
 
     const handleBorrowSuccess = () => {
         // Refetch data to update the table after borrowing
@@ -69,7 +124,6 @@ export default function ELiTable() {
             onChange={() => handleCheckboxChange(unit)}
             checked={selectedItems.includes(unit)}
             />
-           
     );
 
     //tesing piece of code
