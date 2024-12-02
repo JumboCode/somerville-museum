@@ -23,6 +23,7 @@ import Gear from '../assets/Gear.jsx';
 import Pie from '../assets/Pie.jsx';
 import Filter from '../assets/Filter.jsx';
 import Brick from '../assets/Brick.jsx';
+import Logo from '../assets/Logo.jsx';
 import './Tabs.css';
 
 // import Filter from './Filters';
@@ -35,7 +36,7 @@ const Tabs = () => {
     return (
         <div>
             <div className="sidenav">
-                <a href="#">Logo</a>
+                <Logo />
                 {/*add functionality later!!*/}
                 <Pie />
                 {/* <Brick /> */}
