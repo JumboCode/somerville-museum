@@ -67,7 +67,7 @@ export default function ELiUnit( { unit } ) {
             </div>
 
             {isPopupVisible && (
-                <Popup unit={unit} onClose={handleClosePopup} />
+                <Popup unit={unit} onClose={handleClosePopup}  />
             )}
         </div>
     );
