@@ -1,0 +1,11 @@
+main = "./src/app/worker.js"
+
+name = "sm-test"
+
+#r2_buckets = [
+#    { binding = "MY_BUCKET", bucket_name = "somerville-museum"}
+#]
+
+[[r2_buckets]]
+binding = 'MY_BUCKET'
+bucket_name = 'somerville-museum'
