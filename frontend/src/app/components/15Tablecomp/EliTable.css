@@ -102,6 +102,17 @@ body, html {
     color: #333;
 }
 
+#NameTag {
+    cursor: pointer;
+}
+
+#NameTag:hover {
+    transition: all 0.5s ease;
+    color: #1c1c1c;
+    font-weight: 500;
+}
+
+
 .ItemBarHolder {
     background-color: white;
     width: 96%;

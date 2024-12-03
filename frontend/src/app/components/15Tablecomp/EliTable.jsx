@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import BorrowButton from '../BorrowButton.jsx';
 import Popup from '../AddItemButton';
 
+
+//on click name sorts alpha order + pop up 
 export default function ELiTable() {
     const [units, setUnits] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -49,7 +51,13 @@ export default function ELiTable() {
             <ELiUnit key={unit.id} unit={unit} />
     );
 
+    const sortByName = () => {
+        const filteredAndSortedEntries = [...units]
+          .sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
     
+        setUnits(filteredAndSortedEntries);
+
+    };
 
     //tesing piece of code
     // const totalPages = Math.ceil(20 / unitsPerPage);
@@ -89,7 +97,7 @@ export default function ELiTable() {
                     <div className="TableLabels">
                         <div className="TableLabel"> ID </div>
                         <div className="TableLabel"> Availability </div>
-                        <div className="TableLabel"> Name </div>
+                        <div className="TableLabel" onClick={sortByName} id='NameTag'> Name </div>
                         <div className="TableLabel"> Tags </div>
                     </div>
                 </div>
