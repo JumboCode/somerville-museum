@@ -1,11 +1,41 @@
 "use client";
 import "./EliUnit.css";
+import { useState, useEffect } from "react";
+import Popup from "./Popup";
 
 // Add unit to this component if needed
 export default function ELiUnit( { unit } ) {
     const { id, name, status, tags } = unit;
+    const [isPopupVisible, setIsPopupVisible] = useState(false);
+
+    const handleDoubleClick = () => {
+        setIsPopupVisible(true);
+    }
+
+    const handleClosePopup = () => {
+        setIsPopupVisible(false);
+    }
+
+    const handleClickOutside = (event) => {
+        if (
+            event.target.closest('.sidebar') === null &&
+            event.target.closest('.unit') === null
+
+        ) {
+            setIsPopupVisible(false);
+        }
+    }
+
+    useEffect(() => {
+        if (isPopupVisible) {
+            document.addEventListener('click', handleClickOutside);
+        } else {
+            document.removeEventListener('click', handleClickOutside)
+        }
+    }, [isPopupVisible]);
 
     return (
+        
         <div className="unit"> 
             <div className="left-section">
                 <div className="check-box">
@@ -24,11 +54,21 @@ export default function ELiUnit( { unit } ) {
                     {unit.status}
                 </div>
                 <div className="name">{unit.name}</div>
-                <div className="tags"></div>
+                <div className="tags">
+                    {tags && tags.length > 0 && tags.map((tag, index) => (
+                            <span key={index} className="tag">
+                                {tag}
+                            </span>
+                        ))}
+                </div>
             </div>
             <div className="drop-down">
-                <button className="drop-downBtn">•••</button>
+                <button className="drop-downBtn" onDoubleClick={handleDoubleClick}>•••</button>
             </div>
+
+            {isPopupVisible && (
+                <Popup unit={unit} onClose={handleClosePopup} />
+            )}
         </div>
     );
 }
