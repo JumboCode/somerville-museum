@@ -1,8 +1,8 @@
 "use client";
 import "./Popup.css";
 
-// Add unit to this component if needed
-export default function Popup( { unit } ) {
+
+export default function Popup( { unit, onClose } ) {
     const { id, name, status, tags } = unit;
 
     return (
@@ -11,7 +11,7 @@ export default function Popup( { unit } ) {
                 <h2>{name}</h2>
                 <div class="buttons">
                 <button class="edit-btn"> Edit </button>
-                <button class="close-btn">X</button>
+                <button class="close-btn" onClick={onClose}>X</button>
                 </div>
             </div>
             
