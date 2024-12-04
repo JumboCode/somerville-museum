@@ -1,18 +1,18 @@
 
 import localFont from "next/font/local";
 import "./globals.css";
-// import SortAlphaButton from "./components/SortAlphaButton.jsx";
-// import EditNoteButton from "./components/EditNoteButton";
+import SortAlphaButton from "./components/SortAlphaButton.jsx";
+import EditNoteButton from "./components/EditNoteButton";
 import './components/Popup.css'; 
-// import Popup from "./components/Popup";
-// import SelectItemButton from "./components/SelectItem";
-// import DeleteItemButton from "./components/DeleteItemButton";
-// import AddItemButton from "./components/AddItemButton";
-// import ELiTable from "./components/15Tablecomp/EliTable";
-// import SelectByTag from "./components/selectByTag";
-// import Dashboard from "./components/Dashboard";
-// import Filters from "./components/Filters";
-// import BorrowButton from "./components/BorrowButton.jsx";
+import Popup from "./components/Popup";
+import SelectItemButton from "./components/SelectItem";
+import DeleteItemButton from "./components/DeleteItemButton";
+import AddItemButton from "./components/AddItemButton";
+import ELiTable from "./components/15Tablecomp/EliTable";
+import SelectByTag from "./components/selectByTag";
+import Dashboard from "./components/Dashboard";
+import Filters from "./components/Filters";
+import BorrowButton from "./components/BorrowButton.jsx";
 import AddPopup from "./components/AddPopup";
 
 
@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-      {/* <SelectItemButton />
+      <SelectItemButton />
       <DeleteItemButton />
       <EditNoteButton />
       <Popup/>
@@ -48,7 +48,7 @@ export default function RootLayout({ children }) {
       <BorrowButton />
       <Dashboard />
       <ELiTable/>  
-      <Filters /> */}
+      <Filters />
       <AddPopup />
       </body>
     </html>
