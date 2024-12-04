@@ -97,22 +97,22 @@ const handleAdd = async (id, name, note) => {
                     {/* First Row: Century and Size */}
                     <div class="inline-row">
                         <div class="dropdown">
-                        <h3>Century</h3>
-                        <select>
-                            <option>???</option>
-                        </select>
+                            <h3>Century</h3>
+                            <select>
+                                <option>???</option>
+                            </select>
                         </div>
                         <div class="dropdown">
-                        <h3>Size</h3>
-                        <select>
-                            <option>???</option>
-                        </select>
+                            <h3>Size</h3>
+                            <select>
+                                <option>???</option>
+                            </select>
                         </div>
                     </div>
                     <div class="dropdown">
                         <h3>Clothing Type</h3>
                         <select>
-                        <option>???</option>
+                            <option>???</option>
                         </select>
                     </div>
                 </div>
