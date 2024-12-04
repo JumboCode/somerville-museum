@@ -38,6 +38,32 @@ const handleAdd = async (id, name, note) => {
 
 };
 
+const categoryButtons = document.querySelectorAll('.category-button');
+
+categoryButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    // Find the parent group to limit selections to that group
+    const parentGroup = button.closest('.button-group');
+    // Remove 'selected' class from all buttons in the group
+    parentGroup.querySelectorAll('.category-button').forEach(btn => btn.classList.remove('selected'));
+    // Add 'selected' class to clicked button
+    button.classList.add('selected');
+  });
+});
+
+
+const colorCircles = document.querySelectorAll('.color-circle');
+
+colorCircles.forEach(circle => {
+  circle.addEventListener('click', () => {
+    // Remove the 'selected' class from all circles
+    colorCircles.forEach(c => c.classList.remove('selected'));
+    // Add 'selected' class to the clicked circle
+    circle.classList.add('selected');
+  });
+});
+
+
     return (
         <div className="row">
             <div className="column">
@@ -87,7 +113,7 @@ const handleAdd = async (id, name, note) => {
                             rows="5" // Num. visible rows
                         ></textarea>
                     </label>
-                    <button type="submit">Submit</button>
+                    {/* <button type="submit">Submit</button> */}
                 </form>
             </div>
 
@@ -115,6 +141,51 @@ const handleAdd = async (id, name, note) => {
                             <option>???</option>
                         </select>
                     </div>
+                    <div class="buttons-container">
+                    <div class="category-buttons">
+                        <h3>Gender</h3>
+                        <div class="button-group">
+                        <button class="category-button" id="male">Male</button>
+                        <button class="category-button" id="female">Female</button>
+                        <button class="category-button" id="unisex">Unisex</button>
+                        </div>
+                    </div>
+
+                    <div class="category-buttons">
+                        <h3>Seasons</h3>
+                        <div class="button-group">
+                        <button class="category-button" id="fall">Fall</button>
+                        <button class="category-button" id="winter">Winter</button>
+                        <button class="category-button" id="spring">Spring</button>
+                        <button class="category-button" id="summer">Summer</button>
+                        </div>
+                    </div>
+                    </div>
+                    <div className="color-selector">
+                    <h3>Color</h3>
+                    <div className="color-options">
+                        <div className="color-circle" id="red" style={{ backgroundColor: "red" }}></div>
+                        <div className="color-circle" id="orange" style={{ backgroundColor: "orange" }}></div>
+                        <div className="color-circle" id="yellow" style={{ backgroundColor: "yellow" }}></div>
+                        <div className="color-circle" id="green" style={{ backgroundColor: "green" }}></div>
+                        <div className="color-circle" id="blue" style={{ backgroundColor: "blue" }}></div>
+                        <div className="color-circle" id="purple" style={{ backgroundColor: "purple" }}></div>
+                        <div className="color-circle" id="pink" style={{ backgroundColor: "pink" }}></div>
+                        <div className="color-circle" id="brown" style={{ backgroundColor: "brown" }}></div>
+                        <div
+                        className="color-circle"
+                        id="white"
+                        style={{ backgroundColor: "white", border: "1px solid #ccc" }}
+                        ></div>
+                        <div className="color-circle" id="gray" style={{ backgroundColor: "gray" }}></div>
+                        <div className="color-circle" id="black" style={{ backgroundColor: "black" }}></div>
+                    </div>
+                    </div>
+        <br></br>
+                </div>
+                <div class="inline-row">
+                    <button type="submit">Cancel</button>
+                    <button type="submit">Submit</button>
                 </div>
             </div>
         </div>

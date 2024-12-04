@@ -126,3 +126,112 @@ button {
 .dropdown h3 {
     margin-bottom: 0.5rem;
 }
+
+/* Gender Buttons Container */
+.gender-buttons-container {
+    margin-top: 1.5rem; /* Add spacing above this section */
+  }
+  
+  /* Button Group Styling */
+  .button-group {
+    display: flex;
+    gap: 1rem; /* Space between buttons */
+    justify-content: flex-start; /* Align buttons to the left */
+  }
+  
+  /* Individual Button Styling */
+  .gender-button {
+    flex: 1; /* Make buttons equal in size */
+    padding: 0.8em 1.2em; /* Add padding for size */
+    border: 1px solid #000; /* Match input borders */
+    border-radius: 4px;
+    background-color: #fff; /* Neutral background */
+    cursor: pointer;
+    font-size: 1rem;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s; /* Smooth hover effects */
+  }
+
+  /* Container for buttons */
+.buttons-container {
+    margin-top: 1.5rem; /* Add spacing above the entire section */
+  }
+  
+  /* Individual Category Buttons Section */
+  .category-buttons {
+    margin-bottom: 1.5rem; /* Add spacing between categories */
+  }
+  
+  /* Button Group Styling (shared across categories) */
+  .button-group {
+    display: flex;
+    gap: 1rem; /* Space between buttons */
+    justify-content: flex-start; /* Align buttons to the left */
+  }
+  
+  /* Shared Button Styling */
+  .category-button {
+    flex: 1; /* Each button takes up equal width */
+    padding: 0.8em 1.2em; /* Add padding for button size */
+    border: 1px solid #000; /* Match input borders */
+    border-radius: 4px;
+    background-color: #fff; /* Neutral background */
+    cursor: pointer;
+    font-size: 1rem;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s; /* Smooth hover effects */
+  }
+  
+  /* Button Hover and Active States */
+  .category-button:hover {
+    background-color: #2196f3; /* Highlight color on hover */
+    color: #fff;
+  }
+  
+  .category-button:active {
+    background-color: #1976d2; /* Slightly darker on click */
+  }
+  
+  /* Selected State */
+  .category-button.selected {
+    background-color: #2196f3;
+    color: #fff;
+    border-color: #2196f3;
+  }
+  
+
+/* Color Selector Container */
+.color-selector {
+    margin-top: 1.5rem; /* Spacing above the section */
+  }
+  
+  /* Color Options Row */
+  .color-options {
+    display: flex;
+    gap: 0.5rem; /* Spacing between circles */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    justify-content: flex-start; /* Align items to the left */
+  }
+  
+  /* Circle Style */
+  .color-circle {
+    width: 30px; /* Circle diameter */
+    height: 30px;
+    border-radius: 50%; /* Make it a circle */
+    cursor: pointer;
+    border: 2px solid transparent; /* Default border */
+    transition: transform 0.2s, border-color 0.3s; /* Smooth interactions */
+  }
+  
+  /* Selected Circle */
+  .color-circle.selected {
+    border-color: #000; /* Highlight selected circle */
+    transform: scale(1.2); /* Slightly enlarge the selected circle */
+  }
+  
+  /* Accessibility Enhancements */
+  .color-circle:focus {
+    outline: 2px dashed #2196f3; /* Accessible focus indicator */
+    outline-offset: 2px;
+  }
+  
