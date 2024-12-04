@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/clerk-js": "^5.35.1",
     "@neondatabase/serverless": "^0.10.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -22,6 +23,8 @@
     "react": "^18",
     "react-bootstrap": "^2.10.5",
     "react-dom": "^18",
+    "react-icons-kit": "^2.0.0",
+    "react-router-dom": "^6.28.0",
     "react-scripts": "^5.0.1",
     "reactjs-popup": "^2.0.6",
     "uuid": "^10.0.0",

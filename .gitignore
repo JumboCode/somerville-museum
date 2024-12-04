@@ -1,5 +1,7 @@
 # dependencies
 frontend/node_modules
+node_modules
+auth-server/node_modules
 frontend/.next
 /.pnp
 .pnp.js

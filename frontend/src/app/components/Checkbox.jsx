@@ -5,12 +5,12 @@ import "./Checkbox.css";
 
 const Checkbox = (props) => { /* Props has element label with the label for dropdown name */
 
-    const [color, setColor] = useState("#D9D9D9");
-    const [checked, setChecked] = useState("#D9D9D9")
+    const [color, setColor] = useState("#FFFFFF");
+    const [checked, setChecked] = useState("#FFFFFF")
 
     const handleClick = () => {
-        setColor(color === "#D9D9D9" ? "#9B525F" : "#D9D9D9");
-        setChecked(color === "##D9D9D9" ? "#ffffff" : "#D9D9D9")
+        setColor(color === "#FFFFFF" ? "#9B525F" : "#FFFFFF");
+        setChecked(color === "##FFFFFF" ? "#ffffff" : "#FFFFFF")
     }
 
     return (

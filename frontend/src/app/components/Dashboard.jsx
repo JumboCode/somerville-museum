@@ -41,7 +41,7 @@ const Dashboard = () => {
 
   // Fetch counts for each status when the component mounts
   useEffect(() => {  // TO DO: UPDATE TOTAL; QUERY FILTERS BY STATUS CURRENTLY
-    const statuses = ['Total', 'Overdue', 'Borrowed', 'Available'];
+    const statuses = ['whatever\' OR \'1\'=\'1\'', 'Overdue', 'Borrowed', 'Available'];
 
     statuses.forEach((status) => {
       fetchCountForStatus(status);

@@ -1,0 +1,230 @@
+.login-bg {
+    background-color: #F8F5F5;
+    width: 100vw;
+    height: 100vh;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mainContainer {
+    background-color: #FFFFFF;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 92vh;
+    width: 40vw;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.19)
+}
+
+.confirmContainer {
+  background-color: #FFFFFF;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 35vh;
+  width: 30vw;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.19);
+  padding: 5% 0% 5% 0%;
+}
+  
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  font-size: 33px;
+  font-weight: bolder;
+  align-items: center;
+  justify-content: center;
+  padding: 5%;
+}
+
+.bodyContainer {
+  font-size: 28px;
+  font-weight: normal;
+}
+
+.SMLogo {
+  align-items: center;
+}
+
+.TheGoat {
+  background-image: url('https://www.hagca.com/uploads/1/2/7/1/127145683/holden-kittelberger-headshot_orig.jpg');
+  width: 100vw;
+  height: 100vh;
+  /*background-repeat: no-repeat;*/
+}
+
+h1 {
+  color: whitesmoke;
+  font-size: larger;
+  font-family: cursive;
+}
+
+.resultContainer,
+.historyItem {
+  flex-direction: row;
+  display: flex;
+  width: 400px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.historyContainer {
+  flex-direction: column;
+  display: flex;
+  height: 200px;
+  align-items: center;
+  flex-grow: 5;
+  justify-content: flex-start;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 260px;
+}
+
+.inputContainer {
+  justify-content: center;
+  padding-top: 2vh;
+  padding-bottom: 2vh;
+}
+
+.inputContainer > .errorLabel {
+  color: red;
+  font-size: 12px;
+}
+
+.password {
+  position: relative;
+}
+
+.inputBox {
+  height: 6vh;
+  width: 28vw;
+  font-size: 24px;
+  border-radius: 5px;
+  border: 1px solid #9B525F;
+  padding-left: 2vw;
+  padding-top: 0vw;
+}
+
+.eyecon {
+  position: absolute;
+  top: 2rem;
+  right: 1rem;
+}
+
+.inputBox::placeholder {
+  color: #592A33;
+  opacity: 1;
+}
+
+.inputButton {
+  border: none;
+  background-color: #9B525F;
+  color: white;
+  padding: 1vh;
+  font-size: 28px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 30vw;
+}
+
+.returnButton {
+  border: none;
+  background-color: #9B525F;
+  color: white;
+  padding: 1vh;
+  font-size: 28px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 17vw;
+}
+
+.errorLabel {
+  /*background-color: rgba(255, 44, 44, 0.2);*/
+  color: rgba(255, 44, 44, 1);
+  margin-bottom: 10px;
+  padding: 0.5rem;
+  border: 5px;
+  max-width: max-content;
+  display: flex;
+  align-self: flex-start;
+  flex-flow: column nowrap;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.remember-pwd {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+  align-items: center;
+  align-content: center;
+  gap: 15vw;
+  margin-left: 0px;
+  font-size: 16px;
+}
+
+.create-account {
+  padding: 1vh;
+  font-size: 20px;
+}
+
+.textButton {
+  background-color: #FFFFFF;
+  border: none;
+  font-size: 20px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.tiny {
+  font-size: 16px;
+}
+
+* {
+  color: #592A33;
+}
+
+.passwordInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: left;
+    padding-top: 2vh;
+}
+
+.passwordInfoP {
+    margin: 0px;
+    font-size: 16px;
+}
+
+.namesContainer {
+    display: flex;
+    flex-direction: row nowrap;
+    gap: 2vw;
+    align-items: flex-end;
+}
+
+.names {
+    height: 6vh;
+    width: 12vw;
+    font-size: 24px;
+    border-radius: 5px;
+    border: 1px solid #9B525F;
+    padding-left: 2vw;
+    padding-top: 0vw;
+}
+.names::placeholder {
+    color: #592A33;
+    opacity: 1;
+}

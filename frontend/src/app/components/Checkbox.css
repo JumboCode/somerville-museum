@@ -1,7 +1,7 @@
 /* we mostly want checkboxes to be the same size regardless of screen width */
 
 .checkbox-button {
-    border: none;
+    border: 1px solid #915360;
     max-width: 20px;
     max-height: 20px;
     min-width: 20px;
@@ -22,4 +22,5 @@
   padding: 3% 5% 3% 5%;
   text-decoration: none;
   height: auto;
+  white-space: nowrap;
 }
