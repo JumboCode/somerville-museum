@@ -1,6 +1,6 @@
 
 import localFont from "next/font/local";
-import "./globals.css";
+import "./layout.css";
 import SortAlphaButton from "./components/SortAlphaButton.jsx";
 import EditNoteButton from "./components/EditNoteButton";
 import './components/Popup.css'; 
@@ -13,6 +13,8 @@ import SelectByTag from "./components/selectByTag";
 import Dashboard from "./components/Dashboard";
 import Filters from "./components/Filters";
 import BorrowButton from "./components/BorrowButton.jsx";
+import App from "./app.js";
+import Login from "./login.js"
 
 
 const geistSans = localFont({
@@ -37,7 +39,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-      <SelectItemButton />
+      {/* <SelectItemButton />
       <DeleteItemButton />
       <EditNoteButton />
       <Popup/>
@@ -47,7 +49,8 @@ export default function RootLayout({ children }) {
       <BorrowButton />
       <Dashboard />
       <ELiTable/>  
-      <Filters />
+      <Filters /> */}
+      <App />
       </body>
     </html>
   );
