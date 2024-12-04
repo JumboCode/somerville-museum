@@ -8,7 +8,7 @@ export default function ELiUnit( { unit } ) {
     const { id, name, status, tags } = unit;
     const [isPopupVisible, setIsPopupVisible] = useState(false);
 
-    const handleDoubleClick = () => {
+    const handleClick = () => {
         setIsPopupVisible(true);
     }
 
@@ -36,7 +36,7 @@ export default function ELiUnit( { unit } ) {
 
     return (
         
-        <div className="unit"> 
+        <div className="unit" onDoubleClick={handleClick}> 
             <div className="left-section">
                 <div className="check-box">
                     <input type="checkbox" id="customCheckbox" className="checkbox-input"/>
@@ -63,7 +63,7 @@ export default function ELiUnit( { unit } ) {
                 </div>
             </div>
             <div className="drop-down">
-                <button className="drop-downBtn" onDoubleClick={handleDoubleClick}>•••</button>
+                <button className="drop-downBtn" onClick={handleClick}>•••</button>
             </div>
 
             {isPopupVisible && (
