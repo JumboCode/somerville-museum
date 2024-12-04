@@ -8,8 +8,9 @@ export default function AddPopup() {
     const [id, setId] = useState(' ');
     const [location, setLocation] = useState('');
     const [note, setNote] = useState('');
-    const [tags, setTags] = useState([]);
-    const [selectedTags, setSelectedTags] = useState([]);
+    const [century, setCentury] = useState('');
+    const [size, setSize] = useState('');
+    const [clothingType, setClothingType] = useState('');
 
 const handleSubmit = async (e) => {
     e.preventDefault();
@@ -92,14 +93,29 @@ const handleAdd = async (id, name, note) => {
 
             <div className="column">
                 <h1>Tags</h1>
-                {/* Cancel and Submit buttons */}
-                    {/* <div className="cancel-container">
-                        <button type="submit">Cancel</button>
+                <div className="dropdowns-container">
+                    {/* First Row: Century and Size */}
+                    <div class="inline-row">
+                        <div class="dropdown">
+                        <h3>Century</h3>
+                        <select>
+                            <option>???</option>
+                        </select>
+                        </div>
+                        <div class="dropdown">
+                        <h3>Size</h3>
+                        <select>
+                            <option>???</option>
+                        </select>
+                        </div>
                     </div>
-
-                    <div className="submit-container">
-                        <button type="submit">Submit</button>
-                    </div> */}
+                    <div class="dropdown">
+                        <h3>Clothing Type</h3>
+                        <select>
+                        <option>???</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
     );
