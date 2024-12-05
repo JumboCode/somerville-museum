@@ -4,10 +4,8 @@ import React, { useState, useEffect } from "react";
 import StylishButton from './StylishButton.jsx'; //import css file
 
 const ReturnButton = ({selectedItems = [], onSuccess }) => {
-    console.log('the selected items are: ', selectedItems);
 
     const handleSubmit = async (e) => {
-        console.log('in handle submit'); 
         try {
             const response = await fetch('../../api/return', {
                 method: 'PUT',
@@ -40,7 +38,7 @@ const ReturnButton = ({selectedItems = [], onSuccess }) => {
 
     return (
         <div>
-            <StylishButton label="Return" styleType="style1" onClick={handleSubmit}/>
+            <StylishButton label="Return" styleType="style2" onClick={handleSubmit}/>
         </div>
     )
 }

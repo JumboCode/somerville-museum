@@ -49,11 +49,11 @@ export default function ELiTable() {
 
                
             } else {
-                console.log("failed to fetch data");
+                console.error("failed to fetch data");
             }
             
         } catch (error) {
-            console.log(error); 
+            console.error(error); 
         }
         
     };
@@ -101,7 +101,6 @@ export default function ELiTable() {
         };
         
     const handleCheckboxChange = (unit) => {
-        console.log(unit.id, 'has been checked');
         
         setSelectedItems((prevSelected) => {
             if (prevSelected.some((item) => item.id === unit.id)) {
