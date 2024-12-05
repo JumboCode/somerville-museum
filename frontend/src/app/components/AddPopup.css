@@ -8,7 +8,6 @@
     padding: 20px;
     box-sizing: border-box; /* Ensure padding doesn’t affect width */
     max-width: 100%; /* Scale with the screen size */
-
     display: flex; /* Use Flexbox for alignment */
     flex-direction: column; /* Stack child elements vertically */
     justify-content: flex-start; /* Push content to the top and bottom */
@@ -47,7 +46,7 @@
     flex: 1 1 calc(50% - 20px);
     min-width: 150px;
 }
-  
+
 input, textarea {
     display: block;
     width: 100%;
@@ -60,12 +59,21 @@ input, textarea {
 }
   
 button {
-    padding: 0.8em 1.6em;
-    font-size: 1rem;
-    border: none;
+    flex: 1; /* Equal size for buttons */
+    padding: 0.8em 1.2em; /* Same padding as gender/season buttons */
+    border: 1px solid #000; /* Match input borders */
+    border-radius: 4px;
+    background-color: #fff; /* Neutral background */
     cursor: pointer;
+    font-size: 1rem;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s; /* Smooth hover effects */
 }
   
+button:hover {
+    background-color: #D3D3D3; /* Darker blue on hover */
+}
+
 @media (max-width: 768px) {
     .row {
       grid-template-columns: 1fr;
