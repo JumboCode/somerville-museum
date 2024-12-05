@@ -13,6 +13,7 @@ import SelectByTag from "./components/selectByTag";
 import Dashboard from "./components/Dashboard";
 import Filters from "./components/Filters";
 import BorrowButton from "./components/BorrowButton.jsx";
+import AddPopup from "./components/AddPopup";
 
 
 const geistSans = localFont({
@@ -37,7 +38,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-      <SelectItemButton />
+      {/* <SelectItemButton />
       <DeleteItemButton />
       <EditNoteButton />
       <Popup/>
@@ -47,7 +48,8 @@ export default function RootLayout({ children }) {
       <BorrowButton />
       <Dashboard />
       <ELiTable/>  
-      <Filters />
+      <Filters /> */}
+      <AddPopup />
       </body>
     </html>
   );
