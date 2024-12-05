@@ -100,6 +100,7 @@ export default function ELiTable() {
         fetchData();
         };
         
+    //function to track which items are checked on table 
     const handleCheckboxChange = (unit) => {
         
         setSelectedItems((prevSelected) => {
@@ -157,11 +158,11 @@ export default function ELiTable() {
                         </div>
                             <div className='buttons'> 
                                 <button className='addBtn'>ADD</button>
-                                <BorrowButton className='brwBtn'
+                                <BorrowButton className='brwBtn'  //added borrow button here
                                 selectedItems = {selectedItems} 
                                 onSuccess = {handleBorrowSuccess}
                                 >BORROW</BorrowButton>
-                                <ReturnButton className='brwBtn'
+                                <ReturnButton className='brwBtn' //added return button here
                                 selectedItems = {selectedItems}
                                 onSuccess={handleBorrowSuccess}
                                 >RETURN</ReturnButton>
