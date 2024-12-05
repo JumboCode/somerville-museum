@@ -32,23 +32,31 @@ export const metadata = {
 };
 
 //on click method
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <title>first page!!</title>
+        <meta name="description" content="good luck team!!" />
+        {/* favicon svg */}
+        <link rel="icon" type="image/svg+xml" href="/sm-logo.svg" />
+        {/* favicon png as backup */}
+        <link rel="icon" type="image/png" sizes="32x32" href="/sm-logo.png" />
+      </head>
       <body>
-      {/* <SelectItemButton /> */}
-      <DeleteItemButton />
-      {/* <EditNoteButton /> */}
-      <Popup/>
-      {/* <AddItemButton/> */}
-      {/* <SortAlphaButton /> */}
-      {/* <SelectByTag /> */}
-      <BorrowButton />
-      {/* <Dashboard /> */}
-      <ELiTable/>  
-      {/* <Filters /> */}
+        <SelectItemButton />
+        <DeleteItemButton />
+        <EditNoteButton />
+        <Popup />
+        <AddItemButton />
+        <SortAlphaButton />
+        <SelectByTag />
+        <BorrowButton />
+        <Dashboard />
+        <ELiTable />
+        <Filters />
       </body>
     </html>
   );
  }
+ 
