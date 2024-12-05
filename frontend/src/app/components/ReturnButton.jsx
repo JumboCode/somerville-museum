@@ -3,17 +3,17 @@
 import React, { useState, useEffect } from "react";
 import StylishButton from './StylishButton.jsx'; //import css file
 
-const ReturnButton = ({selectedItems = [], onSuccess }) => {
+const ReturnButton = ({selectedItems = [], onSuccess }) => {  //takes in selected items as a parameter
 
     const handleSubmit = async (e) => {
         try {
-            const response = await fetch('../../api/return', {
+            const response = await fetch('../../api/return', {   //call return API 
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ 
-                    selectedItems: selectedItems.map(item => item.id)
+                    selectedItems: selectedItems.map(item => item.id)  //send in selected items 
                 })
             });
             
@@ -24,7 +24,7 @@ const ReturnButton = ({selectedItems = [], onSuccess }) => {
             const result = await response.json(); 
 
             if (result.message) {
-                alert(result.message);  
+                alert(result.message);  //display result message 
             }
 
             if (onSuccess) {
