@@ -45,8 +45,6 @@ const BorrowButton = ( {selectedItems = [], onSuccess } ) => {
         setDateBorrowed(calculateBorrowDay());
     }, []);
 
-    console.log('the selected items are: ', selectedItems);
-
     // //fetches the item by ID, sets the items and their IDS in variables
     // const fetchItemById = async () => {
     //     if (!id) return;

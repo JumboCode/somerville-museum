@@ -2,8 +2,6 @@ import { query } from './db.js';
 
 export default async function handler(req, res) {
   const { selectedItems } = req.body;
-  console.log('made it!'); 
-  console.log(selectedItems);
 
   try {
 
@@ -12,15 +10,12 @@ export default async function handler(req, res) {
     let validItems = []; 
 
     for (const itemId of selectedItems) {
-      console.log(itemId); 
       //checks status of each item 
       const statusResult = await query(
         'SELECT status FROM dummy_data WHERE id = $1', [itemId] 
       ); 
 
       const itemStatus = statusResult.rows[0]?.status; 
-
-      console.log(itemStatus);
       
       //if the item isnt available, add to unavailable items 
       if(itemStatus !== 'Borrowed' && itemStatus !== 'Overdue') {
@@ -30,7 +25,6 @@ export default async function handler(req, res) {
 
         const today = new Date();
         const todayFormatted = today.toLocaleDateString().split('T')[0];
-        console.log(todayFormatted); 
 
         let returnNote = `Date Returned: ${todayFormatted}`; 
       
