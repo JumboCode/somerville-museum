@@ -8,72 +8,69 @@ export default function AddPopup() {
     const [id, setId] = useState(' ');
     const [location, setLocation] = useState('');
     const [note, setNote] = useState('');
-    const [century, setCentury] = useState('');
-    const [size, setSize] = useState('');
-    const [clothingType, setClothingType] = useState('');
+    const [tags, setTags] = useState([]);
+    const [error, setError] = useState(null);
 
-const handleSubmit = async (e) => {
-    e.preventDefault();
-    await handleAdd(id, itemName, note); 
-    setItemName(''); 
-    setNote('');
-    setSelectedTags([]);
-  };
+    // Fetch the tags from the API (automatically on load)
+    useEffect(() => {
+        const fetchTags = async () => {
+            try {
+                // Fetch all tags from the API
+                const response = await fetch('/api/fetchTags');
+                if (!response.ok) throw new Error('Network response was not ok');
+                const data = await response.json();
 
-const handleAdd = async (id, name, note) => {
-    const body = JSON.stringify({
-        name: name,
-        id: id,
-        note: note
-    });
-    console.log('Body:', body); // Should log the body with hardcoded values
+                // Convert the array of objects to an array of strings
+                const tagsArray = data.map(item => item.tag);
 
-    const response = await fetch(`../../api/addItem`, {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json' // Specify the content type
-        },
-        body: JSON.stringify({ id: id, name: name, note: note}) // Send the id as a JSON object
-    });
+                // Save the tags in state
+                setTags(tagsArray);
+            } catch (error) {
+                console.error('Error fetching tags:', error);
+                setError(error.message);
+            }
+        };
 
-};
+        // Call the fetchTags function
+        fetchTags();
+    }, []);
 
-const categoryButtons = document.querySelectorAll('.category-button');
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        await handleAdd(id, itemName, note); 
+        setItemName(''); 
+        setNote('');
+        // setSelectedTags([]);
+    };
 
-categoryButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    // Find the parent group to limit selections to that group
-    const parentGroup = button.closest('.button-group');
-    // Remove 'selected' class from all buttons in the group
-    parentGroup.querySelectorAll('.category-button').forEach(btn => btn.classList.remove('selected'));
-    // Add 'selected' class to clicked button
-    button.classList.add('selected');
-  });
-});
+  
+    const handleAdd = async (id, name, note) => {
+        const body = JSON.stringify({
+            name: name,
+            id: id,
+            note: note
+        });
+        console.log('Body:', body); // Should log the body with hardcoded values
 
+        const response = await fetch(`../../api/addItem`, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json' // Specify the content type
+            },
+            body: JSON.stringify({ id: id, name: name, note: note}) // Send the id as a JSON object
+        });
+    };
 
-const colorCircles = document.querySelectorAll('.color-circle');
-
-colorCircles.forEach(circle => {
-  circle.addEventListener('click', () => {
-    // Remove the 'selected' class from all circles
-    colorCircles.forEach(c => c.classList.remove('selected'));
-    // Add 'selected' class to the clicked circle
-    circle.classList.add('selected');
-  });
-});
-
-
-    return (
+    return (                
+    <form onSubmit={handleSubmit}>
         <div className="row">
             <div className="column">
                 <h1>Add Item</h1>
                 <br></br>
 
-                <img src="/images/DisplayImage.svg" alt="Descriptive text" className="styled-image" />
+                <img src="/images/DisplayImage.svg" className="styled-image" />
                 <br></br>
 
-                <form onSubmit={handleSubmit}>
                     <label>
                         Item Name*
                         <input
@@ -82,7 +79,7 @@ colorCircles.forEach(circle => {
                             onChange={(e) => setItemName(e.target.value)}
                         />
                     </label>
-            
+
                     {/* Container for ID and Location */}
                     <div className="inline-row">
                         <label>
@@ -113,51 +110,50 @@ colorCircles.forEach(circle => {
                             rows="5" // Num. visible rows
                         ></textarea>
                     </label>
-                    <button type="submit">Submit</button>
-                </form>
+                    {/* <button type="submit">Submit</button> */}
             </div>
 
             <div className="column">
                 <h2>Tags</h2>
                 <div className="dropdowns-container">
                     {/* First Row: Century and Size */}
-                    <div class="inline-row">
-                        <div class="dropdown">
+                    <div className="inline-row">
+                        <div className="dropdown">
                             <h3>Century</h3>
                             <select>
                                 <option>???</option>
                             </select>
                         </div>
-                        <div class="dropdown">
+                        <div className="dropdown">
                             <h3>Size</h3>
                             <select>
                                 <option>???</option>
                             </select>
                         </div>
                     </div>
-                    <div class="dropdown">
+                    <div className="dropdown">
                         <h3>Clothing Type</h3>
                         <select>
                             <option>???</option>
                         </select>
                     </div>
-                    <div class="buttons-container">
-                    <div class="category-buttons">
+                    <div className="buttons-container">
+                    <div className="category-buttons">
                         <h3>Gender</h3>
-                        <div class="button-group">
-                        <button class="category-button" id="male">Male</button>
-                        <button class="category-button" id="female">Female</button>
-                        <button class="category-button" id="unisex">Unisex</button>
+                        <div className="button-group">
+                        <button className="category-button" id="male">Male</button>
+                        <button className="category-button" id="female">Female</button>
+                        <button className="category-button" id="unisex">Unisex</button>
                         </div>
                     </div>
 
-                    <div class="category-buttons">
+                    <div className="category-buttons">
                         <h3>Season</h3>
-                        <div class="button-group">
-                            <button class="category-button" id="fall">Fall</button>
-                            <button class="category-button" id="winter">Winter</button>
-                            <button class="category-button" id="spring">Spring</button>
-                            <button class="category-button" id="summer">Summer</button>
+                        <div className="button-group">
+                            <button className="category-button" id="fall">Fall</button>
+                            <button className="category-button" id="winter">Winter</button>
+                            <button className="category-button" id="spring">Spring</button>
+                            <button className="category-button" id="summer">Summer</button>
                         </div>
                     </div>
                     </div>
@@ -183,11 +179,12 @@ colorCircles.forEach(circle => {
                 </div>
         <br></br>
                 </div>
-                <div class="inline-row">
-                    <button type="submit">Cancel</button>
+                <div className="inline-row">
+                    <button type="">Cancel</button>
                     <button type="submit">Submit</button>
                 </div>
             </div>
         </div>
+    </form>
     );
 }
