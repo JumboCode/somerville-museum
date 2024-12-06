@@ -5,7 +5,7 @@ import "./AddPopup.css";
 
 export default function AddPopup() {
     const [itemName, setItemName] = useState('');
-    const [id, setId] = useState(' ');
+    const [id, setId] = useState('');
     const [location, setLocation] = useState('');
     const [centuryTag, setCenturyTag] = useState('');
     const [sizeTag, setSizeTag] = useState('');
@@ -33,7 +33,7 @@ export default function AddPopup() {
                 setError(error.message);
             }
         };
-        
+
         // Call the fetchTags function
         fetchTags();
     }, []);
@@ -45,26 +45,28 @@ export default function AddPopup() {
         
         // Reset fields after submission
         setItemName(''); 
+        setId('');
         setNote('');
         setCenturyTag([]);
         setSizeTag([]);
         setClothingTag([]);
     };
 
-    // Update century tag state with the selected value
-    const handleCenturySelect = (value) => {
-        setCenturyTag(value); 
+    const handleCancel = () => {
+        // Reset all fields when cancel button is clicked
+        setItemName('');
+        setId('');
+        setLocation('');
+        setCenturyTag('');
+        setSizeTag('');
+        setClothingTag('');
+        setNote('');
     };
-    
-    // Update size tag state with the selected value
-    const handleSizeSelect = (value) => {
-        setSizeTag(value); 
-    };    
-    
-    // Update clothing tag state with the selected value
-    const handleClothingSelect = (value) => {
-        setClothingTag(value); 
-    };
+
+    // Functions to handle dropdown selections
+    const handleCenturySelect = (value) => setCenturyTag(value);
+    const handleSizeSelect = (value) => setSizeTag(value);
+    const handleClothingSelect = (value) => setClothingTag(value);
   
     // Function to send a POST request to the addItem API
     const handleAdd = async (id, name, note) => {
@@ -211,30 +213,29 @@ return (
                     {/* Color selector options */}
                     <div className="color-selector">
                     <h3>Color</h3>
-                    <div className="color-options">
-                        <div className="color-circle" id="red" style={{ backgroundColor: "red" }}></div>
-                        <div className="color-circle" id="orange" style={{ backgroundColor: "orange" }}></div>
-                        <div className="color-circle" id="yellow" style={{ backgroundColor: "yellow" }}></div>
-                        <div className="color-circle" id="green" style={{ backgroundColor: "green" }}></div>
-                        <div className="color-circle" id="blue" style={{ backgroundColor: "blue" }}></div>
-                        <div className="color-circle" id="purple" style={{ backgroundColor: "purple" }}></div>
-                        <div className="color-circle" id="pink" style={{ backgroundColor: "pink" }}></div>
-                        <div className="color-circle" id="brown" style={{ backgroundColor: "brown" }}></div>
-                        <div
-                        className="color-circle"
-                        id="white"
-                        style={{ backgroundColor: "white", border: "1px solid #ccc" }}
-                        ></div>
-                    <div className="color-circle" id="gray" style={{ backgroundColor: "gray" }}></div>
-                    <div className="color-circle" id="black" style={{ backgroundColor: "black" }}></div>
+                        <div className="color-options">
+                            <div className="color-circle" id="red" style={{ backgroundColor: "red" }}></div>
+                            <div className="color-circle" id="orange" style={{ backgroundColor: "orange" }}></div>
+                            <div className="color-circle" id="yellow" style={{ backgroundColor: "yellow" }}></div>
+                            <div className="color-circle" id="green" style={{ backgroundColor: "green" }}></div>
+                            <div className="color-circle" id="blue" style={{ backgroundColor: "blue" }}></div>
+                            <div className="color-circle" id="purple" style={{ backgroundColor: "purple" }}></div>
+                            <div className="color-circle" id="pink" style={{ backgroundColor: "pink" }}></div>
+                            <div className="color-circle" id="brown" style={{ backgroundColor: "brown" }}></div>
+                            <div
+                                className="color-circle"
+                                id="white"
+                                style={{ backgroundColor: "white", border: "1px solid #ccc" }}
+                            ></div>
+                            <div className="color-circle" id="gray" style={{ backgroundColor: "gray" }}></div>
+                            <div className="color-circle" id="black" style={{ backgroundColor: "black" }}></div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <br></br>
-        
+
             {/* Cancel and submit buttons */}
-            </div>
-                <div className="inline-row">
-                    <button type="">Cancel</button>
+                <div className="button-container">
+                    <button type="button" onClick={handleCancel}>Cancel</button>
                     <button type="submit">Submit</button>
                 </div>
             </div>
