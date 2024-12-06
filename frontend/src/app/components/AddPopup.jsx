@@ -18,24 +18,25 @@ export default function AddPopup() {
     useEffect(() => {
         const fetchTags = async () => {
             try {
+                // Fetch all tags from the API
                 const response = await fetch('/api/fetchTags');
                 if (!response.ok) throw new Error('Network response was not ok');
                 const data = await response.json();
-    
-                if (Array.isArray(data)) {
-                    const tagsArray = data.map(item => item.tag);
-                    setTags(tagsArray);
-                } else {
-                    throw new Error('Unexpected data format from API');
-                }
+
+                // Convert the array of objects to an array of strings
+                const tagsArray = data.map(item => item.tag);
+
+                // Save the tags in state
+                setTags(tagsArray);
             } catch (error) {
+                console.error('Error fetching tags:', error);
                 setError(error.message);
             }
         };
-    
+        
+        // Call the fetchTags function
         fetchTags();
     }, []);
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
