@@ -1,6 +1,9 @@
 .row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  height: 100vh; /* Full height of the viewport */
+  width: 100vw;
+  margin: 0; /* Remove any default margins */
 }
 
 .column {
@@ -11,7 +14,7 @@
     display: flex; /* Use Flexbox for alignment */
     flex-direction: column; /* Stack child elements vertically */
     justify-content: flex-start; /* Push content to the top and bottom */
-    height: 100%; /* Ensure the column spans the full container height */
+    height: 100%;
     position: relative; /* Needed for absolute positioning if used */
 }
 
@@ -34,14 +37,14 @@
         padding: 15px; /* Reduce padding on smaller screens */
     }
 }
-  
+
 .inline-row {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     align-items: center;
 }
-  
+
 .inline-row > * {
     flex: 1 1 calc(50% - 20px);
     min-width: 150px;
