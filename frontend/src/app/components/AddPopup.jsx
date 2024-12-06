@@ -7,6 +7,9 @@ export default function AddPopup() {
     const [itemName, setItemName] = useState('');
     const [id, setId] = useState(' ');
     const [location, setLocation] = useState('');
+    const [centuryTag, setCenturyTag] = useState('');
+    const [sizeTag, setSizeTag] = useState('');
+    const [clothingTag, setClothingTag] = useState('');
     const [note, setNote] = useState('');
     const [tags, setTags] = useState([]);
     const [error, setError] = useState(null);
@@ -15,40 +18,61 @@ export default function AddPopup() {
     useEffect(() => {
         const fetchTags = async () => {
             try {
-                // Fetch all tags from the API
+                console.log('Fetching tags...');
                 const response = await fetch('/api/fetchTags');
                 if (!response.ok) throw new Error('Network response was not ok');
                 const data = await response.json();
-
-                // Convert the array of objects to an array of strings
-                const tagsArray = data.map(item => item.tag);
-
-                // Save the tags in state
-                setTags(tagsArray);
+                console.log('Fetched data:', data);
+    
+                if (Array.isArray(data)) {
+                    const tagsArray = data.map(item => item.tag);
+                    console.log('tagsArray before setTags:', tagsArray);
+                    setTags(tagsArray);
+                } else {
+                    throw new Error('Unexpected data format from API');
+                }
             } catch (error) {
                 console.error('Error fetching tags:', error);
                 setError(error.message);
             }
         };
-
-        // Call the fetchTags function
+    
         fetchTags();
     }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await handleAdd(id, itemName, note); 
+        await handleAdd(id, itemName, note, centuryTag, sizeTag, clothingTag); 
         setItemName(''); 
         setNote('');
-        // setSelectedTags([]);
+        setCenturyTag([]);
+        setSizeTag([]);
+        setClothingTag([]);
     };
 
+    const handleCenturySelect = (value) => {
+        // Update state with the selected value
+        setCenturyTag(value); 
+    };
+    
+    const handleSizeSelect = (value) => {
+        // Update state with the selected value
+        setSizeTag(value); 
+    };    
+    
+    const handleClothingSelect = (value) => {
+        // Update state with the selected value
+        setClothingTag(value); 
+    };
   
     const handleAdd = async (id, name, note) => {
         const body = JSON.stringify({
             name: name,
             id: id,
-            note: note
+            note: note,
+            tag1: centuryTag,
+            tag2: sizeTag,
+            tag3: clothingTag
         });
         console.log('Body:', body); // Should log the body with hardcoded values
 
@@ -57,11 +81,11 @@ export default function AddPopup() {
             headers: {
             'Content-Type': 'application/json' // Specify the content type
             },
-            body: JSON.stringify({ id: id, name: name, note: note}) // Send the id as a JSON object
+            body: JSON.stringify({ id: id, name: name, note: note, tag1: centuryTag, tag2 : sizeTag, tag3 : clothingTag}) // Send the id as a JSON object
         });
     };
 
-    return (                
+return (                
     <form onSubmit={handleSubmit}>
         <div className="row">
             <div className="column">
@@ -110,7 +134,6 @@ export default function AddPopup() {
                             rows="5" // Num. visible rows
                         ></textarea>
                     </label>
-                    {/* <button type="submit">Submit</button> */}
             </div>
 
             <div className="column">
@@ -120,22 +143,35 @@ export default function AddPopup() {
                     <div className="inline-row">
                         <div className="dropdown">
                             <h3>Century</h3>
-                            <select>
-                                <option>???</option>
+                            <select id="singleSelect" onChange={(e) => handleCenturySelect(e.target.value)}>
+                                {tags.map((tag) => (
+                                    <option key={tag} value={tag}>
+                                        {tag}
+                                    </option>
+                                ))}
                             </select>
+
                         </div>
                         <div className="dropdown">
                             <h3>Size</h3>
-                            <select>
-                                <option>???</option>
+                            <select id="singleSelect" onChange={(e) => handleSizeSelect(e.target.value)}>
+                                {tags.map((tag) => (
+                                    <option key={tag} value={tag}>
+                                        {tag}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                     </div>
                     <div className="dropdown">
                         <h3>Clothing Type</h3>
-                        <select>
-                            <option>???</option>
-                        </select>
+                        <select id="singleSelect" onChange={(e) => handleClothingSelect(e.target.value)}>
+                                {tags.map((tag) => (
+                                    <option key={tag} value={tag}>
+                                        {tag}
+                                    </option>
+                                ))}
+                            </select>
                     </div>
                     <div className="buttons-container">
                     <div className="category-buttons">
