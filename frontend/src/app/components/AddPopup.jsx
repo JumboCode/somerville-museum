@@ -18,21 +18,17 @@ export default function AddPopup() {
     useEffect(() => {
         const fetchTags = async () => {
             try {
-                console.log('Fetching tags...');
                 const response = await fetch('/api/fetchTags');
                 if (!response.ok) throw new Error('Network response was not ok');
                 const data = await response.json();
-                console.log('Fetched data:', data);
     
                 if (Array.isArray(data)) {
                     const tagsArray = data.map(item => item.tag);
-                    console.log('tagsArray before setTags:', tagsArray);
                     setTags(tagsArray);
                 } else {
                     throw new Error('Unexpected data format from API');
                 }
             } catch (error) {
-                console.error('Error fetching tags:', error);
                 setError(error.message);
             }
         };
@@ -40,9 +36,13 @@ export default function AddPopup() {
         fetchTags();
     }, []);
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        // Call the handleAdd function
         await handleAdd(id, itemName, note, centuryTag, sizeTag, clothingTag); 
+        
+        // Reset fields after submission
         setItemName(''); 
         setNote('');
         setCenturyTag([]);
@@ -50,22 +50,24 @@ export default function AddPopup() {
         setClothingTag([]);
     };
 
+    // Update century tag state with the selected value
     const handleCenturySelect = (value) => {
-        // Update state with the selected value
         setCenturyTag(value); 
     };
     
+    // Update size tag state with the selected value
     const handleSizeSelect = (value) => {
-        // Update state with the selected value
         setSizeTag(value); 
     };    
     
+    // Update clothing tag state with the selected value
     const handleClothingSelect = (value) => {
-        // Update state with the selected value
         setClothingTag(value); 
     };
   
+    // Function to send a POST request to the addItem API
     const handleAdd = async (id, name, note) => {
+        // Create a JSON object with the fields from the popup
         const body = JSON.stringify({
             name: name,
             id: id,
@@ -74,27 +76,32 @@ export default function AddPopup() {
             tag2: sizeTag,
             tag3: clothingTag
         });
-        console.log('Body:', body); // Should log the body with hardcoded values
 
+        // Send a POST request to the addItem API
         const response = await fetch(`../../api/addItem`, {
             method: 'POST',
             headers: {
-            'Content-Type': 'application/json' // Specify the content type
+            'Content-Type': 'application/json'
             },
+            // Send in all of the fields from the popup
             body: JSON.stringify({ id: id, name: name, note: note, tag1: centuryTag, tag2 : sizeTag, tag3 : clothingTag}) // Send the id as a JSON object
         });
     };
 
-return (                
+return (
+    // Wrap entire popup in a form
     <form onSubmit={handleSubmit}>
         <div className="row">
+            {/* Left column */}
             <div className="column">
                 <h1>Add Item</h1>
                 <br></br>
 
+                {/* Drag-and-drop placeholder */}
                 <img src="/images/DisplayImage.svg" className="styled-image" />
                 <br></br>
 
+                    {/* Name field */}
                     <label>
                         Item Name*
                         <input
@@ -131,15 +138,17 @@ return (
                             name="note"
                             value={note}
                             onChange={(e) => setNote(e.target.value)}
-                            rows="5" // Num. visible rows
+                            rows="5" // # visible rows
                         ></textarea>
                     </label>
             </div>
 
+            {/* Right column */}
             <div className="column">
                 <h2>Tags</h2>
                 <div className="dropdowns-container">
-                    {/* First Row: Century and Size */}
+
+                    {/* Century and size dropdowns */}
                     <div className="inline-row">
                         <div className="dropdown">
                             <h3>Century</h3>
@@ -150,7 +159,6 @@ return (
                                     </option>
                                 ))}
                             </select>
-
                         </div>
                         <div className="dropdown">
                             <h3>Size</h3>
@@ -163,6 +171,8 @@ return (
                             </select>
                         </div>
                     </div>
+
+                    {/* Clothing type dropdown */}
                     <div className="dropdown">
                         <h3>Clothing Type</h3>
                         <select id="singleSelect" onChange={(e) => handleClothingSelect(e.target.value)}>
@@ -173,6 +183,8 @@ return (
                                 ))}
                             </select>
                     </div>
+
+                    {/* Gender buttons */}
                     <div className="buttons-container">
                     <div className="category-buttons">
                         <h3>Gender</h3>
@@ -183,6 +195,7 @@ return (
                         </div>
                     </div>
 
+                    {/* Season buttons */}
                     <div className="category-buttons">
                         <h3>Season</h3>
                         <div className="button-group">
@@ -193,6 +206,8 @@ return (
                         </div>
                     </div>
                     </div>
+
+                    {/* Color selector options */}
                     <div className="color-selector">
                     <h3>Color</h3>
                     <div className="color-options">
@@ -209,12 +224,14 @@ return (
                         id="white"
                         style={{ backgroundColor: "white", border: "1px solid #ccc" }}
                         ></div>
-                        <div className="color-circle" id="gray" style={{ backgroundColor: "gray" }}></div>
-                        <div className="color-circle" id="black" style={{ backgroundColor: "black" }}></div>
-                    </div>
+                    <div className="color-circle" id="gray" style={{ backgroundColor: "gray" }}></div>
+                    <div className="color-circle" id="black" style={{ backgroundColor: "black" }}></div>
                 </div>
-        <br></br>
-                </div>
+            </div>
+            <br></br>
+        
+            {/* Cancel and submit buttons */}
+            </div>
                 <div className="inline-row">
                     <button type="">Cancel</button>
                     <button type="submit">Submit</button>
