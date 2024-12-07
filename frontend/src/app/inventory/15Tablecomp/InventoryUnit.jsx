@@ -1,5 +1,7 @@
 // InventoryUnit.jsx
 "use client";
+import { useState, useEffect } from "react";
+import Popup from "./Popup";
 import "./InventoryUnit.css";
 
 export default function InventoryUnit({ unit }) {
@@ -8,10 +10,37 @@ export default function InventoryUnit({ unit }) {
         return null; // Don't render anything if `unit` is undefined
     }
 
-    const { id, name, status, tags } = unit;
+    const { id, name, status, tags } = unit; 
+    const [isPopupVisible, setIsPopupVisible] = useState(false);
 
-    return (
-        <div className="unit">
+    const handleClick = () => {
+        setIsPopupVisible(true);
+    }
+
+    const handleClosePopup = () => {
+        setIsPopupVisible(false);
+    }
+
+    const handleClickOutside = (event) => {
+        if (
+            event.target.closest('.sidebar') === null &&
+            event.target.closest('.unit') === null
+
+        ) {
+            setIsPopupVisible(false);
+        }
+    }
+
+    useEffect(() => {
+        if (isPopupVisible) {
+            document.addEventListener('click', handleClickOutside);
+        } else {
+            document.removeEventListener('click', handleClickOutside)
+        }
+    }, [isPopupVisible]);
+
+    return (  
+        <div className="unit" onDoubleClick={handleClick}> 
             <div className="left-section">
                 <div className="check-box">
                     <input type="checkbox" id="customCheckbox" className="checkbox-input" />
@@ -22,13 +51,28 @@ export default function InventoryUnit({ unit }) {
                     </div>
                 </div>
             </div>
-            <div className="id"> {id} </div>
-            <div className="name">{name}</div>
-            <div className="status">{status}</div>
-            <div className="tags">{tags}</div>
-            <div className="drop-down">
-                <button></button>
+            <div className="center-section">
+                <div className="id"> {unit.id} </div>
+                <div className="status">
+                    <div className={`circle ${unit.status}`} ></div>
+                    {unit.status}
+                </div>
+                <div className="name">{unit.name}</div>
+                <div className="tags">
+                    {tags && tags.length > 0 && tags.map((tag, index) => (
+                            <span key={index} className="tag">
+                                {tag}
+                            </span>
+                        ))}
+                </div>
             </div>
+            <div className="drop-down">
+                <button className="drop-downBtn" onClick={handleClick}>•••</button>
+            </div>
+
+            {isPopupVisible && (
+                <Popup unit={unit} onClose={handleClosePopup}  />
+            )}
         </div>
     );
 }

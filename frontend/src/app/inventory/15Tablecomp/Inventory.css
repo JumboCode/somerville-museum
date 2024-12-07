@@ -20,8 +20,8 @@ body, html {
 }
 
 .Header {
-    background-color: beige;
-    height: 20%;
+    background-color: white;
+    height: 15%;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -36,10 +36,11 @@ body, html {
     display: flex; 
     align-items: center;
     justify-content: space-between;
-    width: 80%;
+    width: 100%;
     position: absolute;
     top: 30%;
-    margin-right: 80px;
+    padding: 0% 2% 1% 2%;
+    gap: 5%;
 }
 
 .Searchbar input[type="text"] {
@@ -47,22 +48,38 @@ body, html {
     border: 1px solid #ccc;
     flex-grow: 2;
     margin-right: 15px;
-    width: 100%;
-    min-width: auto;
+    min-width: 30vw;
+    height:5vh;
+    background-color: #D9D9D9;
+
 }
 
 .buttons {
+    z-index: 10000;
     display: flex;
     gap: 10px;
+    height: 5vh;
+    align-items: center;
 }
 
-.addBtn, .brwBtn {
+.addBtn {
     padding: 8px 12px;
     border: none;
-    background-color: #6e7781;
+    background-color: #418CFE;
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
+    border-radius: 2px;
+}
+
+.brwBtn {
+    padding: 8px 12px;
+    border: none;
+    background-color: #D9D9D9;
+    color: black;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 2px;
 }
 
 .addBtn:hover, .brwBtn:hover {
@@ -77,8 +94,9 @@ body, html {
     padding-right: 10%;
     position: absolute;
     bottom: -2px; 
-    gap: -2vh;
+    gap: 2vh;
     font-size: 1rem;
+    margin-top: 2vh;
 }
 
 .TableLabel {
@@ -88,20 +106,32 @@ body, html {
     color: #333;
 }
 
+#NameTag {
+    cursor: pointer;
+}
+
+#NameTag:hover {
+    transition: all 0.5s ease;
+    color: #1c1c1c;
+    font-weight: 500;
+}
+
+
 .ItemBarHolder {
-    background-color: aliceblue;
-    width: 100%;
+    background-color: white;
+    width: 96%;
+    border: 1px solid #ccc;
     display: flex;
     height: 80%;
-    border-radius: 10px;
     flex-direction: column;
     max-height: 100%; 
     overflow-y: auto;
+    margin-left: 2%;
+    margin-right: 2%;
 }
 
 .pagination-controls {
     display: flex;
-    justify-content:space-around;
     flex-direction: row;
     position: sticky;
     bottom: 0;
@@ -109,17 +139,45 @@ body, html {
     padding: 10px;
     text-align: center;
     border-radius: 10px;
+    justify-content: space-between;
 }
 
+
 .num-items {
+    /* height: 5vh; */
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
     padding-left: 3%;
+    margin-right: auto;
+    flex: 0; 
 }
 
 .page-selection {
+    display: flex;
     padding-right: 5%;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.leftBtn, .rightBtn, .pageNum {
+    padding: 8px 12px;
+    border: none;
+    color: black;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 2px;
+    background: none;
+}
+
+.view {
+    padding: 10%
+}
+
+.select-num {
+    padding: 10% 15% 10% 15%;
+    background-color: #D9D9D9;
+    border: none;
 }
 
 
