@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import "./Dashboard.css";
-import RecentBorrows from './RecentBorrows.jsx';
+import "../components/Dashboard.css"
+import RecentBorrows from "../components/RecentBorrows";
 
 const Dashboard = () => {
   // State to store the counts for each status
@@ -68,7 +68,7 @@ const Dashboard = () => {
       </nav>
       <br></br>
       <h2>Recent Borrows</h2>
-      {/* <RecentBorrows /> */}
+      <RecentBorrows />
     </div>
   );
 };
