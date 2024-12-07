@@ -4,7 +4,7 @@ import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { useState } from 'react';
 
-function PopUp({ handleAdd, close }) {
+function AddPopup({ handleAdd, close }) {
 
   const [itemName, setItemName] = useState('');
   const [note, setnote] = useState('');
@@ -89,7 +89,7 @@ export default function MyForm({className, children}) {
         {(close) => (
           <div className='modal'>
             <div className='content'>
-              <PopUp handleAdd={handleAdd} close={close} />
+              <AddPopup handleAdd={handleAdd} close={close} />
             </div>
             <div>
               <button onClick={() => close()}>Exit</button>

@@ -1,13 +1,12 @@
 "use client";
-import './EliTable.css';
-import ELiUnit from '../15Tablecomp/EliUnit';
+import style from './15Tablecomp/Inventory.css';
+import InventoryUnit from './15Tablecomp/InventoryUnit.jsx';
 import { useState, useEffect } from "react";
-import BorrowButton from '../BorrowButton.jsx';
-import Popup from '../AddItemButton';
+import BorrowButton from '../components/BorrowButton.jsx';
+import AddPopup from '../components/AddItemButton';
+// import Popup from 'Popup.jsx';
 
-
-//on click name sorts alpha order + pop up 
-export default function ELiTable() {
+export default function Inventory() {
     const [units, setUnits] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [unitsPerPage, setUnitsPerPage] = useState(10); //default units per page is 10
@@ -48,7 +47,7 @@ export default function ELiTable() {
     const currentUnits = units
         .slice(startIndex, startIndex + unitsPerPage)
         .map((unit) => 
-            <ELiUnit key={unit.id} unit={unit} />
+            <InventoryUnit key={"1"} unit={unit} />
     );
 
     const sortByName = () => {
@@ -90,7 +89,7 @@ export default function ELiTable() {
                             <input type="text" placeholder="Search..."/>
                         </div>
                             <div className='buttons'> 
-                                <Popup className='addBtn'>+item</Popup>
+                                <AddPopup className='addBtn'>+item</AddPopup>
                                 <BorrowButton className='brwBtn' >Borrow</BorrowButton>
                             </div>
                     </div>

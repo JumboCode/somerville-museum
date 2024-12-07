@@ -3,6 +3,9 @@ import "./Popup.css";
 
 
 export default function Popup( { unit, onClose } ) {
+    if (!unit){
+        return null;
+    }
     const { id, name, status, tags } = unit;
 
     return (
@@ -20,9 +23,9 @@ export default function Popup( { unit, onClose } ) {
                 <div class="image-placeholder"></div>
                 <p><strong>ID:</strong> {id}</p>
                 <p><strong>Status:</strong> {status}</p>
+                <p><strong>Location:</strong> Shelf H</p>
                 </div>
                 <div class="details-right">
-                <p><strong>Location:</strong> Shelf H</p>
                 </div>
             </div>
             

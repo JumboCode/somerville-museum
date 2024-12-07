@@ -40,21 +40,18 @@
   /* Item Details Section */
   .item-details {
     display: flex;
-    justify-content: space-between;
-    padding: 2vh 0;
+    padding: 0.25vh;
   }
   
   .details-left {
-    display: flex;
-    flex-direction: column;
-    gap: 1vh;
+    gap: 0vh;
   }
   
   .image-placeholder {
-    width: 80%;
-    height: 10vh;
+    width: 30vh;
+    height: 30vh;
     background-color: #ccc;
-    border-radius: 50%;
+    border-radius: 5%;
   }
   
   /* Tags Section */

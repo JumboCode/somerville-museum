@@ -1,11 +1,16 @@
+// InventoryUnit.jsx
 "use client";
-import "./EliUnit.css";
 import { useState, useEffect } from "react";
 import Popup from "./Popup";
+import "./InventoryUnit.css";
 
-// Add unit to this component if needed
-export default function ELiUnit( { unit } ) {
-    const { id, name, status, tags } = unit;
+export default function InventoryUnit({ unit }) {
+    // Add a condition to make sure `unit` is defined
+    if (!unit) {
+        return null; // Don't render anything if `unit` is undefined
+    }
+
+    const { id, name, status, tags } = unit; 
     const [isPopupVisible, setIsPopupVisible] = useState(false);
 
     const handleClick = () => {
@@ -34,12 +39,11 @@ export default function ELiUnit( { unit } ) {
         }
     }, [isPopupVisible]);
 
-    return (
-        
+    return (  
         <div className="unit" onDoubleClick={handleClick}> 
             <div className="left-section">
                 <div className="check-box">
-                    <input type="checkbox" id="customCheckbox" className="checkbox-input"/>
+                    <input type="checkbox" id="customCheckbox" className="checkbox-input" />
                 </div>
                 <div className="picture">
                     <div className="image-container">
