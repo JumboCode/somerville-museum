@@ -5,41 +5,47 @@
   color: #000000;
 }
 
+h1, h2 {
+  padding-bottom: 1rem;
+}
+
 li {
-    border-radius: 3%;
+    border-radius: 0.5rem;
 }
 
 .nav-links {
-  /* center the words on the bar! */
-  display: flex;
-  background-color:#d9d9d9;
-  justify-content: center;
-  /* positioning */
   margin: auto;
   width: 60vw;
-  text-align: center;
   height: auto;
-  /* removing the bullet points that normally come with a list*/
   list-style: none;
-  /* I liked the way my font looked bold better */
 }
 
 .last-element {
   border-right: 0px;
 }
 
-p:hover { /*for when you hover over a link!*/
-    color: #F92C85;
+.nav-items{
+  display: inline-block;
+  align-items: center;
+  justify-content: center;
+  background-color: #d9d9d9; 
+  margin-right: 1rem;
+  width: 12rem;
+  height: 12rem;
+  text-align: center;
 }
 
-.nav-items {
-  /* constant border width */
-  border-right: 1px solid black;
-  text-align: center;
-  padding: 3% 5% 3% 5%;
-  color: black;
-  text-decoration: none;
-  width: 8vw;
-  height: auto;
-  flex-grow: 1;
+.wrapper {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.placeholder {
+  display: inline-block;
+  width: 12rem;
+  height: 3.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  background-color: #d9d9d9;
+  margin-right: 1rem;
 }
