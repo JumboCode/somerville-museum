@@ -12,7 +12,6 @@ const pool = new Pool({
 
 // Utility function to query the database using the pool
 export async function query(text, params) {
-  console.log(process.env.DATABASE_URL);
   const client = await pool.connect();
   try {
     const res = await client.query(text, params);
