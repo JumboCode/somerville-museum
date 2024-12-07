@@ -2,8 +2,8 @@
 
 import React from "react";
 import "./Filters.css";
-import Checkbox from "./Checkbox";
-import Dropdown from "./Dropdown";
+import Checkbox from "../components/Checkbox";
+import Dropdown from "../components/Dropdown";
 
 const Filter = () => {
 
