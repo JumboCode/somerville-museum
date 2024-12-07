@@ -1,0 +1,139 @@
+/* Sidebar Container */
+.sidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 30%;
+    background-color: #fff;
+    box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1);
+    padding: 2vh;
+    padding-left: 5vh;
+    overflow-y: auto;
+    z-index: 1000;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header h2 {
+    margin: 0;
+  }
+  
+  .buttons {
+    display: flex;
+    gap: 1vh;
+  }
+  
+  .edit-btn, .close-btn {
+    background-color: transparent;
+    border: 1px solid #333;
+    padding: 0.5vh 1vh;
+    cursor: pointer;
+  }
+  
+  /* Item Details Section */
+  .item-details {
+    display: flex;
+    padding: 0.25vh;
+  }
+  
+  .details-left {
+    gap: 0vh;
+  }
+  
+  .image-placeholder {
+    width: 30vh;
+    height: 30vh;
+    background-color: #ccc;
+    border-radius: 5%;
+  }
+  
+  /* Tags Section */
+  .tags-section {
+    padding: 1vh 0;
+  }
+  
+  .tags {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1vh;
+    overflow-x: auto;
+    padding-bottom: 1vh;
+  }
+  
+  .tag {
+    background-color: #c3c9c9;
+    padding: 0.5vh 1vh;
+    border-radius: 4px;
+    font-size: 1.5vh;
+  }
+  
+  /* Notes Section */
+  .notes-section {
+    padding: 1vh 0;
+  }
+  
+  textarea {
+    width: 100%;
+    height: 10vh;
+    resize: none;
+    padding: 1vh;
+    border: 1px solid #333;
+    background-color: #fff;
+    border-radius: 4px;
+    font-size: 1.5vh;
+  }
+  
+  /* Borrower Information Section */
+  .borrower-info {
+    padding: 2vh 0;
+  }
+  
+  .borrower-info p {
+    margin: 0.5vh 0;
+  }
+  
+  .return-btn {
+    display: block;
+    margin-bottom: 2vh;
+    padding: 1vh 2vh;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* History Section */
+  .history-section {
+    padding: 2vh 0;
+  }
+  
+  .history-section table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .history-section table tr td {
+    border-bottom: 1px solid #ccc;
+    padding: 1vh 0;
+    font-size: 1.5vh;
+  }
+  
+  .history-section h3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .history-section a {
+    font-size: 1.5vh;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
