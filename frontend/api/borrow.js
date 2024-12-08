@@ -2,13 +2,13 @@ import { query } from './db.js';
 
 export default async function handler(req, res) {
 
-  const { dateBorrowed, borrowerName, borrowerEmail, returnDate, 
+  const { dateBorrowed, borrowerName, borrowerEmail, dueDate, 
           APPROVER_NAME, APPROVER_EMAIL, selectedItems } = req.body;
 
   try {
    
     //notes to make query shorter 
-    const borrowHistoryNote = `Borrower Name: ${borrowerName}, Borrower Email: ${borrowerEmail}, Borrowed on Date: ${dateBorrowed}, Return Date: ${returnDate}`;
+    const borrowHistoryNote = `Borrower Name: ${borrowerName}, Borrower Email: ${borrowerEmail}, Borrowed on Date: ${dateBorrowed}, Due Date: ${dueDate}`;
     const approverInfoNote = `Approver Name: ${APPROVER_NAME}, Approver Email: ${APPROVER_EMAIL}`;
     
 
@@ -42,13 +42,13 @@ export default async function handler(req, res) {
       availableItems.push(itemId);
     }
 
-    let message = 'Borrowing process completed.';
+    let message = 'Borrowing process completed. ';
 
     if (availableItems.length > 0) {
-      message += `Sucessfully borrowed items ${availableItems.join(', ')}.`
+      message += `Sucessfully borrowed items ${availableItems.join(', ')}. `
     }
     if (unavailableItems.length > 0) {
-      message += `The following items were unavailable: ${unavailableItems.join(', ')}.`
+      message += `The following items were unavailable: ${unavailableItems.join(', ')}. `
     }
 
     res.status(200).json({ message });
