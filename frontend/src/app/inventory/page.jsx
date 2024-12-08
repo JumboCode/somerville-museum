@@ -1,9 +1,12 @@
 "use client";
-import './EliTable.css';
-import ELiUnit from '../15Tablecomp/EliUnit';
+import style from './15Tablecomp/Inventory.css';
+import InventoryUnit from './15Tablecomp/InventoryUnit.jsx';
 import { useState, useEffect } from "react";
+import BorrowButton from '../components/BorrowButton.jsx';
+import AddPopup from '../components/AddItemButton';
+// import Popup from 'Popup.jsx';
 
-export default function ELiTable() {
+export default function Inventory() {
     const [units, setUnits] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [unitsPerPage, setUnitsPerPage] = useState(10); //default units per page is 10
@@ -44,10 +47,16 @@ export default function ELiTable() {
     const currentUnits = units
         .slice(startIndex, startIndex + unitsPerPage)
         .map((unit) => 
-            <ELiUnit key={unit.id} unit={unit} />
+            <InventoryUnit key={"1"} unit={unit} />
     );
 
+    const sortByName = () => {
+        const filteredAndSortedEntries = [...units]
+          .sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
     
+        setUnits(filteredAndSortedEntries);
+
+    };
 
     //tesing piece of code
     // const totalPages = Math.ceil(20 / unitsPerPage);
@@ -80,14 +89,14 @@ export default function ELiTable() {
                             <input type="text" placeholder="Search..."/>
                         </div>
                             <div className='buttons'> 
-                                <button className='addBtn'>ADD</button>
-                                <button className='brwBtn'>BORROW</button>
+                                <AddPopup className='addBtn'>+item</AddPopup>
+                                <BorrowButton className='brwBtn' >Borrow</BorrowButton>
                             </div>
                     </div>
                     <div className="TableLabels">
                         <div className="TableLabel"> ID </div>
-                        <div className="TableLabel"> Name </div>
-                        <div className="TableLabel"> Status </div>
+                        <div className="TableLabel"> Availability </div>
+                        <div className="TableLabel" onClick={sortByName} id='NameTag'> Name </div>
                         <div className="TableLabel"> Tags </div>
                     </div>
                 </div>
@@ -96,8 +105,8 @@ export default function ELiTable() {
                 </div>
                 <div className="pagination-controls">
                     <div className="num-items">
-                        <p>View</p>
-                        <select name="select-num" id="select-num" onChange = {handleUnitsPerPageChange}>
+                        <p className="view">View </p>
+                        <select className="select-num" id="select-num" onChange = {handleUnitsPerPageChange}>
                             <option value="10">10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
@@ -105,18 +114,16 @@ export default function ELiTable() {
                         </select>
                     </div>
                     <div className="page-selection">
-                        <button onClick={goToPreviousPage} disabled={currentPage === 1}>
+                        <button className="leftBtn" onClick={goToPreviousPage} disabled={currentPage === 1}>
                             &lt;
                         </button>
-                        {/* <span>Page {currentPage} of {totalPages}</span> */}
-                        
                             {buttons.map((number) => (
-                                <button key={number} onClick={() => setCurrentPage(number)}>
+                                <button className="pageNum" key={number} onClick={() => setCurrentPage(number)}>
                                     {number}
                                 </button>
                             ))}
                         
-                        <button onClick={goToNextPage} disabled={currentPage === totalPages}>
+                        <button className="rightBtn" onClick={goToNextPage} disabled={currentPage === totalPages}>
                             &gt;
                         </button>
                     </div>
