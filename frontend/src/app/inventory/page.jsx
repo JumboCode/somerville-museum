@@ -1,54 +1,82 @@
+// Inventory.jsx
 "use client";
 import style from './15Tablecomp/Inventory.css';
 import InventoryUnit from './15Tablecomp/InventoryUnit.jsx';
 import { useState, useEffect } from "react";
 import BorrowButton from '../components/BorrowButton.jsx';
 import AddPopup from '../components/AddItemButton';
-// import Popup from 'Popup.jsx';
+import ReturnButton from '../components/ReturnButton';
 
 export default function Inventory() {
-    const [units, setUnits] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [unitsPerPage, setUnitsPerPage] = useState(10); //default units per page is 10
-    const [totalPages, setTotalPages] = useState();
+  const [units, setUnits] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [unitsPerPage, setUnitsPerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState();
+  const [selectedItems, setSelectedItems] = useState([]);
 
+  useEffect(() => {
+    console.log(selectedItems);
+    fetchData();
+  }, [selectedItems]);
 
-    useEffect (() => {
-        async function fetchData() {
-            try {            
-                const response = await fetch(`../../api/queryAll`, { 
-                    method: 'GET',
-                    headers: {
-                    'Content-Type': 'application/json' // Specify the content type
-                    },
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log("data selected" + data);
-                    setUnits(data);
-                    setTotalPages(Math.ceil(data.length / 10));
-                } else {
-                    console.log("failed to fetch data");
-                }
-                
-            } catch (error) {
-                console.log(error);
-            }
-            
-        }
-
-            fetchData();
-
-        }, []);
+  async function fetchData() {
+    try {
+      const response = await fetch(`../../api/queryAll`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        const currentDate = new Date();
+        const updatedData = data.map((item) => {
+          if (item.status === 'Borrowed' && item.dueDate && new Date(item.dueDate) < currentDate) {
+            return { ...item, status: 'Overdue' };
+          }
+          return item;
+        });
         
-    const startIndex = (currentPage - 1) * unitsPerPage;
+        setUnits(updatedData);
+        setTotalPages(Math.ceil(updatedData.length / unitsPerPage));
+      } else {
+        console.error("failed to fetch data");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
-    const currentUnits = units
-        .slice(startIndex, startIndex + unitsPerPage)
-        .map((unit) => 
-            <InventoryUnit key={"1"} unit={unit} />
-    );
+  const handleBorrowSuccess = () => {
+    fetchData();
+  };
+
+  const handleCheckboxChange = (unit, isChecked) => {
+    console.log("HYING HERE RAHHH", unit);
+    setSelectedItems((prevSelected) => {
+      if (isChecked) {
+        console.log("MKASDMDKADMF");
+        return [unit, ...prevSelected];
+      } else {
+        console.log("nettspend")
+        return prevSelected.filter(item => item.id !== unit.id);
+      }
+    });
+  };
+
+  const startIndex = (currentPage - 1) * unitsPerPage;
+  const currentUnits = units
+    .slice(startIndex, startIndex + unitsPerPage)
+    .map((unit) => (
+      <InventoryUnit
+        key={unit.id}
+        unit={unit}
+        onChange={handleCheckboxChange}
+        // checked={selectedItems.some((item) => item?.id && unit?.id && item.id === unit.id)}
+        checked={false}
+      />
+    ));
 
     const sortByName = () => {
         const filteredAndSortedEntries = [...units]
@@ -57,6 +85,7 @@ export default function Inventory() {
         setUnits(filteredAndSortedEntries);
 
     };
+
 
     //tesing piece of code
     // const totalPages = Math.ceil(20 / unitsPerPage);
@@ -81,6 +110,7 @@ export default function Inventory() {
     const buttons = Array.from({ length: totalPages}, (_, index) => index + 1);
 
     return (
+            <>
         
             <div className="Table">
                 <div className="Header">
@@ -90,8 +120,18 @@ export default function Inventory() {
                         </div>
                             <div className='buttons'> 
                                 <AddPopup className='addBtn'>+item</AddPopup>
-                                <BorrowButton className='brwBtn' >Borrow</BorrowButton>
+                                <BorrowButton className='brwBtn' 
+                                selectedItems={selectedItems}
+                                onSuccess = {handleBorrowSuccess}>Borrow</BorrowButton>
+                                selectedItems = {selectedItems} 
+                                onSuccess = {handleBorrowSuccess}
+                                <ReturnButton className='brwBtn' //added return button here
+                                selectedItems = {selectedItems}
+                                onSuccess={handleBorrowSuccess}
+                                >RETURN</ReturnButton>
+
                             </div>
+                        
                     </div>
                     <div className="TableLabels">
                         <div className="TableLabel"> ID </div>
@@ -129,6 +169,7 @@ export default function Inventory() {
                     </div>
                 </div>
             </div>
+        </>
         
     );
 }
