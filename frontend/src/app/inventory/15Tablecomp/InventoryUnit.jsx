@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Popup from "./Popup";
 import "./InventoryUnit.css";
 
-export default function InventoryUnit({ unit }) {
+export default function InventoryUnit({ unit, onChange, checked }) {
     // Add a condition to make sure `unit` is defined
     if (!unit) {
         return null; // Don't render anything if `unit` is undefined
@@ -38,12 +38,20 @@ export default function InventoryUnit({ unit }) {
             document.removeEventListener('click', handleClickOutside)
         }
     }, [isPopupVisible]);
-
+    if(checked){
+        console.log("IOSFJNFAS", checked);
+    }
     return (  
         <div className="unit" onDoubleClick={handleClick}> 
             <div className="left-section">
-                <div className="check-box">
-                    <input type="checkbox" id="customCheckbox" className="checkbox-input" />
+            <div className="check-box">
+                <input 
+                    type="checkbox" 
+                    id={`customCheckbox-${id}`} 
+                    className="checkbox-input" 
+                    checked={checked} 
+                    onChange={(e) => onChange(unit, e.target.checked)} 
+                />
                 </div>
                 <div className="picture">
                     <div className="image-container">
@@ -69,10 +77,6 @@ export default function InventoryUnit({ unit }) {
             <div className="drop-down">
                 <button className="drop-downBtn" onClick={handleClick}>•••</button>
             </div>
-
-            {isPopupVisible && (
-                <Popup unit={unit} onClose={handleClosePopup}  />
-            )}
         </div>
     );
 }
