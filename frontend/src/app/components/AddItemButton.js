@@ -3,8 +3,9 @@
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { useState } from 'react';
+import AddPopup from './AddPopup';
 
-function AddPopup({ handleAdd, close }) {
+function AddButton({ handleAdd, close }) {
 
   const [itemName, setItemName] = useState('');
   const [note, setnote] = useState('');
