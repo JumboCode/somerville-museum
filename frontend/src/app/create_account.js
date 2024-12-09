@@ -175,7 +175,7 @@ const checkAccountExists = (callback) => {
       .then((r) => {
         if ('success' === r.message) {
           localStorage.setItem('user', JSON.stringify({ email, token: r.token }))
-          navigate('/login')
+          navigate('/confirm_signup')
         } else {
           setError('Something went wrong with creating your account. Try again')
           resetFields()
