@@ -1,0 +1,25 @@
+.popup-wrapper {
+        display: inline-block; /* Inline wrapper for proper positioning */
+}
+      
+/* Ensure the Popup modal inherits full-screen behavior */
+.reactjs-popup-overlay {
+        position: fixed; /* Full-screen overlay */
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5); /* Dim background */
+        z-index: 999; /* High stacking order */
+}
+
+/* Style for the content of the popup */
+.reactjs-popup-content {
+        position: relative; /* Ensure proper positioning */
+        margin: auto;
+        background: #ffffff; /* White background */
+        border-radius: 8px; /* Smooth edges */
+        padding: 20px;
+        max-width: 500px; /* Limit width */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}

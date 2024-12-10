@@ -3,7 +3,7 @@ import style from './15Tablecomp/Inventory.css';
 import InventoryUnit from './15Tablecomp/InventoryUnit.jsx';
 import { useState, useEffect } from "react";
 import BorrowButton from '../components/BorrowButton.jsx';
-import AddButton from '../components/AddItemButton';
+import AddButton from '../components/AddPopup';
 // import Popup from 'Popup.jsx';
 
 export default function Inventory() {
@@ -89,7 +89,7 @@ export default function Inventory() {
                             <input type="text" placeholder="Search..."/>
                         </div>
                             <div className='buttons'> 
-                                <AddButton className='addBtn'>+item</AddButton>
+                                <AddButton className='addBtn'> </AddButton>
                                 <BorrowButton className='brwBtn' >Borrow</BorrowButton>
                             </div>
                     </div>

@@ -55,7 +55,7 @@ body, html {
 }
 
 .buttons {
-    z-index: 10000;
+    z-index: 1;
     display: flex;
     gap: 10px;
     height: 5vh;
