@@ -77,6 +77,11 @@ export default function InventoryUnit({ unit, onChange, checked }) {
             <div className="drop-down">
                 <button className="drop-downBtn" onClick={handleClick}>•••</button>
             </div>
+            <div>
+                { isPopupVisible && (
+                    <Popup unit={unit} onClose={handleClosePopup} />
+                )}
+            </div>
         </div>
     );
 }
