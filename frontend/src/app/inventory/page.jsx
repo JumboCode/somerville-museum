@@ -122,7 +122,10 @@ export default function Inventory() {
                         </div>
                             <div className='buttons'> 
                                 <AddButton className='addBtn'> </AddButton>
-                                <BorrowButton className='brwBtn' >Borrow</BorrowButton>
+                                <BorrowButton className='brwBtn'
+                                selectedItems={selectedItems}
+                                onSuccess={handleBorrowSuccess}>Borrow
+                            </BorrowButton>
                             </div>
                     </div>
                     <div className="TableLabels">
