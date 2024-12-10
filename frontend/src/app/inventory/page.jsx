@@ -5,6 +5,7 @@ import InventoryUnit from './15Tablecomp/InventoryUnit.jsx';
 import { useState, useEffect } from "react";
 import BorrowButton from '../components/BorrowButton.jsx';
 import AddButton from '../components/AddPopup';
+import ReturnButton from '../components/ReturnButton';
 // import Popup from 'Popup.jsx';
 
 export default function Inventory() {
@@ -53,13 +54,10 @@ export default function Inventory() {
     };
 
     const handleCheckboxChange = (unit, isChecked) => {
-        console.log("HYING HERE RAHHH", isChecked, unit);
         setSelectedItems((prevSelected) => {
             if (isChecked) {
-                console.log([unit, ...prevSelected]);
                 return [unit, ...prevSelected];
             } else {
-                console.log("nettspend")
                 return prevSelected.filter(item => item.id !== unit.id);
             }
         });
@@ -123,9 +121,13 @@ export default function Inventory() {
                             <div className='buttons'> 
                                 <AddButton className='addBtn'> </AddButton>
                                 <BorrowButton className='brwBtn'
-                                selectedItems={selectedItems}
-                                onSuccess={handleBorrowSuccess}>Borrow
-                            </BorrowButton>
+                                    selectedItems={selectedItems}
+                                    onSuccess={handleBorrowSuccess}>Borrow
+                                </BorrowButton>
+                                <ReturnButton className='brwBtn'
+                                    selectedItems={selectedItems}
+                                    onSuccess={handleBorrowSuccess}>
+                                </ReturnButton>
                             </div>
                     </div>
                     <div className="TableLabels">

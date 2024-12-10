@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from "react";
 import StylishButton from './StylishButton.jsx'; //import css file
 
-const ReturnButton = ({selectedItems = [], onSuccess }) => {  //takes in selected items as a parameter
-
+const ReturnButton = ( {selectedItems = [], onSuccess } ) => {  //takes in selected items as a parameter
     const handleSubmit = async (e) => {
+        console.log(selectedItems);
         try {
             const response = await fetch('../../api/return', {   //call return API 
                 method: 'PUT',
@@ -38,7 +38,7 @@ const ReturnButton = ({selectedItems = [], onSuccess }) => {  //takes in selecte
 
     return (
         <div>
-            <StylishButton label="Return" styleType="style2" onClick={handleSubmit}/>
+            <StylishButton label="Return" styleType="style1" onClick={handleSubmit}/>
         </div>
     )
 }

@@ -5,6 +5,8 @@
   width: 100%;
 }
 
+
+
 .filter-section {
   width: 18rem;
   min-width: 16rem;
@@ -20,7 +22,7 @@
 .inventory-section {
   flex: 1;
   margin: auto;
-  margin-left: 18rem;
-  width: calc(100% - 18rem - 4rem); /* Take remaining width */
+  margin-left: 35rem;
+  width: calc(100% - 30rem); /* Take remaining width */
   overflow-x: hidden;
 }
