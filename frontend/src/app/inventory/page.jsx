@@ -4,8 +4,8 @@ import style from './15Tablecomp/Inventory.css';
 import InventoryUnit from './15Tablecomp/InventoryUnit.jsx';
 import { useState, useEffect } from "react";
 import BorrowButton from '../components/BorrowButton.jsx';
-import AddPopup from '../components/AddItemButton';
-import ReturnButton from '../components/ReturnButton';
+import AddButton from '../components/AddPopup';
+// import Popup from 'Popup.jsx';
 
 export default function Inventory() {
     const [units, setUnits] = useState([]);
@@ -120,18 +120,10 @@ export default function Inventory() {
                         <div className="Searchbar">
                             <input type="text" placeholder="Search..." />
                         </div>
-                        <div className='buttons'>
-                            <AddPopup className='addBtn'>+item</AddPopup>
-                            <BorrowButton className='brwBtn'
-                                selectedItems={selectedItems}
-                                onSuccess={handleBorrowSuccess}>Borrow
-                            </BorrowButton>
-                            <ReturnButton className='brwBtn' //added return button here
-                                selectedItems={selectedItems}
-                                onSuccess={handleBorrowSuccess}
-                            >RETURN</ReturnButton>
-                        </div>
-
+                            <div className='buttons'> 
+                                <AddButton className='addBtn'> </AddButton>
+                                <BorrowButton className='brwBtn' >Borrow</BorrowButton>
+                            </div>
                     </div>
                     <div className="TableLabels">
                         <div className="TableLabel"> ID </div>
