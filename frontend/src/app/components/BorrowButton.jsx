@@ -149,7 +149,16 @@ const BorrowButton = ( {selectedItems = [], onSuccess } ) => {
            
            <StylishButton label="Borrow" styleType="style1" onClick={openPopup} />
 
-           <Popup open={isOpen} modal nested> 
+           <Popup open={isOpen} modal nested
+           //im the TL i can inline style if i want it is 1am and i still have another pr to do
+           contentStyle={{
+            backgroundColor: 'white', // White background
+            padding: '20px',          // Padding for content
+            borderRadius: '8px',      // Rounded corners for the popup
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', // Light shadow for depth
+            maxWidth: '500px',         // Max width of the popup
+            margin: 'auto',            // Centering the popup
+        }}> 
                {/* Attach onSubmit directly to prevent form submission */}
                <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}> 
 
