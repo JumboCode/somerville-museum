@@ -21,13 +21,16 @@ export default function SelectItemButton() {
         setError(null);
 
         try {
-            const response = await fetch('../../api/selectId', {
-                method: 'PUT',
+            const response = await fetch(`../../api/db`, { 
+                method: 'PUT', // Use the PUT method
                 headers: {
-                    'Content-Type': 'application/json'
+                  'Content-Type': 'application/json' // Specify the content type
                 },
-                body: JSON.stringify({ id: id })
-            });
+                body: JSON.stringify({
+                  text: 'SELECT * FROM dummy_data WHERE id = $1', // SQL query for selecting the record
+                  params: [id] // Parameters for the query
+                })
+              });
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
