@@ -83,14 +83,16 @@ export default function AddPopup() {
         });
 
         // Send a POST request to the addItem API
-        const response = await fetch(`../../api/addItem`, {
+        const response = await fetch(`../../api/db`, { // Use the generic handler
             method: 'POST',
             headers: {
-            'Content-Type': 'application/json'
+              'Content-Type': 'application/json'
             },
-            // Send in all of the fields from the popup
-            body: JSON.stringify({ id: id, name: name, note: note, tag1: centuryTag, tag2 : sizeTag, tag3 : clothingTag}) // Send the id as a JSON object
-        });
+            body: JSON.stringify({
+              text: 'INSERT INTO dummy_data (id, name, note, tags) VALUES ($1, $2, $3, $4)',
+              params: [id, name, note, [centuryTag, sizeTag, clothingTag]] // Parameters for the query
+            })
+          });
 
         setIsPopupVisible(false);
     };
