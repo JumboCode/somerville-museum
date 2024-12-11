@@ -22,12 +22,16 @@ export default function Inventory() {
 
     async function fetchData() {
         try {
-            const response = await fetch(`../../api/queryAll`, {
-                method: 'GET',
+            const response = await fetch(`../../api/db`, { 
+                method: 'POST', // Use POST since we are sending SQL as part of the request
                 headers: {
-                    'Content-Type': 'application/json'
+                  'Content-Type': 'application/json' 
                 },
-            });
+                body: JSON.stringify({
+                  text: 'SELECT * FROM dummy_data', // Query for getting all records
+                  params: [] // No parameters needed for this query
+                })
+              });
 
             if (response.ok) {
                 const data = await response.json();

@@ -18,13 +18,16 @@ export default function PopupGfg() {
 
     const handleFetchData = async () => {
         try {
-            const response = await fetch(`../../api/selectId`, { 
-                method: 'PUT',
+            const response = await fetch(`../../api/db`, { 
+                method: 'PUT', // Use the PUT method
                 headers: {
-                'Content-Type': 'application/json' // Specify the content type
+                  'Content-Type': 'application/json' // Specify the content type
                 },
-                body: JSON.stringify({ id: inputValue }) // Send the id as a JSON object
-              })
+                body: JSON.stringify({
+                  text: 'SELECT * FROM dummy_data WHERE id = $1', // SQL query for selecting the record
+                  params: [inputValue] // Parameters for the query
+                })
+              });
             const result = await response.json();
     
             // Ensure result.tags is a string before calling split

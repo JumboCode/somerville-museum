@@ -31,13 +31,17 @@
                              if (confirm("Do you really want to delete the selected item(s)? \nSelected Item(s): " + itemIds)) {
                                  // For each item ID, make a GET request to the 'delete' endpoint
                                  itemIds.forEach(id => {
-                                    fetch(`../../api/delete`, { 
-                                        method: 'PUT',
+                                    fetch(`../../api/db`, { 
+                                        method: 'PUT', // Use the PUT method
                                         headers: {
-                                        'Content-Type': 'application/json' // Specify the content type
+                                          'Content-Type': 'application/json' // Specify the content type
                                         },
-                                        body: JSON.stringify({ id }) // Send the name as a JSON object
-                                      })})
+                                        body: JSON.stringify({
+                                          text: 'DELETE FROM dummy_data WHERE id = $1', // SQL query for deletion
+                                          params: [id] // Parameters for the query
+                                        })
+                                      });
+                                 });
                                 } else {
                                     alert('User cancelled the deletion.');
                                 }
