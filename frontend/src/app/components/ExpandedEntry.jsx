@@ -67,13 +67,16 @@ function ExpandedEntry({ itemData, onClose }) {
 
     const handleUpdateNote = async (event) => {
         try {
-            const response = await fetch("../../api/updateNote", {
+            const response = await fetch("../../api/db", {
                 method: "PUT",
                 headers: {
-                    "Content-Type": "application/json",
+                  "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ id: itemData.id, note: newNote }), // Update the note
-            });
+                body: JSON.stringify({
+                  text: "UPDATE dummy_data SET note = $1 WHERE id = $2", // SQL query for updating the note
+                  params: [newNote, itemData.id], // Parameters for the query
+                }),
+              });
             if (!response.ok) {
                 throw new Error('Failed to update note');
             }
@@ -84,13 +87,16 @@ function ExpandedEntry({ itemData, onClose }) {
     
     const handleUpdateName = async (event) => {
         try {
-            const response = await fetch("../../api/updateName", {
+            const response = await fetch("../../api/db", {
                 method: "PUT",
                 headers: {
-                    "Content-Type": "application/json",
+                  "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ id: itemData.id, name: newName }), // Update the note
-            });
+                body: JSON.stringify({
+                  text: "UPDATE dummy_data SET name = $1 WHERE id = $2", // SQL query for updating the name
+                  params: [newName, itemData.id], // Parameters for the query
+                }),
+              });
             if (!response.ok) {
                 throw new Error('Failed to update name');
             }
@@ -101,13 +107,16 @@ function ExpandedEntry({ itemData, onClose }) {
 
     const handleUpdateStatus = async (event) => {
         try {
-            const response = await fetch("../../api/updateStatus", {
+            const response = await fetch("../../api/db", {
                 method: "PUT",
                 headers: {
-                    "Content-Type": "application/json",
+                  "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ id: itemData.id, status: newStatus }), // Update the status
-            });
+                body: JSON.stringify({
+                  text: "UPDATE dummy_data SET status = $1 WHERE id = $2", // SQL query for updating the status
+                  params: [newStatus, itemData.id], // Parameters for the query
+                }),
+              });
             if (!response.ok) {
                 throw new Error('Failed to update status');
             }

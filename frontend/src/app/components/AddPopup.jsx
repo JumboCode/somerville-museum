@@ -83,6 +83,7 @@ export default function AddPopup() {
         });
 
         // Send a POST request to the addItem API
+        console.log(body);
         const response = await fetch(`../../api/db`, { // Use the generic handler
             method: 'POST',
             headers: {
