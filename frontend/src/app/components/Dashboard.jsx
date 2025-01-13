@@ -1,3 +1,12 @@
+/**
+ * @fileoverview Page that shows inventory overview and general statistics.
+ * 
+ * @file Dashboard.jsx
+ * @date January 12th, 2025
+ * @authors John Doe
+ *  
+ */
+
 "use client";
 
 import React, { useState, useEffect } from "react";
