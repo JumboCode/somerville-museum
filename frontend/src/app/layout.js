@@ -1,3 +1,11 @@
+/**
+ * @fileoverview Page that shows inventory overview and general statistics.
+ * 
+ * @file Layout.jsx
+ * @date January 12th, 2025
+ * @authors Entire Somerville Museum Team
+ *  
+ */
 
 import React from 'react';
 import Sidebar from './components/Sidebar';
