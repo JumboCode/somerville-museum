@@ -1,15 +1,48 @@
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+
+  /* Somerville Museum Global vars */
+
+  /* Colors */
+  --background: #F8F5F5;
+
+  /* fills */
+  --grayed_out: #F0F0F0;
+  --sm_red: #9B525F;
+  --sm_light_red: #E3CECE;
+  --sm_blue: #007781;
+
+  /* states */
+  --available: #33CF48;
+  --borrowed: #F2BA54;
+  --overdue: #CF3336;
+  --missing: #9000FF;
+
+  --great: #33CF48;
+  --good: #F2BA54;
+  --washing: #235DF1;
+  --dry_cleaning: #55ACEA;
+  --repairs: #BD33CF;
+
+  /* text colors */
+  --error_red: #DD1717;
+  --sm_red: #592A33;
+  --white: #ffffff;
+  --black: #000000;
+  --gray: #5E6171;
+
+  /* fonts */
+  --sm_font: 'Akatab';
+
 }
 
-@media (prefers-color-scheme: dark) {
+/* Will implement dark mode if we have time */
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 html,
 body {
