@@ -24,7 +24,7 @@ import Pie from '../assets/Pie.jsx';
 import Filter from '../assets/Filter.jsx';
 import Brick from '../assets/Brick.jsx';
 import Logo from '../assets/Logo.jsx';
-import './Tabs.css';
+import './Sidebar.css';
 
 // import Filter from './Filters';
 import Dashboard from "./Dashboard.jsx";
@@ -32,7 +32,7 @@ import Link from 'next/link'
 // import ELiTable from "./components/15Tablecomp/EliTable";
 
 
-const Tabs = () => {
+const Sidebar = () => {
     return (
         <div>
             <div className="sidenav">
@@ -55,4 +55,4 @@ const Tabs = () => {
     );
 };
 
-export default Tabs;
+export default Sidebar;

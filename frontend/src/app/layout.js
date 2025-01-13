@@ -1,6 +1,6 @@
 
 import React from 'react';
-import Tabs from './components/Tabs';
+import Sidebar from './components/Sidebar';
 
 export default function RootLayout({ children }) {
     return (
@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
             </head>
             <body>
                 <div className="app-layout">
-                    <Tabs />
+                    <Sidebar />
                     <main className="main-content">{children}</main>
                 </div>
             </body>
