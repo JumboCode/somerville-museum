@@ -23,4 +23,4 @@ jobs:
         run: npm install --prefix frontend
 
       - name: Deploy Project Artifacts to Vercel
-        run: npx vercel@latest deploy --prod --token=$VERCEL_TOKEN --cwd=frontend
+        run: npx vercel@latest deploy --prod --token=$VERCEL_TOKEN --cwd=frontend --env DATABASE_URL=${{ secrets.DATABASE_URL }}
