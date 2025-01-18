@@ -1,0 +1,9 @@
+{
+        "crons": [
+          {
+            "path": "/api/overdue.js",
+            "schedule": "0 0 * * *"
+          }
+        ]
+      }
+      
