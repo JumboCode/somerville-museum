@@ -1,75 +1,114 @@
-/* The sidebar */
+/* Sidebar.css */
 .sidenav {
-    width: 4rem;
-    background-color: #adaaaa;
-    padding-top: 20px;
     position: fixed;
-    z-index: 10;
-    top: 0;
     left: 0;
-    bottom: 0;
-    height: 100%;
-    overflow-x: hidden;
-}
-
-/* Text link styles */
-.sidenav a {
-    display: block;
-    color: #000000;
-    font-size: 1rem;
-    font-weight: normal;
-    padding: 6px 0;
-    text-align: center;
-    margin: 0 auto;
-    transition: color 0.3s ease;
-}
-
-.sidenav a:hover {
-    color: #ffffff;
-}
-
-.sidenav a svg,
-.sidenav svg,
-.sidenav svg path {
-    display: block;
-    margin: 2.5rem auto;
-    height: 25px;
-    width: 25px;
-    fill: #000000;
-    transition: all 0.2s ease;
-    transform: scale(1); 
-}
-
-.sidenav a:hover svg,
-.sidenav svg:hover,
-.sidenav svg path:hover {
-    fill: #ffffff;
-    transform: scale(1.05);
-}
-
-.sidenav #logo {
-    height: 3.5rem; 
-    width: 3.5rem;   
-    margin: 1rem auto; 
-}
-
-#gear {
-    position: absolute;
-    bottom: 0;
-    left: 30%;
-}
-
-/* Main content area */
-.main-content {
-    margin-left: 4rem; /* Offset for the sidebar */
+    top: 0;
+    height: 100vh;
+    width: 80px;
+    background-color: white;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     display: flex;
-    height: 100vh; /* Full height of the viewport */
-    overflow: hidden; /* Prevent content overflow */
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 0;
+    z-index: 1000;
 }
 
-/* Filter and Inventory sections */
+/* Logo styles */
+.logo-wrapper {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-wrapper svg {
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    fill: #000000;
+}
+
+/* Individual nav item styling */
+.nav-item {
+    width: 48px;
+    height: 48px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Style all SVGs in nav items */
+.nav-item svg,
+.nav-item a svg {
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    fill: #000000;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.2s ease;
+}
+
+/* Style SVG paths */
+.nav-item svg path,
+.nav-item a svg path {
+    fill: #000000;
+}
+
+/* Create hitbox for nav items */
+.nav-item a {
+    position: absolute;
+    inset: -8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+/* Hover effects */
+.nav-item a:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.nav-item a:hover svg {
+    transform: scale(1.1);
+}
+
+/* Settings positioning */
+.settings {
+    margin-top: auto;
+}
+
+/* Remove hover effects from logo */
+.logo-wrapper a:hover {
+    background-color: transparent;
+}
+
+.logo-wrapper svg:hover,
+.logo-wrapper a:hover svg {
+    transform: none;
+}
+
+
+
+/* DO WE USE ANY OF THIS ANYWHERE? (I forget?)*/
+
+
+/* Main content area 
+.main-content {
+    margin-left: 4rem;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Filter and Inventory sections 
 .filter-section {
-    flex: 0 0 25%; /* 25% of the main content width */
+    flex: 0 0 25%;
     max-width: 25%;
     overflow-y: auto;
     padding: 16px;
@@ -79,39 +118,17 @@
 }
 
 .inventory-section {
-    flex: 1; /* Takes the remaining width */
+    flex: 1;
     overflow-y: auto;
     padding: 16px;
     background-color: #ffffff;
     box-sizing: border-box;
 }
 
-/* Wrapper for the entire app */
+/* Wrapper for the entire app 
 .app-layout {
-    display: flex; /* Align items horizontally */
-    height: 100vh; /* Full viewport height */
-    overflow: hidden; /* Prevent any overflow issues */
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
 }
-
-/* Sidebar (Tabs) */
-.sidenav {
-    width: 4rem; /* Fixed width for the Tabs component */
-    background-color: #adaaaa;
-    position: fixed; /* Make it fixed to the left side */
-    top: 0;
-    left: 0;
-    height: 100%;
-    z-index: 1000; /* Ensure it stays on top */
-    overflow-x: hidden;
-}
-
-/* Main content next to the sidebar */
-.main-content {
-    margin-left: 4rem; /* Leave space for the Tabs component */
-    display: flex; /* Allow horizontal alignment of children */
-    flex-direction: row; /* Ensure Filters and Inventory are side-by-side */
-    flex: 1;
-    height: 100%; /* Take up the remaining height */
-    overflow: hidden; /* Prevent any overflow */
-}
-
+    */

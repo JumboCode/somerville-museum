@@ -18,7 +18,8 @@
 
 'use client';
 
-import React, { useState } from 'react';
+// Sidebar.jsx
+import React from 'react';
 import Gear from '../assets/Gear.jsx';
 import Pie from '../assets/Pie.jsx';
 import Filter from '../assets/Filter.jsx';
@@ -26,31 +27,29 @@ import Brick from '../assets/Brick.jsx';
 import Logo from '../assets/Logo.jsx';
 import './Sidebar.css';
 
-// import Filter from './Filters';
-import Dashboard from "./Dashboard.jsx";
-import Link from 'next/link'
-// import ELiTable from "./components/15Tablecomp/EliTable";
-
-
 const Sidebar = () => {
     return (
-        <div>
-            <div className="sidenav">
+        <div className="sidenav">
+            <div className="logo-wrapper">
                 <Logo />
-                {/*add functionality later!!*/}
-                <Pie />
-                {/* <Brick /> */}
-                {/* <li> */}
-                <Brick />
-                    {/* <Link href="/inventory"></Link> */}
-                {/* </li> */}
-                <Filter />
-                <Gear />
             </div>
 
-            {/* <div className="main">
-                <Dashboard />
-            </div> */}
+            {/* Static navigation items */}
+            
+            <div className="nav-item">
+                <Pie />
+            </div>
+            <div className="nav-item">
+                <Brick />
+            </div>
+            <div className="nav-item">
+                <Filter />
+            </div>
+            
+
+            <div className="nav-item settings">
+                <Gear />
+            </div>
         </div>
     );
 };
