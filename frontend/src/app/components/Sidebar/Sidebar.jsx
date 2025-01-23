@@ -20,11 +20,11 @@
 
 // Sidebar.jsx
 import React from 'react';
-import Gear from '../assets/Gear.jsx';
-import Pie from '../assets/Pie.jsx';
-import Filter from '../assets/Filter.jsx';
-import Brick from '../assets/Brick.jsx';
-import Logo from '../assets/Logo.jsx';
+import Gear from '../../assets/Gear.jsx';
+import Pie from '../../assets/Pie.jsx';
+import Filter from '../../assets/Filter.jsx';
+import Brick from '../../assets/Brick.jsx';
+import Logo from '../../assets/Logo.jsx';
 import './Sidebar.css';
 
 const Sidebar = () => {
@@ -35,20 +35,23 @@ const Sidebar = () => {
             </div>
 
             {/* Static navigation items */}
-            
-            <div className="nav-item">
-                <Pie />
-            </div>
-            <div className="nav-item">
-                <Brick />
-            </div>
-            <div className="nav-item">
-                <Filter />
-            </div>
-            
+            <div className="nav-items">
+                <div className="nav-item">
+                    <Pie />
+                    <p id="bar_text">Dashboard</p>
+                </div>
+                <div className="nav-item">
+                    <Brick />
+                    <p id="bar_text">Inventory</p>
+                </div>
+                <div className="nav-item">
+                    <Filter />
+                    <p id="bar_text">Filters</p>
+                </div>
 
-            <div className="nav-item settings">
-                <Gear />
+                <div className="nav-item settings">
+                    <Gear />
+                </div>
             </div>
         </div>
     );
