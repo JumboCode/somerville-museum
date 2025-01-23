@@ -8,7 +8,7 @@
  */
 
 import React from 'react';
-import Sidebar from './components/Sidebar';
+import Sidebar from './components/Sidebar/NavigationBar';
 
 export default function RootLayout({ children }) {
     return (
