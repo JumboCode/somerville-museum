@@ -1,151 +1,152 @@
 .navigationBar {
-    background-color: rgba(155, 82, 95, 1);
-    width: 90px;
-    position: fixed;
-    left: 0;
-    top: 0;
-    margin-top: auto;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    min-height: 100%;
-    padding: 29px 0 13px;
+  background-color: rgba(155, 82, 95, 1);
+  width: 90px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 100%;
+  padding: 29px 0 13px;
+  color: white;
+}
+
+.otherSvgs {
+  background-color: white;
+}
+
+@media (max-width: 991px) {
+  .navigationBar {
+    width: 70px;
   }
-  
-  @media (max-width: 991px) {
-    .navigationBar {
-      width: 70px;
-    }
+}
+
+@media (max-width: 640px) {
+  .navigationBar {
+    width: 60px;
+    padding-top: 20px;
   }
-  
-  @media (max-width: 640px) {
-    .navigationBar {
-      width: 60px;
-      padding-top: 20px;
-    }
-  }
-  
+}
+
+.logo {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1;
+  width: 48px;
+  padding: 8px;
+  margin-bottom: 40px;
+  box-shadow: 0 0 9px rgba(0, 0, 0, 0.25);
+  align-self: center;
+}
+
+@media (max-width: 991px) {
   .logo {
-    background-color: #fff;
-    aspect-ratio: 1;
-    object-fit: contain;
-    width: 62px;
-    box-shadow: 0 0 9px rgba(0, 0, 0, 0.25);
-    align-self: center;
-    justify-content: center;
+    width: 48px;
   }
-  
-  @media (max-width: 991px) {
-    .logo {
-      width: 48px;
-    }
+}
+
+@media (max-width: 640px) {
+  .logo {
+    width: 40px;
   }
-  
-  @media (max-width: 640px) {
-    .logo {
-      width: 40px;
-    }
-  }
-  
-  .navItem {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: auto;
-    padding: 16px 0;
-    text-decoration: none;
-    color: #fff;
-    font-size: 12px;
-    gap: 8px;
-    cursor: pointer;
-    transition: opacity 0.2s ease;
-  }
-  
-  .navItem:hover {
-    opacity: 0.8;
-  }
-  
-  .navItem:focus {
-    outline: 2px solid #fff;
-    outline-offset: -2px;
-  }
-  
-  .navItemActive {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: auto;
-    padding: 16px 0;
-    text-decoration: none;
-    color: #fff;
-    font-size: 12px;
-    gap: 8px;
-    cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-  
+}
+
+.navItem, .navItemActive, .navItemSettings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: auto;
+  padding: 16px 0;
+  text-decoration: none;
+  color: white;
+  font-size: 12px;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.navItemSettings {
+  margin: auto 0 50px;
+}
+
+.navItem:hover, .navItemSettings:hover {
+  transform: scale(1.1);
+}
+
+.navItem:focus {
+  outline: 2px solid #fff;
+  outline-offset: -2px;
+}
+
+.navItem svg, .navItemSettings svg {
+  margin: auto;
+  width: 1.75rem;
+  fill: white;
+  transition: transform 0.3s ease;
+}
+
+
+
+.otherSvgs svg {
+  fill: white;
+}
+
+.navItem IconComponent, .navItemSettings IconComponent {
+  fill: white;
+}
+
+
+
+
+/* Remove Settings text */
+.settingsLabel {
+  display: none;
+}
+
+.navItemSettings:focus {
+  outline: 2px solid #fff;
+  outline-offset: -2px;
+}
+
+@media (max-width: 991px) {
+  .navItem,
+  .navItemActive,
   .navItemSettings {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: auto;
-    padding: 16px 0;
-    text-decoration: none;
-    color: #fff;
-    font-size: 12px;
-    gap: 8px;
-    margin: auto 0 16px;
-    cursor: pointer;
-    transition: opacity 0.2s ease;
+    padding: 12px 0;
   }
-  
-  .navItemSettings:hover {
-    opacity: 0.8;
+}
+
+@media (max-width: 640px) {
+  .navItem,
+  .navItemActive,
+  .navItemSettings {
+    padding: 10px 0;
   }
-  
-  .navItemSettings:focus {
-    outline: 2px solid #fff;
-    outline-offset: -2px;
-  }
-  
-  @media (max-width: 991px) {
-    .navItem,
-    .navItemActive,
-    .navItemSettings {
-      padding: 12px 0;
-    }
-  }
-  
-  @media (max-width: 640px) {
-    .navItem,
-    .navItemActive,
-    .navItemSettings {
-      padding: 10px 0;
-    }
-  }
-  
+}
+
+@media (max-width: 991px) {
   .icon {
-    font-size: 24px;
+    font-size: 20px;
   }
-  
-  @media (max-width: 991px) {
-    .icon {
-      font-size: 20px;
-    }
+}
+
+@media (max-width: 640px) {
+  .icon {
+    font-size: 18px;
   }
-  
-  @media (max-width: 640px) {
-    .icon {
-      font-size: 18px;
-    }
-  }
-  
+}
+
+.label {
+  color: white;
+  font-size: 12px;
+}
+
+@media (max-width: 991px) {
   .label {
-    font-size: 12px;
+    font-size: 10px;
   }
-  
-  @media (max-width: 991px) {
-    .label {
-      font-size: 10px;
-    }
-  }
+}
