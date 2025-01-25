@@ -6,18 +6,17 @@
 }
 
 .main {
-    display: flex;
-    width: 100vw;
-    height: 100vh;
-    padding: 2rem;
+    padding-top: 2rem;
 }
 
 .column {
     width: 100vw;
     height: 100vh;
-    /* flex: 1; */
     display: flex;
-    
+    left: 0rem;
+    position: absolute;
+    border: 1px solid #9B525F;
+    padding-left: 4.5rem;
 }
 
 .title {
@@ -36,13 +35,19 @@
 }
 
 .left {
-    flex: 1;
-    width: 60%;
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    margin-left: 2rem;
+    margin-right: 2rem;
 }
 
 .right {
-    flex: 2;
-    width: 40%;
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    margin-right: 2rem;
+    margin-left: 2rem;
 }
 
 .garment-type-container {
@@ -64,8 +69,6 @@
 
 #drop-zone {
     width: 100%;
-    max-width: 400px;
-    height: 200px;
     border: 1px solid #9B525F;
     border-radius: 1px;
     display: flex;
@@ -83,12 +86,11 @@
     transition: background-color 0.3s, border-color 0.3s;
 }
 
-  
 #drop-zone.dragover {
     background-color: #b0b0b0;
     border-color: #9B525F;
 }
-  
+
 .upload-icon {
     width: 40%;
 }

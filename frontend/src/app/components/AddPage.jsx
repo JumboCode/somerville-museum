@@ -2,11 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import "../globals.css";
-import UploadIcon from "../../../public/icons/upload.svg";
 
 export default function AddPage() {
     const [dragOver, setDragOver] = useState(false);
     const [preview, setPreview] = useState(null);
+    const [itemName, setItemName] = useState('');
+    const [id, setId] = useState('');
+    const [location, setLocation] = useState('');
+    const [centuryTag, setCenturyTag] = useState('');
+    const [sizeTag, setSizeTag] = useState('');
+    const [clothingTag, setClothingTag] = useState('');
+    const [note, setNote] = useState('');
+    const [tags, setTags] = useState([]);
 
     const handleFileSelect = (file) => {
         if (file && file.type.startsWith("image/")) {
@@ -29,10 +36,9 @@ export default function AddPage() {
         const file = event.target.files[0];
         handleFileSelect(file);
     };
-    
+
     return (
         <div className="main">
-
             <div className="column">
                 <div className="left">
                     <div className="title">
@@ -70,6 +76,7 @@ export default function AddPage() {
                                 />
                             )}
                         </div>
+                        <p>asjdbfjasbdfjhabshdj</p>
 
                     </div>
 
@@ -80,6 +87,8 @@ export default function AddPage() {
                         <h3>Garment Type</h3>
                         
                     </div>
+                    <p>asjdbfjasbdfjhabshdj</p>
+
                 </div>
             </div>    
         </div>
