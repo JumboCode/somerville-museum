@@ -1,16 +1,3 @@
-/* The sidebar */
-.sidenav {
-    width: 4rem;
-    background-color: #adaaaa;
-    padding-top: 20px;
-    position: fixed;
-    z-index: 10;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    height: 100%;
-    overflow-x: hidden;
-}
 
 /* Text link styles */
 .sidenav a {
@@ -95,7 +82,7 @@
 
 /* Sidebar (Tabs) */
 .sidenav {
-    width: 4rem; /* Fixed width for the Tabs component */
+    width: 4.5vw; /* Fixed width for the Tabs component */
     background-color: #adaaaa;
     position: fixed; /* Make it fixed to the left side */
     top: 0;
@@ -103,6 +90,8 @@
     height: 100%;
     z-index: 1000; /* Ensure it stays on top */
     overflow-x: hidden;
+    padding-top: 20px;
+    bottom: 0;
 }
 
 /* Main content next to the sidebar */
