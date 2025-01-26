@@ -1,14 +1,16 @@
 // Inventory.jsx
 "use client";
-import style from './15Tablecomp/Inventory.css';
+// import style from './15Tablecomp/Inventory.css';
 import InventoryUnit from './15Tablecomp/InventoryUnit.jsx';
 import { useState, useEffect } from "react";
 import BorrowButton from '../components/BorrowButton.jsx';
 import AddButton from '../components/AddPopup';
 import ReturnButton from '../components/ReturnButton';
+import Filter from '../components/Filter/Filter';
+import './inventory.css'
 // import Popup from 'Popup.jsx';
 
-export default function Inventory() {
+export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
     const [units, setUnits] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [unitsPerPage, setUnitsPerPage] = useState(10);
@@ -19,6 +21,10 @@ export default function Inventory() {
         console.log(selectedItems);
         fetchData();
     }, [selectedItems]);
+
+    useEffect(() => {
+        console.log('Filter Visibility Changed:', isFilterVisible);
+    }, [isFilterVisible]);
 
     async function fetchData() {
         try {
@@ -77,7 +83,6 @@ export default function Inventory() {
                 unit={unit}
                 onChange={handleCheckboxChange}
                 checked={selectedItems.some((item) => item?.id && unit?.id && item.id === unit.id)}
-            // checked={true}
             />)
         }
 
@@ -115,8 +120,12 @@ export default function Inventory() {
 
     return (
         <>
-
-            <div className="Table">
+            <Filter 
+                isVisible={isFilterVisible} 
+                onClose={toggleFilterVisibility} 
+                className={isFilterVisible ? 'visible' : ''}
+            />
+            <div className={`Table ${isFilterVisible ? 'shrink' : ''}`}>
                 <div className="Header">
                     <div className="Items">
                         <div className="Searchbar">
