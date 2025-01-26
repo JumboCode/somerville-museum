@@ -82,6 +82,8 @@ export default function AddPage() {
 
                 </div>
 
+                <div class="divider"></div>
+
                 <div className="right">
                     <div className="garment-type-component">
                         <h3>Garment Type</h3>
