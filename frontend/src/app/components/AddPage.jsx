@@ -8,12 +8,35 @@ export default function AddPage() {
     const [preview, setPreview] = useState(null);
     const [itemName, setItemName] = useState('');
     const [id, setId] = useState('');
-    const [location, setLocation] = useState('');
-    const [centuryTag, setCenturyTag] = useState('');
-    const [sizeTag, setSizeTag] = useState('');
-    const [clothingTag, setClothingTag] = useState('');
-    const [note, setNote] = useState('');
-    const [tags, setTags] = useState([]);
+    const [date, setDate] = useState('');
+    const [price, setPrice] = useState('');
+    const [garmentTag, setGarmentTag] = useState('');
+    const [timeTag, setTimeTag] = useState('');
+    const [age, setAge] = useState('');
+    const [gender, setGender] = useState([]);
+    const [size, setSize] = useState([]);
+    const [Season, setSeason] = useState([]);
+    const [condition, setCondition] = useState([]);
+    const [color, setColor] = useState([]);
+
+    // // Fetch garment tags from the server
+    // useEffect(() => {
+    //     const fetchGarmentTags = async () => {
+    //         try {
+    //             const response = await fetch('/api/garmentTags');
+    //             if (!response.ok) throw new Error('Network response was not ok');
+    //             const data = await response.json();
+
+    //             // Convert array of objects to an array of strings
+    //             const tags = data.map((tag) => tag.name);
+
+    //         } catch (error) {
+    //             console.error('Error fetching tags:', error);
+    //         }
+    //     };
+
+    //     fetchGarmentTags();
+    // }, []);
 
     const handleFileSelect = (file) => {
         if (file && file.type.startsWith("image/")) {
@@ -40,11 +63,14 @@ export default function AddPage() {
     return (
         <div className="main">
             <div className="column">
+
+                {/* Left column */}
                 <div className="left">
                     <div className="title">
                         Add Item
                     </div>
 
+                    {/* Drag-and-drop image upload section */}
                     <div className="image-upload">
                         <div
                             id="drop-zone"
@@ -81,14 +107,35 @@ export default function AddPage() {
                     </div>
 
                 </div>
-
+                
+                {/* Middle Vertical Divider */}
                 <div class="divider"></div>
 
+                {/* Right Column */}
                 <div className="right">
-                    <div className="garment-type-component">
-                        <h3>Garment Type</h3>
+
+                    {/* Garment and Time Section */}
+                    <div className="garment-and-time">
                         
+                        {/* Garment Title and Dropdown */}
+                        <div className="garment-type-component">
+                            <h3>Garment Type*</h3>
+
+                            <select id="singleSelect" onChange={(e) => handleGarmentSelection(e.target.value)}>
+                                {/* {tags.map((tag) => (
+                                    <option key={tag} value={tag}>
+                                        {tag}
+                                    </option>
+                                ))} */}
+                            </select>
+                        </div>
+
+                        {/* Time Period Title and Dropdown */}
+                        <div className="time-period-component">
+                            <h3>Time Period*<span style={{fontWeight: "400"}}>(Max of 2)</span></h3>
+                        </div>
                     </div>
+                        
                     <p>asjdbfjasbdfjhabshdj</p>
 
                 </div>

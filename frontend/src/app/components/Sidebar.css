@@ -2,7 +2,7 @@
 /* Text link styles */
 .sidenav a {
     display: block;
-    color: #000000;
+    color: #ffffff;
     font-size: 1rem;
     font-weight: normal;
     padding: 6px 0;
@@ -22,7 +22,7 @@
     margin: 2.5rem auto;
     height: 25px;
     width: 25px;
-    fill: #000000;
+    fill: #ffffff;
     transition: all 0.2s ease;
     transform: scale(1); 
 }
@@ -82,7 +82,7 @@
 /* Sidebar (Tabs) */
 .sidenav {
     width: 4.5vw; /* Fixed width for the Tabs component */
-    background-color: #adaaaa;
+    background-color: #9B525F;
     position: fixed; /* Make it fixed to the left side */
     top: 0;
     left: 0;
