@@ -10,7 +10,7 @@
 import React from 'react';
 import Sidebar from './components/Sidebar/NavigationBar';
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children, currentPage }) { // Accept currentPage as a prop
     return (
         <html lang="en">
             <head>
@@ -23,8 +23,8 @@ export default function RootLayout({ children }) {
             </head>
             <body>
                 <div className="app-layout">
-                    <Sidebar />
-                    <main className="main-content">{children}</main>
+                    <Sidebar currentPage={currentPage} /> {/* Pass currentPage to Sidebar */}
+                    <main className="main-content adjacent">{children}</main>
                 </div>
             </body>
         </html>
