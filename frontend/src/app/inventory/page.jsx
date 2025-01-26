@@ -1,17 +1,7 @@
 // users will be redirected to this page after a successful login attempt
-"use client";
-import './login.css';
+import '../app.css';
 
-export default function forgot_password () {
-    const onButtonClick = () => {
-        if (loggedIn) {
-          localStorage.removeItem('user')
-          props.setLoggedIn(false)
-        } else {
-          navigate('/login')
-        }
-    }
-
+export default function Inventory () {
     return (
     <div className={'inventory-bg'}>
         <div className="mainContainer">
