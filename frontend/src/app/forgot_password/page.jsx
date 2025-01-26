@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './login.css';
+import '../app.css';
 
 export default function forgot_password () {
     return (
