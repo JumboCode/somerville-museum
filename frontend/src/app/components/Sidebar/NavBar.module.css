@@ -89,8 +89,10 @@
   transition: transform 0.3s ease;
 }
 
+/*--------------Maybe change something here to mke the svgs white-----------*/
 
 
+/* idk T_T */
 .otherSvgs svg {
   fill: white;
 }
@@ -99,7 +101,7 @@
   fill: white;
 }
 
-
+/*--------------------------------------------------------------------------*/
 
 
 /* Remove Settings text */
