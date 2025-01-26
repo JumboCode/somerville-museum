@@ -6,17 +6,17 @@
 }
 
 .main {
-    padding-top: 2rem;
+    /* padding-top: 2rem; */
+    width: 100vw;
+    height: 100vh;
 }
 
 .column {
     width: 100vw;
-    height: 100vh;
     display: flex;
     left: 0rem;
     position: absolute;
-    border: 1px solid #9B525F;
-    padding-left: 4.5rem;
+    padding-left: 4.5vw;
 }
 
 .title {
@@ -36,14 +36,24 @@
 
 .left {
     display: flex;
+    padding-top: 2rem;
     flex-direction: column;
     width: 40%;
     margin-left: 2rem;
     margin-right: 2rem;
 }
 
+.divider {
+    width: 1px;
+    background-color: #9B525F; 
+    height: 100vh;
+    flex-shrink: 0;
+    top: 0;
+}
+
 .right {
     display: flex;
+    padding-top: 2rem;
     flex-direction: column;
     width: 60%;
     margin-right: 2rem;

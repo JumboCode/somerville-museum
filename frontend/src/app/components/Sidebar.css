@@ -48,7 +48,6 @@
 
 /* Main content area */
 .main-content {
-    margin-left: 4rem; /* Offset for the sidebar */
     display: flex;
     height: 100vh; /* Full height of the viewport */
     overflow: hidden; /* Prevent content overflow */
@@ -92,15 +91,7 @@
     overflow-x: hidden;
     padding-top: 20px;
     bottom: 0;
+    position: relative;
 }
 
-/* Main content next to the sidebar */
-.main-content {
-    margin-left: 4rem; /* Leave space for the Tabs component */
-    display: flex; /* Allow horizontal alignment of children */
-    flex-direction: row; /* Ensure Filters and Inventory are side-by-side */
-    flex: 1;
-    height: 100%; /* Take up the remaining height */
-    overflow: hidden; /* Prevent any overflow */
-}
 
