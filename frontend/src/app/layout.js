@@ -7,10 +7,35 @@
  *  
  */
 
-import React from 'react';
-import Sidebar from './components/Sidebar/NavigationBar';
+'use client'
 
-export default function RootLayout({ children, currentPage }) { // Accept currentPage as a prop
+import React, { useState, useEffect } from 'react';
+import Sidebar from './components/Sidebar/NavigationBar';
+import Filter from './components/Filter/Filter';
+import { usePathname } from 'next/navigation';
+import './inventory/inventory.css';
+
+export default function RootLayout({ children, currentPage }) {
+    const [isFilterVisible, setIsFilterVisible] = useState(false);
+    const pathname = usePathname();
+
+    // Close filter when page changes
+    useEffect(() => {
+        setIsFilterVisible(false);
+    }, [pathname]);
+
+    const toggleFilterVisibility = () => {
+        setIsFilterVisible(prev => !prev);
+    };
+    
+    // Clone children and pass props
+    const childrenWithProps = React.Children.map(children, child => 
+        React.cloneElement(child, { 
+            isFilterVisible, 
+            toggleFilterVisibility 
+        })
+    );
+
     return (
         <html lang="en">
             <head>
@@ -23,8 +48,20 @@ export default function RootLayout({ children, currentPage }) { // Accept curren
             </head>
             <body>
                 <div className="app-layout">
-                    <Sidebar currentPage={currentPage} /> {/* Pass currentPage to Sidebar */}
-                    <main className="main-content adjacent">{children}</main>
+                    <Sidebar 
+                        currentPage={currentPage} 
+                        onFilterToggle={toggleFilterVisibility} 
+                    />
+                    <div className="main-content-wrapper">
+                        <Filter 
+                            isVisible={isFilterVisible} 
+                            onClose={toggleFilterVisibility} 
+                            className={isFilterVisible ? 'visible' : ''}
+                        />
+                        <main className={`main-content ${isFilterVisible ? 'shrink' : ''}`}>
+                            {childrenWithProps}
+                        </main>
+                    </div>
                 </div>
             </body>
         </html>

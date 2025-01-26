@@ -16,78 +16,66 @@ const initialNavigationItems = [
   { id: 'settings', icon: Gear, label: '', isSettings: true, href: '/settings' },
 ];
 
-const NavigationBar = () => {
-    const pathname = usePathname();
-    const [navigationItems, setNavigationItems] = useState(initialNavigationItems);
-    const [activeFilter, setActiveFilter] = useState(false);
-    const [isMounted, setIsMounted] = useState(false);
-  
-    useEffect(() => {
-      setIsMounted(true);
-    }, []);
 
-    // Render nothing until mounted to avoid hydration issues
-    if (!isMounted) {
-      return null; 
+const NavigationBar = ({ onFilterToggle }) => {
+  const pathname = usePathname();
+  const [navigationItems, setNavigationItems] = useState(initialNavigationItems);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null; 
+  }
+
+  const handleItemClick = (clickedId) => {
+    if (pathname !== '/inventory') return;
+
+    if (clickedId === 'filter') {
+      onFilterToggle(); // Call the prop to toggle the filter visibility
     }
+  };
 
-    const handleItemClick = (clickedId) => {
-      // Reset filter when navigating away from inventory/filters
-      if (!['inventory', 'filters'].includes(clickedId)) {
-        setActiveFilter(false);
+  const filteredNavigationItems = () => {
+    const items = [...navigationItems];
+    // Conditionally add the Filter item below Inventory and above Settings
+    if (pathname === '/inventory') {
+      const filterItem = {
+        id: 'filter',
+        icon: Filter,
+        label: 'Filter',
+      };
+   
+      const settingsIndex = items.findIndex(item => item.isSettings);
+      if (settingsIndex !== -1) {
+        items.splice(settingsIndex, 0, filterItem);
+      } else {
+        items.push(filterItem);
       }
-      setNavigationItems((items) =>
-        items.map((item) => ({
-          ...item,
-        }))
-      );
-    };
-  
-    const toggleFilter = () => {
-      setActiveFilter(prev => !prev);
-    };
+    }
+    return items;
+  };
 
-    const filteredNavigationItems = () => {
-      const items = [...navigationItems];
-      // Conditionally add the Filter item below Inventory and above Settings
-      if (pathname === '/inventory' || pathname === '/filter') {
-        const filterItem = {
-          id: 'filter',
-          icon: Filter,
-          label: 'Filter',
-          onClick: toggleFilter,
-          href: '/filter',
-          isActive: activeFilter,
-        };
-     
-        const settingsIndex = items.findIndex(item => item.isSettings);
-        if (settingsIndex !== -1) {
-          items.splice(settingsIndex, 0, filterItem);
-        } else {
-          items.push(filterItem);
-        }
-      }
-      return items;
-    };
-  
-    return (
-      <div className={styles.navigationBar}>
-        <div className={styles.logo}>
-          <Logo />
-        </div>
-        
-        {filteredNavigationItems().map((item) => (
-          <NavigationItem
-            key={item.id}
-            icon={item.icon}
-            label={item.label}
-            isSettings={item.isSettings}
-            onClick={() => handleItemClick(item.id)}
-            href={item.href}
-          />
-        ))}
+  return (
+    <div className={styles.navigationBar}>
+      <div className={styles.logo}>
+        <Logo />
       </div>
-    );
+      
+      {filteredNavigationItems().map((item) => (
+        <NavigationItem
+          key={item.id}
+          icon={item.icon}
+          label={item.label}
+          isSettings={item.isSettings}
+          onClick={() => handleItemClick(item.id)}
+          href={item.href}
+        />
+      ))}
+    </div>
+  );
 };
 
 export default NavigationBar;
