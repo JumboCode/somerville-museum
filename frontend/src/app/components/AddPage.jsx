@@ -19,24 +19,9 @@ export default function AddPage() {
     const [condition, setCondition] = useState([]);
     const [color, setColor] = useState([]);
 
-    // // Fetch garment tags from the server
-    // useEffect(() => {
-    //     const fetchGarmentTags = async () => {
-    //         try {
-    //             const response = await fetch('/api/garmentTags');
-    //             if (!response.ok) throw new Error('Network response was not ok');
-    //             const data = await response.json();
-
-    //             // Convert array of objects to an array of strings
-    //             const tags = data.map((tag) => tag.name);
-
-    //         } catch (error) {
-    //             console.error('Error fetching tags:', error);
-    //         }
-    //     };
-
-    //     fetchGarmentTags();
-    // }, []);
+    const handleGarmentSelection = (value) => {
+        setGarmentTag(value);
+    };
 
     const handleFileSelect = (file) => {
         if (file && file.type.startsWith("image/")) {
@@ -120,19 +105,21 @@ export default function AddPage() {
                         {/* Garment Title and Dropdown */}
                         <div className="garment-type-component">
                             <h3>Garment Type*</h3>
-
                             <select id="singleSelect" onChange={(e) => handleGarmentSelection(e.target.value)}>
-                                {/* {tags.map((tag) => (
-                                    <option key={tag} value={tag}>
-                                        {tag}
-                                    </option>
-                                ))} */}
+                                <option value="Gowns/dresses">Gowns/dresses</option>
+                                <option value="Outerwear">Outerwear</option>
+                                <option value="Accessories">Accessories</option>
+                                <option value="Bottoms">Bottoms</option>
+                                <option value="Shoes">Shoes</option>
+                                <option value="Socks/hose">Socks/hose</option>
+                                <option value="Tops">Tops</option>
+                                <option value="Vests">Vests</option>
                             </select>
                         </div>
 
                         {/* Time Period Title and Dropdown */}
                         <div className="time-period-component">
-                            <h3>Time Period*<span style={{fontWeight: "400"}}>(Max of 2)</span></h3>
+                            <h3>Time Period*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3>
                         </div>
                     </div>
                         
