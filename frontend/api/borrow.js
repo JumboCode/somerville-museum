@@ -29,7 +29,7 @@ export default async function handler(req, res) {
     
     for (const itemId of selectedItems) {
       let dateReturned = null; 
-
+      //ASK ABOUT THIS, this appears in the database as exactly what the var names are, is that an issue? 
       const borrowObject = {
         borrowerId, 
         itemId,

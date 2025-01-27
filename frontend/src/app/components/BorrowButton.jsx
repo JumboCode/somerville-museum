@@ -1,7 +1,7 @@
 'use client'
 
 import Popup from 'reactjs-popup';
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import StylishButton from './StylishButton.jsx'; //import css file
 import BorrowTemp from './BorrowTemp.jsx';
 
@@ -67,6 +67,10 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
     
     console.log('the updated selected items are:', availableSelectedItems);
 
+    if (onSuccess) {
+
+    }
+
 
   return (
     <div>
@@ -85,10 +89,17 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
       >
         {(close) => (
           <BorrowTemp
-            selectedItems={availableSelectedItems}
-            onClose={close} // Close function passed to BorrowTemp
-          />
-        )}
+          selectedItems={availableSelectedItems}
+          onClose={close}
+          onSuccess={() => {
+            // Call the parent's onSuccess if provided
+            if (onSuccess) {
+              onSuccess(); // Reset data in parent component
+            }
+            setIsOpen(false); // Close the popup after success
+          }}
+        />)}
+        
       </Popup>
     </div>
   );

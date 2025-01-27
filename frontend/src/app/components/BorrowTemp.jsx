@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Popup from 'reactjs-popup';
 
-const BorrowTemp = ({ selectedItems = [], onClose }) => {
+const BorrowTemp = ({ selectedItems = [], onClose, onSuccess }) => {
     const [borrowerFirstName, setBorrowerFirstName] = useState(''); 
     const [borrowerLastName, setBorrowerLastName] = useState(''); 
     const [borrowerEmail, setBorrowerEmail] = useState(''); 
@@ -13,70 +13,32 @@ const BorrowTemp = ({ selectedItems = [], onClose }) => {
     const [approver, setApprover] = useState(''); 
     const [note, setNote] = useState(''); 
 
-    // if (!isEmailValid) {
-    //     alert('Please enter a valid email');
-    //     return;
-    // }
 
  
     //calculates the return date based on users selection
-const calculateDueDate = (weeks) => {
+    const calculateDueDate = (weeks) => {
         const today = new Date();
         today.setDate(today.getDate() + weeks * 7);
         return today.toLocaleDateString().split('T')[0]; // Format as YYYY-MM-DD
-      };
+    };
 
-  const dueDate = calculateDueDate(returnWeeks);
+    const dueDate = calculateDueDate(returnWeeks);
   
-  //calculates the current day NOTEEEEEE this for some reason logs one day after
-  const calculateBorrowDay = () => {
+    //calculates the current day NOTEEEEEE this for some reason logs one day after
+    const calculateBorrowDay = () => {
       const today = new Date();
       return today.toLocaleDateString().split('T')[0];
-  }
+    }
   
   useEffect(() => {
       setDateBorrowed(calculateBorrowDay());
   }, []);
 
-  // //fetches the item by ID, sets the items and their IDS in variables
-  // const fetchItemById = async () => {
-  //     if (!id) return;
-  //     try {
-  //         const response = await fetch(`../../api/selectId`, { 
-  //             method: 'POST',
-  //             headers: {
-  //             'Content-Type': 'application/json' 
-  //             },
-  //             body: JSON.stringify({ id }) 
-  //           })
-  
-  //           if (!response.ok) {
-  //             // Handle specific response statuses
-  //             if (response.status === 404) {
-  //                 console.error("Item not found");
-  //                 alert("Item not found. Please check the ID and try again.");
-  //                 return; // Exit if item not found
-  //             }
-  //             throw new Error(`Fetch error: ${response.status}`);
-  //         }
-  
-  //         const data = await response.json();
 
-  //         //if the data was retrieved add it to vars 
-  //         if (data) {
-  //             setSelectedItems((prevItems) => [...prevItems, data]); 
-  //             setSelectedItemIds((prevIds) => [...prevIds, data.id]);
-  //             setId(''); 
-  //         } 
-  //     }
-  //     catch (error) {
-  //         console.error("Error fetching item:", error);
-  //     }
-  // };
-  const isEmailValid = borrowerEmail.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+    const isEmailValid = borrowerEmail.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
    
-  //submits the information, updates all data columns with appropriate information
-  const handleSubmit = async (e) => {
+    //submits the information, updates all data columns with appropriate information
+    const handleSubmit = async (e) => {
     e.preventDefault(); 
 
         if (!isEmailValid) {
@@ -87,35 +49,39 @@ const calculateDueDate = (weeks) => {
         let borrowerName = (borrowerFirstName + ' ' + borrowerLastName); 
         console.log('items being sent into API:', selectedItems);
 
-    try {
-        const response = await fetch('/api/borrow', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                dateBorrowed,
-                borrowerName: `${borrowerFirstName} ${borrowerLastName}`,
-                borrowerEmail,
-                phoneNumber,
-                dueDate,
-                approver,
-                note,
-                selectedItems: selectedItems.map(item => item.id),
-            }),
-        });
-    
-        if (!response.ok) {
-            const errorText = await response.text(); // Fetch error text
-            throw new Error(`Fetch failed: ${response.status} ${errorText}`);
-        }
-    
-        const result = await response.json();
-        alert(result.message || 'Success!');
-        resetFields();
-    } catch (error) {
-        console.error('Error submitting data:', error);
-    }
+        try {
+            const response = await fetch('/api/borrow', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    dateBorrowed,
+                    borrowerName: `${borrowerFirstName} ${borrowerLastName}`,
+                    borrowerEmail,
+                    phoneNumber,
+                    dueDate,
+                    approver,
+                    note,
+                    selectedItems: selectedItems.map(item => item.id),
+                }),
+            });
         
-  };
+            if (!response.ok) {
+                const errorText = await response.text(); // Fetch error text
+                throw new Error(`Fetch failed: ${response.status} ${errorText}`);
+            }
+        
+            const result = await response.json();
+            alert(result.message || 'Success!');
+               // Trigger onSuccess after the action
+            if (onSuccess) {
+                onSuccess();
+            }   
+            
+            resetFields();
+        } catch (error) {
+            console.error('Error submitting data:', error);
+        }
+    };
 
     const resetFields = () => {
         setBorrowerFirstName('');
