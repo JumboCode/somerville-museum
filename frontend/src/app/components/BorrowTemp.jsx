@@ -2,9 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import Popup from 'reactjs-popup';
+import BorrowUnit from './BorrowUnit';
 
 const BorrowTemp = ({ selectedItems = [], onClose, onSuccess }) => {
     const [borrowerFirstName, setBorrowerFirstName] = useState(''); 
+    const [borrowItems, setBorrowItems] = useState(selectedItems); 
     const [borrowerLastName, setBorrowerLastName] = useState(''); 
     const [borrowerEmail, setBorrowerEmail] = useState(''); 
     const [dateBorrowed, setDateBorrowed] = useState('');
@@ -61,7 +63,7 @@ const BorrowTemp = ({ selectedItems = [], onClose, onSuccess }) => {
                     dueDate,
                     approver,
                     note,
-                    selectedItems: selectedItems.map(item => item.id),
+                    selectedItems: borrowItems.map(item => item.id),
                 }),
             });
         
@@ -76,7 +78,7 @@ const BorrowTemp = ({ selectedItems = [], onClose, onSuccess }) => {
             if (onSuccess) {
                 onSuccess();
             }   
-            
+
             resetFields();
         } catch (error) {
             console.error('Error submitting data:', error);
@@ -85,12 +87,17 @@ const BorrowTemp = ({ selectedItems = [], onClose, onSuccess }) => {
 
     const resetFields = () => {
         setBorrowerFirstName('');
+        setBorrowItems([]); 
         setBorrowerLastName('');
         setBorrowerEmail('');
         setPhoneNumber('');
         setReturnWeeks(1);
         setApprover('');
         setNote('');
+    };
+
+    const handleDelete = (item) => {
+        setBorrowItems((prevItems) => prevItems.filter((i) => i.id !== item.id));
     };
     
 
@@ -100,10 +107,13 @@ const BorrowTemp = ({ selectedItems = [], onClose, onSuccess }) => {
             <form onSubmit={handleSubmit}> 
                 <div>
                     <h4>Selected Items:</h4>
-                    {selectedItems.length > 0 ? (
+                    {borrowItems.length > 0 ? (
                         <ul>
-                            {selectedItems.map((item, index) => (
-                                <li key={index}>{item.id} - {item.name || "Item Name"}</li> 
+                            {borrowItems.map((item, index) => (
+                                <BorrowUnit
+                                    key={item.id}
+                                    item={item}
+                                    onDelete={handleDelete}/>
                             ))}
                         </ul>
                     ) : (
