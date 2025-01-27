@@ -19,7 +19,7 @@ const NavigationItem = ({ icon: IconComponent, label, isSettings, onClick, href,
   ) : (
     <Link href={href}>
         <div className={classNameC} onClick={onClick}>
-            {IconComponent && <IconComponent className="otherSvgs" fill="white" />}
+            {IconComponent && <IconComponent fill="white" />}
             {!isSettings && <span className={styles.label}>{label}</span>}
         </div>
     </Link>
