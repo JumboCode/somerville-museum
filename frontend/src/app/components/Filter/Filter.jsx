@@ -9,19 +9,27 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
             <div className="filters">
                 <p className="filters-title">Filters</p>
                 <div className="checkboxes">
-                    <Checkbox label="All" />
                     <Checkbox label="Available" />
                     <Checkbox label="Borrowed" />
                     <Checkbox label="Overdue" />
                     <Checkbox label="Missing" />
                 </div>
                 <div className="dropdowns">
-                    <Dropdown label="Century" />
-                    <Dropdown label="Type" />
-                    <Dropdown label="Size" /> 
-                    <Dropdown label="Color" />
+                    <Dropdown label="Condition" />
                     <Dropdown label="Gender" />
+                    <Dropdown label="Color" /> 
+                    <Dropdown label="Type" />
+                    <Dropdown label="Size" />
+                    <Dropdown label="Time Period" />
                 </div>
+                <div className="checkboxes">
+                    <Checkbox label="Winter" />
+                    <Checkbox label="Spring" />
+                    <Checkbox label="Summer" />
+                    <Checkbox label="Fall" />
+                </div>
+                {/* Return Date */}
+                {/* Reset */}
             </div>
         </div>
     );

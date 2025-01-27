@@ -1,18 +1,15 @@
 .navigationBar {
   background-color: rgba(155, 82, 95, 1);
   width: 90px;
-  position: fixed;
+  position: fixed; /* Keep this fixed for the entire sidebar */
   left: 0;
   top: 0;
-  margin-top: auto;
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: 99%;
   padding: 29px 0 13px;
   color: white;
   z-index: 100;
-  border: 2px solid red;
 }
 
 .otherSvgs {
@@ -69,13 +66,14 @@
   gap: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  border: 2px solid blue;
 }
 
 .navItemSettings {
-  margin-top: auto;
-  border: 2px solid green;
+  position: relative;
+  top: 325px;
 }
+
+
 
 .navItem:hover, .navItemSettings:hover {
   transform: scale(1.1);
