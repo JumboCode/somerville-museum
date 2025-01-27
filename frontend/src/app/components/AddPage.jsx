@@ -10,6 +10,7 @@ export default function AddPage() {
     const [id, setId] = useState('');
     const [date, setDate] = useState('');
     const [price, setPrice] = useState('');
+    const [note, setNote] = useState('');
     const [garmentTag, setGarmentTag] = useState('');
     const [timeTag, setTimeTag] = useState('');
     const [age, setAge] = useState('');
@@ -43,6 +44,10 @@ export default function AddPage() {
     const handleFileInputChange = (event) => {
         const file = event.target.files[0];
         handleFileSelect(file);
+    };
+
+    const handleTimePeriodSelection = (value) => {
+        setTimeTag(value);
     };
 
     return (
@@ -94,7 +99,7 @@ export default function AddPage() {
                 </div>
                 
                 {/* Middle Vertical Divider */}
-                <div class="divider"></div>
+                <div className="divider"></div>
 
                 {/* Right Column */}
                 <div className="right">
@@ -120,11 +125,14 @@ export default function AddPage() {
                         {/* Time Period Title and Dropdown */}
                         <div className="time-period-component">
                             <h3>Time Period*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3>
+                            <select id="multiSelect" onChange={(e) => handleTimePeriodSelection(e.target.value)}>
+                                <option value="Post-1910s">Post-1910s</option>
+                                <option value="Pre-1700s">Pre-1700s</option>
+                                <option value="1750s-1800s">1750s - 1800s</option>
+                                <option value="1800s-1840s">1800s - 1840s</option>
+                            </select>
                         </div>
                     </div>
-                        
-                    <p>asjdbfjasbdfjhabshdj</p>
-
                 </div>
             </div>    
         </div>
