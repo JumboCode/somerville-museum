@@ -6,7 +6,6 @@
 }
 
 .main {
-    /* padding-top: 2rem; */
     width: 100vw;
     height: 100vh;
 }
@@ -71,17 +70,9 @@
     gap: 10px;
 }
 
-.half-dropdown {
-    border-radius: 3px;
-    border: 1px solid #9B525F;
-    background: #FFF;
-    flex-shrink: 0;
-    width: 50%;
-}
-
 #drop-zone {
     width: 100%;
-    height: 100%;
+    height: 35vh;
     border: 1px solid #9B525F;
     border-radius: 1px;
     display: flex;
@@ -89,10 +80,11 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    margin: 20px 0;
+    margin: 1.3rem 0;
     cursor: pointer;
     background-color: #FFF;
     transition: background-color 0.3s, border-color 0.3s;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
 }
 
 #drop-zone.dragover {
@@ -112,37 +104,206 @@
 
 .garment-and-time {
     display: flex;
-    justify-content: space-between;
     width: 100%;
     gap: 5vw;
 }
 
-.singleSelect {
+.dropdown-component {
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.dropdown-component select {
     border-radius: 3px;
     border: 1px solid #9B525F;
     background: #FFF;
+    width: 50%;
+    padding: 0.5rem;
+}
+
+.itemName {
+    color: #000;
+    font-family: Akatab;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: .4rem;
+}
+
+.itemTextBox textarea{
+    display: flex;
+    padding: .5rem;
+    width: stretch;
+    height: 6vh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1rem;
+    flex: 1 0 0;
+    align-self: stretch;
+    border-radius: .2rem;
+    border: 1px solid #9B525F;
+    background: #FFF;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    resize: none;
+    overflow: hidden;
+    line-height: 4vh;
+    outline: none;
+}
+
+.idName {
+    color: #000;
+    font-family: Akatab;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: .4rem;
+}
+
+.dateName {
+    color: #000;
+    font-family: Akatab;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: .4rem;
+}
+
+.priceName {
+    color: #000;
+    font-family: Akatab;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: .4rem;
 }
 
 .dropdown {
+    border-radius: 3px;
+    border: 1px solid #9B525F;
+    background: #FFF;
+    padding: 0.5rem;
     width: 100%;
-    border-radius: 3px;
-    border: 1px solid #9B525F;
-    background: #FFF;
-}
-.garment-type-component {
-    width: 50%;
 }
 
-.garment-type-component select {
+.dropdown select {
     border-radius: 3px;
     border: 1px solid #9B525F;
     background: #FFF;
     width: stretch;
 }
 
-.time-period-component select {
-    border-radius: 3px;
+.textBoxRow {
+    display: flex;
+    gap: 1.8rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.idTextBox textarea {
+    border-radius: .2rem;
+    border: 1px solid #585555;
+    height: 5vh;
+    width: 8vw;
+    background: #F0F0F0;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    resize: none;
+    overflow: hidden;
+    font-size: 1rem;
+    padding: .35rem;
+    outline: none;
+    /* text-align: center; Centers text horizontally */
+    line-height: 3.5vh; /* Matches the height of the textarea */
+}
+
+.dateTextBox textarea {
+    border-radius: .2rem;
+    border: 1px solid #585555;
+    height: 5vh;
+    width: 13vw;
+    background: #F0F0F0;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    resize: none;
+    overflow: hidden;
+    font-size: 1rem;
+    padding: .35rem;
+    outline: none;
+    /* text-align: center; Centers text horizontally */
+    line-height: 3.5vh; /* Matches the height of the textarea */
+    pointer-events: none; /* Prevents all mouse interactions */
+    user-select: none; /* Disables text selection */
+}
+
+.priceTextBox textarea {
+    border-radius: .2rem;
     border: 1px solid #9B525F;
     background: #FFF;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    height: 5vh;
+    width: 13vw;
+    resize: none;
+    overflow: hidden;
+    font-size: 1rem;
+    padding: .35rem;
+    outline: none;
+    /* text-align: center; Centers text horizontally */
+    line-height: 3.5vh; /* Matches the height of the textarea */
+}
+
+.notesName {
+    color: #000;
+    font-family: Akatab;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: .4rem;
+    margin-top: .4rem;
+}
+
+.notesTextBox textarea{
+    border-radius: .2rem;
+    border: 1px solid #9B525F;
+    background: #FFF;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    height: 20vh;
     width: stretch;
+    resize: none;
+    overflow: hidden;
+    font-size: 1rem;
+    padding: .35rem;
+    outline: none;
+    /* text-align: center; Centers text horizontally */
+    line-height: 3.5vh; /* Matches the height of the textarea */
+}
+
+.button {
+    border-radius: .2rem;
+    border: 1px solid #9B525F;
+    background: #FFF;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+}
+
+.button select {
+    border-radius: .2rem;
+    border: 1px solid #9B525F;
+    background: #9B525F;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+}
+
+.size-buttons {
+    display: flex-col;
+    gap: 1rem;
+    margin-top: 1rem;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
 }
