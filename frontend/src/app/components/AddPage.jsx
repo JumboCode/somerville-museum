@@ -1,7 +1,10 @@
 "use client"; // This file is client-side
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import "../globals.css";
+import { Dropdown } from 'primereact/dropdown';
+import { MultiSelect } from 'primereact/multiselect';
+import { SelectButton } from 'primereact/selectbutton';
 
 export default function AddPage() {
     const [dragOver, setDragOver] = useState(false);
@@ -11,14 +14,15 @@ export default function AddPage() {
     const [date, setDate] = useState('');
     const [price, setPrice] = useState('');
     const [note, setNote] = useState('');
-    const [garmentTag, setGarmentTag] = useState('');
-    const [timeTag, setTimeTag] = useState('');
+    const [selectedGarment, setSelectedGarment] = useState("");
+    const [selectedTimePeriod, setSelectedTimePeriod] = useState("");
     const [age, setAge] = useState('');
     const [gender, setGender] = useState([]);
-    const [size, setSize] = useState([]);
+    const [selectedSize, setSelectedSize] = useState([]);
     const [Season, setSeason] = useState([]);
     const [condition, setCondition] = useState([]);
     const [color, setColor] = useState([]);
+    const [text, setText] = useState("");
 
     const handleGarmentSelection = (value) => {
         setGarmentTag(value);
@@ -49,6 +53,35 @@ export default function AddPage() {
     const handleTimePeriodSelection = (value) => {
         setTimeTag(value);
     };
+
+    const handleChange = (event) => {
+        setText(event.target.value);
+    };
+
+    const garments = [
+        { label: "Gowns/dresses", value: "Gowns/dresses" },
+        { label: "Outerwear", value: "Outerwear" },
+        { label: "Accessories", value: "Accessories" },
+        { label: "Bottoms", value: "Bottoms" },
+        { label: "Shoes", value: "Shoes" },
+        { label: "Socks/hose", value: "Socks/hose" },
+        { label: "Tops", value: "Tops" },
+        { label: "Vests", value: "Vests" }
+    ];
+
+    const timePeriods = [
+        { name: "Post-1920s" },
+        { name: "Pre-1700s" },
+        { name: "1750s-1800s" },
+        { name: "1800s-1840s" }
+    ];
+
+    const sizes = [
+        { label: "Small", value: "small" },
+        { label: "Medium", value: "medium" },
+        { label: "Large", value: "large" },
+        { label: "X-Large", value: "x-large" }
+    ];
 
     return (
         <div className="main">
@@ -92,8 +125,52 @@ export default function AddPage() {
                                 />
                             )}
                         </div>
-                        <p>asjdbfjasbdfjhabshdj</p>
+                        <div className="itemName">
+                            Item Name*
+                        </div>
+                        {/* start making other boxes for left column here */}
 
+                        <label htmlFor="textBox"></label>
+                        <div className="itemTextBox">
+                            <textarea placeholder=""></textarea>
+                        </div>
+
+                        <div className="textBoxRow">
+                            <div className="allID">
+                                <div className="idName">
+                                    ID
+                                </div>
+                                <div className="idTextBox">
+                                    <textarea placeholder="1256"></textarea>
+                                </div>
+                            </div>
+                            
+                            <div className="allDate">
+                                <div className="dateName">
+                                    Date Added
+                                </div>
+                                <div className="dateTextBox">
+                                    <textarea placeholder="01/10/2024"></textarea>
+                                </div>
+                            </div>
+                            <div className="allPrice">
+                                <div className="priceName">
+                                    Price
+                                </div>
+                                <div className="priceTextBox">
+                                    <textarea placeholder=""></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="notesName">
+                            Notes
+                        </div>
+
+                        <div className="notesTextBox">
+                            <textarea placeholder="Extra item information not captured by tags (i.e. fabric type, or where it was bought from)."></textarea>
+                        </div>
+                    
                     </div>
 
                 </div>
@@ -106,33 +183,60 @@ export default function AddPage() {
 
                     {/* Garment and Time Section */}
                     <div className="garment-and-time">
-                        
+                    
                         {/* Garment Title and Dropdown */}
-                        <div className="garment-type-component">
+                        <div className="dropdown-component">
                             <h3>Garment Type*</h3>
-                            <select id="singleSelect" onChange={(e) => handleGarmentSelection(e.target.value)}>
-                                <option value="Gowns/dresses">Gowns/dresses</option>
-                                <option value="Outerwear">Outerwear</option>
-                                <option value="Accessories">Accessories</option>
-                                <option value="Bottoms">Bottoms</option>
-                                <option value="Shoes">Shoes</option>
-                                <option value="Socks/hose">Socks/hose</option>
-                                <option value="Tops">Tops</option>
-                                <option value="Vests">Vests</option>
-                            </select>
+                            <Dropdown
+                                value={selectedGarment}
+                                options={garments}
+                                onChange={(e) => setSelectedGarment(e.value)}
+                                placeholder="Select Garment Type"
+                                className="dropdown"
+                            />
                         </div>
 
                         {/* Time Period Title and Dropdown */}
-                        <div className="time-period-component">
-                            <h3>Time Period*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3>
-                            <select id="multiSelect" onChange={(e) => handleTimePeriodSelection(e.target.value)}>
-                                <option value="Post-1910s">Post-1910s</option>
-                                <option value="Pre-1700s">Pre-1700s</option>
-                                <option value="1750s-1800s">1750s - 1800s</option>
-                                <option value="1800s-1840s">1800s - 1840s</option>
-                            </select>
+                        <div className="dropdown-component">
+                            <h3>Time Period*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3>                            
+                                <MultiSelect
+                                    value={selectedTimePeriod} 
+                                    onChange={(e) => setSelectedTimePeriod(e.value)}
+                                    options={timePeriods} 
+                                    optionLabel="name" 
+                                    display="chip" 
+                                    placeholder="Select Time Period" 
+                                    maxSelectedLabels={2}
+                                    className="dropdown" 
+                                />
                         </div>
                     </div>
+                    
+                    <div className="ageGenderRow">
+                        <div className="allAge">
+                            <div className="ageName">
+                                Age Group*
+                            </div>
+                            <div className="youthButton">
+
+                            </div>
+                            <div className="adultButton">
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    {/* Size Buttons */}
+                    <div className="size-buttons">
+                        <h3>Size*</h3>
+
+                        <div className="button">
+                            <SelectButton value={selectedSize} onChange={(e) => setSelectedSize(e.value)} options={sizes} />
+                        </div>      
+                    </div>
+
                 </div>
             </div>    
         </div>
