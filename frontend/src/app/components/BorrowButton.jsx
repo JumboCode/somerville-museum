@@ -67,10 +67,6 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
     
     console.log('the updated selected items are:', availableSelectedItems);
 
-    if (onSuccess) {
-
-    }
-
 
   return (
     <div>
@@ -99,7 +95,7 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
             setIsOpen(false); // Close the popup after success
           }}
         />)}
-        
+
       </Popup>
     </div>
   );

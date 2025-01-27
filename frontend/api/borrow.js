@@ -3,10 +3,16 @@ import { query } from './db.js';
 export default async function handler(req, res) {
   console.log('reached borrow API', req.body); 
 
+  let message; 
 
   const { dateBorrowed, borrowerName, borrowerEmail, phoneNumber, dueDate, 
           approver, note, selectedItems } = req.body;
    
+  if (selectedItems == 0) {
+    message = "No items selected."
+    res.status(200).json({message}); 
+  }
+        
   try {
 
     const existingBorrowerResult = await query(
@@ -93,7 +99,7 @@ export default async function handler(req, res) {
 
     }
 
-    let message = 'Borrowing process completed. ';
+    message = 'Borrowing process completed. ';
 
     res.status(200).json({ message });
 
