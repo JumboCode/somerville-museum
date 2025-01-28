@@ -10,7 +10,7 @@ export default function InventoryUnit({ unit, onChange, checked }) {
         return null; // Don't render anything if `unit` is undefined
     }
 
-    const { id, name, status, tags } = unit; 
+    const { id, name, status, tags, condition } = unit; 
     const [isPopupVisible, setIsPopupVisible] = useState(false);
 
     const handleClick = () => {
@@ -51,6 +51,7 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                     className="checkbox-input" 
                     checked={checked} 
                     onChange={(e) => onChange(unit, e.target.checked)} 
+                    
                 />
                 </div>
                 <div className="picture">
@@ -61,11 +62,12 @@ export default function InventoryUnit({ unit, onChange, checked }) {
             </div>
             <div className="center-section">
                 <div className="id"> {unit.id} </div>
+                <div className="name">{unit.name}</div>
                 <div className="status">
                     <div className={`circle ${unit.status}`} ></div>
                     {unit.status}
                 </div>
-                <div className="name">{unit.name}</div>
+                <div className="condition">{unit.condition}</div>
                 <div className="tags">
                     {tags && tags.length > 0 && tags.map((tag, index) => (
                             <span key={index} className="tag">
