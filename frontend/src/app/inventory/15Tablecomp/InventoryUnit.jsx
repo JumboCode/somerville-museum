@@ -2,9 +2,13 @@
 "use client";
 import { useState, useEffect } from "react";
 import Popup from "./Popup";
+import PrePopup from "./PrePopup";
 import "./InventoryUnit.css";
 
 export default function InventoryUnit({ unit, onChange, checked }) {
+
+
+
     // Add a condition to make sure `unit` is defined
     if (!unit) {
         return null; // Don't render anything if `unit` is undefined
@@ -12,10 +16,20 @@ export default function InventoryUnit({ unit, onChange, checked }) {
 
     const { id, name, status, tags, condition } = unit; 
     const [isPopupVisible, setIsPopupVisible] = useState(false);
+    const [isPrePopupVisible, setIsPrePopupVisible] = useState(false);
 
-    const handleClick = () => {
+    const handleDoubleClick = () => {
         setIsPopupVisible(true);
     }
+
+    const handleClick = () => {
+        setIsPrePopupVisible(true);
+    }
+
+    const handleClosePrePopup = () => {
+        setIsPrePopupVisible(false);
+    } 
+
 
     const handleClosePopup = () => {
         setIsPopupVisible(false);
@@ -31,6 +45,19 @@ export default function InventoryUnit({ unit, onChange, checked }) {
         }
     }
 
+    //CALL BACK FOR PREPOPUP
+    const handlePopupOption = (option) => {
+        if (option === "expand") {
+            console.log("Navigating to expanded view..."); 
+
+            setIsPrePopupVisible(false); 
+            setIsPopupVisible(true);
+        } else {
+            console.log("Edit option selected...");
+        }
+    }
+
+
     useEffect(() => {
         if (isPopupVisible) {
             document.addEventListener('click', handleClickOutside);
@@ -38,11 +65,15 @@ export default function InventoryUnit({ unit, onChange, checked }) {
             document.removeEventListener('click', handleClickOutside)
         }
     }, [isPopupVisible]);
+
     if(checked){
         console.log("IOSFJNFAS", checked);
     }
+
+    //not pulling tags
+    console.log(unit.tags);  
     return (  
-        <div className="unit" onDoubleClick={handleClick}> 
+        <div className="unit" onDoubleClick={handleDoubleClick}> 
             <div className="left-section">
             <div className="check-box">
                 <input 
@@ -80,6 +111,10 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                 <button className="drop-downBtn" onClick={handleClick}>•••</button>
             </div>
             <div>
+                { isPrePopupVisible && (
+                    <PrePopup onClose={handleClosePrePopup} onOptionSelect={handlePopupOption}/>
+                )}       
+
                 { isPopupVisible && (
                     <Popup unit={unit} onClose={handleClosePopup} />
                 )}
