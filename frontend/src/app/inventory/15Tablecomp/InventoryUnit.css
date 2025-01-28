@@ -1,14 +1,13 @@
 .unit {
     display: flex;
-    width: 87.5vw;
+    width: 100%;
     min-height: 5vh;
     justify-content: space-around;
     align-items: center;
     color: #000000;
     font-size: 1rem;
-    padding: 0 2vh;
     flex-shrink: 0;
-    border-bottom: 0.804px solid #9B525F;
+    border-bottom: 1px solid #9B525F;
     background: #FFF;
 }
 
@@ -17,7 +16,7 @@
     align-items: center;
     gap: 1vh;
     margin-left: 1vh;
-    width:9vw;
+    width:6.5vw;
     justify-content: space-between;
 }
 
@@ -66,8 +65,8 @@
     align-items: center;
     gap: 5vh;
     justify-content: space-between;
-    width: 63vw;
-    flex-wrap: wrap; /* Allow wrapping if there are too many items */
+    width: 50vw;
+    flex-wrap: nowrap; /* Allow wrapping if there are too many items */
 }
 
 .circle {
@@ -92,10 +91,17 @@
     background-color: red;
 }
 
-.id, .name, .status, .tags, .drop-down, .condition {
+.id, .name, .status, .drop-down, .condition{
     flex: 1; 
-    min-width: 5%;
     text-align: center;
+}
+
+.id {
+    width: 1vw;
+}
+
+.name {
+    width: 8vw
 }
 
 .status {
@@ -118,7 +124,7 @@
     justify-content: center;
     padding: 10px;
     margin: 1vh;
-    width:11vh;
+    width: 5vw;
     height: 4vh;
     border: none;
     cursor: pointer;
@@ -138,11 +144,24 @@
     align-items: center;
     overflow-x: auto;  
     overflow-y: hidden;
-    white-space: nowrap; 
     justify-content: center;
-    padding: 0 1vh; 
     height: 5vh;
-    width: 50vh; 
+    width: 30vw; 
+}
+
+.gender, .season, .size, .time {
+    display: flex;
+    width: vw;
+    height: 2vh;
+    padding: 2px 19px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 2px;
+    border: 1px solid #8184A6;
+    background: #FFF;
+    box-shadow: 0px 0.5px 2px 0px rgba(0, 0, 0, 0.25);
+    font-size: 0.7rem;
 }
 
 .tag {

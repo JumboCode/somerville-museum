@@ -14,7 +14,7 @@ export default function InventoryUnit({ unit, onChange, checked }) {
         return null; // Don't render anything if `unit` is undefined
     }
 
-    const { id, name, status, tags, condition } = unit; 
+    const { id, name, status, tags, condition, gender, season, size, time_period} = unit; 
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [isPrePopupVisible, setIsPrePopupVisible] = useState(false);
 
@@ -99,13 +99,12 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                     {unit.status}
                 </div>
                 <div className="condition">{unit.condition}</div>
-                <div className="tags">
-                    {tags && tags.length > 0 && tags.map((tag, index) => (
-                            <span key={index} className="tag">
-                                {tag}
-                            </span>
-                        ))}
-                </div>
+            </div>
+            <div className="tags">
+                <div className="gender">{unit.gender}</div>
+                <div className="season">{unit.season}</div>
+                <div className="size">{unit.size}</div>
+                <div className="time">{unit.time_period}</div>
             </div>
             <div className="drop-down">
                 <button className="drop-downBtn" onClick={handleClick}>•••</button>
