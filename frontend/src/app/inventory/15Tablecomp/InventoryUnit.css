@@ -1,15 +1,15 @@
 .unit {
     display: flex;
-    background-color: white;
-    width: 100%;
-    min-height: 8vh;
+    width: 87.5vw;
+    min-height: 5vh;
     justify-content: space-around;
     align-items: center;
     color: #000000;
     font-size: 1rem;
-    border-bottom: 1px solid #c5bcbc;
     padding: 0 2vh;
     flex-shrink: 0;
+    border-bottom: 0.804px solid #9B525F;
+    background: #FFF;
 }
 
 .left-section {
@@ -22,33 +22,36 @@
 }
 
 .checkbox-input {
-    appearance: none;    
-    height: 3vh;
-    width: 3vh;
-    border: 2px solid #636669;
-    position: relative;
-    cursor: pointer;
-    background-color: white;
-    transition: background-color 0.2s;
-    margin-left: 2vh;
-    
+    display: flex;
+    width: 20px;
+    height: 20px;
+    padding: 5px;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    border-radius: 2px;
+    border: 1px solid #915360;
+    box-shadow: 0px 0.5px 2px 0px rgba(0, 0, 0, 0.25);
+    appearance: none;
 }
 
 /* Checkbox checked style */
 .checkbox-input:checked {
-    background-color: #4a4b4b;
-    border-color: #2c2a2a;
+    border-radius: 1.608px;
+    border-color: 0.804px solid #915360;
+    background-color: #803946;
+    box-shadow: 0px 0.402px 1.608px 0px rgba(0, 0, 0, 0.25);
 }
 
 .picture .image-container {
-    width: 6vh; 
-    height: 6vh; 
+    width: 4vh; 
+    height: 4vh; 
     border-radius: 50%;
     overflow: hidden; 
-    background-color: aqua;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: lightgray 50% / cover no-repeat;
 }
 
 .picture img {
@@ -62,8 +65,9 @@
     flex-direction: row;
     align-items: center;
     gap: 5vh;
-    justify-content: center;
+    justify-content: space-between;
     width: 63vw;
+    flex-wrap: wrap; /* Allow wrapping if there are too many items */
 }
 
 .circle {
@@ -88,9 +92,9 @@
     background-color: red;
 }
 
-.id, .name, .status, .tags, .drop-down {
+.id, .name, .status, .tags, .drop-down, .condition {
     flex: 1; 
-    width: 5%;
+    min-width: 5%;
     text-align: center;
 }
 
@@ -113,13 +117,20 @@
     align-items: center;
     justify-content: center;
     padding: 10px;
-    background-color: none;
     margin: 1vh;
     width:11vh;
     height: 4vh;
-    background-color: white;
     border: none;
     cursor: pointer;
+    background: #FFF;
+    box-shadow: none;
+    color: #000000;
+}
+
+.dropdown:hover {
+    background-color: #FFF;
+    color:white;
+    
 }
 
 .tags {
@@ -135,7 +146,6 @@
 }
 
 .tag {
-    margin-right: 1vh; 
     font-size: 1.5vh; 
 }
 
