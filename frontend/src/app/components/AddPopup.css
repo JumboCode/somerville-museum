@@ -97,15 +97,21 @@ input, textarea {
 
 /* Button styling */
 button {
-  flex: 1; 
-  padding: 0.8em 1.2em;
-  border: 1px solid #000;
-  border-radius: 4px;
-  background-color: #fff;
-  cursor: pointer;
-  font-size: 1rem;
+  display: inline-flex;
+  padding: 11px 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  border-radius: 5px;
+  background: #007781;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+  color: #FFF;
   text-align: center;
-  transition: background-color 0.3s, color 0.3s;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 button:hover {
