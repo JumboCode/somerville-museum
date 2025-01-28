@@ -1,5 +1,6 @@
 "use client";
 import "./PrePopup.css";
+import StylishButton from "@/app/components/StylishButton";
 
 
 export default function PrePopup({ onClose, onOptionSelect }) {
