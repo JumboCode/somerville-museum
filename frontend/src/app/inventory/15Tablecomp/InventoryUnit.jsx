@@ -95,10 +95,12 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                 <div className="id"> {unit.id} </div>
                 <div className="name">{unit.name}</div>
                 <div className="status">
-                    <div className={`circle ${unit.status}`} ></div>
+                    <div className={`circle1 ${unit.status}`} ></div>
                     {unit.status}
                 </div>
-                <div className="condition">{unit.condition}</div>
+                <div className="condition">
+                    <div className={`circle2 ${unit.condition}`} ></div>
+                    {unit.condition}</div>
             </div>
             <div className="tags">
                 <div className="gender">{unit.gender}</div>
