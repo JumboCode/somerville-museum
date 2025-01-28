@@ -14,6 +14,11 @@ const BorrowTemp = ({ selectedItems = [], onClose, onSuccess }) => {
     const [returnWeeks, setReturnWeeks] = useState(1);
     const [approver, setApprover] = useState(''); 
     const [note, setNote] = useState(''); 
+    const [currentPage, setCurrentPage] = useState(1); 
+    const [isSuccessPopupVisible, setIsSuccessPopupVisible] = useState(false);
+
+    const itemsPerPage = 5;
+    const totalPages = Math.ceil(borrowItems.length / itemsPerPage); 
 
 
  
@@ -37,49 +42,63 @@ const BorrowTemp = ({ selectedItems = [], onClose, onSuccess }) => {
   }, []);
 
 
-    const isEmailValid = borrowerEmail.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Format: XXX@domain.YYY
+    const phoneRegex = /^\d{3}-\d{3}-\d{4}$/; // Format: XXX-XXX-XXXX
+
+    const isEmailValid = emailRegex.test(borrowerEmail);
+    const isPhoneValid = phoneRegex.test(phoneNumber);
    
     //submits the information, updates all data columns with appropriate information
     const handleSubmit = async (e) => {
     e.preventDefault(); 
 
-        if (!isEmailValid) {
-          alert('Please enter a valid email');
-          return; 
-        }
+    if (!isEmailValid) {
+        alert("Please enter a valid email in the format XXX@domain.YYY");
+        return;
+    }
 
-        let borrowerName = (borrowerFirstName + ' ' + borrowerLastName); 
+    if (!isPhoneValid) {
+        alert("Please enter a valid phone number in the format XXX-XXX-XXXX");
+        return;
+    }
+
         console.log('items being sent into API:', selectedItems);
 
         try {
-            const response = await fetch('/api/borrow', {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    dateBorrowed,
-                    borrowerName: `${borrowerFirstName} ${borrowerLastName}`,
-                    borrowerEmail,
-                    phoneNumber,
-                    dueDate,
-                    approver,
-                    note,
-                    selectedItems: borrowItems.map(item => item.id),
-                }),
-            });
-        
-            if (!response.ok) {
-                const errorText = await response.text(); // Fetch error text
-                throw new Error(`Fetch failed: ${response.status} ${errorText}`);
+            if (borrowItems == 0) {
+                alert('No items selected.'); 
+            } else {
+                const response = await fetch('/api/borrow', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        dateBorrowed,
+                        borrowerName: `${borrowerFirstName} ${borrowerLastName}`,
+                        borrowerEmail,
+                        phoneNumber,
+                        dueDate,
+                        approver,
+                        note,
+                        selectedItems: borrowItems.map(item => item.id),
+                    }),
+                });
+            
+                if (!response.ok) {
+                    const errorText = await response.text(); // Fetch error text
+                    throw new Error(`Fetch failed: ${response.status} ${errorText}`);
+                }
+            
+                const result = await response.json();
+    
+                setIsSuccessPopupVisible(true);
+                resetFields(); 
+                  // Trigger onSuccess after the action
+                if (onSuccess) {
+                    onSuccess();
+                }   
             }
-        
-            const result = await response.json();
-            alert(result.message || 'Success!');
-               // Trigger onSuccess after the action
-            if (onSuccess) {
-                onSuccess();
-            }   
 
-            resetFields();
+
         } catch (error) {
             console.error('Error submitting data:', error);
         }
@@ -94,119 +113,140 @@ const BorrowTemp = ({ selectedItems = [], onClose, onSuccess }) => {
         setReturnWeeks(1);
         setApprover('');
         setNote('');
+        setCurrentPage(1); 
     };
 
     const handleDelete = (item) => {
         setBorrowItems((prevItems) => prevItems.filter((i) => i.id !== item.id));
     };
+
+    const getCurrentPageItems = () => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        return borrowItems.slice(startIndex, startIndex + itemsPerPage);
+    };
     
+    const handlePageChange = (page) => {
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
+        }
+    };
 
     return (
         <div>
-            {/* Directly use the passed onClose function to close the popup */}
-            <form onSubmit={handleSubmit}> 
+            <form onSubmit={handleSubmit}>
                 <div>
-                    <h4>Selected Items:</h4>
+                    <h4>Borrow Item(s)</h4>
                     {borrowItems.length > 0 ? (
-                        <ul>
-                            {borrowItems.map((item, index) => (
-                                <BorrowUnit
-                                    key={item.id}
-                                    item={item}
-                                    onDelete={handleDelete}/>
-                            ))}
-                        </ul>
+                        <>
+                            <ul>
+                                {getCurrentPageItems().map((item) => (
+                                    <BorrowUnit
+                                        key={item.id}
+                                        item={item}
+                                        onDelete={handleDelete}
+                                    />
+                                ))}
+                            </ul>
+                            <div className="pagination">
+                                <button
+                                    type="button"
+                                    disabled={currentPage === 1}
+                                    onClick={() => handlePageChange(currentPage - 1)}
+                                >
+                                    {"<"}
+                                </button>
+                                {Array.from({ length: totalPages }, (_, index) => (
+                                    <button
+                                        key={index + 1}
+                                        type="button"
+                                        className={currentPage === index + 1 ? "active" : ""}
+                                        onClick={() => handlePageChange(index + 1)}
+                                    >
+                                        {index + 1}
+                                    </button>
+                                ))}
+                                <button
+                                    type="button"
+                                    disabled={currentPage === totalPages}
+                                    onClick={() => handlePageChange(currentPage + 1)}
+                                >
+                                    {">"}
+                                </button>
+                            </div>
+                        </>
                     ) : (
                         <p>No items selected.</p>
                     )}
                 </div>
 
+                {/* Borrower Information */}
+                <h4>Information</h4>
                 <label>
-                    Borrower First Name* 
+                    Borrower First Name*
                     <input
-                        name="borrowerFirstName"
-                        placeholder="John"
                         required
                         value={borrowerFirstName}
                         onChange={(e) => setBorrowerFirstName(e.target.value)}
                     />
                 </label>
-
                 <label>
-                    Borrower Last Name* 
+                    Borrower Last Name*
                     <input
-                        name="borrowerLastName"
-                        placeholder="Appleseed" 
                         required
                         value={borrowerLastName}
                         onChange={(e) => setBorrowerLastName(e.target.value)}
                     />
                 </label>
-
-                <hr/>
-
                 <label>
-                    Phone Number* 
+                    Borrower Email*
                     <input
-                        placeholder="(123) 123-1234" 
+                        type="text"
+                        required
+                        value={borrowerEmail}
+                        onChange={(e) => setBorrowerEmail(e.target.value)}
+                        style={{ borderColor: isEmailValid || !borrowerEmail ? "initial" : "red" }}
+                    />
+                </label>
+                <label>
+                    Phone Number*
+                    <input
                         required
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                     />
                 </label>
-
-                <hr/>
-
                 <label>
-                    Borrower Email* 
+                    Approver*
                     <input
-                        type="email"
-                        placeholder="johnappleseed@gmail.com" 
-                        required
-                        value={borrowerEmail}
-                        onChange={(e) => setBorrowerEmail(e.target.value)}
-                        style={{ borderColor: isEmailValid || !borrowerEmail ? 'initial' : 'red' }}
-                    />
-                </label>
-
-                <label>
-                    Return Date* 
-                    <select value={returnWeeks} onChange={(e) => setReturnWeeks(Number(e.target.value))}>
-                        <option value={1}>1 week</option>
-                        <option value={2}>2 weeks</option>
-                        <option value={3}>3 weeks</option>
-                        <option value={4}>4 weeks</option>
-                        <option value={5}>5 weeks</option>
-                        <option value={6}>6 weeks</option>
-                    </select>
-                </label>
-
-                <label>
-                    Approver* 
-                    <input
-                        name="approver"
-                        placeholder="Mary Jane" 
                         required
                         value={approver}
                         onChange={(e) => setApprover(e.target.value)}
                     />
                 </label>
-
-                <hr/> 
-
-                <label> 
-                    Note 
-                    <input
-                        type="text" 
-                        value={note}
-                        onChange={(e) => setNote(e.target.value)}
-                    />
+                <label>
+                    Note
+                    <input value={note} onChange={(e) => setNote(e.target.value)} />
                 </label>
-
-                <button type="submit">Confirm Borrow</button> 
-                {/* Use the passed onClose function to close the popup */}
-                <button type="button" onClick={onClose}>Exit</button>
+                <button type="submit">Borrow</button>
+                <button type="button" onClick={onClose}>
+                    Cancel
+                </button>
             </form>
+
+            {/* Success Popup */}
+            {isSuccessPopupVisible && (
+                <Popup open={true} onClose={() => setIsSuccessPopupVisible(false)}>
+                    <div>
+                        <h2>Borrow Success</h2>
+                        <p>
+                            The following items have been successfully borrowed:{" "}
+                            {borrowItems.map((item) => item.id).join(", ")}
+                        </p>
+                        <p>Thank you!</p>
+                        <button onClick={onClose}>Return to Inventory</button>
+                    </div>
+                </Popup>
+            )}
         </div>
     );
 };
