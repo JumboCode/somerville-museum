@@ -50,24 +50,23 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
   // This function is triggered when the button is clicked
   const handleButtonClick = async () => {
     console.log('Button clicked from BorrowButton');
-
-    // Check the validity before opening the popup
-    const isValid = await handleValidity();
-    if (isValid) {
-      setIsOpen(true);  // Open the popup only if validity is true
+    if(selectedItems == 0) {
+      alert('No Items selected.'); 
     } else {
-      alert('Some items are invalid. Please try again.');
-    }
-  };
-
-    // Track the updated selected items state
-    // useEffect(() => {
-    //     console.log('Updated available selected items:', availableSelectedItems);
-    //   }, [availableSelectedItems]);
+        // Check the validity before opening the popup
+    const isValid = await handleValidity();
+      if (isValid) {
+        setIsOpen(true);  // Open the popup only if validity is true
+      } else {
+        alert('Some items are invalid. Please try again.');
+      }
+    };
     
     console.log('the updated selected items are:', availableSelectedItems);
 
+  }
 
+  
   return (
     <div>
       <StylishButton
@@ -92,7 +91,6 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
             if (onSuccess) {
               onSuccess(); // Reset data in parent component
             }
-            setIsOpen(false); // Close the popup after success
           }}
         />)}
 
