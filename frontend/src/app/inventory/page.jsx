@@ -7,12 +7,13 @@ import BorrowButton from '../components/BorrowButton.jsx';
 import AddButton from '../components/AddPopup';
 import ReturnButton from '../components/ReturnButton';
 import DeleteItemButton from '../components/DeleteItemButton';
+import StylishButton from '../components/StylishButton.jsx';
 // import Popup from 'Popup.jsx';
 
 export default function Inventory() {
     const [units, setUnits] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [unitsPerPage, setUnitsPerPage] = useState(10);
+    const [unitsPerPage, setUnitsPerPage] = useState(15);
     const [totalPages, setTotalPages] = useState();
     const [selectedItems, setSelectedItems] = useState([]);
 
@@ -167,25 +168,34 @@ export default function Inventory() {
                     <div className="num-items">
                         <p className="view">View </p>
                         <select className="select-num" id="select-num" onChange={handleUnitsPerPageChange}>
-                            <option value="10">10</option>
+                            <option value="10">15</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
                             <option value="100">100</option>
                         </select>
                     </div>
                     <div className="page-selection">
-                        <button className="leftBtn" onClick={goToPreviousPage} disabled={currentPage === 1}>
-                            &lt;
-                        </button>
+                        <StylishButton className="leftBtn" 
+                                        label = "&lt;" 
+                                        onClick={goToPreviousPage} 
+                                        disabled={currentPage === 1}
+                                        styleType='style4'>
+                        </StylishButton>
                         {buttons.map((number) => (
-                            <button className="pageNum" key={number} onClick={() => setCurrentPage(number)}>
-                                {number}
-                            </button>
+                            <StylishButton className="pageNum" 
+                                            label={number} 
+                                            key={number} 
+                                            onClick={() => setCurrentPage(number)}
+                                            styleType='style4'>
+                            </StylishButton>
                         ))}
 
-                        <button className="rightBtn" onClick={goToNextPage} disabled={currentPage === totalPages}>
-                            &gt;
-                        </button>
+                        <StylishButton className="rightBtn" 
+                                        label="&gt;"
+                                        onClick={goToNextPage} 
+                                        disabled={currentPage === totalPages}
+                                        styleType='style4'>
+                        </StylishButton>
                     </div>
                 </div>
             </div>
