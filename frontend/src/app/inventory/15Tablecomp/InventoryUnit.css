@@ -32,14 +32,27 @@
     border: 1px solid #915360;
     box-shadow: 0px 0.5px 2px 0px rgba(0, 0, 0, 0.25);
     appearance: none;
+    cursor: pointer;
+    position: relative;
 }
 
 /* Checkbox checked style */
 .checkbox-input:checked {
-    border-radius: 1.608px;
     border-color: 0.804px solid #915360;
     background-color: #803946;
     box-shadow: 0px 0.402px 1.608px 0px rgba(0, 0, 0, 0.25);
+}
+
+.checkbox-input:checked::after {
+    content: "";
+    width: 5px;
+    height: 9px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -60%) rotate(45deg);
 }
 
 .picture .image-container {
