@@ -24,6 +24,14 @@ export default function AddPage() {
     const [color, setColor] = useState([]);
     const [text, setText] = useState("");
 
+    const [youthSelection, setYouthSelection] = useState(null);
+    const [adultSelection, setAdultSelection] = useState(null);
+    const [genderSelection, setGenderSelection] = useState(null);
+
+    const options = ["Youth", "Adult"];
+    const genderOptions = ["Male", "Female", "Unisex"];
+
+
     const handleGarmentSelection = (value) => {
         setGarmentTag(value);
     };
@@ -217,13 +225,29 @@ export default function AddPage() {
                             <div className="ageName">
                                 Age Group*
                             </div>
-                            <div className="youthButton">
-
+                            <div className="ageRow">
+                                <div className="youthButton">
+                                    <SelectButton 
+                                        value={youthSelection} 
+                                        options={options} 
+                                        onChange={(e) => setYouthSelection(e.value)} 
+                                        ariaLabel="Youth Selection" 
+                                    />
+                                </div>
                             </div>
-                            <div className="adultButton">
-
+                        </div>
+                        <div className="allGender">
+                            <div className="genderName">
+                                Gender*
                             </div>
-
+                            <div className="genderButtons">
+                                    <SelectButton 
+                                        value={genderSelection} 
+                                        options={genderOptions}
+                                        onChange={(e) => setGenderSelection(e.value)} 
+                                        ariaLabel="Youth Selection" 
+                                    />
+                            </div>
                         </div>
                     </div>
 
