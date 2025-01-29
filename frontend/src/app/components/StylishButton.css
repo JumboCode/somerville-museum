@@ -53,8 +53,15 @@
   }
 
   .stylish-button.style4 {
-    background:none; 
-    color:#000;
+    background: none; 
     border: none;
+    color: #000000;
+    box-shadow: none;
+  }
+
+  .stylish-button.style5 {
+    background-color:#9B525F; 
+    border: none;
+    color: white;
     box-shadow: none;
   }

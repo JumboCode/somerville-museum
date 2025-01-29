@@ -151,6 +151,7 @@
     align-items: center;
     justify-content: flex-end;
     width:5vw;
+    color: #000000;
 }
 
 .drop-downBtn {
@@ -163,15 +164,15 @@
     height: 4vh;
     border: none;
     cursor: pointer;
-    background: #FFF;
+    background: none;
     box-shadow: none;
     color: #000000;
 }
 
-.dropdown:hover {
-    background-color: #FFF;
-    color:white;
-    
+.drop-downBtn:hover {
+    background: none;
+    box-shadow: none;
+    appearance: none;
 }
 
 .tags {
