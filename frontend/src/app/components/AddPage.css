@@ -307,3 +307,61 @@
     align-items: flex-start;
     gap: 10px;
 }
+
+.ageName {
+    margin-top: .2rem;
+    color: #000;
+    font-family: Akatab;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.ageRow {
+    display: flex;
+}
+
+.youthButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    gap:1rem;
+}
+
+.p-selectbutton {
+    width: 100%; /* Ensures full width inside container */
+}
+
+.p-selectbutton .p-button {
+    display: inline-flex; 
+    /* flex-direction: column; */
+    border-radius: .2rem;
+    border: 1px solid #9B525F;
+    background: #FFF;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    transition: background-color 0.3s ease;
+    gap: 1rem;
+    padding: .5rem;
+    margin-right: .7rem;
+}
+
+.p-selectbutton .p-button:hover {
+    background-color: #d9d1d1;
+}
+
+.ageGenderRow {
+    display: inline-flex;
+}
+
+.genderName {
+    margin-bottom: 1rem;
+    margin-top: .2rem;
+    color: #000;
+    font-family: Akatab;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
