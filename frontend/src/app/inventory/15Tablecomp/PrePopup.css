@@ -1,23 +1,18 @@
 /* Style the overlay that darkens the background */
 .Popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    position: absolute;
+    background: none;
+    padding: 10px;
+    z-index: 9999;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Ensure it appears above other content */
 }
 
 /* Style the actual popup container */
 .Popup > .Header {
     background-color: white;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
     width: 300px;
     font-size: 16px;
@@ -26,25 +21,26 @@
 
 /* Style the buttons container */
 .Popup .Buttons {
-    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    background-color: #9B525F;
 }
 
 /* Style individual buttons */
 .popupBtn {
-    background-color: #007BFF;
+    background: #9B525F;
     color: white;
     border: none;
     padding: 10px 20px;
-    margin: 5px;
     font-size: 14px;
-    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    box-shadow: none;
 }
 
-/* Add a hover effect for buttons */
 .popupBtn:hover {
-    background-color: #0056b3;
+    background: #9B525F;
 }
 
 /* Style when the popup is closed (optional) */

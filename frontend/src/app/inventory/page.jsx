@@ -16,8 +16,8 @@ export default function Inventory() {
     const [unitsPerPage, setUnitsPerPage] = useState(15);
     const [totalPages, setTotalPages] = useState();
     const [selectedItems, setSelectedItems] = useState([]);
-    const [selectAllChecked, setSelectAllChecked] = useState(false)
-
+    const [selectAllChecked, setSelectAllChecked] = useState(false);
+    
     useEffect(() => {
         console.log(selectedItems);
         fetchData();
