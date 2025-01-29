@@ -14,7 +14,7 @@ const StylishButton = ({ label, styleType, onClick }) => {
 
 StylishButton.propTypes = {
   label: PropTypes.string.isRequired, //text inside button
-  styleType: PropTypes.oneOf(['style1', 'style2', 'style3', 'style4']), //style option selection
+  styleType: PropTypes.oneOf(['style1', 'style2', 'style3', 'style4', 'style5']), //style option selection
   onClick: PropTypes.func, //onClick handler
 };
 
