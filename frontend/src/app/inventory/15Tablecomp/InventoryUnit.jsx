@@ -1,6 +1,6 @@
 // InventoryUnit.jsx
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, forwardRef} from "react";
 import Popup from "./Popup";
 import PrePopup from "./PrePopup";
 import "./InventoryUnit.css";
@@ -17,6 +17,8 @@ export default function InventoryUnit({ unit, onChange, checked }) {
     const { id, name, status, tags, condition, gender, season, size, time_period} = unit; 
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [isPrePopupVisible, setIsPrePopupVisible] = useState(false);
+    const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
+    const buttonRef = useRef(null);
 
     const handleDoubleClick = () => {
         setIsPopupVisible(true);
@@ -24,6 +26,13 @@ export default function InventoryUnit({ unit, onChange, checked }) {
 
     const handleClick = () => {
         setIsPrePopupVisible(true);
+        if (buttonRef.current) {
+            const rect = buttonRef.current.getBoundingClientRect();
+            setPopupPosition({
+                top: rect.bottom + window.scrollY - 2, // Position below button
+                left: rect.left + window.scrollX - 100, // Align left with button
+            });
+        }
     }
 
     const handleClosePrePopup = () => {
@@ -59,7 +68,7 @@ export default function InventoryUnit({ unit, onChange, checked }) {
 
 
     useEffect(() => {
-        if (isPopupVisible) {
+        if (isPopupVisible || isPrePopupVisible) {
             document.addEventListener('click', handleClickOutside);
         } else {
             document.removeEventListener('click', handleClickOutside)
@@ -109,11 +118,14 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                 <div className="time">{unit.time_period}</div>
             </div>
             <div className="drop-down">
-                <button className="drop-downBtn" onClick={handleClick}>•••</button>
-            </div>
-            <div>
+                <button className="drop-downBtn" 
+                        onClick={handleClick}
+                        ref = {buttonRef}
+                        >•••</button>
                 { isPrePopupVisible && (
-                    <PrePopup onClose={handleClosePrePopup} onOptionSelect={handlePopupOption}/>
+                    <PrePopup onClose={handleClosePrePopup} 
+                               onOptionSelect={handlePopupOption}
+                               position = {popupPosition}/>
                 )}       
 
                 { isPopupVisible && (
