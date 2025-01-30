@@ -50,6 +50,7 @@
     width: 60%;
     margin-right: 2rem;
     margin-left: 2rem;
+    gap: 1.5rem;
 }
 
 .garment-type-component {
@@ -71,8 +72,8 @@
 }
 
 #drop-zone {
-    width: 100%;
-    height: 35vh;
+    width: 38vw;
+    height: 30vh;
     border: 1px solid #9B525F;
     border-radius: 1px;
     display: flex;
@@ -201,6 +202,18 @@
     width: stretch;
 }
 
+.p-dropdown-panel {
+    background-color: #FFF !important;
+    border: 1px solid #FFF; /* Optional: adds a subtle border */
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+}
+
+.p-multiselect-panel {
+    background-color: #FFF !important;
+    border: 1px solid #FFF; /* Optional: adds a subtle border */
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+}
+
 .textBoxRow {
     display: flex;
     gap: 1.8rem;
@@ -300,39 +313,45 @@
 }
 
 .size-buttons {
-    display: flex-col;
-    gap: 1rem;
-    margin-top: 1rem;
     justify-content: center;
     align-items: flex-start;
-    gap: 10px;
+    gap: 1rem;
 }
 
-.ageName {
-    margin-top: .2rem;
-    color: #000;
-    font-family: Akatab;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
+.allAge {
+    width: 100%;
+    gap: 1rem;
+    flex: 1;
+}
+
+.allGender {
+    display: flex-col;
+    width: 100%;
+    flex: 1;
 }
 
 .ageRow {
     display: flex;
+    gap: 0;
 }
 
-.youthButton {
+.ageButton {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 1rem;
-    gap:1rem;
+    margin-top: 1rem;
 }
 
-.p-selectbutton {
-    width: 100%; /* Ensures full width inside container */
+.genderButtons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+    gap: 1rem;
 }
+
+/* .p-selectbutton {
+     /* Ensures full width inside container */
 
 .p-selectbutton .p-button {
     display: inline-flex; 
@@ -345,23 +364,89 @@
     gap: 1rem;
     padding: .5rem;
     margin-right: .7rem;
+    width: 6rem;
+    height: 3rem;
+}
+
+.ageButton .p-selectbutton .p-button {
+    width: 7rem;
+}
+
+.size-buttons .p-selectbutton .p-button {
+    width: 9rem;
+    margin-right:1.6rem;
+    margin-top: .5rem;
+}
+
+.genderButtons .p-selectbutton .p-button {
+    width: 7rem;
 }
 
 .p-selectbutton .p-button:hover {
-    background-color: #d9d1d1;
+    background-color: #9B525F;
+    color: #ffffff;
 }
 
-.ageGenderRow {
-    display: inline-flex;
+.age-and-gender {
+    display: flex;
+    width: 100%;
+    /* gap: 1rem; */
 }
 
-.genderName {
-    margin-bottom: 1rem;
-    margin-top: .2rem;
-    color: #000;
-    font-family: Akatab;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
+.condition-component {
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
 }
+
+.color-selector {
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+  }
+  
+  .color-label {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .color-options {
+    display: flex;
+    gap: 8px;
+    margin-top: 5px;
+  }
+  
+  .color-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    outline: 1px solid transparent;
+    transition: border 0.2s ease-in-out;
+  }
+  
+  .color-circle.selected {
+    border: 2px solid black !important;
+    transform: scale(1.2);
+  }
+  
+  .selected-text {
+    margin-top: 5px;
+    font-size: 14px;
+  }
+
+  .cancel-submit {
+    display: flex;
+    justify-content: flex-end; 
+  }
+
+  .cancel-submit-buttons .p-selectbutton .p-button {
+    height: 3rem;
+  }
+
+  .cancel-submit-buttons {
+    justify-content: right;
+  }
+  
