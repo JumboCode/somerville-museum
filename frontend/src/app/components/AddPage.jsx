@@ -1,6 +1,6 @@
 "use client"; // This file is client-side
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import "../globals.css";
 import { Dropdown } from 'primereact/dropdown';
 import { MultiSelect } from 'primereact/multiselect';
@@ -70,6 +70,19 @@ export default function AddPage() {
         { name: "Gray", hex: "#8E8E93" },
         { name: "Black", hex: "#000000" },
       ];
+
+    // Placeholder Current Date
+    const [placeholderDate, setPlaceholderDate] = useState('');
+    useEffect(() => {
+        // Get today's date
+        const today = new Date();
+        const month = String(today.getMonth() + 1).padStart(2, '0'); 
+        const day = String(today.getDate()).padStart(2, '0');
+        const year = today.getFullYear();
+
+        // Format the date as MM/DD/YYYY
+        setPlaceholderDate(`${month}/${day}/${year}`);
+    }, []);
 
     const handleGarmentSelection = (value) => {
         setGarmentTag(value);
@@ -180,7 +193,7 @@ export default function AddPage() {
                                     Date Added
                                 </div>
                                 <div className="dateTextBox">
-                                    <textarea placeholder="01/10/2024"></textarea>
+                                    <textarea placeholder={placeholderDate}></textarea>
                                 </div>
                             </div>
                             <div className="allPrice">
