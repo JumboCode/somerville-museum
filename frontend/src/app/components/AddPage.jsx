@@ -247,16 +247,14 @@ export default function AddPage() {
                         {/* Age Buttons */}
                         <div className="allAge">
                             <h3>Age Group*</h3>
-                            <div className="ageRow">
-                                <div className="ageButton">
-                                    <SelectButton 
-                                        value={ageSelection} 
-                                        options={ageOptions}
-                                        onChange={(e) => setAgeSelection(e.value)} 
-                                        ariaLabel="Age Selection" 
-                                        classname="ageButton"
-                                    />
-                                </div>
+                            <div className="ageButtons">
+                                <SelectButton
+                                    value={ageSelection} 
+                                    options={ageOptions}
+                                    onChange={(e) => setAgeSelection(e.value)} 
+                                    ariaLabel="Age Selection" 
+                                    classname="ageButtons"
+                                />
                             </div>
                         </div>
 
