@@ -47,9 +47,11 @@
     display: flex;
     padding-top: 2rem;
     flex-direction: column;
+    justify-content: space-evenly;
     width: 60%;
     margin-right: 2rem;
     margin-left: 2rem;
+    margin-bottom: 1rem;
     gap: 1.5rem;
 }
 
@@ -318,34 +320,30 @@
     gap: 1rem;
 }
 
-.allAge {
+.age-and-gender {
+    display: flex;
     width: 100%;
-    gap: 1rem;
-    flex: 1;
+    gap: 4rem;
+    margin: 0;
+    padding: 0;
+}
+
+.allAge {
+    width: 33%;
 }
 
 .allGender {
     display: flex-col;
-    width: 100%;
-    flex: 1;
+    width: 66%;
 }
 
-.ageRow {
+.ageButtons {
     display: flex;
-    gap: 0;
-}
-
-.ageButton {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     margin-top: 1rem;
 }
 
 .genderButtons {
     display: flex;
-    justify-content: center;
-    align-items: center;
     margin-top: 1rem;
     gap: 1rem;
 }
@@ -387,11 +385,6 @@
     color: #ffffff;
 }
 
-.age-and-gender {
-    display: flex;
-    width: 100%;
-    /* gap: 1rem; */
-}
 
 .condition-component {
     display: flex;
