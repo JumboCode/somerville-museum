@@ -7,33 +7,23 @@ import { MultiSelect } from 'primereact/multiselect';
 import { SelectButton } from 'primereact/selectbutton';
 
 export default function AddPage() {
+    // Left column state variables
     const [dragOver, setDragOver] = useState(false);
     const [preview, setPreview] = useState(null);
-    const [itemName, setItemName] = useState('');
-    const [id, setId] = useState('');
-    const [date, setDate] = useState('');
-    const [price, setPrice] = useState('');
-    const [note, setNote] = useState('');
+
+    // Right column state variables
     const [selectedGarment, setSelectedGarment] = useState("");
     const [selectedTimePeriod, setSelectedTimePeriod] = useState("");
-    const [selectedSize, setSelectedSize] = useState([]);
-    const [Season, setSeason] = useState([]);
-    const [condition, setCondition] = useState([]);
-    const [color, setColor] = useState([]);
-    const [text, setText] = useState("");
-
     const [ageSelection, setAgeSelection] = useState(null);
-    const [adultSelection, setAdultSelection] = useState(null);
     const [genderSelection, setGenderSelection] = useState(null);
+    const [selectedSize, setSelectedSize] = useState([]);
     const [selectedSeason, setSelectedSeason] = useState(null);
+    const [condition, setCondition] = useState([]);
     const [selectedColors, setSelectedColors] = useState([]);
     const [selectedChoice, setSelectedChoice] = useState([]);
 
-    const ageOptions = ["Youth", "Adult"];
-    const genderOptions = ["Male", "Female", "Unisex"];
-    const seasons = ["Fall", "Winter", "Spring", "Summer"];
-    const conditions = ["Needs repair", "Needs dry cleaning", "Needs washing", "Not usable", "Great"];
-    const garments = [
+    // Define all of the options for buttons and dropdowns
+    const garmentOptions = [
         { label: "Gowns/dresses", value: "Gowns/dresses" },
         { label: "Outerwear", value: "Outerwear" },
         { label: "Accessories", value: "Accessories" },
@@ -49,14 +39,16 @@ export default function AddPage() {
         { name: "1750s-1800s" },
         { name: "1800s-1840s" }
     ];
+    const ageOptions = ["Youth", "Adult"];
+    const genderOptions = ["Male", "Female", "Unisex"];
     const sizes = [
         { label: "Small", value: "small" },
         { label: "Medium", value: "medium" },
         { label: "Large", value: "large" },
         { label: "X-Large", value: "x-large" }
     ];
-
-    const cancelOrSubmit = ["Cancel", "Submit"];
+    const seasons = ["Fall", "Winter", "Spring", "Summer"];
+    const conditions = ["Needs repair", "Needs dry cleaning", "Needs washing", "Not usable", "Great"];
     const colors = [
         { name: "Red", hex: "#FF3B30" },
         { name: "Orange", hex: "#FF9500" },
@@ -70,34 +62,30 @@ export default function AddPage() {
         { name: "Gray", hex: "#8E8E93" },
         { name: "Black", hex: "#000000" },
       ];
+    const cancelOrSubmit = ["Cancel", "Submit"];
 
-    // Placeholder Current Date
+    // Fetch placeholder for current date
     const [placeholderDate, setPlaceholderDate] = useState('');
     useEffect(() => {
-        // Get today's date
         const today = new Date();
         const month = String(today.getMonth() + 1).padStart(2, '0'); 
         const day = String(today.getDate()).padStart(2, '0');
         const year = today.getFullYear();
-
-        // Format the date as MM/DD/YYYY
         setPlaceholderDate(`${month}/${day}/${year}`);
     }, []);
 
-    const handleGarmentSelection = (value) => {
-        setGarmentTag(value);
-    };
-
+    // Function to handle and update file selection
     const handleFileSelect = (file) => {
         if (file && file.type.startsWith("image/")) {
-        const reader = new FileReader();
-        reader.onload = (e) => setPreview(e.target.result);
-        reader.readAsDataURL(file);
+            const reader = new FileReader();
+            reader.onload = (e) => setPreview(e.target.result);
+            reader.readAsDataURL(file);
         } else {
-        alert("Please upload a valid image file.");
+            alert("Please upload a valid image file.");
         }
     };
 
+    // Function to handle drag-and-drop file upload
     const handleDrop = (event) => {
         event.preventDefault();
         setDragOver(false);
@@ -105,26 +93,20 @@ export default function AddPage() {
         handleFileSelect(file);
     };
 
+    // Function to handle file input change
     const handleFileInputChange = (event) => {
         const file = event.target.files[0];
         handleFileSelect(file);
     };
 
-    const handleTimePeriodSelection = (value) => {
-        setTimeTag(value);
-    };
-
-    const handleChange = (event) => {
-        setText(event.target.value);
-    };
-
+    // Function to handle color selection
     const handleSelect = (color) => {
         if (selectedColors.includes(color)) {
-          setSelectedColors(selectedColors.filter((c) => c !== color));
+            setSelectedColors(selectedColors.filter((c) => c !== color));
         } else if (selectedColors.length < 2) {
-          setSelectedColors([...selectedColors, color]);
+            setSelectedColors([...selectedColors, color]);
         }
-      };
+    };
 
     return (
         <div className="main">
@@ -171,13 +153,14 @@ export default function AddPage() {
                         <div className="itemName">
                             Item Name*
                         </div>
-                        {/* start making other boxes for left column here */}
 
+                        {/* Item Name Text Entry */}
                         <label htmlFor="textBox"></label>
                         <div className="itemTextBox">
                             <textarea placeholder=""></textarea>
                         </div>
-
+                        
+                        {/* ID, Date Added, and Price Text Entries */}
                         <div className="textBoxRow">
                             <div className="allID">
                                 <div className="idName">
@@ -232,7 +215,7 @@ export default function AddPage() {
                             <h3>Garment Type*</h3>
                             <Dropdown
                                 value={selectedGarment}
-                                options={garments}
+                                options={garmentOptions}
                                 onChange={(e) => setSelectedGarment(e.value)}
                                 placeholder="Select Garment Type"
                                 className="dropdown"
