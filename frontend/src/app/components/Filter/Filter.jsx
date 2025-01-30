@@ -3,9 +3,13 @@ import './Filter.css';
 import Calendar from '../../assets/Calendar.jsx';
 import Reset from '../../assets/Reset.jsx';
 import Dropdown from '../../assets/Dropdown.jsx';
+import CalendarPicker from '../Calendar/CalendarPicker.jsx';
 
 const FilterComponent = ({ isVisible, onClose, className }) => {
     const [openDropdowns, setOpenDropdowns] = useState({});
+    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+    const [selectedDate, setSelectedDate] = useState('Select...');
+    const [selectedOptions, setSelectedOptions] = useState({});
     const dropdownRefs = useRef({});
 
     // Close dropdowns when clicking outside
@@ -27,6 +31,18 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
             ...prev,
             [label]: !prev[label]
         }));
+    };
+
+    const handleDateSelect = (date) => {
+        setSelectedDate(date);
+    };
+
+    const handleOptionSelect = (label, option) => {
+        setSelectedOptions(prev => ({
+            ...prev,
+            [label]: option
+        }));
+        toggleDropdown(label);
     };
 
     return (
@@ -53,14 +69,14 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
                                 className={`select-box ${openDropdowns[label] ? 'active' : ''}`}
                                 onClick={() => toggleDropdown(label)}
                             >
-                                <span>Select...</span>
+                                <span>{selectedOptions[label] || 'Select...'}</span>
                                 <Dropdown className={`dropdown-icon ${openDropdowns[label] ? 'rotated' : ''}`} />
                             </div>
                             {openDropdowns[label] && (
                                 <ul className="dropdown-options">
-                                    <li>Option 1</li>
-                                    <li>Option 2</li>
-                                    <li>Option 3</li>
+                                    <li onClick={() => handleOptionSelect(label, 'Option 1')}>Option 1</li>
+                                    <li onClick={() => handleOptionSelect(label, 'Option 2')}>Option 2</li>
+                                    <li onClick={() => handleOptionSelect(label, 'Option 3')}>Option 3</li>
                                 </ul>
                             )}
                         </div>
@@ -81,10 +97,18 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
                 <div className="filter-section">
                     <h2>Return Date</h2>
                     <div className="custom-select">
-                        <div className="select-box">
-                            <span>Select...</span>
+                        <div 
+                            className="select-box"
+                            onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+                        >
+                            <span>{selectedDate}</span>
                             <Calendar className="calendar-icon" />
                         </div>
+                        <CalendarPicker 
+                            isOpen={isCalendarOpen}
+                            onClose={() => setIsCalendarOpen(false)}
+                            onDateSelect={handleDateSelect}
+                        />
                     </div>
                 </div>
 
