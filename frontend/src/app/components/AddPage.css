@@ -397,55 +397,50 @@
 .condition-dropdown {
     padding: 0.5rem;
     width: 100%;
-    margin-top: .5rem;
+    margin-top: 0.5rem;
 }
 
 .color-selector {
     display: flex;
     flex-direction: column;
     font-family: Arial, sans-serif;
-  }
+}
+
   
-  .color-label {
-    font-size: 14px;
-    font-weight: bold;
-  }
-  
-  .color-options {
+.color-options {
     display: flex;
-    gap: 8px;
-    margin-top: 5px;
-  }
+    gap: 0.7rem;
+    margin-top: 0.5rem;
+}
   
-  .color-circle {
+.color-circle {
     width: 24px;
     height: 24px;
     border-radius: 50%;
     cursor: pointer;
     outline: 1px solid transparent;
-    transition: border 0.2s ease-in-out;
-  }
+    transition: border 0.1s ease-in-out;
+}
   
-  .color-circle.selected {
+.color-circle.selected {
     border: 2px solid black !important;
-    transform: scale(1.2);
-  }
-  
-  .selected-text {
+    transform: scale(1.3);
+}
+
+.selected-text {
     margin-top: 5px;
     font-size: 14px;
-  }
+}
 
-  .cancel-submit {
+.cancel-submit {
     display: flex;
     justify-content: flex-end; 
-  }
+}
 
-  .cancel-submit-buttons .p-selectbutton .p-button {
+.cancel-submit-buttons .p-selectbutton .p-button {
     height: 3rem;
-  }
+}
 
-  .cancel-submit-buttons {
+.cancel-submit-buttons {
     justify-content: right;
-  }
-  
+}
