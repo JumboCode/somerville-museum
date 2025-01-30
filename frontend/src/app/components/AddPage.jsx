@@ -238,6 +238,7 @@ export default function AddPage() {
                         </div>
                     </div>
                     
+                    {/* Age and Gender Buttons */}
                     <div className="age-and-gender">
 
                         {/* Age Buttons */}
@@ -278,16 +279,18 @@ export default function AddPage() {
                         />
                     </div>
 
-
-                    {/* Size Buttons */}
+                    {/* Season Buttons */}
                     <div className="size-buttons">
                         <h3>Season*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3> 
-                        <SelectButton value={selectedSeason} onChange={(e) => setSelectedSeason(e.value)} options={seasons} />
+                        <SelectButton 
+                            value={selectedSeason} 
+                            onChange={(e) => setSelectedSeason(e.value)} 
+                            options={seasons} />
                     </div>
 
                     {/* Condition Dropdown */}
                     <div className="condition-component">
-                        <div className="condition-dropdown">
+                        <div className="dropdown-component">
                             <h3>Condition*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3> 
                             <Dropdown
                                 value={condition}
