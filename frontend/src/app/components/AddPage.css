@@ -348,41 +348,62 @@
     gap: 1rem;
 }
 
-/* .p-selectbutton {
-     /* Ensures full width inside container */
-
 .p-selectbutton .p-button {
     display: inline-flex; 
-    /* flex-direction: column; */
-    border-radius: .2rem;
+    border-radius: 0.2rem;
     border: 1px solid #9B525F;
     background: #FFF;
-    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
-    transition: background-color 0.3s ease;
+    box-shadow: 0px 0.1rem 0.2rem 0px rgba(0, 0, 0, 0.25);
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     gap: 1rem;
-    padding: .5rem;
-    margin-right: .7rem;
-    width: 6rem;
+    padding: 0.5rem;
+    margin-right: 1.3rem;
+    width: 9rem;
     height: 3rem;
+    cursor: pointer;
+    justify-content: center;
+    font-size: 16px;
 }
 
-.ageButton .p-selectbutton .p-button {
+/* Ensure Age buttons use correct width */
+.ageButtons .p-selectbutton .p-button {
     width: 7rem;
 }
 
-.size-buttons .p-selectbutton .p-button {
-    width: 9rem;
-    margin-right:1.6rem;
-    margin-top: .5rem;
-}
-
+/* Ensure Gender buttons use correct width */
 .genderButtons .p-selectbutton .p-button {
     width: 7rem;
 }
 
-.p-selectbutton .p-button:hover {
-    background-color: #9B525F;
-    color: #ffffff;
+.size-buttons > h3,
+.season-buttons > h3 {
+    display: block; /* Ensure it's a block element */
+    margin-bottom: .8rem !important; /* Force margin in case it's overridden */
+}
+
+/* ✅ Fix: Make selected buttons stay highlighted */
+.p-selectbutton .p-button.selected {
+    background-color: #9B525F !important; /* Dark red */
+    color: white !important;
+    border: 2px solid #7B3F4C; /* Darker border */
+}
+
+/* ✅ Fix: Maintain hover effect, but prevent hover from overriding selection */
+.p-selectbutton .p-button:hover:not(.selected) {
+    background-color: #d17a88; /* Lighter red */
+    color: white;
+}
+
+/* ✅ Fix: Ensure selected buttons remain highlighted even after clicking elsewhere */
+.p-selectbutton .p-button:focus {
+    outline: none;
+}
+
+/* ✅ Fix: Ensure text inside buttons is centered properly */
+.p-selectbutton .p-button span {
+    margin: auto;
+    text-align: center;
+    
 }
 
 
@@ -443,4 +464,9 @@
 
 .cancel-submit-buttons {
     justify-content: right;
+}
+
+.error-text {
+    color: red;
+    font-weight: bold;
 }
