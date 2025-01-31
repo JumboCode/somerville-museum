@@ -51,7 +51,8 @@ export default function AddPage() {
     
     const genderOptions = [
         { value: "male", label: "Male" },
-        { value: "female", label: "Female" }
+        { value: "female", label: "Female" },
+        { value: "unisex", label: "Unisex" }
     ];
     const sizes = [
         { label: "Small", value: "small" },
@@ -65,7 +66,15 @@ export default function AddPage() {
         { label: "Spring", value: "Spring" },
         { label: "Summer", value: "Summer" }
     ];
-    const conditions = ["Needs repair", "Needs dry cleaning", "Needs washing", "Not usable", "Great"];
+
+    const conditions = [
+        { name: "Needs repair" },
+        { name: "Needs dry cleaning" },
+        { name: "Needs washing" },
+        { name: "Not usable" },
+        { name: "Great" },
+    ]
+
     const colors = [
         { name: "Red", hex: "#FF3B30" },
         { name: "Orange", hex: "#FF9500" },
@@ -116,10 +125,45 @@ export default function AddPage() {
         handleFileSelect(file);
     };
 
+    // Function to deal with a number input to format as a $ amount
+    const handlePriceChange = (e) => {
+        let value = e.target.value;
+    
+        // Remove any non-numeric characters except dot
+        value = value.replace(/[^0-9.]/g, "");
+    
+        // Ensure only one decimal point
+        const parts = value.split(".");
+        if (parts.length > 2) {
+            value = parts[0] + "." + parts.slice(1).join("");
+        }
+    
+        setPriceText(value ? `$${value}` : "");
+    };
+
+    // Function to format price as currency
+    const formatPrice = () => {
+        if (priceText === "") return;
+    
+        // Convert to a fixed two-decimal format
+        const formattedValue = parseFloat(priceText).toFixed(2);
+    
+        // Check is input is valid before setting state
+        if (!isNaN(formattedValue)) {
+            setPriceText(`$${numericValue.toFixed(2)}`);
+        }
+    };
+
+    const handleTimePeriodSelect= (value) => {
+        setSelectedTimePeriod(value);
+    };
+
     // Function to handle color selection
     const handleSelect = (color) => {
+        // If color is already selected, remove it
         if (selectedColors.includes(color)) {
             setSelectedColors(selectedColors.filter((c) => c !== color));
+        // If fewer than 2 colors are selected, add the new color
         } else if (selectedColors.length < 2) {
             setSelectedColors([...selectedColors, color]);
         }
@@ -165,7 +209,7 @@ export default function AddPage() {
             status: "Available", // Default status
             authenticity_level: null,
             location: null,
-            date_added: placeholderDate,
+            date_added: placeholderDate, //is this correct?
             current_borrower: null,
             borrow_history: null
         };
@@ -194,7 +238,6 @@ export default function AddPage() {
 
         // If no errors, clear previous errors and proceed
         setErrors({});
-
 
         alert("Form submitted!");
     };
@@ -283,12 +326,15 @@ export default function AddPage() {
                                 <div className={`priceName ${errors.name ? "error-text" : ""}`}>
                                     Price
                                 </div>
-                                <div className="priceTextBox">
-                                    <textarea placeholder=""
-                                    id = "priceTB"
+                                <div className="priceInput">
+                                <input 
+                                    type="text"
+                                    placeholder="$0.00"
+                                    id="priceTB"
                                     value={priceText}
-                                    onChange={(e) => setPriceText(e.target.value)}
-                                    />
+                                    onChange={(e) => handlePriceChange(e)}
+                                    onBlur={formatPrice}
+                                />
                                 </div>
                             </div>
                         </div>
@@ -336,13 +382,14 @@ export default function AddPage() {
                             <h3 className={errors.time_period ? "error-text" : ""}>Time Period*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3>                            
                                 <MultiSelect
                                     value={selectedTimePeriod} 
-                                    onChange={(e) => setSelectedTimePeriod(e.value)}
+                                    onChange={(e) => handleTimePeriodSelect(e.value)}
                                     options={timePeriods} 
                                     optionLabel="name" 
                                     display="chip" 
                                     placeholder="Select Time Period" 
                                     maxSelectedLabels={2}
                                     className="dropdown"
+                                    showSelectAll={false}
                                 />
                         </div>
                     </div>
@@ -415,12 +462,16 @@ export default function AddPage() {
                     <div className="condition-component">
                         <div className="dropdown-component">
                             <h3 className={errors.time_period ? "error-text" : ""}>Condition*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3> 
-                            <Dropdown
+                            <MultiSelect
                                 value={condition}
                                 options={conditions}
                                 onChange={(e) => setCondition(e.value)}
+                                optionLabel="name" 
+                                display="chip" 
+                                maxSelectedLabels={2}
                                 placeholder="Select Condition"
                                 className="dropdown"
+                                showSelectAll={false}
                             />
                         </div>
                     </div>
@@ -450,21 +501,21 @@ export default function AddPage() {
                             
                         </div>
                     </div>
-
-                        <div className="cancel-submit">
-                            <div className="cancel-submit-buttons">
-                                <div className="ageButton">
-                                    <SelectButton 
-                                        value={selectedChoice} 
-                                        onChange={(e) => handleSubmitCancelClick(e.value)} 
-                                        options={cancelOrSubmit}
-                                        
-                                    />
-                                </div>
-                            </div>           
-                        </div>
                 </div>
-            </div>    
+            </div>  
+
+            <div className="cancel-submit">
+                <div className="cancel-submit-buttons">
+                    <div className="ageButton">
+                        <SelectButton
+                            value={selectedChoice} 
+                            onChange={(e) => handleSubmitCancelClick(e.value)} 
+                            options={cancelOrSubmit}  
+                        />
+                    </div>
+                </div>           
+            </div>  
         </div>
     );
 }
+
