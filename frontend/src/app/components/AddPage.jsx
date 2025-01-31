@@ -12,6 +12,7 @@ export default function AddPage() {
     const [preview, setPreview] = useState(null);
 
     // Right column state variables
+    const [itemText, setItemText] = useState("");
     const [selectedGarment, setSelectedGarment] = useState("");
     const [selectedTimePeriod, setSelectedTimePeriod] = useState("");
     const [ageSelection, setAgeSelection] = useState(null);
@@ -108,6 +109,10 @@ export default function AddPage() {
         }
     };
 
+    const handleSubmitClick = (value) => {
+        
+    };
+
     return (
         <div className="main">
             <div className="column">
@@ -157,7 +162,11 @@ export default function AddPage() {
                         {/* Item Name Text Entry */}
                         <label htmlFor="textBox"></label>
                         <div className="itemTextBox">
-                            <textarea placeholder=""></textarea>
+                            <textarea placeholder=""
+                            id = "itemTB"
+                            value={textValue}
+                            onChange={setItemText(e.target.value)} // Handle user input>
+                            />
                         </div>
                         
                         {/* ID, Date Added, and Price Text Entries */}
@@ -333,7 +342,7 @@ export default function AddPage() {
                                 <div className="ageButton">
                                     <SelectButton 
                                         value={selectedChoice} 
-                                        onChange={(e) => setSelectedChoice(e.value)} 
+                                        onChange={(e) => handleSubmitClick(e.value)} 
                                         options={cancelOrSubmit}
                                         
                                     />
