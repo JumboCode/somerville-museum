@@ -74,7 +74,7 @@ export default function Inventory() {
         if (selectAllChecked) {
             setSelectedItems([]);
         } else {
-            setSelectedItems(units.slice(startIndex, startIndex + unitsPerPage));
+            setSelectedItems([...units]);
         }
         setSelectAllChecked(!selectAllChecked);
     };
