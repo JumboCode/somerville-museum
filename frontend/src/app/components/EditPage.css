@@ -1,0 +1,446 @@
+.add-page {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.main {
+    width: 100vw;
+    height: 100vh;
+}
+
+.column {
+    width: 100vw;
+    display: flex;
+    left: 0rem;
+    position: absolute;
+    padding-left: 4.5vw;
+}
+
+.title {
+    color: #000;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.left {
+    display: flex;
+    padding-top: 2rem;
+    flex-direction: column;
+    width: 40%;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+.divider {
+    width: 1px;
+    background-color: #9B525F; 
+    height: 100vh;
+    flex-shrink: 0;
+    top: 0;
+}
+
+.right {
+    display: flex;
+    padding-top: 2rem;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 60%;
+    margin-right: 2rem;
+    margin-left: 2rem;
+    margin-bottom: 1rem;
+    gap: 1.5rem;
+}
+
+.garment-type-component {
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.time-period-component {
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+#drop-zone {
+    width: 38vw;
+    height: 30vh;
+    border: 1px solid #9B525F;
+    border-radius: 1px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 1.3rem 0;
+    cursor: pointer;
+    background-color: #FFF;
+    transition: background-color 0.3s, border-color 0.3s;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+}
+
+#drop-zone.dragover {
+    background-color: #b0b0b0;
+    border-color: #9B525F;
+}
+
+.upload-icon {
+    width: 40%;
+}
+
+.preview {
+    margin-top: 10px;
+    max-width: 100%;
+    max-height: 150px;
+}
+
+.garment-and-time {
+    display: flex;
+    width: 100%;
+    gap: 5vw;
+}
+
+.dropdown-component {
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.dropdown-component select {
+    border-radius: 3px;
+    border: 1px solid #9B525F;
+    background: #FFF;
+    width: 50%;
+    padding: 0.5rem;
+}
+
+.itemName {
+    color: #000;
+    font-family: Akatab;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: .4rem;
+}
+
+.itemTextBox textarea{
+    display: flex;
+    padding: .5rem;
+    width: stretch;
+    height: 6vh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1rem;
+    flex: 1 0 0;
+    align-self: stretch;
+    border-radius: .2rem;
+    border: 1px solid #9B525F;
+    background: #FFF;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    resize: none;
+    overflow: hidden;
+    line-height: 4vh;
+    outline: none;
+}
+
+.idName {
+    color: #000;
+    font-family: Akatab;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: .4rem;
+}
+
+.dateName {
+    color: #000;
+    font-family: Akatab;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: .4rem;
+}
+
+.priceName {
+    color: #000;
+    font-family: Akatab;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: .4rem;
+}
+
+.dropdown {
+    border-radius: 3px;
+    border: 1px solid #9B525F;
+    background: #FFF;
+    padding: 0.5rem;
+    width: 100%;
+}
+
+.dropdown select {
+    border-radius: 3px;
+    border: 1px solid #9B525F;
+    background: #FFF;
+    width: stretch;
+}
+
+.p-dropdown-panel {
+    background-color: #FFF !important;
+    border: 1px solid #FFF; /* Optional: adds a subtle border */
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+}
+
+.p-multiselect-panel {
+    background-color: #FFF !important;
+    border: 1px solid #FFF; /* Optional: adds a subtle border */
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+}
+
+.textBoxRow {
+    display: flex;
+    gap: 1.8rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.idTextBox textarea {
+    border-radius: .2rem;
+    border: 1px solid #585555;
+    height: 5vh;
+    width: 8vw;
+    background: #F0F0F0;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    resize: none;
+    overflow: hidden;
+    font-size: 1rem;
+    padding: .35rem;
+    outline: none;
+    /* text-align: center; Centers text horizontally */
+    line-height: 3.5vh; /* Matches the height of the textarea */
+}
+
+.dateTextBox textarea {
+    border-radius: .2rem;
+    border: 1px solid #585555;
+    height: 5vh;
+    width: 13vw;
+    background: #F0F0F0;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    resize: none;
+    overflow: hidden;
+    font-size: 1rem;
+    padding: .35rem;
+    outline: none;
+    /* text-align: center; Centers text horizontally */
+    line-height: 3.5vh; /* Matches the height of the textarea */
+    pointer-events: none; /* Prevents all mouse interactions */
+    user-select: none; /* Disables text selection */
+}
+
+.priceTextBox textarea {
+    border-radius: .2rem;
+    border: 1px solid #9B525F;
+    background: #FFF;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    height: 5vh;
+    width: 13vw;
+    resize: none;
+    overflow: hidden;
+    font-size: 1rem;
+    padding: .35rem;
+    outline: none;
+    /* text-align: center; Centers text horizontally */
+    line-height: 3.5vh; /* Matches the height of the textarea */
+}
+
+.notesName {
+    color: #000;
+    font-family: Akatab;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: .4rem;
+    margin-top: .4rem;
+}
+
+.notesTextBox textarea{
+    border-radius: .2rem;
+    border: 1px solid #9B525F;
+    background: #FFF;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    height: 20vh;
+    width: stretch;
+    resize: none;
+    overflow: hidden;
+    font-size: 1rem;
+    padding: .35rem;
+    outline: none;
+    /* text-align: center; Centers text horizontally */
+    line-height: 3.5vh; /* Matches the height of the textarea */
+}
+
+.button {
+    border-radius: .2rem;
+    border: 1px solid #9B525F;
+    background: #FFF;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+}
+
+.button select {
+    border-radius: .2rem;
+    border: 1px solid #9B525F;
+    background: #9B525F;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+}
+
+.size-buttons {
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.age-and-gender {
+    display: flex;
+    width: 100%;
+    gap: 4rem;
+    margin: 0;
+    padding: 0;
+}
+
+.allAge {
+    width: 33%;
+}
+
+.allGender {
+    display: flex-col;
+    width: 66%;
+}
+
+.ageButtons {
+    display: flex;
+    margin-top: 1rem;
+}
+
+.genderButtons {
+    display: flex;
+    margin-top: 1rem;
+    gap: 1rem;
+}
+
+/* .p-selectbutton {
+     /* Ensures full width inside container */
+
+.p-selectbutton .p-button {
+    display: inline-flex; 
+    /* flex-direction: column; */
+    border-radius: .2rem;
+    border: 1px solid #9B525F;
+    background: #FFF;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    transition: background-color 0.3s ease;
+    gap: 1rem;
+    padding: .5rem;
+    margin-right: .7rem;
+    width: 6rem;
+    height: 3rem;
+}
+
+.ageButton .p-selectbutton .p-button {
+    width: 7rem;
+}
+
+.size-buttons .p-selectbutton .p-button {
+    width: 9rem;
+    margin-right:1.6rem;
+    margin-top: .5rem;
+}
+
+.genderButtons .p-selectbutton .p-button {
+    width: 7rem;
+}
+
+.p-selectbutton .p-button:hover {
+    background-color: #9B525F;
+    color: #ffffff;
+}
+
+
+.condition-component {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.condition-dropdown {
+    padding: 0.5rem;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.color-selector {
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+}
+
+  
+.color-options {
+    display: flex;
+    gap: 0.7rem;
+    margin-top: 0.5rem;
+}
+  
+.color-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    outline: 1px solid transparent;
+    transition: border 0.1s ease-in-out;
+}
+  
+.color-circle.selected {
+    border: 2px solid black !important;
+    transform: scale(1.3);
+}
+
+.selected-text {
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.cancel-submit {
+    display: flex;
+    justify-content: flex-end; 
+}
+
+.cancel-submit-buttons .p-selectbutton .p-button {
+    height: 3rem;
+}
+
+.cancel-submit-buttons {
+    justify-content: right;
+}
