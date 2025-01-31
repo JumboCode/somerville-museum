@@ -11,14 +11,12 @@ export default function AddPage() {
     const [dragOver, setDragOver] = useState(false);
     const [preview, setPreview] = useState(null);
 
-    const [errors, setErrors] = useState({});
-
     // Right column state variables
     const [itemText, setItemText] = useState("");
     const [priceText, setPriceText] = useState("");
     const [notesText, setNotesText] = useState("");
     const [selectedGarment, setSelectedGarment] = useState("");
-    const [selectedTimePeriod, setSelectedTimePeriod] = useState("");
+    const [selectedTimePeriod, setSelectedTimePeriod] = useState([]);
     const [ageSelection, setAgeSelection] = useState(null);
     const [genderSelection, setGenderSelection] = useState(null);
     const [selectedSize, setSelectedSize] = useState([]);
@@ -26,6 +24,9 @@ export default function AddPage() {
     const [condition, setCondition] = useState([]);
     const [selectedColors, setSelectedColors] = useState([]);
     const [selectedChoice, setSelectedChoice] = useState([]);
+
+    // "Overall" state variables
+    const [errors, setErrors] = useState({});
 
     // Define all of the options for buttons and dropdowns
     const garmentOptions = [
@@ -48,7 +49,6 @@ export default function AddPage() {
         { value: "child", label: "Child" },
         { value: "adult", label: "Adult" }
     ];
-    
     const genderOptions = [
         { value: "male", label: "Male" },
         { value: "female", label: "Female" },
@@ -66,7 +66,6 @@ export default function AddPage() {
         { label: "Spring", value: "Spring" },
         { label: "Summer", value: "Summer" }
     ];
-
     const conditions = [
         { name: "Needs repair" },
         { name: "Needs dry cleaning" },
@@ -74,7 +73,6 @@ export default function AddPage() {
         { name: "Not usable" },
         { name: "Great" },
     ]
-
     const colors = [
         { name: "Red", hex: "#FF3B30" },
         { name: "Orange", hex: "#FF9500" },
@@ -199,7 +197,7 @@ export default function AddPage() {
             cost: priceText ? parseInt(priceText, 10) : null, // Convert price to integer
             notes: notesText || null,
             garment_type: selectedGarment || null,
-            time_period: selectedTimePeriod ? [selectedTimePeriod] : null, // Wrap in array if not null
+            time_period: selectedTimePeriod.length > 0 ? selectedTimePeriod : null, // Wrap in array if not null
             age_group: ageSelection || null,
             gender: genderSelection || null,
             size: selectedSize.length > 0 ? selectedSize : null,
@@ -218,9 +216,9 @@ export default function AddPage() {
 
         // Check for missing required fields and set error flags
         if (!newItem.name) newErrors.name = true;
-        if (!newItem.cost) newErrors.cost = true;
+        // if (!newItem.cost) newErrors.cost = true;
         if (!newItem.garment_type) newErrors.garment_type = true;
-        if (!newItem.time_period || newItem.time_period.length === 0) newErrors.time_period = true;
+        if (!newItem.time_period) newErrors.time_period = true;
         if (!newItem.age_group) newErrors.age_group = true;
         if (!newItem.gender) newErrors.gender = true;
         if (!newItem.size) newErrors.size = true;
@@ -239,9 +237,38 @@ export default function AddPage() {
         // If no errors, clear previous errors and proceed
         setErrors({});
 
+        // Convert newItem params to JSON object
+        const body = JSON.stringify(newItem);
+
+        // Send a POST request to the add API with body data
+        console.log(body);
+        const addItemDB = async () => {
+            try {
+                const response = await fetch(`../../api/add`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body,
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Request failed with status ${response.status}`);
+                }
+
+            } catch (error) {
+                console.error("Error adding item:", error);
+                alert("Error adding item. Please try again.");
+                return;
+            }
+        };
+
+        // Call the function to send the API request
+        addItemDB();
+
         alert("Form submitted!");
     };
-    
+
     const handleCancel = () => {
         // Add cancel logic here (e.g., closing a modal)
         alert("Action cancelled.");
@@ -431,7 +458,7 @@ export default function AddPage() {
 
                     {/* Size Buttons */}
                     <div className="size-buttons p-selectbutton">
-                        <h3 className={errors.time_period ? "error-text" : ""}>Size*</h3>
+                        <h3 className={errors.size ? "error-text" : ""}>Size*</h3>
                         {sizes.map((option) => (
                             <button 
                                 key={option.value} 
@@ -461,7 +488,7 @@ export default function AddPage() {
                     {/* Condition Dropdown */}
                     <div className="condition-component">
                         <div className="dropdown-component">
-                            <h3 className={errors.time_period ? "error-text" : ""}>Condition*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3> 
+                            <h3 className={errors.condition ? "error-text" : ""}>Condition*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3> 
                             <MultiSelect
                                 value={condition}
                                 options={conditions}
@@ -479,7 +506,7 @@ export default function AddPage() {
                     {/* Color Selector */}
                     <div className="color-component">
                         <div className="color-dropdown">
-                            <h3 className={errors.time_period ? "error-text" : ""}>Color*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3> 
+                            <h3 className={errors.color ? "error-text" : ""}>Color*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3> 
                             <div className="color-selector">
                                 <div className="color-options">
                                     {colors.map((color) => (
