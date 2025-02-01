@@ -6,21 +6,28 @@ import { Dropdown } from 'primereact/dropdown';
 import { MultiSelect } from 'primereact/multiselect';
 import { SelectButton } from 'primereact/selectbutton';
 
-export default function AddPage() {
+export default function EditPage() {
     // Left column state variables
     const [dragOver, setDragOver] = useState(false);
     const [preview, setPreview] = useState(null);
 
     // Right column state variables
+    const [idText, setIDText] = useState("");
+    const [itemText, setItemText] = useState("");
+    const [priceText, setPriceText] = useState("");
+    const [notesText, setNotesText] = useState("");
     const [selectedGarment, setSelectedGarment] = useState("");
-    const [selectedTimePeriod, setSelectedTimePeriod] = useState("");
-    const [ageSelection, setAgeSelection] = useState(null);
-    const [genderSelection, setGenderSelection] = useState(null);
+    const [selectedTimePeriod, setSelectedTimePeriod] = useState([]);
+    const [ageSelection, setAgeSelection] = useState([]);
+    const [genderSelection, setGenderSelection] = useState([]);
     const [selectedSize, setSelectedSize] = useState([]);
-    const [selectedSeason, setSelectedSeason] = useState(null);
+    const [selectedSeason, setSelectedSeason] = useState([]);
     const [condition, setCondition] = useState([]);
     const [selectedColors, setSelectedColors] = useState([]);
-    const [selectedChoice, setSelectedChoice] = useState([]);
+    const [selectedChoice ] = useState([]);
+
+    // "Overall" state variables
+    const [errors, setErrors] = useState({});
 
     // Define all of the options for buttons and dropdowns
     const garmentOptions = [
@@ -36,19 +43,37 @@ export default function AddPage() {
     const timePeriods = [
         { name: "Post-1920s" },
         { name: "Pre-1700s" },
-        { name: "1750s-1800s" },
-        { name: "1800s-1840s" }
+        { name: "1750s - 1800s" },
+        { name: "1800s - 1840s" }
     ];
-    const ageOptions = ["Youth", "Adult"];
-    const genderOptions = ["Male", "Female", "Unisex"];
+    const ageOptions = [
+        { value: "Youth", label: "Youth" },
+        { value: "Adult", label: "Adult" }
+    ];
+    const genderOptions = [
+        { value: "Male", label: "Male" },
+        { value: "Female", label: "Female" },
+        { value: "Unisex", label: "Unisex" }
+    ];
     const sizes = [
-        { label: "Small", value: "small" },
-        { label: "Medium", value: "medium" },
-        { label: "Large", value: "large" },
-        { label: "X-Large", value: "x-large" }
+        { value: "Small", label: "Small" },
+        { value: "Medium", label: "Medium" },
+        { value: "Large", label: "Large" },
+        { value: "X-Large", label: "X-Large" }
     ];
-    const seasons = ["Fall", "Winter", "Spring", "Summer"];
-    const conditions = ["Needs repair", "Needs dry cleaning", "Needs washing", "Not usable", "Great"];
+    const seasons = [
+        { label: "Fall", value: "Fall" },
+        { label: "Winter", value: "Winter" },
+        { label: "Spring", value: "Spring" },
+        { label: "Summer", value: "Summer" }
+    ];
+    const conditions = [
+        { name: "Needs repair" },
+        { name: "Needs dry cleaning" },
+        { name: "Needs washing" },
+        { name: "Not usable" },
+        { name: "Great" },
+    ]
     const colors = [
         { name: "Red", hex: "#FF3B30" },
         { name: "Orange", hex: "#FF9500" },
@@ -99,13 +124,230 @@ export default function AddPage() {
         handleFileSelect(file);
     };
 
+    // Function to deal with a number input to format as a $ amount
+    const handlePriceChange = (e) => {
+        let value = e.target.value;
+    
+        // Remove any non-numeric characters except dot
+        value = value.replace(/[^0-9.]/g, "");
+    
+        // Ensure only one decimal point
+        const parts = value.split(".");
+        if (parts.length > 2) {
+            value = parts[0] + "." + parts.slice(1).join("");
+        }
+    
+        setPriceText(value ? `$${value}` : "");
+    };
+
+    // Function to format price as currency
+    const formatPrice = () => {
+        if (priceText === "") return;
+    
+        // Convert to a fixed two-decimal format
+        const formattedValue = parseFloat(priceText).toFixed(2);
+    
+        // Check is input is valid before setting state
+        if (!isNaN(formattedValue)) {
+            setPriceText(`$${numericValue.toFixed(2)}`);
+        }
+    };
+    
     // Function to handle color selection
-    const handleSelect = (color) => {
+    const handleColorSelect = (color) => {
+        // If color is already selected, remove it
         if (selectedColors.includes(color)) {
             setSelectedColors(selectedColors.filter((c) => c !== color));
+        // If fewer than 2 colors are selected, add the new color
         } else if (selectedColors.length < 2) {
             setSelectedColors([...selectedColors, color]);
         }
+    };
+
+    const handleConditionSelect = (selectedConditions) => {
+        console.log("Selected conditions:", selectedConditions);
+    
+        // Ensure selectedConditions is always an array
+        if (!Array.isArray(selectedConditions)) {
+            setCondition([]); // Set to empty array if selection is cleared
+            return;
+        }
+    
+        // Extract only names, handling undefined values safely
+        const selectedNames = selectedConditions.map(item => item?.name || "").filter(name => name !== "");
+    
+        // Update state
+        setCondition(selectedNames);
+    };
+
+    const handleTimePeriodSelect = (selectedTimePeriods) => {    
+        // Ensure selectedTimePeriods is always an array
+        if (!Array.isArray(selectedTimePeriods)) {
+            setSelectedTimePeriod([]); // Set to empty array if selection is cleared
+            return;
+        }
+    
+        // Extract only names
+        const selectedNames = selectedTimePeriods.map(item => item?.name || ""); // Avoid undefined errors
+    
+        // Update state
+        setSelectedTimePeriod(selectedNames.filter(name => name !== "")); // Remove any empty values
+    };
+
+    const handleSeasonSelect = (season) => {
+        setSelectedSeason((prevSelected) => {
+            if (prevSelected.includes(season)) {
+                // Remove season if already selected
+                return prevSelected.filter((s) => s !== season);
+            } else if (prevSelected.length < 2) {
+                // Add season if less than 2 are selected
+                return [...prevSelected, season];
+            } else {
+                return prevSelected; // Don't add more than 2
+            }
+        });
+    };
+
+    const handleSubmitCancelClick = (value) => {
+        if (value === "Submit") {
+            console.log("Submitting form...");
+            handleSubmit(); // Call your form submission function
+        } else if (value === "Cancel") {
+            console.log("Cancelling...");
+            handleCancel(); // Call your cancel function
+        }
+    };
+
+    // Fetch data from the API about the item to edit
+    const fetchItemData = async () => {
+        try {
+            const response = await fetch(`/api/edit?id=2`);
+
+            if (!response.ok) {
+                throw new Error('Error fetching data');
+            }
+
+            const data = await response.json();
+            
+            // Parse the JSON response and populate states
+            setIDText(data.id);
+            setItemText(data.name);
+            setPlaceholderDate(data.date_added);
+            setPriceText(data.cost ? `$${data.cost}` : "");
+            setNotesText(data.notes);
+            setSelectedGarment(data.garment_type);
+            setSelectedTimePeriod(data.time_period || []);
+            setAgeSelection(data.age_group || []);
+            setGenderSelection(data.gender || []);
+            setSelectedColors(data.color || []);
+            setSelectedSeason(data.season || []);
+            setSelectedSize(data.size || []);
+            setCondition(data.condition || []);
+
+            console.log("data.id is ", data.id);
+            console.log("idText is ", idText);
+            
+        } catch (error) {
+            console.error('Error fetching item data:', error);
+        }
+    };
+    
+    useEffect(() => {
+        // Prompt user for ID if not already set
+        if (!idText) {
+            const id = prompt("Please enter the ID of the item to edit:");
+            if (!id) {
+                alert("No ID entered. Please try again.");
+                return;
+            }
+            setIDText(id);
+        }
+
+        // Fetch data for the item with the given ID
+        fetchItemData();
+    }, []);
+
+    const handleSubmit = () => {
+        const newItem = {
+            id: idText,
+            name: itemText || null,
+            cost: priceText ? parseInt(priceText.replace('$', ''), 10): null,
+            notes: notesText || null,
+            garment_type: selectedGarment || null,
+            time_period: selectedTimePeriod.length > 0 ? selectedTimePeriod : null, // Wrap in array if not null
+            age_group: ageSelection || null,
+            gender: genderSelection || null,
+            size: selectedSize.length > 0 ? selectedSize : null,
+            season: selectedSeason.length > 0 ? selectedSeason : null, // Wrap in array if not null
+            condition: condition.length > 0 ? condition : null,
+            color: selectedColors.length > 0 ? selectedColors : null,
+            status: "Available", // Default status
+            authenticity_level: null,
+            location: null,
+            date_added: placeholderDate, //is this correct?
+            current_borrower: null,
+            borrow_history: null
+        };
+
+        let newErrors = {}; // Object to store missing fields
+
+        // Check for missing required fields and set error flags
+        if (!newItem.name) newErrors.name = true;
+        if (!newItem.garment_type) newErrors.garment_type = true;
+        if (!newItem.time_period) newErrors.time_period = true;
+        if (!newItem.age_group) newErrors.age_group = true;
+        if (!newItem.gender) newErrors.gender = true;
+        if (!newItem.size) newErrors.size = true;
+        if (!newItem.season) newErrors.season = true;
+        if (!newItem.condition) newErrors.condition = true;
+        if (!newItem.color) newErrors.color = true;
+        if (!newItem.date_added) newErrors.date_added = true;
+
+        // If any errors exist, update state and show alert
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            alert("Please fill out all required fields.");
+            return;
+        }
+
+        // If no errors, clear previous errors and proceed
+        setErrors({});
+
+        // Convert newItem params to JSON object
+        const body = JSON.stringify(newItem);
+
+        // Send a POST request to the add API with body data
+        console.log(body);
+        const addItemDB = async () => {
+            try {
+                const response = await fetch(`../../api/add`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body,
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Request failed with status ${response.status}`);
+                }
+
+            } catch (error) {
+                console.error("Error adding item:", error);
+                alert("Error adding item. Please try again.");
+                return;
+            }
+        };
+
+        // Call the function to send the API request
+        addItemDB();
+
+        alert("Form submitted!");
+    };
+
+    const handleCancel = () => {
+        // Add cancel logic here (e.g., closing a modal)
+        alert("Action cancelled.");
     };
 
     return (
@@ -150,29 +392,38 @@ export default function AddPage() {
                                 />
                             )}
                         </div>
-                        <div className="itemName">
+                        <div className={`itemName ${errors.name ? "error-text" : ""}`}>
                             Item Name*
                         </div>
 
                         {/* Item Name Text Entry */}
                         <label htmlFor="textBox"></label>
                         <div className="itemTextBox">
-                            <textarea placeholder=""></textarea>
+                            <textarea placeholder=""
+                            id = "itemTB"
+                            value={itemText}
+                            onChange={(e) => setItemText(e.target.value)}
+                            />
                         </div>
                         
                         {/* ID, Date Added, and Price Text Entries */}
                         <div className="textBoxRow">
                             <div className="allID">
-                                <div className="idName">
+                                <div className={`idName ${errors.name ? "error-text" : ""}`}>
                                     ID
                                 </div>
                                 <div className="idTextBox">
-                                    <textarea placeholder="1256"></textarea>
+                                    <textarea 
+                                        type="text"
+                                        value={idText}
+                                        placeholder="1256"
+                                        onChange={(e) => setIDText(e.target.value)}
+                                    />
                                 </div>
                             </div>
-                            
+
                             <div className="allDate">
-                                <div className="dateName">
+                                <div className={`dateName ${errors.name ? "error-text" : ""}`}>
                                     Date Added
                                 </div>
                                 <div className="dateTextBox">
@@ -180,21 +431,33 @@ export default function AddPage() {
                                 </div>
                             </div>
                             <div className="allPrice">
-                                <div className="priceName">
+                                <div className={`priceName ${errors.name ? "error-text" : ""}`}>
                                     Price
                                 </div>
-                                <div className="priceTextBox">
-                                    <textarea placeholder=""></textarea>
+                                <div className="priceInput">
+                                <input 
+                                    type="text"
+                                    placeholder="$0.00"
+                                    id="priceTB"
+                                    value={priceText}
+                                    onChange={(e) => handlePriceChange(e)}
+                                    onBlur={formatPrice}
+                                />
                                 </div>
                             </div>
                         </div>
 
-                        <div className="notesName">
+                        <div className={`notesName ${errors.name ? "error-text" : ""}`}>
                             Notes
+                            
                         </div>
 
                         <div className="notesTextBox">
-                            <textarea placeholder="Extra item information not captured by tags (i.e. fabric type, or where it was bought from)."></textarea>
+                            <textarea placeholder="Extra item information not captured by tags (i.e. fabric type, or where it was bought from)."
+                            id = "notesTB"
+                            value={notesText}
+                            onChange={(e) => setNotesText(e.target.value)}
+                            />
                         </div>
                     
                     </div>
@@ -212,7 +475,7 @@ export default function AddPage() {
                     
                         {/* Garment Title and Dropdown */}
                         <div className="dropdown-component">
-                            <h3>Garment Type*</h3>
+                            <h3 className={errors.garment_type ? "error-text" : ""}>Garment Type*</h3>
                             <Dropdown
                                 value={selectedGarment}
                                 options={garmentOptions}
@@ -224,80 +487,99 @@ export default function AddPage() {
 
                         {/* Time Period Title and Dropdown */}
                         <div className="dropdown-component">
-                            <h3>Time Period*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3>                            
+                            <h3 className={errors.time_period ? "error-text" : ""}>Time Period*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3>                            
                                 <MultiSelect
-                                    value={selectedTimePeriod} 
-                                    onChange={(e) => setSelectedTimePeriod(e.value)}
-                                    options={timePeriods} 
+                                    value={timePeriods.filter(period => selectedTimePeriod.includes(period.name))} // Sync selected values
+                                    options={timePeriods}
+                                    onChange={(e) => handleTimePeriodSelect(e.value || [])}
                                     optionLabel="name" 
                                     display="chip" 
-                                    placeholder="Select Time Period" 
                                     maxSelectedLabels={2}
-                                    className="dropdown" 
+                                    placeholder="Select Time Period"
+                                    className="dropdown"
+                                    showSelectAll={false}
                                 />
                         </div>
                     </div>
                     
                     {/* Age and Gender Buttons */}
                     <div className="age-and-gender">
-
                         {/* Age Buttons */}
                         <div className="allAge">
-                            <h3>Age Group*</h3>
-                            <div className="ageButtons">
-                                <SelectButton
-                                    value={ageSelection} 
-                                    options={ageOptions}
-                                    onChange={(e) => setAgeSelection(e.value)} 
-                                    ariaLabel="Age Selection" 
-                                    classname="ageButtons"
-                                />
+                            <h3 className={errors.age_group ? "error-text" : ""}>Age Group*</h3>
+                            <div className="ageButtons p-selectbutton">
+                                {ageOptions.map((option) => (
+                                    <button
+                                        key={option.value}
+                                        className={`p-button ${ageSelection === option.value ? "selected" : ""}`}
+                                        onClick={() => setAgeSelection(option.value)}
+                                    >
+                                        {option.label}
+                                    </button>
+                                ))}
                             </div>
                         </div>
 
                         {/* Gender Buttons */}
                         <div className="allGender">
-                            <h3>Gender*</h3>
-                            <div className="genderButtons">
-                                    <SelectButton 
-                                        value={genderSelection} 
-                                        options={genderOptions}
-                                        onChange={(e) => setGenderSelection(e.value)} 
-                                        ariaLabel="Gender Selection" 
-                                    />
+                            <h3 className={errors.gender ? "error-text" : ""}>Gender*</h3>
+                            <div className="genderButtons p-selectbutton">
+                                {genderOptions.map((option) => (
+                                    <button
+                                        key={option.value}
+                                        className={`p-button ${genderSelection === option.value ? "selected" : ""}`}
+                                        onClick={() => setGenderSelection(option.value)}
+                                    >
+                                        {option.label}
+                                    </button>
+                                ))}
                             </div>
                         </div>
                     </div>
 
                     {/* Size Buttons */}
-                    <div className="size-buttons">
-                        <h3>Size*</h3>
-                        <SelectButton 
-                            value={selectedSize} 
-                            onChange={(e) => setSelectedSize(e.value)} 
-                            options={sizes} 
-                        />
+                    <div className="size-buttons p-selectbutton">
+                        <h3 className={errors.size ? "error-text" : ""}>Size*</h3>
+                        {sizes.map((option) => (
+                            <button 
+                                key={option.value} 
+                                className={`p-button ${selectedSize === option.value ? "selected" : ""}`}
+                                onClick={() => setSelectedSize(option.value)}
+                                >
+                                    {option.label} 
+                            </button>
+                        ))}
                     </div>
 
-                    {/* Season Buttons */}
-                    <div className="size-buttons">
-                        <h3>Season*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3> 
-                        <SelectButton 
-                            value={selectedSeason} 
-                            onChange={(e) => setSelectedSeason(e.value)} 
-                            options={seasons} />
+                    <div className="season-buttons p-selectbutton">
+                        <h3 className={errors.season ? "error-text" : ""}>
+                            Season* <span style={{ fontWeight: "400" }}> (Max of 2)</span>
+                        </h3>
+                        {seasons.map((option) => (
+                            <button
+                                key={option.value}
+                                className={`p-button ${selectedSeason.includes(option.value) ? "selected" : ""}`}
+                                onClick={() => handleSeasonSelect(option.value)}
+                            >
+                                {option.label}
+                            </button>
+                        ))}
                     </div>
 
                     {/* Condition Dropdown */}
                     <div className="condition-component">
                         <div className="dropdown-component">
-                            <h3>Condition*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3> 
-                            <Dropdown
-                                value={condition}
-                                options={conditions}
-                                onChange={(e) => setCondition(e.value)}
-                                placeholder="Select Condition"
-                                className="dropdown"
+                            <h3 className={errors.condition ? "error-text" : ""}>Condition*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3> 
+                            <MultiSelect
+                                value={conditions.filter(cond => condition.includes(cond.name))} // Sync selected values
+    options={conditions}
+    onChange={(e) => handleConditionSelect(e.value || [])} // Ensure `e.value` is never undefined
+    optionLabel="name" 
+    display="chip" 
+    maxSelectedLabels={2}
+    placeholder="Select Condition"
+    className="dropdown"
+    showSelectAll={false}
                             />
                         </div>
                     </div>
@@ -305,7 +587,7 @@ export default function AddPage() {
                     {/* Color Selector */}
                     <div className="color-component">
                         <div className="color-dropdown">
-                            <h3>Color*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3> 
+                            <h3 className={errors.color ? "error-text" : ""}>Color*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3> 
                             <div className="color-selector">
                                 <div className="color-options">
                                     {colors.map((color) => (
@@ -316,7 +598,7 @@ export default function AddPage() {
                                         backgroundColor: color.hex,
                                         border: color.border ? `2px solid ${color.border}` : "none",
                                         }}
-                                        onClick={() => handleSelect(color.name)}
+                                        onClick={() => handleColorSelect(color.name)}
                                     ></div>
                                     ))}
                                 </div>
@@ -327,21 +609,21 @@ export default function AddPage() {
                             
                         </div>
                     </div>
-
-                        <div className="cancel-submit">
-                            <div className="cancel-submit-buttons">
-                                <div className="ageButton">
-                                    <SelectButton 
-                                        value={selectedChoice} 
-                                        onChange={(e) => setSelectedChoice(e.value)} 
-                                        options={cancelOrSubmit}
-                                        
-                                    />
-                                </div>
-                            </div>           
-                        </div>
                 </div>
-            </div>    
+            </div>  
+
+            <div className="cancel-submit">
+                <div className="cancel-submit-buttons">
+                    <div className="ageButton">
+                        <SelectButton
+                            value={selectedChoice} 
+                            onChange={(e) => handleSubmitCancelClick(e.value)} 
+                            options={cancelOrSubmit}  
+                        />
+                    </div>
+                </div>           
+            </div>  
         </div>
     );
 }
+
