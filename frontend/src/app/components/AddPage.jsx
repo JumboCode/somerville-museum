@@ -12,6 +12,7 @@ export default function AddPage() {
     const [preview, setPreview] = useState(null);
 
     // Right column state variables
+    const [idText, setIDText] = useState("");
     const [itemText, setItemText] = useState("");
     const [priceText, setPriceText] = useState("");
     const [notesText, setNotesText] = useState("");
@@ -151,13 +152,9 @@ export default function AddPage() {
             setPriceText(`$${numericValue.toFixed(2)}`);
         }
     };
-
-    const handleTimePeriodSelect= (value) => {
-        setSelectedTimePeriod(value);
-    };
-
+    
     // Function to handle color selection
-    const handleSelect = (color) => {
+    const handleColorSelect = (color) => {
         // If color is already selected, remove it
         if (selectedColors.includes(color)) {
             setSelectedColors(selectedColors.filter((c) => c !== color));
@@ -165,6 +162,36 @@ export default function AddPage() {
         } else if (selectedColors.length < 2) {
             setSelectedColors([...selectedColors, color]);
         }
+    };
+
+    const handleConditionSelect = (selectedConditions) => {
+        console.log("Selected conditions:", selectedConditions);
+    
+        // Ensure selectedConditions is always an array
+        if (!Array.isArray(selectedConditions)) {
+            setCondition([]); // Set to empty array if selection is cleared
+            return;
+        }
+    
+        // Extract only names, handling undefined values safely
+        const selectedNames = selectedConditions.map(item => item?.name || "").filter(name => name !== "");
+    
+        // Update state
+        setCondition(selectedNames);
+    };
+
+    const handleTimePeriodSelect = (selectedTimePeriods) => {    
+        // Ensure selectedTimePeriods is always an array
+        if (!Array.isArray(selectedTimePeriods)) {
+            setSelectedTimePeriod([]); // Set to empty array if selection is cleared
+            return;
+        }
+    
+        // Extract only names
+        const selectedNames = selectedTimePeriods.map(item => item?.name || ""); // Avoid undefined errors
+    
+        // Update state
+        setSelectedTimePeriod(selectedNames.filter(name => name !== "")); // Remove any empty values
     };
 
     const handleSeasonSelect = (season) => {
@@ -193,15 +220,16 @@ export default function AddPage() {
 
     const handleSubmit = () => {
         const newItem = {
+            id: idText,
             name: itemText || null,
-            cost: priceText ? parseInt(priceText, 10) : null, // Convert price to integer
+            cost: priceText ? parseInt(priceText.replace('$', ''), 10): null,
             notes: notesText || null,
             garment_type: selectedGarment || null,
             time_period: selectedTimePeriod.length > 0 ? selectedTimePeriod : null, // Wrap in array if not null
             age_group: ageSelection || null,
             gender: genderSelection || null,
             size: selectedSize.length > 0 ? selectedSize : null,
-            season: selectedSeason.length > 0 ? [selectedSeason] : null, // Wrap in array if not null
+            season: selectedSeason.length > 0 ? selectedSeason : null, // Wrap in array if not null
             condition: condition.length > 0 ? condition : null,
             color: selectedColors.length > 0 ? selectedColors : null,
             status: "Available", // Default status
@@ -216,7 +244,6 @@ export default function AddPage() {
 
         // Check for missing required fields and set error flags
         if (!newItem.name) newErrors.name = true;
-        // if (!newItem.cost) newErrors.cost = true;
         if (!newItem.garment_type) newErrors.garment_type = true;
         if (!newItem.time_period) newErrors.time_period = true;
         if (!newItem.age_group) newErrors.age_group = true;
@@ -337,10 +364,14 @@ export default function AddPage() {
                                     ID
                                 </div>
                                 <div className="idTextBox">
-                                    <textarea placeholder="1256"></textarea>
+                                    <textarea 
+                                        type="text"
+                                        placeholder="1256"
+                                        onChange={(e) => setIDText(e.target.value)}
+                                    />
                                 </div>
                             </div>
-                            
+
                             <div className="allDate">
                                 <div className={`dateName ${errors.name ? "error-text" : ""}`}>
                                     Date Added
@@ -408,13 +439,13 @@ export default function AddPage() {
                         <div className="dropdown-component">
                             <h3 className={errors.time_period ? "error-text" : ""}>Time Period*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3>                            
                                 <MultiSelect
-                                    value={selectedTimePeriod} 
-                                    onChange={(e) => handleTimePeriodSelect(e.value)}
-                                    options={timePeriods} 
+                                    value={timePeriods.filter(period => selectedTimePeriod.includes(period.name))} // Sync selected values
+                                    options={timePeriods}
+                                    onChange={(e) => handleTimePeriodSelect(e.value || [])}
                                     optionLabel="name" 
                                     display="chip" 
-                                    placeholder="Select Time Period" 
                                     maxSelectedLabels={2}
+                                    placeholder="Select Time Period"
                                     className="dropdown"
                                     showSelectAll={false}
                                 />
@@ -490,15 +521,15 @@ export default function AddPage() {
                         <div className="dropdown-component">
                             <h3 className={errors.condition ? "error-text" : ""}>Condition*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3> 
                             <MultiSelect
-                                value={condition}
-                                options={conditions}
-                                onChange={(e) => setCondition(e.value)}
-                                optionLabel="name" 
-                                display="chip" 
-                                maxSelectedLabels={2}
-                                placeholder="Select Condition"
-                                className="dropdown"
-                                showSelectAll={false}
+                                value={conditions.filter(cond => condition.includes(cond.name))} // Sync selected values
+    options={conditions}
+    onChange={(e) => handleConditionSelect(e.value || [])} // Ensure `e.value` is never undefined
+    optionLabel="name" 
+    display="chip" 
+    maxSelectedLabels={2}
+    placeholder="Select Condition"
+    className="dropdown"
+    showSelectAll={false}
                             />
                         </div>
                     </div>
@@ -517,7 +548,7 @@ export default function AddPage() {
                                         backgroundColor: color.hex,
                                         border: color.border ? `2px solid ${color.border}` : "none",
                                         }}
-                                        onClick={() => handleSelect(color.name)}
+                                        onClick={() => handleColorSelect(color.name)}
                                     ></div>
                                     ))}
                                 </div>
