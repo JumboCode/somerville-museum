@@ -182,7 +182,7 @@ export default function Inventory() {
                     <div className="num-items">
                         <p className="view">View </p>
                         <select className="select-num" id="select-num" onChange={handleUnitsPerPageChange}>
-                            <option value="10">15</option>
+                            <option value="15">15</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
                             <option value="100">100</option>
