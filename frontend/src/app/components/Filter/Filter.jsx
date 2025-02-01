@@ -1,17 +1,71 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './Filter.css';
+import { useFilterContext } from "../contexts/FilterContext.js" 
 import Calendar from '../../assets/Calendar.jsx';
 import Reset from '../../assets/Reset.jsx';
 import Dropdown from '../../assets/Dropdown.jsx';
+
 import CalendarPicker from '../Calendar/CalendarPicker.jsx';
 
 const FilterComponent = ({ isVisible, onClose, className }) => {
+    const { selectedFilters, setSelectedFilters } = useFilterContext();
+    const fields = {
+        // Status: {
+        //     options: ["Available", "Overdue", "Borrowed", "Missing"]
+        // },
+        Condition: {
+            options: ["Great", "Needs washing", "Needs repair", "Needs dry cleaning", "Not usable"]
+        }, 
+        Gender: {
+            options: ["Male", "Female", "Unisex"]
+        }, 
+        Color: {
+            options: ["Red", "Black", "Blue", "Green", "Purple", "Yellow", "Pink", "Gray", "Brown", "Orange", "White"]
+        }, 
+        Type: {
+            options: ["Winter", "Summer", "Spring", "Fall"]
+        }, 
+        Size: {
+            options: ["One Size", "Small", "Medium", "Large"]
+        }, 
+        Time_Period: {
+            options: ["1800s - 1840s", "1750s - 1800s", "Post-1910s", "Pre-1700s"]
+        },
+        // Season: {
+        //     options: ["Winter", "Summer", "Spring", "Fall"]
+        // } 
+    };
+    const checkboxFields = {
+        Status: {
+            options: ["Available", "Overdue", "Borrowed", "Missing"]
+        },
+        Season: {
+            options: ["Winter", "Summer", "Spring", "Fall"]
+        } 
+    }
+    // Initialize an object to all "" for filtering later on on the backend
+    let baseOptions = {}
+    Object.keys(fields).map((key) => {
+        baseOptions = {...baseOptions, [key.toLowerCase()]: "NOT NULL"}
+    })
+
+    baseOptions = {
+        ...baseOptions,
+        status: "NOT NULL",
+        season: "NOT NULL",
+        return_date: "NOT NULL"
+    }
     const [openDropdowns, setOpenDropdowns] = useState({});
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const [selectedDate, setSelectedDate] = useState('Select...');
-    const [selectedOptions, setSelectedOptions] = useState({});
+    const [selectedOptions, setSelectedOptions] = useState(baseOptions);
     const dropdownRefs = useRef({});
+    const checkboxRefs = useRef({});
 
+
+    useEffect(() => {
+        setSelectedFilters(selectedOptions);
+    }, [selectedOptions]);
     // Close dropdowns when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -25,7 +79,7 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
-
+    
     const toggleDropdown = (label) => {
         setOpenDropdowns(prev => ({
             ...prev,
@@ -35,15 +89,27 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
 
     const handleDateSelect = (date) => {
         setSelectedDate(date);
+        setSelectedOptions((curr) => ({
+            ...curr, return_date: date
+        }))
     };
 
     const handleOptionSelect = (label, option) => {
+        const formattedLabel = label.toLowerCase().replaceAll(" ", "_");
+        // Due to the asynchronous behavior of setState, make the api call in toggleDropdown to get filters
         setSelectedOptions(prev => ({
             ...prev,
-            [label]: option
+            [formattedLabel]: option
         }));
         toggleDropdown(label);
     };
+
+    const updateCheckboxes = (field) => (e) => {
+		setSelectedOptions((current) => ({
+			...current,
+			[field]: (e.target.checked) ? e.target.checked : "",
+		}));
+	};
 
     return (
         <div className={`filter-component ${isVisible ? 'visible' : ''} ${className}`}>
@@ -51,16 +117,19 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
                 <div className="filter-section">
                     <h2>Status</h2>
                     <div className="status-grid">
-                        <label><input type="checkbox" />Available</label>
-                        <label><input type="checkbox" />Overdue</label>
-                        <label><input type="checkbox" />Borrowed</label>
-                        <label><input type="checkbox" />Missing</label>
+                        <label><input type="checkbox" value={selectedOptions?.available || false} onClick={updateCheckboxes("status")}/>Available</label>
+                        <label><input type="checkbox" value={selectedOptions?.overdue || false} onClick={updateCheckboxes("overdue")}/>Overdue</label>
+                        <label><input type="checkbox" value={selectedOptions?.borrowed || false} onClick={updateCheckboxes("borrowed")}/>Borrowed</label>
+                        <label><input type="checkbox" value={selectedOptions?.missing || false} onClick={updateCheckboxes("missing")}/>Missing</label>
                     </div>
                 </div>
+                
 
-                {['Condition', 'Gender', 'Color', 'Type', 'Size', 'Time Period'].map((label) => (
+                {Object.keys(fields).map((label) => {
+                    let currLabel = selectedOptions[label.toLowerCase().replaceAll(" ", "_")];
+                    return (
                     <div key={label} className="filter-section">
-                        <h2>{label}</h2>
+                        <h2>{label.replaceAll("_", " ")}</h2>
                         <div 
                             className="custom-select"
                             ref={el => dropdownRefs.current[label] = el}
@@ -69,19 +138,19 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
                                 className={`select-box ${openDropdowns[label] ? 'active' : ''}`}
                                 onClick={() => toggleDropdown(label)}
                             >
-                                <span>{selectedOptions[label] || 'Select...'}</span>
+                                <span>{ (currLabel == "NOT NULL") ? 'Select...' : currLabel}</span>
                                 <Dropdown className={`dropdown-icon ${openDropdowns[label] ? 'rotated' : ''}`} />
                             </div>
                             {openDropdowns[label] && (
-                                <ul className="dropdown-options">
-                                    <li onClick={() => handleOptionSelect(label, 'Option 1')}>Option 1</li>
-                                    <li onClick={() => handleOptionSelect(label, 'Option 2')}>Option 2</li>
-                                    <li onClick={() => handleOptionSelect(label, 'Option 3')}>Option 3</li>
+                                <ul className='dropdown-options'>
+                                    {fields[label].options.map((option) => (
+                                        <li onClick={() => handleOptionSelect(label, option)}>{option}</li>
+                                    ))}
                                 </ul>
                             )}
                         </div>
                     </div>
-                ))}
+                )})}
 
                 <div className="filter-section">
                     <h2>Season</h2>
@@ -111,11 +180,12 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
                         />
                     </div>
                 </div>
-
+                <div>
                 <button className="reset-button">
                     <Reset />
                     <p>Reset</p>
                 </button>
+                </div>
             </div>
         </div>
     );
