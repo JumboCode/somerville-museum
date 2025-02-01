@@ -6,6 +6,7 @@ export default async function handler(req, res) {
     }
 
     try {
+        // Desctructure the request body
         const {
             id,
             name,
@@ -24,7 +25,7 @@ export default async function handler(req, res) {
             location,
             date_added,
             current_borrower,
-            borrow_history = {}  // Default to empty object for JSONB
+            borrow_history = {}
         } = req.body;
 
         if (!id) {
@@ -38,9 +39,11 @@ export default async function handler(req, res) {
         );
         const idExists = idExistsResult.rows[0].exists;
 
+        // Define the result variable
         let result;
+
+        // If the ID exists, update the existing entry
         if (idExists) {
-            // If the ID exists, update the existing entry
             result = await query(
                 `UPDATE dummy_data 
                 SET name = $2,

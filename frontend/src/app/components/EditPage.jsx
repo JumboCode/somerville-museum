@@ -227,6 +227,9 @@ export default function EditPage() {
 
     // Fetch data from the API about the item to edit
     const retrieveItem = async () => {
+        setStatusMessage("Retrieving item data...");
+        setStatusType("neutral");
+
         if (!idText) {
             setStatusMessage("Error: No ID set.");
             setStatusType("error");
@@ -270,6 +273,10 @@ export default function EditPage() {
             setStatusMessage("Error fetching item data. Please try again.");
             setStatusType("error");
         }
+
+        // Reset status message after retrieval
+        setStatusMessage("");
+        setStatusType("neutral");
     };
     
     useEffect(() => {
