@@ -51,7 +51,7 @@
     width: 60%;
     margin-right: 2rem;
     margin-left: 2rem;
-    margin-bottom: 1rem;
+    margin-bottom: 4rem;
     gap: 1.5rem;
 }
 
@@ -117,7 +117,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    gap: 10px;
+    line-height: 2.3rem;
 }
 
 .dropdown-component select {
@@ -195,10 +195,13 @@
     background: #FFF;
     padding: 0.5rem;
     width: 100%;
+    height: 3.5rem;
+    margin-top: 0.6rem;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
 }
 
 .dropdown select {
-    border-radius: 3px;
+    /* border-radius: 3px; */
     border: 1px solid #9B525F;
     background: #FFF;
     width: stretch;
@@ -206,15 +209,132 @@
 
 .p-dropdown-panel {
     background-color: #FFF !important;
-    border: 1px solid #FFF; /* Optional: adds a subtle border */
+    border: 1px solid #9B525F;
     box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+}
+
+
+.p-dropdown-item {
+    padding: 0.5rem;
+    background-color: #FFF;
+    border-bottom: 1px solid #DBDBDB;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 0;
+}
+
+.p-dropdown-item:hover {
+    background-color: #efd4da;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out !important;
+}
+
+.p-multiselect-item:hover {
+    background-color: #efd4da;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out !important;
 }
 
 .p-multiselect-panel {
     background-color: #FFF !important;
-    border: 1px solid #FFF; /* Optional: adds a subtle border */
+    border: 1px solid #9B525F;
     box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    color: #FFF !important;
 }
+
+.p-multiselect-token {
+    color: #FFFFFF !important;
+    background-color: #9B525F !important;
+    border-radius: 0.2rem;
+    padding: 0.8rem;
+    font-size: 1rem;
+    height: 3.5vh;
+    margin-right: 0.4rem;
+    gap: 0.4rem;
+}
+
+.p-multiselect-token-label {
+    color: #FFFFFF !important;
+    cursor: pointer;
+}
+
+.p-chips-token .p-chips-token-icon {
+    color: white !important;
+}
+
+.p-multiselect-label-container {
+    justify-content: center;
+    line-height: 2.3rem;
+}
+
+.p-multiselect-item {
+    background-color: #fff;
+    padding: 0.5rem;
+    border-top: 1px solid #DBDBDB;
+    border-radius: 0rem;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+
+.p-multiselect-header {
+    display: none !important;
+}
+/* Hide the default checkbox */
+.p-checkbox input[type="checkbox"] {
+    opacity: 0;
+    position: absolute;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/* .p-checkbox {
+    border: 1px solid #9B525F;
+    width: 1rem;
+    height: 1rem;
+} */
+
+.p-checkbox-icon .p-highlight {
+    background-color: #FFF;
+    transition: background-color 0.4s ease-in-out, border-color 0.4s ease-in-out !important;
+}
+
+/* Ensure the checkbox container is visible */
+.p-multiselect .p-multiselect-items .p-multiselect-item .p-checkbox {
+    display: flex !important;
+    align-items: center !important;
+    border: 1px solid #9B525F;
+}
+
+/* Style the checkbox box */
+.p-checkbox-box {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    border: 2px solid #9B525F !important; /* Dark red border */
+    border-radius: 0.25rem !important; /* Rounded corners */
+    background-color: #FFF; /* Default background color */
+    transition: background-color 0.4s ease-in-out, border-color 0.4s ease-in-out !important;
+}
+
+.p-multiselect .p-multiselect-items .p-multiselect-item .p-checkbox .p-checkbox-box.p-highlight {
+    background-color: #9B525F !important; /* Dark red background when checked */
+    border-color: #9B525F !important; /* Optional: Match border color to background */
+}
+
+/* Checkmark color */
+.p-multiselect .p-multiselect-items .p-multiselect-item .p-checkbox .p-checkbox-box.p-highlight .p-checkbox-icon {
+    color: #FFF !important; /* White checkmark for contrast */
+}
+
+.p-highlight {
+    background: #f7e6e9;
+    transition: background 0.1s ease-in-out, border-color 0.1s ease-in-out !important;
+}
+
+
 
 .textBoxRow {
     display: flex;
@@ -235,8 +355,7 @@
     font-size: 1rem;
     padding: .35rem;
     outline: none;
-    /* text-align: center; Centers text horizontally */
-    line-height: 3.5vh; /* Matches the height of the textarea */
+    line-height: 3.5vh;
 }
 
 .dateTextBox textarea {
@@ -257,7 +376,7 @@
     user-select: none; /* Disables text selection */
 }
 
-.priceTextBox textarea {
+.priceInput input {
     border-radius: .2rem;
     border: 1px solid #9B525F;
     background: #FFF;
@@ -269,8 +388,7 @@
     font-size: 1rem;
     padding: .35rem;
     outline: none;
-    /* text-align: center; Centers text horizontally */
-    line-height: 3.5vh; /* Matches the height of the textarea */
+    line-height: 3.5vh;
 }
 
 .notesName {
@@ -296,8 +414,7 @@
     font-size: 1rem;
     padding: .35rem;
     outline: none;
-    /* text-align: center; Centers text horizontally */
-    line-height: 3.5vh; /* Matches the height of the textarea */
+    line-height: 3.5vh;
 }
 
 .button {
@@ -317,7 +434,6 @@
 .size-buttons {
     justify-content: center;
     align-items: flex-start;
-    gap: 1rem;
 }
 
 .age-and-gender {
@@ -339,52 +455,64 @@
 
 .ageButtons {
     display: flex;
-    margin-top: 1rem;
+    margin-top: 0.6rem;
 }
 
 .genderButtons {
     display: flex;
-    margin-top: 1rem;
-    gap: 1rem;
+    margin-top: 0.6rem;
 }
-
-/* .p-selectbutton {
-     /* Ensures full width inside container */
 
 .p-selectbutton .p-button {
     display: inline-flex; 
-    /* flex-direction: column; */
-    border-radius: .2rem;
+    border-radius: 0.2rem;
     border: 1px solid #9B525F;
     background: #FFF;
-    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
-    transition: background-color 0.3s ease;
+    box-shadow: 0px 0.1rem 0.2rem 0px rgba(0, 0, 0, 0.25);
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     gap: 1rem;
-    padding: .5rem;
-    margin-right: .7rem;
-    width: 6rem;
-    height: 3rem;
-}
-
-.ageButton .p-selectbutton .p-button {
+    padding: 0.5rem;
+    margin-right: 1.3rem;
     width: 7rem;
+    height: 3rem;
+    cursor: pointer;
+    justify-content: center;
+    font-size: 16px;
 }
 
-.size-buttons .p-selectbutton .p-button {
-    width: 9rem;
-    margin-right:1.6rem;
-    margin-top: .5rem;
+.ageButtons .p-selectbutton .p-button {
+    width: 7rem;
 }
 
 .genderButtons .p-selectbutton .p-button {
     width: 7rem;
 }
 
-.p-selectbutton .p-button:hover {
-    background-color: #9B525F;
-    color: #ffffff;
+.size-buttons > h3,
+.season-buttons > h3 {
+    display: block;
+    margin-bottom: 0.6rem !important;
 }
 
+.p-selectbutton .p-button.selected {
+    background-color: #9B525F !important;
+    color: white !important;
+    border: 2px solid #7B3F4C;
+}
+
+.p-selectbutton .p-button:hover:not(.selected) {
+    background-color: #d17a88;
+    color: black;
+}
+
+.p-selectbutton .p-button:focus {
+    outline: none;
+}
+
+.p-selectbutton .p-button span {
+    margin: auto;
+    text-align: center;
+}
 
 .condition-component {
     display: flex;
@@ -406,7 +534,6 @@
     font-family: Arial, sans-serif;
 }
 
-  
 .color-options {
     display: flex;
     gap: 0.7rem;
@@ -434,13 +561,39 @@
 
 .cancel-submit {
     display: flex;
-    justify-content: flex-end; 
+    justify-content: flex-end;
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    z-index: 1000;
+}
+
+.cancel-submit-buttons {
+    display: flex;
+    justify-content: flex-end;
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    z-index: 1000;
+    gap: 0.625rem;
 }
 
 .cancel-submit-buttons .p-selectbutton .p-button {
     height: 3rem;
 }
 
-.cancel-submit-buttons {
-    justify-content: right;
+.error-text {
+    color: red;
+    font-weight: bold;
+}
+
+.p-multiselect .p-multiselect-trigger {
+    transition: transform 0.3s ease-in-out;
+    transform: rotate(0deg); /* Default: arrow pointing down */
+}
+
+/* Rotate the arrow when the dropdown is open */
+.p-multiselect.p-focus .p-multiselect-trigger,
+.p-multiselect.p-multiselect-open .p-multiselect-trigger {
+    transform: rotate(180deg); /* Arrow points up when expanded */
 }
