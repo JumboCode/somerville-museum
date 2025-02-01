@@ -47,7 +47,7 @@ export default function AddPage() {
         { name: "1800s-1840s" }
     ];
     const ageOptions = [
-        { value: "child", label: "Child" },
+        { value: "youth", label: "Youth" },
         { value: "adult", label: "Adult" }
     ];
     const genderOptions = [
