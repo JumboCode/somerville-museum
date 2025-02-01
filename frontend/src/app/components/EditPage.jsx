@@ -24,10 +24,12 @@ export default function EditPage() {
     const [selectedSeason, setSelectedSeason] = useState([]);
     const [condition, setCondition] = useState([]);
     const [selectedColors, setSelectedColors] = useState([]);
-    const [selectedChoice ] = useState([]);
 
     // "Overall" state variables
+    const [selectedChoice ] = useState([]);
     const [errors, setErrors] = useState({});
+    const [statusMessage, setStatusMessage] = useState("");
+    const [statusType, setStatusType] = useState("");
 
     // Define all of the options for buttons and dropdowns
     const garmentOptions = [
@@ -105,8 +107,11 @@ export default function EditPage() {
             const reader = new FileReader();
             reader.onload = (e) => setPreview(e.target.result);
             reader.readAsDataURL(file);
+            setStatusMessage("Image uploaded successfully.");
+            setStatusType("success");
         } else {
-            alert("Please upload a valid image file.");
+            setStatusMessage("Error: Invalid file type. Please upload an image.");
+            setStatusType("error");
         }
     };
 
@@ -143,7 +148,7 @@ export default function EditPage() {
     // Function to format price as currency
     const formatPrice = () => {
         if (priceText === "") return;
-    
+
         // Convert to a fixed two-decimal format
         const formattedValue = parseFloat(priceText).toFixed(2);
     
@@ -169,7 +174,7 @@ export default function EditPage() {
     
         // Ensure selectedConditions is always an array
         if (!Array.isArray(selectedConditions)) {
-            setCondition([]); // Set to empty array if selection is cleared
+            setCondition([]);
             return;
         }
     
@@ -183,15 +188,15 @@ export default function EditPage() {
     const handleTimePeriodSelect = (selectedTimePeriods) => {    
         // Ensure selectedTimePeriods is always an array
         if (!Array.isArray(selectedTimePeriods)) {
-            setSelectedTimePeriod([]); // Set to empty array if selection is cleared
+            setSelectedTimePeriod([]);
             return;
         }
     
         // Extract only names
-        const selectedNames = selectedTimePeriods.map(item => item?.name || ""); // Avoid undefined errors
+        const selectedNames = selectedTimePeriods.map(item => item?.name || "");
     
         // Update state
-        setSelectedTimePeriod(selectedNames.filter(name => name !== "")); // Remove any empty values
+        setSelectedTimePeriod(selectedNames.filter(name => name !== ""));
     };
 
     const handleSeasonSelect = (season) => {
@@ -203,33 +208,49 @@ export default function EditPage() {
                 // Add season if less than 2 are selected
                 return [...prevSelected, season];
             } else {
-                return prevSelected; // Don't add more than 2
+                return prevSelected; 
             }
         });
     };
 
     const handleSubmitCancelClick = (value) => {
         if (value === "Submit") {
-            console.log("Submitting form...");
-            handleSubmit(); // Call your form submission function
+            setStatusMessage("Updating...");
+            setStatusType("neutral");
+            handleSubmit();
         } else if (value === "Cancel") {
-            console.log("Cancelling...");
-            handleCancel(); // Call your cancel function
+            setStatusMessage("Action canceled.");
+            setStatusType("neutral");
+            resetForm();
         }
     };
 
     // Fetch data from the API about the item to edit
-    const fetchItemData = async () => {
+    const retrieveItem = async () => {
+        if (!idText) {
+            setStatusMessage("Error: No ID set.");
+            setStatusType("error");
+            return;
+        }
+    
         try {
-            const response = await fetch(`/api/edit?id=2`);
-
+            const response = await fetch(`/api/retrieveItem?id=${idText}`);
+    
+            // Custom error handling for no item found
+            if (response.status === 428) {
+                setStatusMessage("Error: Item ID does not exist.");
+                setStatusType("error");
+                return;
+            }
+    
             if (!response.ok) {
                 throw new Error('Error fetching data');
             }
-
+    
+            // Parse response as JSON
             const data = await response.json();
-            
-            // Parse the JSON response and populate states
+    
+            // Populate state with retrieved data
             setIDText(data.id);
             setItemText(data.name);
             setPlaceholderDate(data.date_added);
@@ -243,55 +264,64 @@ export default function EditPage() {
             setSelectedSeason(data.season || []);
             setSelectedSize(data.size || []);
             setCondition(data.condition || []);
-
-            console.log("data.id is ", data.id);
-            console.log("idText is ", idText);
-            
+    
         } catch (error) {
             console.error('Error fetching item data:', error);
+            setStatusMessage("Error fetching item data. Please try again.");
+            setStatusType("error");
         }
     };
     
     useEffect(() => {
         // Prompt user for ID if not already set
         if (!idText) {
-            const id = prompt("Please enter the ID of the item to edit:");
-            if (!id) {
-                alert("No ID entered. Please try again.");
-                return;
-            }
+            let id;
+
+            // Keep prompting until a valid ID is entered
+            do {
+                id = prompt("Please enter the ID of the item to edit:");
+                if (id === null) {
+                    alert("ID entry canceled. Reload the page to try again.");
+                    return;
+                }
+                id = id.trim();
+            } while (!id);
+    
             setIDText(id);
         }
-
-        // Fetch data for the item with the given ID
-        fetchItemData();
-    }, []);
+    
+        // Fetch data for the item with the given ID only if it's set
+        if (idText) {
+            retrieveItem();
+        }
+    }, [idText]);
+    
 
     const handleSubmit = () => {
         const newItem = {
             id: idText,
             name: itemText || null,
-            cost: priceText ? parseInt(priceText.replace('$', ''), 10): null,
+            cost: priceText ? parseInt(priceText.replace('$', ''), 10) : null,
             notes: notesText || null,
             garment_type: selectedGarment || null,
-            time_period: selectedTimePeriod.length > 0 ? selectedTimePeriod : null, // Wrap in array if not null
+            time_period: selectedTimePeriod.length > 0 ? selectedTimePeriod : null,
             age_group: ageSelection || null,
             gender: genderSelection || null,
             size: selectedSize.length > 0 ? selectedSize : null,
-            season: selectedSeason.length > 0 ? selectedSeason : null, // Wrap in array if not null
+            season: selectedSeason.length > 0 ? selectedSeason : null,
             condition: condition.length > 0 ? condition : null,
             color: selectedColors.length > 0 ? selectedColors : null,
-            status: "Available", // Default status
+            status: "Available",
             authenticity_level: null,
             location: null,
-            date_added: placeholderDate, //is this correct?
+            date_added: placeholderDate,
             current_borrower: null,
             borrow_history: null
         };
-
-        let newErrors = {}; // Object to store missing fields
-
-        // Check for missing required fields and set error flags
+    
+        let newErrors = {};
+    
+        // Required fields check
         if (!newItem.name) newErrors.name = true;
         if (!newItem.garment_type) newErrors.garment_type = true;
         if (!newItem.time_period) newErrors.time_period = true;
@@ -302,52 +332,71 @@ export default function EditPage() {
         if (!newItem.condition) newErrors.condition = true;
         if (!newItem.color) newErrors.color = true;
         if (!newItem.date_added) newErrors.date_added = true;
-
-        // If any errors exist, update state and show alert
+    
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
-            alert("Please fill out all required fields.");
+            setStatusMessage("Please fill out all required fields.");
+            setStatusType("error");
             return;
         }
-
-        // If no errors, clear previous errors and proceed
+    
         setErrors({});
-
-        // Convert newItem params to JSON object
-        const body = JSON.stringify(newItem);
-
-        // Send a POST request to the add API with body data
-        console.log(body);
-        const addItemDB = async () => {
+    
+        const updateItem = async () => {
             try {
-                const response = await fetch(`../../api/add`, {
+                const response = await fetch(`../../api/updateItem`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body,
+                    body: JSON.stringify(newItem),
                 });
-
+    
+                const data = await response.json();
+    
                 if (!response.ok) {
-                    throw new Error(`Request failed with status ${response.status}`);
+                    if (response.status === 428) {
+                        setStatusMessage("Error: ID is missing.");
+                    } else if (response.status === 500) {
+                        setStatusMessage("Internal server error. Please try again.");
+                    } else {
+                        setStatusMessage(`Error: ${data.error || "Unknown error"}`);
+                    }
+                    setStatusType("error");
+                    return;
                 }
-
+    
+                if (response.status === 201) {
+                    setStatusMessage("Item successfully added.");
+                } else {
+                    setStatusMessage("Item successfully updated.");
+                }
+                setStatusType("success");
+    
             } catch (error) {
-                console.error("Error adding item:", error);
-                alert("Error adding item. Please try again.");
-                return;
+                console.error('Error updating item:', error);
+                setStatusMessage("An error occurred. Please try again.");
+                setStatusType("error");
             }
         };
+    
+        updateItem();
+    };    
 
-        // Call the function to send the API request
-        addItemDB();
-
-        alert("Form submitted!");
-    };
-
-    const handleCancel = () => {
-        // Add cancel logic here (e.g., closing a modal)
-        alert("Action cancelled.");
+    // Reset form fields
+    const resetForm = () => {
+        setIDText("");
+        setItemText("");
+        setPriceText("");
+        setNotesText("");
+        setSelectedGarment("");
+        setSelectedTimePeriod([]);
+        setAgeSelection(null);
+        setGenderSelection(null);
+        setSelectedSize([]);
+        setSelectedSeason([]);
+        setCondition([]);
+        setSelectedColors([]);
     };
 
     return (
@@ -449,7 +498,6 @@ export default function EditPage() {
 
                         <div className={`notesName ${errors.name ? "error-text" : ""}`}>
                             Notes
-                            
                         </div>
 
                         <div className="notesTextBox">
@@ -459,9 +507,7 @@ export default function EditPage() {
                             onChange={(e) => setNotesText(e.target.value)}
                             />
                         </div>
-                    
                     </div>
-
                 </div>
                 
                 {/* Middle Vertical Divider */}
@@ -572,14 +618,14 @@ export default function EditPage() {
                             <h3 className={errors.condition ? "error-text" : ""}>Condition*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3> 
                             <MultiSelect
                                 value={conditions.filter(cond => condition.includes(cond.name))} // Sync selected values
-    options={conditions}
-    onChange={(e) => handleConditionSelect(e.value || [])} // Ensure `e.value` is never undefined
-    optionLabel="name" 
-    display="chip" 
-    maxSelectedLabels={2}
-    placeholder="Select Condition"
-    className="dropdown"
-    showSelectAll={false}
+                                options={conditions}
+                                onChange={(e) => handleConditionSelect(e.value || [])} // Ensure `e.value` is never undefined
+                                optionLabel="name" 
+                                display="chip" 
+                                maxSelectedLabels={2}
+                                placeholder="Select Condition"
+                                className="dropdown"
+                                showSelectAll={false}
                             />
                         </div>
                     </div>
@@ -605,14 +651,19 @@ export default function EditPage() {
                                 <p className="selected-text">
                                     Selected: {selectedColors.length > 0 ? selectedColors.join(", ") : "None"}
                                 </p>
-                                </div>
-                            
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>  
 
             <div className="cancel-submit">
+                {/* Status Message */}
+                <div className={`statusMessage ${statusType}`}>
+                    {statusMessage}
+                </div>
+
+                {/* Cancel and Submit Buttons */}
                 <div className="cancel-submit-buttons">
                     <div className="ageButton">
                         <SelectButton
@@ -621,9 +672,8 @@ export default function EditPage() {
                             options={cancelOrSubmit}  
                         />
                     </div>
-                </div>           
-            </div>  
+                </div>
+            </div>
         </div>
     );
 }
-

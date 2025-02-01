@@ -24,10 +24,12 @@ export default function AddPage() {
     const [selectedSeason, setSelectedSeason] = useState([]);
     const [condition, setCondition] = useState([]);
     const [selectedColors, setSelectedColors] = useState([]);
-    const [selectedChoice, setSelectedChoice] = useState([]);
 
     // "Overall" state variables
+    const [selectedChoice ] = useState([]);
     const [errors, setErrors] = useState({});
+    const [statusMessage, setStatusMessage] = useState("");
+    const [statusType, setStatusType] = useState("");
 
     // Define all of the options for buttons and dropdowns
     const garmentOptions = [
@@ -203,18 +205,20 @@ export default function AddPage() {
                 // Add season if less than 2 are selected
                 return [...prevSelected, season];
             } else {
-                return prevSelected; // Don't add more than 2
+                return prevSelected;
             }
         });
     };
 
     const handleSubmitCancelClick = (value) => {
         if (value === "Submit") {
-            console.log("Submitting form...");
-            handleSubmit(); // Call your form submission function
+            setStatusMessage("Submitting...");
+            setStatusType("neutral");
+            handleSubmit();
         } else if (value === "Cancel") {
-            console.log("Cancelling...");
-            handleCancel(); // Call your cancel function
+            setStatusMessage("Action canceled.");
+            setStatusType("neutral");
+            resetForm(); 
         }
     };
 
@@ -240,7 +244,7 @@ export default function AddPage() {
             borrow_history: null
         };
 
-        let newErrors = {}; // Object to store missing fields
+        let newErrors = {};
 
         // Check for missing required fields and set error flags
         if (!newItem.name) newErrors.name = true;
@@ -257,7 +261,8 @@ export default function AddPage() {
         // If any errors exist, update state and show alert
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
-            alert("Please fill out all required fields.");
+            setStatusMessage("Please fill out all required fields.");
+            setStatusType("error");
             return;
         }
 
@@ -268,7 +273,6 @@ export default function AddPage() {
         const body = JSON.stringify(newItem);
 
         // Send a POST request to the add API with body data
-        console.log(body);
         const addItemDB = async () => {
             try {
                 const response = await fetch(`../../api/add`, {
@@ -280,25 +284,48 @@ export default function AddPage() {
                 });
 
                 if (!response.ok) {
-                    throw new Error(`Request failed with status ${response.status}`);
+                    // Catch errors for duplicate item IDs
+                    if (response.status === 427) {
+                        setStatusMessage("An item with this ID already exists.");
+                        setStatusType("error");
+                    } else {
+                        alert(`Error: ${data.error || "Request failed."}`);
+                    }
+                    return;
                 }
 
             } catch (error) {
-                console.error("Error adding item:", error);
-                alert("Error adding item. Please try again.");
+                setStatusMessage("An error occurred. Please try again.");
+                setStatusType("error");
                 return;
             }
+
+            // If successful, show success message
+            setStatusMessage("Item successfully added.");
+            setStatusType("success");
         };
 
         // Call the function to send the API request
         addItemDB();
 
-        alert("Form submitted!");
+        // Reset form fields
+        resetForm();
     };
 
-    const handleCancel = () => {
-        // Add cancel logic here (e.g., closing a modal)
-        alert("Action cancelled.");
+    const resetForm = () => {
+        // Reset form fields (states)
+        setIDText("");
+        setItemText("");
+        setPriceText("");
+        setNotesText("");
+        setSelectedGarment("");
+        setSelectedTimePeriod([]);
+        setAgeSelection(null);
+        setGenderSelection(null);
+        setSelectedSize([]);
+        setSelectedSeason([]);
+        setCondition([]);
+        setSelectedColors([]);
     };
 
     return (
@@ -399,7 +426,6 @@ export default function AddPage() {
 
                         <div className={`notesName ${errors.name ? "error-text" : ""}`}>
                             Notes
-                            
                         </div>
 
                         <div className="notesTextBox">
@@ -409,9 +435,7 @@ export default function AddPage() {
                             onChange={(e) => setNotesText(e.target.value)}
                             />
                         </div>
-                    
                     </div>
-
                 </div>
                 
                 {/* Middle Vertical Divider */}
@@ -522,14 +546,14 @@ export default function AddPage() {
                             <h3 className={errors.condition ? "error-text" : ""}>Condition*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3> 
                             <MultiSelect
                                 value={conditions.filter(cond => condition.includes(cond.name))} // Sync selected values
-    options={conditions}
-    onChange={(e) => handleConditionSelect(e.value || [])} // Ensure `e.value` is never undefined
-    optionLabel="name" 
-    display="chip" 
-    maxSelectedLabels={2}
-    placeholder="Select Condition"
-    className="dropdown"
-    showSelectAll={false}
+                                options={conditions}
+                                onChange={(e) => handleConditionSelect(e.value || [])}
+                                optionLabel="name" 
+                                display="chip" 
+                                maxSelectedLabels={2}
+                                placeholder="Select Condition"
+                                className="dropdown"
+                                showSelectAll={false}
                             />
                         </div>
                     </div>
@@ -555,14 +579,19 @@ export default function AddPage() {
                                 <p className="selected-text">
                                     Selected: {selectedColors.length > 0 ? selectedColors.join(", ") : "None"}
                                 </p>
-                                </div>
-                            
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>  
 
             <div className="cancel-submit">
+                {/* Status Message */}
+                <div className={`statusMessage ${statusType}`}>
+                    {statusMessage}
+                </div>
+
+                {/* Cancel and Submit Buttons */}
                 <div className="cancel-submit-buttons">
                     <div className="ageButton">
                         <SelectButton
@@ -571,9 +600,8 @@ export default function AddPage() {
                             options={cancelOrSubmit}  
                         />
                     </div>
-                </div>           
-            </div>  
+                </div>
+            </div>
         </div>
     );
 }
-
