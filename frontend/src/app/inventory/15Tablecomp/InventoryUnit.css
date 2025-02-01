@@ -1,3 +1,5 @@
+@import url("../../globals.css");
+
 .unit {
     display: flex;
     width: 100%;
@@ -89,19 +91,19 @@
 }
 
 .Borrowed {
-    background-color: red;
+    background-color: var(--borrowed);
 }
 
 .Available {
-    background-color: green;
+    background-color: var(--available);
 }
 
 .Overdue {
-    background-color: orange;
+    background-color: var(--overdue);
 }
 
 .Missing {
-    background-color: red;
+    background-color: var(--missing);
 }
 
 .circle2 {
@@ -111,19 +113,23 @@
 }
 
 .Great {
-    background-color: green;
+    background-color: var(--great);
+}
+
+.Good {
+    background-color: var(--good);
 }
 
 .repair{
-    background-color: purple;
+    background-color: var(--repairs);
 }
 
 .washing {
-    background-color: blue;
+    background-color: var(--washing);
 }
 
 .cleaning {
-    background-color: lightblue;
+    background-color: var(--dry_cleaning);
 }
 
 .Not {
@@ -189,11 +195,12 @@
 }
 
 .tags {
+    padding-left: 4vw;
     display: flex;
     align-items: center;
     overflow-x: auto;  
     overflow-y: hidden;
-    justify-content: center;
+    justify-content: left;
     height: 5vh;
     width: 30vw; 
 }
