@@ -13,6 +13,7 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar/NavigationBar';
 import Filter from './components/Filter/Filter';
 import { usePathname } from 'next/navigation';
+import { FilterProvider } from './components/contexts/FilterContext';
 import './inventory/inventory.css';
 
 export default function RootLayout({ children, currentPage }) {
@@ -37,33 +38,35 @@ export default function RootLayout({ children, currentPage }) {
     );
 
     return (
-        <html lang="en">
-            <head>
-                <title>Database</title>
-                <meta name="description" content="Database for the Somerville Museum" />
-                {/* favicon svg */}
-                <link rel="icon" type="image/svg+xml" href="/sm-logo.svg" />
-                {/* favicon png as backup */}
-                <link rel="icon" type="image/png" sizes="32x32" href="/sm-logo.png" />
-            </head>
-            <body>
-                <div className="app-layout">
-                    <Sidebar 
-                        currentPage={currentPage} 
-                        onFilterToggle={toggleFilterVisibility} 
-                    />
-                    <div className="main-content-wrapper">
-                        <Filter 
-                            isVisible={isFilterVisible} 
-                            onClose={toggleFilterVisibility} 
-                            className={isFilterVisible ? 'visible' : ''}
+        <FilterProvider>
+            <html lang="en">
+                <head>
+                    <title>Database</title>
+                    <meta name="description" content="Database for the Somerville Museum" />
+                    {/* favicon svg */}
+                    <link rel="icon" type="image/svg+xml" href="/sm-logo.svg" />
+                    {/* favicon png as backup */}
+                    <link rel="icon" type="image/png" sizes="32x32" href="/sm-logo.png" />
+                </head>
+                <body>
+                    <div className="app-layout">
+                        <Sidebar 
+                            currentPage={currentPage} 
+                            onFilterToggle={toggleFilterVisibility} 
                         />
-                        <main className={`main-content ${isFilterVisible ? 'shrink' : ''}`}>
-                            {childrenWithProps}
-                        </main>
+                        <div className="main-content-wrapper">
+                            <Filter 
+                                isVisible={isFilterVisible} 
+                                onClose={toggleFilterVisibility} 
+                                className={isFilterVisible ? 'visible' : ''}
+                            />
+                            <main className={`main-content ${isFilterVisible ? 'shrink' : ''}`}>
+                                {childrenWithProps}
+                            </main>
+                        </div>
                     </div>
-                </div>
-            </body>
-        </html>
+                </body>
+            </html>
+        </FilterProvider>
     );
 }
