@@ -37,7 +37,7 @@
 
 .divider {
     width: 1px;
-    background-color: #9B525F; 
+    background-color: var(--sm_red);
     height: 100vh;
     flex-shrink: 0;
     top: 0;
@@ -76,7 +76,7 @@
 #drop-zone {
     width: 38vw;
     height: 30vh;
-    border: 1px solid #9B525F;
+    border: 1px solid var(--sm_red);
     border-radius: 1px;
     display: flex;
     flex-direction: column;
@@ -92,7 +92,7 @@
 
 #drop-zone.dragover {
     background-color: #b0b0b0;
-    border-color: #9B525F;
+    border-color: var(--sm_red);
 }
 
 .upload-icon {
@@ -122,7 +122,7 @@
 
 .dropdown-component select {
     border-radius: 3px;
-    border: 1px solid #9B525F;
+    border: 1px solid var(--sm_red);
     background: #FFF;
     width: 50%;
     padding: 0.5rem;
@@ -150,7 +150,7 @@
     flex: 1 0 0;
     align-self: stretch;
     border-radius: .2rem;
-    border: 1px solid #9B525F;
+    border: 1px solid var(--sm_red);
     background: #FFF;
     box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
     resize: none;
@@ -191,7 +191,7 @@
 
 .dropdown {
     border-radius: 3px;
-    border: 1px solid #9B525F;
+    border: 1px solid var(--sm_red);
     background: #FFF;
     padding: 0.5rem;
     width: 100%;
@@ -201,14 +201,14 @@
 }
 
 .dropdown select {
-    border: 1px solid #9B525F;
+    border: 1px solid var(--sm_red);
     background: #FFF;
     width: stretch;
 }
 
 .p-dropdown-panel {
     background-color: #FFF !important;
-    border: 1px solid #9B525F;
+    border: 1px solid var(--sm_red);
     box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
 }
 
@@ -233,14 +233,14 @@
 
 .p-multiselect-panel {
     background-color: #FFF !important;
-    border: 1px solid #9B525F;
+    border: 1px solid var(--sm_red);
     box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
     color: #FFF !important;
 }
 
 .p-multiselect-token {
     color: #FFFFFF !important;
-    background-color: #9B525F !important;
+    background-color: var(--sm_red) !important;
     border-radius: 0.2rem;
     padding: 0.8rem;
     font-size: 1rem;
@@ -294,7 +294,7 @@
 .p-multiselect .p-multiselect-items .p-multiselect-item .p-checkbox {
     display: flex !important;
     align-items: center !important;
-    border: 1px solid #9B525F;
+    border: 1px solid var(--sm_red);
 }
 
 .p-checkbox-box {
@@ -303,15 +303,15 @@
     justify-content: center !important;
     width: 1.25rem !important;
     height: 1.25rem !important;
-    border: 2px solid #9B525F !important;
+    border: 2px solid var(--sm_red) !important;
     border-radius: 0.25rem !important;
     background-color: #FFF;
     transition: background-color 0.4s ease-in-out, border-color 0.4s ease-in-out !important;
 }
 
 .p-multiselect .p-multiselect-items .p-multiselect-item .p-checkbox .p-checkbox-box.p-highlight {
-    background-color: #9B525F !important;
-    border-color: #9B525F !important;
+    background-color: var(--sm_red) !important;
+    border-color: var(--sm_red) !important;
 }
 
 /* Checkmark color */
@@ -336,7 +336,7 @@
     border: 1px solid #585555;
     height: 5vh;
     width: 8vw;
-    background: #F0F0F0;
+    background: var(--grayed_out);
     box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
     resize: none;
     overflow: hidden;
@@ -351,7 +351,7 @@
     border: 1px solid #585555;
     height: 5vh;
     width: 13vw;
-    background: #F0F0F0;
+    background: var(--grayed_out);
     box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
     resize: none;
     overflow: hidden;
@@ -366,7 +366,7 @@
 
 .priceInput input {
     border-radius: .2rem;
-    border: 1px solid #9B525F;
+    border: 1px solid var(--sm_red);
     background: #FFF;
     box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
     height: 5vh;
@@ -392,7 +392,7 @@
 
 .notesTextBox textarea{
     border-radius: .2rem;
-    border: 1px solid #9B525F;
+    border: 1px solid var(--sm_red);
     background: #FFF;
     box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
     height: 20vh;
@@ -407,15 +407,15 @@
 
 .button {
     border-radius: .2rem;
-    border: 1px solid #9B525F;
+    border: 1px solid var(--sm_red);
     background: #FFF;
     box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
 }
 
 .button select {
     border-radius: .2rem;
-    border: 1px solid #9B525F;
-    background: #9B525F;
+    border: 1px solid var(--sm_red);
+    background: var(--sm_red);
     box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
 }
 
@@ -454,7 +454,7 @@
 .p-selectbutton .p-button {
     display: inline-flex; 
     border-radius: 0.2rem;
-    border: 1px solid #9B525F;
+    border: 1px solid var(--sm_red);
     background: #FFF;
     box-shadow: 0px 0.1rem 0.2rem 0px rgba(0, 0, 0, 0.25);
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
@@ -483,7 +483,7 @@
 }
 
 .p-selectbutton .p-button.selected {
-    background-color: #9B525F !important;
+    background-color: var(--sm_red) !important;
     color: white !important;
     border: 2px solid #7B3F4C;
 }
