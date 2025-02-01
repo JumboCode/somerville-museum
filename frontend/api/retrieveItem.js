@@ -11,9 +11,9 @@ export default async function handler(req, res) {
         // Query the database for the entry with the given ID
         const result = await query('SELECT * FROM dummy_data WHERE id = $1', [id]);
 
-        // If no rows are found, return a 404 response
+        // If no entry is found, return a 428 error
         if (result.rows.length === 0) {
-            return res.status(404).json({ message: 'Entry not found' });
+            return res.status(428).json({ message: 'Item ID does not exist' });
         }
 
         // Return the entry as JSON
