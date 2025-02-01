@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import Popup from 'reactjs-popup';
 import BorrowUnit from './BorrowUnit';
-import './BorrowTemp.css'
+import './BorrowPopup.css'
 
-const BorrowTemp = ({ selectedItems = [], onClose, onSuccess }) => {
+const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
     const [borrowerFirstName, setBorrowerFirstName] = useState(''); 
     const [borrowItems, setBorrowItems] = useState(selectedItems); 
     const [borrowerLastName, setBorrowerLastName] = useState(''); 
@@ -22,7 +22,6 @@ const BorrowTemp = ({ selectedItems = [], onClose, onSuccess }) => {
     const totalPages = Math.ceil(borrowItems.length / itemsPerPage); 
 
 
- 
     //calculates the return date based on users selection
     const calculateDueDate = (weeks) => {
         const today = new Date();
@@ -62,8 +61,6 @@ const BorrowTemp = ({ selectedItems = [], onClose, onSuccess }) => {
         alert("Please enter a valid phone number in the format XXX-XXX-XXXX");
         return;
     }
-
-        console.log('items being sent into API:', selectedItems);
 
         try {
             if (borrowItems == 0) {
@@ -120,12 +117,12 @@ const BorrowTemp = ({ selectedItems = [], onClose, onSuccess }) => {
     const handleDelete = (item) => {
         setBorrowItems((prevItems) => prevItems.filter((i) => i.id !== item.id));
     };
-
+    
     const getCurrentPageItems = () => {
         const startIndex = (currentPage - 1) * itemsPerPage;
         return borrowItems.slice(startIndex, startIndex + itemsPerPage);
     };
-    
+    //page changes for left hand side
     const handlePageChange = (page) => {
         if (page >= 1 && page <= totalPages) {
             setCurrentPage(page);
@@ -252,4 +249,4 @@ const BorrowTemp = ({ selectedItems = [], onClose, onSuccess }) => {
     );
 };
 
-export default BorrowTemp;
+export default BorrowPopup;

@@ -41,12 +41,6 @@ export default async function handler(req, res) {
         .join(', ')}. `;
     }
 
-    // if (availableItems.length > 0) {
-    //   message += `You can proceed with borrowing the following items: ${availableItems
-    //     .map((item) => item.name)
-    //     .join(', ')}.`;
-    // }
-
     // Send the response
     res.status(200).json({
       message,

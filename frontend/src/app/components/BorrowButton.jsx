@@ -3,7 +3,7 @@
 import Popup from 'reactjs-popup';
 import React, { useState, useEffect } from "react";
 import StylishButton from './StylishButton.jsx'; //import css file
-import BorrowTemp from './BorrowTemp.jsx';
+import BorrowPopup from './BorrowPopup.jsx';
 
 const BorrowButton = ({ selectedItems = [], onSuccess }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +11,6 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
 
   // This function checks the validity of the selected items
   async function handleValidity() {
-    console.log('Checking validity...');
 
     try {
       const response = await fetch('../../api/borrowValidity', {
@@ -33,13 +32,9 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
           alert(result.message);  
       }
 
-      console.log('the available items are:', result.availableItems); 
+      //reset available items after check
+      setAvailableSelectedItems(result.availableItems);   
 
-      setAvailableSelectedItems(result.availableItems);
-
-    //   setAvailableSelectedItems(result.updatedSelectedItems); 
-
-      console.log('Validity check passed:', result);
       return true; // Return true if the validity check passes
     } catch (error) {
       console.error('Error during validity check:', error);
@@ -49,7 +44,6 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
 
   // This function is triggered when the button is clicked
   const handleButtonClick = async () => {
-    console.log('Button clicked from BorrowButton');
     if(selectedItems == 0) {
       alert('No Items selected.'); 
     } else {
@@ -61,8 +55,6 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
         alert('Some items are invalid. Please try again.');
       }
     };
-    
-    console.log('the updated selected items are:', availableSelectedItems);
 
   }
 
@@ -75,7 +67,6 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
         onClick={handleButtonClick}
       />
 
-      {/* Popup will only open if isOpen is true */}
       <Popup
         className='popup-wrapper'
         open={isOpen}
@@ -83,7 +74,7 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
         onClose={() => setIsOpen(false)} // Close the popup when it's closed
       >
         {(close) => (
-          <BorrowTemp
+          <BorrowPopup
           selectedItems={availableSelectedItems}
           onClose={close}
           onSuccess={() => {
