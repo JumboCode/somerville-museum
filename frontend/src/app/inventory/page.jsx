@@ -61,8 +61,8 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
                 const data = await response.json();
                 const currentDate = new Date();
                 const updatedData = data.map((item) => {
-                    if (item.status === 'Borrowed' && item.dueDate && new Date(item.dueDate) < currentDate) {
-                        return { ...item, status: 'Overdue' };
+                    if (item.status === "Borrowed" && item.dueDate && new Date(item.dueDate) < currentDate) {
+                        return { ...item, status: "Overdue" };
                     }
                     return item;
                 });

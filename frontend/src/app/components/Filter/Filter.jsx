@@ -4,15 +4,11 @@ import { useFilterContext } from "../contexts/FilterContext.js"
 import Calendar from '../../assets/Calendar.jsx';
 import Reset from '../../assets/Reset.jsx';
 import Dropdown from '../../assets/Dropdown.jsx';
-
 import CalendarPicker from '../Calendar/CalendarPicker.jsx';
 
 const FilterComponent = ({ isVisible, onClose, className }) => {
     const { selectedFilters, setSelectedFilters } = useFilterContext();
     const fields = {
-        // Status: {
-        //     options: ["Available", "Overdue", "Borrowed", "Missing"]
-        // },
         Condition: {
             options: ["Great", "Needs washing", "Needs repair", "Needs dry cleaning", "Not usable"]
         }, 
@@ -31,9 +27,6 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
         Time_Period: {
             options: ["1800s - 1840s", "1750s - 1800s", "Post-1910s", "Pre-1700s"]
         },
-        // Season: {
-        //     options: ["Winter", "Summer", "Spring", "Fall"]
-        // } 
     };
     const checkboxFields = {
         Status: {
@@ -62,11 +55,10 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
     const dropdownRefs = useRef({});
     const checkboxRefs = useRef({});
 
-
     useEffect(() => {
         setSelectedFilters(selectedOptions);
     }, [selectedOptions]);
-    // Close dropdowns when clicking outside
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             Object.keys(dropdownRefs.current).forEach(key => {
@@ -96,7 +88,6 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
 
     const handleOptionSelect = (label, option) => {
         const formattedLabel = label.toLowerCase().replaceAll(" ", "_");
-        // Due to the asynchronous behavior of setState, make the api call in toggleDropdown to get filters
         setSelectedOptions(prev => ({
             ...prev,
             [formattedLabel]: option
@@ -104,12 +95,12 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
         toggleDropdown(label);
     };
 
-    const updateCheckboxes = (field) => (e) => {
-		setSelectedOptions((current) => ({
-			...current,
-			[field]: (e.target.checked) ? e.target.checked : "",
-		}));
-	};
+    const updateCheckboxes = (field, value) => (e) => {
+        setSelectedOptions((current) => ({
+            ...current,
+            [field]: e.target.checked ? value : "NOT NULL",
+        }));
+    };
 
     return (
         <div className={`filter-component ${isVisible ? 'visible' : ''} ${className}`}>
@@ -117,13 +108,18 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
                 <div className="filter-section">
                     <h2>Status</h2>
                     <div className="status-grid">
-                        <label><input type="checkbox" value={selectedOptions?.available || false} onClick={updateCheckboxes("status")}/>Available</label>
-                        <label><input type="checkbox" value={selectedOptions?.overdue || false} onClick={updateCheckboxes("overdue")}/>Overdue</label>
-                        <label><input type="checkbox" value={selectedOptions?.borrowed || false} onClick={updateCheckboxes("borrowed")}/>Borrowed</label>
-                        <label><input type="checkbox" value={selectedOptions?.missing || false} onClick={updateCheckboxes("missing")}/>Missing</label>
+                        {checkboxFields.Status.options.map((status) => (
+                            <label key={status}>
+                                <input 
+                                    type="checkbox" 
+                                    checked={selectedOptions.status === status}
+                                    onChange={updateCheckboxes("status", status)}
+                                />
+                                {status}
+                            </label>
+                        ))}
                     </div>
                 </div>
-                
 
                 {Object.keys(fields).map((label) => {
                     let currLabel = selectedOptions[label.toLowerCase().replaceAll(" ", "_")];
@@ -144,7 +140,7 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
                             {openDropdowns[label] && (
                                 <ul className='dropdown-options'>
                                     {fields[label].options.map((option) => (
-                                        <li onClick={() => handleOptionSelect(label, option)}>{option}</li>
+                                        <li key={option} onClick={() => handleOptionSelect(label, option)}>{option}</li>
                                     ))}
                                 </ul>
                             )}
@@ -155,9 +151,14 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
                 <div className="filter-section">
                     <h2>Season</h2>
                     <div className="season-grid">
-                        {['Winter', 'Spring', 'Summer', 'Fall'].map((season) => (
+                        {checkboxFields.Season.options.map((season) => (
                             <label key={season}>
-                                <input type="checkbox" />{season}
+                                <input 
+                                    type="checkbox" 
+                                    checked={selectedOptions.season === season}
+                                    onChange={updateCheckboxes("season", season)}
+                                />
+                                {season}
                             </label>
                         ))}
                     </div>
