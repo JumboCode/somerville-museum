@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Popup from 'reactjs-popup';
 import BorrowUnit from './BorrowUnit';
+import './BorrowTemp.css'
 
 const BorrowTemp = ({ selectedItems = [], onClose, onSuccess }) => {
     const [borrowerFirstName, setBorrowerFirstName] = useState(''); 
@@ -91,7 +92,7 @@ const BorrowTemp = ({ selectedItems = [], onClose, onSuccess }) => {
                 const result = await response.json();
     
                 setIsSuccessPopupVisible(true);
-                resetFields(); 
+                // resetFields(); 
                   // Trigger onSuccess after the action
                 if (onSuccess) {
                     onSuccess();
@@ -149,7 +150,7 @@ const BorrowTemp = ({ selectedItems = [], onClose, onSuccess }) => {
                             </ul>
                             <div className="pagination">
                                 <button
-                                    type="button"
+                                    type="pagintion button"
                                     disabled={currentPage === 1}
                                     onClick={() => handlePageChange(currentPage - 1)}
                                 >
@@ -183,7 +184,7 @@ const BorrowTemp = ({ selectedItems = [], onClose, onSuccess }) => {
                 <h4>Information</h4>
                 <label>
                     Borrower First Name*
-                    <input
+                    <input className='input:first-of-type'
                         required
                         value={borrowerFirstName}
                         onChange={(e) => setBorrowerFirstName(e.target.value)}
