@@ -2,10 +2,11 @@ import { query } from './db.js';
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method not allowed' });
+        return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
     try {
+        // Destructure the request body
         const {
             id,
             name,
@@ -24,7 +25,7 @@ export default async function handler(req, res) {
             location,
             date_added,
             current_borrower,
-            borrow_history = {} // JSONB default value
+            borrow_history = {}
         } = req.body;
 
         // Check if an item with the given id already exists
