@@ -39,13 +39,13 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
     // Initialize an object to all "" for filtering later on on the backend
     let baseOptions = {}
     Object.keys(fields).map((key) => {
-        baseOptions = {...baseOptions, [key.toLowerCase()]: "NOT NULL"}
+        baseOptions = {...baseOptions, [key.toLowerCase()]: []}
     })
 
     baseOptions = {
         ...baseOptions,
-        status: "NOT NULL",
-        season: "NOT NULL",
+        status: [],
+        season: [],
         return_date: "NOT NULL"
     }
     const [openDropdowns, setOpenDropdowns] = useState({});
@@ -54,6 +54,7 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
     const [selectedOptions, setSelectedOptions] = useState(baseOptions);
     const dropdownRefs = useRef({});
     const checkboxRefs = useRef({});
+    const calendarRef = useRef(null);
 
     useEffect(() => {
         setSelectedFilters(selectedOptions);
@@ -66,8 +67,12 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
                     setOpenDropdowns(prev => ({...prev, [key]: false}));
                 }
             });
-        };
 
+            if (calendarRef.current && !calendarRef.current.contains(event.target)) {
+                setIsCalendarOpen(false);
+            }
+        };
+    
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
@@ -86,20 +91,38 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
         }))
     };
 
+    // Now enables multiple options to be selected
     const handleOptionSelect = (label, option) => {
         const formattedLabel = label.toLowerCase().replaceAll(" ", "_");
-        setSelectedOptions(prev => ({
-            ...prev,
-            [formattedLabel]: option
-        }));
-        toggleDropdown(label);
+        setSelectedOptions(prev => {
+            const currentValues = prev[formattedLabel];
+            const valueExists = currentValues.includes(option);
+            
+            return {
+                ...prev,
+                [formattedLabel]: valueExists 
+                    ? currentValues.filter(item => item !== option)  // Remove if exists
+                    : [...currentValues, option]  // Add if doesn't exist
+            };
+        });
     };
 
+    // now enables multiple checkboxes to be selected
     const updateCheckboxes = (field, value) => (e) => {
-        setSelectedOptions((current) => ({
-            ...current,
-            [field]: e.target.checked ? value : "NOT NULL",
-        }));
+        setSelectedOptions((current) => {
+            const currentValues = current[field];
+            if (e.target.checked) {
+                return {
+                    ...current,
+                    [field]: [...currentValues, value]
+                };
+            } else {
+                return {
+                    ...current,
+                    [field]: currentValues.filter(item => item !== value)
+                };
+            }
+        });
     };
 
     return (
@@ -108,16 +131,16 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
                 <div className="filter-section">
                     <h2>Status</h2>
                     <div className="status-grid">
-                        {checkboxFields.Status.options.map((status) => (
-                            <label key={status}>
-                                <input 
-                                    type="checkbox" 
-                                    checked={selectedOptions.status === status}
-                                    onChange={updateCheckboxes("status", status)}
-                                />
-                                {status}
-                            </label>
-                        ))}
+                    {checkboxFields.Status.options.map((status) => (
+                        <label key={status}>
+                            <input 
+                                type="checkbox" 
+                                checked={selectedOptions.status.includes(status)}
+                                onChange={updateCheckboxes("status", status)}
+                            />
+                            {status}
+                        </label>
+                    ))}
                     </div>
                 </div>
 
@@ -134,13 +157,24 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
                                 className={`select-box ${openDropdowns[label] ? 'active' : ''}`}
                                 onClick={() => toggleDropdown(label)}
                             >
-                                <span>{ (currLabel == "NOT NULL") ? 'Select...' : currLabel}</span>
+                                <span>
+                                    {currLabel.length === 0 
+                                        ? 'Select...' 
+                                        : currLabel.join(', ')}
+                                </span>
                                 <Dropdown className={`dropdown-icon ${openDropdowns[label] ? 'rotated' : ''}`} />
                             </div>
+
                             {openDropdowns[label] && (
                                 <ul className='dropdown-options'>
                                     {fields[label].options.map((option) => (
-                                        <li key={option} onClick={() => handleOptionSelect(label, option)}>{option}</li>
+                                        <li 
+                                            key={option} 
+                                            onClick={() => handleOptionSelect(label, option)}
+                                            className={selectedOptions[label.toLowerCase()].includes(option) ? 'selected' : ''}
+                                        >
+                                            {option}
+                                        </li>
                                     ))}
                                 </ul>
                             )}
@@ -151,34 +185,37 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
                 <div className="filter-section">
                     <h2>Season</h2>
                     <div className="season-grid">
-                        {checkboxFields.Season.options.map((season) => (
-                            <label key={season}>
-                                <input 
-                                    type="checkbox" 
-                                    checked={selectedOptions.season === season}
-                                    onChange={updateCheckboxes("season", season)}
-                                />
-                                {season}
-                            </label>
-                        ))}
+                    {checkboxFields.Season.options.map((season) => (
+                        <label key={season}>
+                            <input 
+                                type="checkbox" 
+                                checked={selectedOptions.season.includes(season)}
+                                onChange={updateCheckboxes("season", season)}
+                            />
+                            {season}
+                        </label>
+                    ))}
                     </div>
                 </div>
 
                 <div className="filter-section">
                     <h2>Return Date</h2>
-                    <div className="custom-select">
-                        <div 
-                            className="select-box"
-                            onClick={() => setIsCalendarOpen(!isCalendarOpen)}
-                        >
-                            <span>{selectedDate}</span>
-                            <Calendar className="calendar-icon" />
+                    <div className="date-select-container">
+                        <div className="custom-select">
+                            <div 
+                                className="select-box"
+                                onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+                            >
+                                <span>{selectedDate}</span>
+                                <Calendar className="calendar-icon" />
+                            </div>
+                            <CalendarPicker 
+                                isOpen={isCalendarOpen}
+                                onClose={() => setIsCalendarOpen(false)}
+                                onDateSelect={handleDateSelect}
+                                ref={calendarRef}
+                            />
                         </div>
-                        <CalendarPicker 
-                            isOpen={isCalendarOpen}
-                            onClose={() => setIsCalendarOpen(false)}
-                            onDateSelect={handleDateSelect}
-                        />
                     </div>
                 </div>
                 <div>
