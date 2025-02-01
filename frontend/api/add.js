@@ -7,36 +7,33 @@ export default async function handler(req, res) {
   
     try {
       const {
+        id,
         name,
-        status = 'Available',
-        age_group,
-        color = [],
-        season = [],
-        garment_type,
-        size,
-        time_period = [],
-        condition = [],
         cost,
+        notes,
+        garment_type,
+        time_period = [],
+        age_group = [],
+        gender,
+        size,
+        season = [],
+        condition = [],
+        color = [],
+        status,
         authenticity_level,
         location,
         date_added,
         current_borrower,
-        borrow_history = {},  // JSONB default
-        notes
+        borrow_history = {}  // JSONB default value
       } = req.body;
-  
-      // Validate required fields
-      if (!name || !garment_type || !size || !cost || !authenticity_level || !location) {
-        return res.status(400).json({ error: 'Missing required fields' });
-      }
   
       // Insert into the database
       const result = await query(
         `INSERT INTO dummy_data 
-        (name, status, age_group, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, current_borrower, borrow_history, notes)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+        (id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, current_borrower, borrow_history, notes)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
         RETURNING *`,
-        [name, status, age_group, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, current_borrower, borrow_history, notes]
+        [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, current_borrower, borrow_history, notes]
       );
   
       res.status(201).json({ success: true, data: result.rows[0] });
