@@ -57,6 +57,7 @@ export default function Inventory() {
     }
 
     const handleBorrowSuccess = () => {
+        setSelectedItems([]); 
         fetchData();
     };
 
