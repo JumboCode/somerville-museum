@@ -1,0 +1,606 @@
+.add-page {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.main {
+    width: 100vw;
+    height: 100vh;
+}
+
+.column {
+    width: 100vw;
+    display: flex;
+    left: 0rem;
+    position: absolute;
+    padding-left: 4.5vw;
+}
+
+.title {
+    color: #000;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.left {
+    display: flex;
+    padding-top: 2rem;
+    flex-direction: column;
+    width: 40%;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+.divider {
+    width: 1px;
+    background-color: var(--sm_red);
+    height: 100vh;
+    flex-shrink: 0;
+    top: 0;
+}
+
+.right {
+    display: flex;
+    padding-top: 2rem;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 60%;
+    margin-right: 2rem;
+    margin-left: 2rem;
+    margin-bottom: 4rem;
+    gap: 1.5rem;
+}
+
+.garment-type-component {
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.time-period-component {
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+#drop-zone {
+    width: 38vw;
+    height: 30vh;
+    border: 1px solid var(--sm_red);
+    border-radius: 1px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 1.3rem 0;
+    cursor: pointer;
+    background-color: #FFF;
+    transition: background-color 0.3s, border-color 0.3s;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+}
+
+#drop-zone.dragover {
+    background-color: #b0b0b0;
+    border-color: var(--sm_red);
+}
+
+.upload-icon {
+    width: 40%;
+}
+
+.preview {
+    margin-top: 10px;
+    max-width: 100%;
+    max-height: 150px;
+}
+
+.garment-and-time {
+    display: flex;
+    width: 100%;
+    gap: 5vw;
+}
+
+.dropdown-component {
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    line-height: 2.3rem;
+}
+
+.dropdown-component select {
+    border-radius: 3px;
+    border: 1px solid var(--sm_red);
+    background: #FFF;
+    width: 50%;
+    padding: 0.5rem;
+}
+
+.itemName {
+    color: #000;
+    font-family: Akatab;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: .4rem;
+}
+
+.itemTextBox textarea{
+    display: flex;
+    padding: .5rem;
+    width: stretch;
+    height: 6vh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1rem;
+    flex: 1 0 0;
+    align-self: stretch;
+    border-radius: .2rem;
+    border: 1px solid var(--sm_red);
+    background: #FFF;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    resize: none;
+    overflow: hidden;
+    line-height: 4vh;
+    outline: none;
+}
+
+.idName {
+    color: #000;
+    font-family: Akatab;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: .4rem;
+}
+
+.dateName {
+    color: #000;
+    font-family: Akatab;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: .4rem;
+}
+
+.priceName {
+    color: #000;
+    font-family: Akatab;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: .4rem;
+}
+
+.dropdown {
+    border-radius: 3px;
+    border: 1px solid var(--sm_red);
+    background: #FFF;
+    padding: 0.5rem;
+    width: 100%;
+    height: 3.5rem;
+    margin-top: 0.6rem;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+}
+
+.dropdown select {
+    border: 1px solid var(--sm_red);
+    background: #FFF;
+    width: stretch;
+}
+
+.p-dropdown-panel {
+    background-color: #FFF !important;
+    border: 1px solid var(--sm_red);
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+}
+
+.p-dropdown-item {
+    padding: 0.5rem;
+    background-color: #FFF;
+    border-bottom: 1px solid #DBDBDB;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 0;
+}
+
+.p-dropdown-item:hover {
+    background-color: #efd4da;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out !important;
+}
+
+.p-multiselect-item:hover {
+    background-color: #efd4da;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out !important;
+}
+
+.p-multiselect-panel {
+    background-color: #FFF !important;
+    border: 1px solid var(--sm_red);
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    color: #FFF !important;
+}
+
+.p-multiselect-token {
+    color: #FFFFFF !important;
+    background-color: var(--sm_red) !important;
+    border-radius: 0.2rem;
+    padding: 0.8rem;
+    font-size: 1rem;
+    height: 3.5vh;
+    margin-right: 0.4rem;
+    gap: 0.4rem;
+}
+
+.p-multiselect-token-label {
+    color: #FFFFFF !important;
+    cursor: pointer;
+}
+
+.p-chips-token .p-chips-token-icon {
+    color: white !important;
+}
+
+.p-multiselect-label-container {
+    justify-content: center;
+    line-height: 2.3rem;
+}
+
+.p-multiselect-item {
+    background-color: #fff;
+    padding: 0.5rem;
+    border-top: 1px solid #DBDBDB;
+    border-radius: 0rem;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+
+.p-multiselect-header {
+    display: none !important;
+}
+
+.p-checkbox input[type="checkbox"] {
+    opacity: 0;
+    position: absolute;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.p-checkbox-icon .p-highlight {
+    background-color: #FFF;
+    transition: background-color 0.4s ease-in-out, border-color 0.4s ease-in-out !important;
+}
+
+.p-multiselect .p-multiselect-items .p-multiselect-item .p-checkbox {
+    display: flex !important;
+    align-items: center !important;
+    border: 1px solid var(--sm_red);
+}
+
+.p-checkbox-box {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    border: 2px solid var(--sm_red) !important;
+    border-radius: 0.25rem !important;
+    background-color: #FFF;
+    transition: background-color 0.4s ease-in-out, border-color 0.4s ease-in-out !important;
+}
+
+.p-multiselect .p-multiselect-items .p-multiselect-item .p-checkbox .p-checkbox-box.p-highlight {
+    background-color: var(--sm_red) !important;
+    border-color: var(--sm_red) !important;
+}
+
+/* Checkmark color */
+.p-multiselect .p-multiselect-items .p-multiselect-item .p-checkbox .p-checkbox-box.p-highlight .p-checkbox-icon {
+    color: #FFF !important;
+}
+
+.p-highlight {
+    background: #f7e6e9;
+    transition: background 0.1s ease-in-out, border-color 0.1s ease-in-out !important;
+}
+
+.textBoxRow {
+    display: flex;
+    gap: 1.8rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.idTextBox textarea {
+    border-radius: .2rem;
+    border: 1px solid #585555;
+    height: 5vh;
+    width: 8vw;
+    background: var(--grayed_out);
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    resize: none;
+    overflow: hidden;
+    font-size: 1rem;
+    padding: .35rem;
+    outline: none;
+    line-height: 3.5vh;
+}
+
+.dateTextBox textarea {
+    border-radius: .2rem;
+    border: 1px solid #585555;
+    height: 5vh;
+    width: 13vw;
+    background: var(--grayed_out);
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    resize: none;
+    overflow: hidden;
+    font-size: 1rem;
+    padding: .35rem;
+    outline: none;
+    line-height: 3.5vh; 
+    pointer-events: none; 
+     /* Disables text selection */
+    user-select: none;
+}
+
+.priceInput input {
+    border-radius: .2rem;
+    border: 1px solid var(--sm_red);
+    background: #FFF;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    height: 5vh;
+    width: 13vw;
+    resize: none;
+    overflow: hidden;
+    font-size: 1rem;
+    padding: .35rem;
+    outline: none;
+    line-height: 3.5vh;
+}
+
+.notesName {
+    color: #000;
+    font-family: Akatab;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: .4rem;
+    margin-top: .4rem;
+}
+
+.notesTextBox textarea{
+    border-radius: .2rem;
+    border: 1px solid var(--sm_red);
+    background: #FFF;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    height: 20vh;
+    width: stretch;
+    resize: none;
+    overflow: hidden;
+    font-size: 1rem;
+    padding: .35rem;
+    outline: none;
+    line-height: 3.5vh;
+}
+
+.button {
+    border-radius: .2rem;
+    border: 1px solid var(--sm_red);
+    background: #FFF;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+}
+
+.button select {
+    border-radius: .2rem;
+    border: 1px solid var(--sm_red);
+    background: var(--sm_red);
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+}
+
+.size-buttons {
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.age-and-gender {
+    display: flex;
+    width: 100%;
+    gap: 4rem;
+    margin: 0;
+    padding: 0;
+}
+
+.allAge {
+    width: 33%;
+}
+
+.allGender {
+    display: flex-col;
+    width: 66%;
+}
+
+.ageButtons {
+    display: flex;
+    margin-top: 0.6rem;
+}
+
+.genderButtons {
+    display: flex;
+    margin-top: 0.6rem;
+}
+
+.p-selectbutton .p-button {
+    display: inline-flex; 
+    border-radius: 0.2rem;
+    border: 1px solid var(--sm_red);
+    background: #FFF;
+    box-shadow: 0px 0.1rem 0.2rem 0px rgba(0, 0, 0, 0.25);
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    gap: 1rem;
+    padding: 0.5rem;
+    margin-right: 1.3rem;
+    width: 7rem;
+    height: 3rem;
+    cursor: pointer;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.ageButtons .p-selectbutton .p-button {
+    width: 7rem;
+}
+
+.genderButtons .p-selectbutton .p-button {
+    width: 7rem;
+}
+
+.size-buttons > h3,
+.season-buttons > h3 {
+    display: block;
+    margin-bottom: 0.6rem !important;
+}
+
+.p-selectbutton .p-button.selected {
+    background-color: var(--sm_red) !important;
+    color: white !important;
+    border: 2px solid #7B3F4C;
+}
+
+.p-selectbutton .p-button:hover:not(.selected) {
+    background-color: #d17a88;
+    color: black;
+}
+
+.p-selectbutton .p-button:focus {
+    outline: none;
+}
+
+.p-selectbutton .p-button span {
+    margin: auto;
+    text-align: center;
+}
+
+.condition-component {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.condition-dropdown {
+    padding: 0.5rem;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.color-selector {
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+}
+
+.color-options {
+    display: flex;
+    gap: 0.7rem;
+    margin-top: 0.5rem;
+}
+  
+.color-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    outline: 1px solid transparent;
+    transition: border 0.1s ease-in-out;
+}
+  
+.color-circle.selected {
+    border: 2px solid black !important;
+    transform: scale(1.3);
+}
+
+.selected-text {
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.cancel-submit {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    z-index: 1000;
+}
+
+.statusMessage {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #333;
+    font-weight: bold;
+    text-align: right;
+    bottom: 2rem;
+    margin-right: 2rem;
+}
+
+.cancel-submit-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.625rem;
+}
+
+.cancel-submit-buttons .p-selectbutton .p-button {
+    height: 3rem;
+}
+
+.error-text {
+    color: red;
+    font-weight: bold;
+}
+
+/* Arrow icon animation */
+.p-multiselect .p-multiselect-trigger {
+    transition: transform 0.3s ease-in-out;
+    transform: rotate(0deg);
+}
+
+.p-multiselect.p-focus .p-multiselect-trigger,
+.p-multiselect.p-multiselect-open .p-multiselect-trigger {
+    transform: rotate(180deg);
+}
+
+.statusMessage.neutral {
+    color: #555;
+}
+
+.statusMessage.success {
+    color: #28a745;
+}
+
+.statusMessage.error {
+    color: #dc3545;
+}
