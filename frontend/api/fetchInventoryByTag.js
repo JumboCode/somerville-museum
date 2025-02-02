@@ -1,34 +1,65 @@
+// fetchInventoryByTag.js
 import { query } from './db.js';
+import { NextResponse } from 'next/server';
 
-// Builds the conditional query piece by piece depending on the state passed
 const buildQuery = (filters) => {
-  // Col names in db that accept arrays instead of regular text.  I hate this function
-  const arrColumns = ["color", "season", "time_period", "condition"]
-  let baseQuery = "SELECT * FROM dummy_data WHERE 1=1"; // Start with a true condition
+  // Specify which columns are stored as arrays in the database 
+  // (PLEASE DON'T CHANGE THE DATABASE EVER AGAIN *praying bufo*)
+  const arrayColumns = ['color', 'season', 'time_period', 'condition'];
+  
+  let baseQuery = "SELECT * FROM dummy_data WHERE 1=1";
   let queryParams = [];
-  let index = 1; // For parameterized queries in PostgreSQL
-  for (const [key, value] of Object.entries(filters)) {
-      if (value === "NOT NULL") continue 
-      else if (arrColumns.includes(key)) {  // Only include valid filters
-          baseQuery += ` AND $${index} = ANY(${key})`;
-      } else {
-        baseQuery += ` AND "${key}" = $${index}`;
-      }
-      queryParams.push(value);
-      index++;
+  let paramIndex = 1;
+
+  for (const [key, values] of Object.entries(filters)) {
+    // Skip empty arrays and NOT NULL values
+    if (values === "NOT NULL" || !Array.isArray(values) || values.length === 0) {
+      continue;
+    }
+
+    if (arrayColumns.includes(key)) {
+      // Handle array columns using ANY
+      baseQuery += ` AND (`;
+      const conditions = values.map((_, index) => {
+        const currentParam = paramIndex + index;
+        return `$${currentParam} = ANY(${key})`;
+      });
+      baseQuery += conditions.join(" OR ");
+      baseQuery += ")";
+    } else {
+      // Handle regular string/int columns using IN
+      baseQuery += ` AND ${key} IN (`;
+      const placeholders = values.map((_, index) => `$${paramIndex + index}`).join(", ");
+      baseQuery += placeholders + ")";
+    }
+    
+    // Add all values to params array
+    queryParams.push(...values);
+    paramIndex += values.length;
   }
 
   return { finalQuery: baseQuery, values: queryParams };
 };
-
-export default async function handler(req, res) {
-  const { finalQuery, values } = buildQuery(req.body)
-  console.log(finalQuery, values);
+export async function POST(request) {
   try {
-      const result = await query(finalQuery, values);
-      res.status(200).json(result.rows);
+    const filters = await request.json();
+    
+    if (!filters || typeof filters !== 'object') {
+      return NextResponse.json(
+        { error: 'Invalid filters format' },
+        { status: 400 }
+      );
+    }
+
+    const { finalQuery, values } = buildQuery(filters);
+    const result = await query(finalQuery, values);
+    
+    return NextResponse.json(result.rows);
   } catch (error) {
     console.error("Database query error:", error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    return NextResponse.json(
+      { error: 'Internal Server Error', details: error.message },
+      { status: 500 }
+    );
   }
 }
