@@ -1,21 +1,8 @@
-/* The sidebar */
-.sidenav {
-    width: 4rem;
-    background-color: #adaaaa;
-    padding-top: 20px;
-    position: fixed;
-    z-index: 10;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    height: 100%;
-    overflow-x: hidden;
-}
 
 /* Text link styles */
 .sidenav a {
     display: block;
-    color: #000000;
+    color: #ffffff;
     font-size: 1rem;
     font-weight: normal;
     padding: 6px 0;
@@ -35,7 +22,7 @@
     margin: 2.5rem auto;
     height: 25px;
     width: 25px;
-    fill: #000000;
+    fill: #ffffff;
     transition: all 0.2s ease;
     transform: scale(1); 
 }
@@ -61,7 +48,6 @@
 
 /* Main content area */
 .main-content {
-    margin-left: 4rem; /* Offset for the sidebar */
     display: flex;
     height: 100vh; /* Full height of the viewport */
     overflow: hidden; /* Prevent content overflow */
@@ -95,23 +81,17 @@
 
 /* Sidebar (Tabs) */
 .sidenav {
-    width: 4rem; /* Fixed width for the Tabs component */
-    background-color: #adaaaa;
+    width: 4.5vw; /* Fixed width for the Tabs component */
+    background-color: #9B525F;
     position: fixed; /* Make it fixed to the left side */
     top: 0;
     left: 0;
     height: 100%;
     z-index: 1000; /* Ensure it stays on top */
     overflow-x: hidden;
+    padding-top: 20px;
+    bottom: 0;
+    position: relative;
 }
 
-/* Main content next to the sidebar */
-.main-content {
-    margin-left: 4rem; /* Leave space for the Tabs component */
-    display: flex; /* Allow horizontal alignment of children */
-    flex-direction: row; /* Ensure Filters and Inventory are side-by-side */
-    flex: 1;
-    height: 100%; /* Take up the remaining height */
-    overflow: hidden; /* Prevent any overflow */
-}
 

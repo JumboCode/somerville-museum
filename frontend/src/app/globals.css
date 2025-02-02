@@ -94,7 +94,7 @@ a {
   padding: 20px;
   border-radius: 8px;
   text-align: center;
-  color: #000000; /* Change this value to the color you want for the text */
+  color: #000000;
 }
 
 .modal-content button {
@@ -133,4 +133,20 @@ a {
   margin-right: 5px;
   margin-top: 5px;
   display: inline-block;
+}
+
+h3 {
+  font-family: Akatab;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+p {
+  font-family: Akatab;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
