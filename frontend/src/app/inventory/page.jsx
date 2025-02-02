@@ -27,17 +27,20 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
                   'Content-Type': 'application/json' 
                 },
                 body: JSON.stringify(selectedFilters)
-              }).then((response) => {
+              }).then(async (response) => {
                 if (!response.ok) {
-                    console.log("ERROR UNABLE TO GET FILTERED ITEMS")
-                    return null;
+                    const errorData = await response.json();
+                    console.error("Error fetching filtered items:", errorData);
+                    throw new Error(errorData.error || 'Failed to fetch filtered items');
                 }
                 return response.json()
               }).then((data) => {
-                if (!data) return;
-                console.log(data);
+                console.log("Received data:", data);
                 setUnits(data);
-              });
+              })
+              .catch((error) => {
+                console.error("Failed to fetch or process data:", error);                
+            });
     }, [selectedItems, triggerFilteredFetch, refreshTable]);
 
     useEffect(() => {
