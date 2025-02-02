@@ -17,7 +17,7 @@ const NavigationItem = ({ icon: IconComponent, label, isSettings, onClick, href,
         <span className={styles.label}>{label}</span>
     </div>
   ) : (
-    <Link href={href}>
+    <Link href={href} style={{ textDecoration: 'none' }}>
         <div className={classNameC} onClick={onClick}>
             {IconComponent && <IconComponent fill="white" />}
             {!isSettings && <span className={styles.label}>{label}</span>}
