@@ -89,7 +89,7 @@ export default function MyForm({className, children}) {
       >
         {(close) => (
 
-              <AddPopup/>
+          <AddPopup/>
         )}
       </Popup>
 
