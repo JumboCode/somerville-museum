@@ -55,6 +55,10 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
     const dropdownRefs = useRef({});
     const checkboxRefs = useRef({});
     const calendarRef = useRef(null);
+    const handleReset = () => {
+        setSelectedOptions(baseOptions);
+        setSelectedDate('Select...');
+    };
 
     useEffect(() => {
         setSelectedFilters(selectedOptions);
@@ -219,10 +223,10 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
                     </div>
                 </div>
                 <div>
-                <button className="reset-button">
-                    <Reset />
-                    <p>Reset</p>
-                </button>
+                    <button className="reset-button" onClick={handleReset}>
+                        <Reset />
+                        <p>Reset</p>
+                    </button>
                 </div>
             </div>
         </div>
