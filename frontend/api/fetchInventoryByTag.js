@@ -24,7 +24,7 @@ const buildQuery = (filters) => {
         const currentParam = paramIndex + index;
         return `$${currentParam} = ANY(${key})`;
       });
-      baseQuery += conditions.join(" OR ");
+      baseQuery += conditions.join(" AND ");
       baseQuery += ")";
     } else {
       // Handle regular string/int columns using IN
