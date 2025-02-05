@@ -8,7 +8,8 @@ import AddButton from '../components/AddPopup';
 import ReturnButton from '../components/ReturnButton';
 import DeleteItemButton from '../components/DeleteItemButton';
 import StylishButton from '../components/StylishButton.jsx';
-// import Popup from 'Popup.jsx';
+import SearchBar from "../components/SearchBar.jsx";
+
 
 export default function Inventory() {
     const [units, setUnits] = useState([]);
@@ -131,9 +132,7 @@ export default function Inventory() {
             <div className="Table">
                 <div className="Header">
                     <div className="Items">
-                        <div className="Searchbar">
-                            <input type="text" placeholder="Search..." />
-                        </div>
+                        <SearchBar />
                             <div className='buttons'> 
                                 <AddButton className='addBtn'> </AddButton>
                                 <BorrowButton className='brwBtn'
