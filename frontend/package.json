@@ -8,8 +8,9 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "type": "module",
   "dependencies": {
-    "@clerk/clerk-js": "^5.35.1",
+    "@clerk/nextjs": "^6.10.6",
     "@neondatabase/serverless": "^0.10.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
