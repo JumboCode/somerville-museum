@@ -1,16 +1,101 @@
-"use client";
+//   return (
+//     <div className={'login-bg'}>
+//       <div className={'mainContainer'}>
+//         <div className={'titleContainer logo-shrink'}>
+//           <div className={'SMLogo'}></div>
+//           <div className="clothing-database">CLOTHING DATABASE</div>
+//         </div>
+//         <div className={'namesContainer'}>
+//           <div className={'inputContainer'}>
+//             <label className="errorLabel" style={{ backgroundColor: errorBG }}>{error}</label>
+//             <input
+//               value={firstName}
+//               placeholder="First Name"
+//               onChange={(ev) => setFirstName(ev.target.value)}
+//               className={'names'}
+//               style={{ borderColor: errorBorder }}
+//             />
+//           </div>
+//           <div className={'inputContainer'}>
+//             <input
+//               value={lastName}
+//               placeholder="Last Name"
+//               onChange={(ev) => setLastName(ev.target.value)}
+//               className={'names'}
+//               style={{ borderColor: errorBorder }}
+//             />
+//           </div>
+//         </div>
+//         <div className={'inputContainer'}>
+//           <input
+//             value={email}
+//             placeholder="Email"
+//             onChange={(ev) => setEmail(ev.target.value)}
+//             className={'inputBox'}
+//             style={{ borderColor: errorBorder }}
+//           />
+//         </div>
+//         <div className={'inputContainer password'}>
+//           <input
+//             value={password}
+//             name="password"
+//             type={passType}
+//             placeholder="Password"
+//             onChange={(ev) => setPassword(ev.target.value)}
+//             className={'inputBox'}
+//             style={{ borderColor: errorBorder }}
+//             autoComplete="current-password"
+//           />
+//           <span className={'eyecon'} onClick={handlePassToggle}>
+//             <Icon icon={passIcon} size={20} />
+//           </span>
+//         </div>
+//         <div className={'inputContainer password'}>
+//           <input
+//             value={confirmPassword}
+//             name="confirmPassword"
+//             type={confirmPassType}
+//             placeholder="Confirm Password"
+//             onChange={(ev) => setConfirmPassword(ev.target.value)}
+//             className={'inputBox'}
+//             style={{ borderColor: errorBorder }}
+//           />
+//           <span className={'eyecon'} onClick={handleConfirmPassToggle}>
+//             <Icon icon={confirmPassIcon} size={20} />
+//           </span>
+//         </div>
+//         <div className={'passwordInfo'}>
+//           <p className={'passwordInfoP'}>Password must contain the following:</p>
+//           <p className={'passwordInfoP'}>- 1 Uppercase character</p>
+//           <p className={'passwordInfoP'}>- 1 Special character - !"$%@#</p>
+//           <p className={'passwordInfoP'}>- Must be longer than 8 characters</p>
+//         </div>
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation'; // Import Next.js router
+//         <div className={'inputContainer'}>
+//           <input className={'inputButton'} type="button" onClick={onButtonClick} value={'Sign Up'} />
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default CreateAccount;
+
+'use client'
+
+import { useState } from 'react'
+import { useSignUp } from '@clerk/nextjs'
+import { useRouter } from 'next/navigation'
 import { Icon } from 'react-icons-kit';
 import { eyeOff } from 'react-icons-kit/feather/eyeOff';
 import { eye } from 'react-icons-kit/feather/eye';
-import '../app.css';
+import "../app.css"
 
-const CreateAccount = () => {
+export default function CreateAccout() {
+  const { isLoaded, signUp, setActive } = useSignUp()
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passType, setPassType] = useState('password');
@@ -20,10 +105,11 @@ const CreateAccount = () => {
   const [error, setError] = useState('');
   const [errorBG, setErrorBG] = useState('#FFFFFF');
   const [errorBorder, setErrorBorder] = useState('#9B525F');
+  const [verifying, setVerifying] = useState(false)
+  const [code, setCode] = useState('')
+  const router = useRouter()
 
-  const router = useRouter(); // Use Next.js useRouter
-
-  function resetFields() {
+  const resetFields = () => {
     setFirstName('');
     setLastName('');
     setEmail('');
@@ -73,7 +159,7 @@ const CreateAccount = () => {
         handleCreateError();
       }
       resetFields();
-      return;
+      return false;
     }
 
     if ('' === email) {
@@ -82,7 +168,7 @@ const CreateAccount = () => {
         handleCreateError();
       }
       resetFields();
-      return;
+      return false;
     }
 
     if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
@@ -91,7 +177,7 @@ const CreateAccount = () => {
         handleCreateError();
       }
       resetFields();
-      return;
+      return false;
     }
 
     if ('' === password) {
@@ -100,7 +186,7 @@ const CreateAccount = () => {
         handleCreateError();
       }
       resetFields();
-      return;
+      return false;
     }
 
     if (password.length < 9 || !containsUppercaseAndSymbol(password)) {
@@ -109,7 +195,7 @@ const CreateAccount = () => {
         handleCreateError();
       }
       resetFields();
-      return;
+      return false;
     }
 
     if ('' === confirmPassword) {
@@ -118,7 +204,7 @@ const CreateAccount = () => {
         handleCreateError();
       }
       resetFields();
-      return;
+      return false;
     }
 
     if (password !== confirmPassword) {
@@ -127,67 +213,96 @@ const CreateAccount = () => {
         handleCreateError();
       }
       resetFields();
+      return false;
+    }
+
+    return true;
+  };
+
+  // Handle submission of the sign-up form
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    if (!onButtonClick()) {
       return;
     }
 
-    // Check if email has an account associated with it
-    checkAccountExists((accountExists) => {
-      if (accountExists) {
-        setError('Account with that email already exists');
-        if (errorBG === '#FFFFFF') {
-          handleCreateError();
-        }
-        resetFields();
-        return;
+    if (!isLoaded) return;
+
+    // Start the sign-up process using the email and password provided
+    try {
+      await signUp.create({
+        emailAddress: email,
+        password: password,
+      })
+
+      // Send the user an email with the verification code
+      await signUp.prepareEmailAddressVerification({
+        strategy: "",
+      })
+
+      // Set 'verifying' true to display second form
+      // and capture the OTP code
+      setVerifying(true)
+    } catch (err) {
+      // See https://clerk.com/docs/custom-flows/error-handling
+      // for more info on error handling
+      console.error(err)
+    }
+  }
+
+  // Handle the submission of the verification form
+  const handleVerify = async (e) => {
+    e.preventDefault()
+
+    if (!isLoaded) return
+
+    try {
+      // Use the code the user provided to attempt verification
+      const signUpAttempt = await signUp.attemptEmailAddressVerification({
+        code,
+      })
+
+      // If verification was completed, set the session to active
+      // and redirect the user
+      if (signUpAttempt.status === 'complete') {
+        await setActive({ session: signUpAttempt.createdSessionId })
+        router.push('/')
       } else {
-        createAcc();
+        
+        // If the status is not complete, check why. User may need to
+        // complete further steps.
+        console.error(JSON.stringify(signUpAttempt, null, 2))
       }
-    });
-  };
+    } catch (err) {
+      // See https://clerk.com/docs/custom-flows/error-handling
+      // for more info on error handling
+      console.error('Error:', JSON.stringify(err, null, 2))
+    }
+  }
 
-  // Call the server API to check if the given email ID already exists
-  const checkAccountExists = (callback) => {
-    fetch('http://localhost:3080/check-account', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email }),
-    })
-      .then((r) => r.json())
-      .then((r) => {
-        callback(r?.userExists);
-      });
-  };
+  // Display the verification form to capture the OTP code
+  if (verifying) {
+    return (
+      <>
+        <h1>Verify your email</h1>
+        <form onSubmit={handleVerify}>
+          <label id="code">Enter your verification code</label>
+          <input value={code} id="code" name="code" onChange={(e) => setCode(e.target.value)} />
+          <button type="submit">Verify</button>
+        </form>
+      </>
+    )
+  }
 
-  // Create account using email and password
-  const createAcc = () => {
-    fetch('http://localhost:3080/auth', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    })
-      .then((r) => r.json())
-      .then((r) => {
-        if ('success' === r.message) {
-          localStorage.setItem('user', JSON.stringify({ email, token: r.token }));
-          router.push('/confirm_signup'); // Navigate using Next.js routing
-        } else {
-          setError('Something went wrong with creating your account. Try again');
-          resetFields();
-        }
-      });
-  };
-
+  // Display the initial sign-up form to capture the email and password
   return (
-    <div className={'login-bg'}>
-      <div className={'mainContainer'}>
-        <div className={'titleContainer'}>
-          <div className={'SMLogo'}>Somerville Museum</div>
+    <div className="login-bg">
+      <div className="mainContainer">
+        <div className="titleContainer logo-shrink">
+          <div className="SMLogo"></div>
+          <div className="clothing-database">CLOTHING DATABASE</div>
         </div>
-        <br />
         <div className={'namesContainer'}>
           <div className={'inputContainer'}>
             <label className="errorLabel" style={{ backgroundColor: errorBG }}>{error}</label>
@@ -209,57 +324,58 @@ const CreateAccount = () => {
             />
           </div>
         </div>
-        <div className={'inputContainer'}>
+        <div className="inputContainer">
           <input
-            value={email}
+            id="email"
+            type="email"
+            name="email"
             placeholder="Email"
-            onChange={(ev) => setEmail(ev.target.value)}
-            className={'inputBox'}
+            value={email}
+            className="inputBox"
+            onChange={(e) => setEmail(e.target.value)}
             style={{ borderColor: errorBorder }}
           />
         </div>
-        <div className={'inputContainer password'}>
+        <div className="inputContainer password">
           <input
-            value={password}
-            name="password"
+            id="password"
             type={passType}
+            name="password"
             placeholder="Password"
-            onChange={(ev) => setPassword(ev.target.value)}
-            className={'inputBox'}
+            value={password}
+            className="inputBox"
+            onChange={(e) => setPassword(e.target.value)}
             style={{ borderColor: errorBorder }}
-            autoComplete="current-password"
           />
           <span className={'eyecon'} onClick={handlePassToggle}>
             <Icon icon={passIcon} size={20} />
           </span>
         </div>
-        <div className={'inputContainer password'}>
+        <div className="inputContainer password">
           <input
-            value={confirmPassword}
-            name="confirmPassword"
+            id="Confirm Password"
             type={confirmPassType}
+            name="Confirm Password"
             placeholder="Confirm Password"
-            onChange={(ev) => setConfirmPassword(ev.target.value)}
-            className={'inputBox'}
+            value={confirmPassword}
+            className="inputBox"
+            onChange={(e) => setConfirmPassword(e.target.value)}
             style={{ borderColor: errorBorder }}
           />
           <span className={'eyecon'} onClick={handleConfirmPassToggle}>
             <Icon icon={confirmPassIcon} size={20} />
           </span>
-          <div className={'passwordInfo'}>
+        </div>
+        <div className={'passwordInfo'}>
             <p className={'passwordInfoP'}>Password must contain the following:</p>
             <p className={'passwordInfoP'}>- 1 Uppercase character</p>
             <p className={'passwordInfoP'}>- 1 Special character - !"$%@#</p>
             <p className={'passwordInfoP'}>- Must be longer than 8 characters</p>
           </div>
-        </div>
-
-        <div className={'inputContainer'}>
-          <input className={'inputButton'} type="button" onClick={onButtonClick} value={'Sign Up'} />
-        </div>
+          <div className={'inputContainer'}>
+            <input className={'inputButton'} type="button" onClick={handleSubmit} value={'Sign Up'} />
+          </div>
       </div>
     </div>
-  );
-};
-
-export default CreateAccount;
+  )
+}

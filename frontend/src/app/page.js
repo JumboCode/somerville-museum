@@ -2,7 +2,6 @@
 
 import "./app.css"
 import "./globals.css"
-import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 const App = () => {
@@ -11,10 +10,10 @@ const App = () => {
   return (
     <div className={'login-bg'}>
       <div className="mainContainer">
-        <div className={'titleContainer'}>
-          <div>Somerville Museum</div>
-        </div>
-        <div>Database</div>
+      <div className="titleContainer logo-shrink">
+        <div className="SMLogo"></div>
+        <div className="clothing-database">CLOTHING DATABASE</div>
+      </div>
         <div className={'buttonContainer'}>
           <input
             className={'inputButton'}

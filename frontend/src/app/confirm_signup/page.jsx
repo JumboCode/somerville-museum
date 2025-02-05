@@ -13,12 +13,12 @@ export default function ConfirmSignup() {
   return (
     <div className={'login-bg'}>
       <div className="confirmContainer">
-        <div className={'titleContainer'}>
-          <div>Thank you for signing up!</div>
+        <div>Thank you for signing up!</div>
+        <br />
+        <div className={'bodyConfirmContainer'}>
+          Somerville Museum will verify your account. You will receive an email when verified.
         </div>
-        <div className={'bodyContainer'}>
-          Please check your email<br />to confirm your account
-        </div>
+        <br />
         <div className={'buttonContainer'}>
           <input
             className={'returnButton'}
