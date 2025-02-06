@@ -41,11 +41,6 @@
     font-size: 1.25em;
 }
 
-.deleteContent p:last-of-type {
-    margin-bottom: 1rem; 
-}
-
-
 .buttons {
     display: flex;
     justify-content: center;
