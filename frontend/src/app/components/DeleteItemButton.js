@@ -75,7 +75,7 @@ import DeletePopup from "./DeletePopup";
                 </StylishButton>
 
                 {isPopupVisible && (
-                <DeletePopup onConfirm={() => console.log("balls")} onCancel={handleCancel} />
+                <DeletePopup onConfirm={handleCancel} onCancel={handleCancel} />
             )}
 
             </>
