@@ -17,6 +17,7 @@ export default async function handler(req, res) {
 
       const itemStatus = statusResult.rows[0]?.status; 
       
+      console.log("reached here!");
       //if the item isnt available, add to unavailable items 
       if(itemStatus !== 'Borrowed' && itemStatus !== 'Overdue') {
         invalidItems.push(itemId); 
@@ -26,12 +27,12 @@ export default async function handler(req, res) {
         const today = new Date();
         const todayFormatted = today.toLocaleDateString().split('T')[0];
 
-        let returnNote = `Date Returned: ${todayFormatted}`; 
+        // let curr_borrower = `Date Returned: ${todayFormatted}`; 
       
         // Using array_append with COALESCE to borrower_history, sending all other data
         await query(
-        'UPDATE dummy_data SET status = $1, borrower_history = array_append(COALESCE(borrower_history, \'{}\'), $2) WHERE id = $3', 
-        ['Available', returnNote, itemId]
+        'UPDATE dummy_data SET status = $1, borrow_history = array_append(borrow_history, current_borrower) WHERE id = $2', 
+        ['Available', itemId]
       );
 
       //add item to available items 
