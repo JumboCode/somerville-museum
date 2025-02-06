@@ -31,6 +31,13 @@
   --black: #000000;
   --gray: #5E6171;
 
+  /* dashboard graph colors */ 
+  --gray-bar: #D6DBED66;
+  --bar-color-1: #8979FF;
+  --bar-color-2: #79BEFF;
+  --bar-color-3: #FFB179;
+  --bar-color-4: #FF7979;
+
   /* fonts */
   --sm_font: 'Akatab';
 

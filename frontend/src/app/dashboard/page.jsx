@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import "../components/Dashboard.css"
 import RecentBorrows from "../components/RecentBorrows";
+import BarGraph from "./BarGraph";
 
 const Dashboard = () => {
   // State to store the counts for each status
@@ -17,7 +18,7 @@ const Dashboard = () => {
   const fetchCountForStatus = async (status) => {
     try {
       const response = await fetch(`../../api/selectCounts`, {
-        method: 'PUT',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -49,6 +50,19 @@ const Dashboard = () => {
     });
   }, []); // Only run once when the component mounts
 
+  const tempData = [
+    { name: "Available", value: 10 },
+    { name: "Borrowed", value: 50 },
+    { name: "Overdue", value: 15 },
+    { name: "Missing", value: 17}
+  ];
+
+  const barGraphData = Object.entries(counts)
+  .filter(([status, value]) => value !== null) // Ensure no null values
+  .map(([status, value]) => ({ name: status, value }));
+
+  
+
   return (
     <div>
       <h1>Inventory Dashboard</h1>
@@ -66,6 +80,8 @@ const Dashboard = () => {
           ))}
         </ul>
       </nav>
+      <BarGraph
+        data = {barGraphData}/>
       <br></br>
       <h2>Recent Borrows</h2>
       <RecentBorrows />
