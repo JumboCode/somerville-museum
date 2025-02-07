@@ -1,93 +1,56 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
-import "../components/Dashboard.css"
-import RecentBorrows from "../components/RecentBorrows";
+import React from 'react';
+import './Dashboard.css';
 import BarGraph from "./BarGraph";
 
 const Dashboard = () => {
-  // State to store the counts for each status
-  const [counts, setCounts] = useState({
-    Total: null,
-    Overdue: null,
-    Borrowed: null,
-    Available: null,
-  });
-
-  // Function to fetch the count from the backend for a specific status
-  const fetchCountForStatus = async (status) => {
-    try {
-      const response = await fetch(`../../api/selectCounts`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name: status }), // Status to query
-      });
-      
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const data = await response.json();
-
-      // Update the state with the count for this status
-      setCounts((prevCounts) => ({
-        ...prevCounts,
-        [status]: data.count,
-      }));
-    } catch (error) {
-      console.error(`Error fetching count for ${status}:`, error);
-    }
-  };
-
-  // Fetch counts for each status when the component mounts
-  useEffect(() => {  // TO DO: UPDATE TOTAL; QUERY FILTERS BY STATUS CURRENTLY
-    const statuses = ['Total', 'Overdue', 'Borrowed', 'Available']; //ADD SQL injection HERE
-
-    statuses.forEach((status) => {
-      fetchCountForStatus(status);
-    });
-  }, []); // Only run once when the component mounts
-
-  const tempData = [
-    { name: "Available", value: 10 },
-    { name: "Borrowed", value: 50 },
-    { name: "Overdue", value: 15 },
-    { name: "Missing", value: 17}
+  // Sample data for now, I'll replace it later when I do the backend stuff
+  const stats = [
+    { label: 'Total Items', value: 200 },
+    { label: 'Currently Borrowed', value: 80 },
+    { label: 'Overdue Items', value: 15 },
+    { label: 'Missing Items', value: 5 }
   ];
 
-  const barGraphData = Object.entries(counts)
-  .filter(([status, value]) => value !== null) // Ensure no null values
-  .map(([status, value]) => ({ name: status, value }));
-
-  
+  const barGraphData = [
+    { name: "Available", value: 100 },
+    { name: "Borrowed", value: 80 },
+    { name: "Overdue", value: 15 },
+    { name: "Missing", value: 5 }
+  ];
 
   return (
-    <div>
-      <h1>Inventory Dashboard</h1>
-      <div className="wrapper">
-        <div className="placeholder"></div><div className="placeholder"></div><div className="placeholder"></div>
+    <div className="dashboard-container">
+      <h1 className="dashboard-title">Dashboard Overview</h1>
+      
+      {/* Stats Cards */}
+      <div className="stats-grid">
+        {stats.map((stat) => (
+          <div key={stat.label} className="stat-card">
+            <div className="stat-value">{stat.value}</div>
+            <div className="stat-label">{stat.label}</div>
+          </div>
+        ))}
       </div>
-      <br></br>
-      <h2>Overview</h2>
-      <nav className="nav-bar">
-        <ul className="nav-links">
-          {Object.entries(counts).map(([status, count]) => (
-            <li key={status} className="nav-items">
-              <p>{status}: {count !== null ? count : "Loading..."}</p>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <BarGraph
-        data = {barGraphData}/>
-      <br></br>
-      <h2>Recent Borrows</h2>
-      <RecentBorrows />
+
+      <div className="charts-grid">
+
+        <div className="chart-card">
+          <h2 className="chart-title">Status</h2>
+          <div className="chart-container">
+            <BarGraph data={barGraphData} />
+          </div>
+        </div>
+
+        <div className="chart-card">
+          <h2 className="chart-title">Conditions</h2>
+          <div className="chart-container">
+            {/* Placeholder for future pie chart */}
+          </div>
+        </div>
+
+      </div>
     </div>
   );
 };
 
 export default Dashboard;
-

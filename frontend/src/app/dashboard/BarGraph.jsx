@@ -26,7 +26,7 @@ const BarGraph = ({ data }) => {
         const margin = { top: 50, right: 30, bottom: 60, left: 50 };
         const containerWidth = svgRef.current.parentElement.clientWidth;
         const width = containerWidth - margin.left - margin.right;
-        const height = 500 - margin.top - margin.bottom;
+        const height = (containerWidth * 0.6) - margin.top - margin.bottom; // Proportional height
 
         // Clear previous SVG elements
         const svg = select(svgRef.current);
@@ -86,12 +86,12 @@ const BarGraph = ({ data }) => {
     };
 
     return (
-        <div className="barGraphContainer"> 
-            <h2> Status </h2>
+        // <div className="barGraphContainer">
+        //     <h2 className="barGraphTitle">Status</h2>
             <div>
                 <svg className="svgContainer" ref={svgRef}></svg>
             </div>
-        </div>
+        // </div>
     ); 
 };
 
