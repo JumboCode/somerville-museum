@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Akatab:wght@400;500;600;700;800;900&display=swap');
+
+* {
+    background-color: #F8F5F5;
+}
+
+/* container for all return items */
+.itemContainer {
+    display: flex;
+    justify-content: space-around;
+    flex-flow: row wrap;
+    align-items: baseline;
+    margin: 2vw;
+}
+
+/* one translucent red box */
+.returnItem {
+    display: flex;
+    flex-direction: column;
+    background-color: #E3CECE;
+    border: 1% solid #9B525F;
+    width: 100%;
+    height: auto;
+    margin: 2vw;
+    color: black;
+    font-family: "Akatab", serif;
+}
+
+/* top row in a given return item box -- containing img, name/id info, 
+ * and close out button */
+.itemID {
+    display: flex;
+    flex-direction: row;
+    gap: 1vw;
+}
+
+/* container for item name and id number -- middle element in .itemID */
+.itemInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+}
+
+/* note: will need separate css class for handling exit button */
+/* note: image will need white border styling and sizing */
+
+/* textbox for "notes" about return item */
+.notesTextbox {
+    width: 100%;
+    height: 10vw;
+    border: 1% solid #9B525F;
+    background-color: #F8F5F5;
+}
+
+/* dropdown to specify condition of return item 
+ * this should be an element of type <select> with dropdown items as <option> */
+.conditionDropdown {
+    width: 100%;
+    height: 5vw;
+    position: relative;
+    display: inline-block;
+    border: 1% solid #9B525F;
+    background-color: #F8F5F5;
+}
+  
+/* styling individual dropdown elements */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #9B525F;
+    min-width: 100%;
+    height: 3vw;
+}
+  
+.conditionDropdown:hover .dropdown-content {
+    display: block;
+}
