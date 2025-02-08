@@ -80,7 +80,6 @@ export default function InventoryUnit({ unit, onChange, checked }) {
     }
 
     //not pulling tags
-    console.log(unit.tags);  
     return (  
         <div className="unit" onDoubleClick={handleDoubleClick}> 
             <div className="left-section">

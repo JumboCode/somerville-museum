@@ -31,7 +31,6 @@ import Dashboard from "./Dashboard.jsx";
 import Link from 'next/link'
 // import ELiTable from "./components/15Tablecomp/EliTable";
 
-
 const Sidebar = () => {
     return (
         <div>
