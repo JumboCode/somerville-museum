@@ -57,7 +57,7 @@ import DeletePopup from "./DeletePopup";
             <div>
                 <StylishButton
                     label = "Delete"
-                    styleType="style1"
+                    styleType={isItemSelected ? "style1" : "style6"}
                     onClick={handleClick}
                 >
                 </StylishButton>
