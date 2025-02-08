@@ -4,11 +4,10 @@ import './15Tablecomp/Inventory.css';
 import InventoryUnit from './15Tablecomp/InventoryUnit.jsx';
 import { useState, useEffect } from "react";
 import BorrowButton from '../components/BorrowButton.jsx';
-import AddButton from '../components/AddPopup';
+import AddButton from '../components/AddItemButton';
 import ReturnButton from '../components/ReturnButton';
 import DeleteItemButton from '../components/DeleteItemButton';
 import StylishButton from '../components/StylishButton.jsx';
-// import Popup from 'Popup.jsx';
 
 export default function Inventory() {
     const [units, setUnits] = useState([]);
@@ -92,18 +91,14 @@ export default function Inventory() {
                 checked={selectedItems.some((item) => item?.id && unit?.id && item.id === unit.id)}
             // checked={true}
             />)
-        }
-
-        );
+        });
 
     const sortByName = () => {
         const filteredAndSortedEntries = [...units]
             .sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
 
         setUnits(filteredAndSortedEntries);
-
     };
-
 
     //tesing piece of code
     // const totalPages = Math.ceil(20 / unitsPerPage);
@@ -144,7 +139,10 @@ export default function Inventory() {
                                     selectedItems={selectedItems}
                                     onSuccess={handleBorrowSuccess}>
                                 </ReturnButton>
-                                <DeleteItemButton classname = 'delBtn'></DeleteItemButton>
+                                <DeleteItemButton
+                                    classname = 'delBtn'
+                                    selectedItems={selectedItems}>
+                                </DeleteItemButton>
                             </div>
                     </div>
                     <div className="TableLabels">

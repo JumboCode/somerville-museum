@@ -1,7 +1,6 @@
 "use client";
 import "./Popup.css";
 
-
 export default function Popup( { unit, onClose } ) {
     if (!unit){
         return null;
