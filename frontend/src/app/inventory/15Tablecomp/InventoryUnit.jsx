@@ -1,21 +1,44 @@
 // InventoryUnit.jsx
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, forwardRef} from "react";
 import Popup from "./Popup";
+import PrePopup from "./PrePopup";
 import "./InventoryUnit.css";
 
 export default function InventoryUnit({ unit, onChange, checked }) {
+
+
+
     // Add a condition to make sure `unit` is defined
     if (!unit) {
         return null; // Don't render anything if `unit` is undefined
     }
 
-    const { id, name, status, tags } = unit; 
+    const { id, name, status, tags, condition, gender, season, size, time_period} = unit; 
     const [isPopupVisible, setIsPopupVisible] = useState(false);
+    const [isPrePopupVisible, setIsPrePopupVisible] = useState(false);
+    const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
+    const buttonRef = useRef(null);
 
-    const handleClick = () => {
+    const handleDoubleClick = () => {
         setIsPopupVisible(true);
     }
+
+    const handleClick = () => {
+        setIsPrePopupVisible(true);
+        if (buttonRef.current) {
+            const rect = buttonRef.current.getBoundingClientRect();
+            setPopupPosition({
+                top: rect.bottom + window.scrollY - 2, // Position below button
+                left: rect.left + window.scrollX - 100, // Align left with button
+            });
+        }
+    }
+
+    const handleClosePrePopup = () => {
+        setIsPrePopupVisible(false);
+    } 
+
 
     const handleClosePopup = () => {
         setIsPopupVisible(false);
@@ -31,18 +54,35 @@ export default function InventoryUnit({ unit, onChange, checked }) {
         }
     }
 
+    //CALL BACK FOR PREPOPUP
+    const handlePopupOption = (option) => {
+        if (option === "expand") {
+            console.log("Navigating to expanded view..."); 
+
+            setIsPrePopupVisible(false); 
+            setIsPopupVisible(true);
+        } else {
+            console.log("Edit option selected...");
+        }
+    }
+
+
     useEffect(() => {
-        if (isPopupVisible) {
+        if (isPopupVisible || isPrePopupVisible) {
             document.addEventListener('click', handleClickOutside);
         } else {
             document.removeEventListener('click', handleClickOutside)
         }
     }, [isPopupVisible]);
+
     if(checked){
         console.log("IOSFJNFAS", checked);
     }
+
+    //not pulling tags
+    console.log(unit.tags);  
     return (  
-        <div className="unit" onDoubleClick={handleClick}> 
+        <div className="unit" onDoubleClick={handleDoubleClick}> 
             <div className="left-section">
             <div className="check-box">
                 <input 
@@ -51,6 +91,7 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                     className="checkbox-input" 
                     checked={checked} 
                     onChange={(e) => onChange(unit, e.target.checked)} 
+                    
                 />
                 </div>
                 <div className="picture">
@@ -61,23 +102,32 @@ export default function InventoryUnit({ unit, onChange, checked }) {
             </div>
             <div className="center-section">
                 <div className="id"> {unit.id} </div>
+                <div className="name">{unit.name}</div>
                 <div className="status">
-                    <div className={`circle ${unit.status}`} ></div>
+                    <div className={`circle1 ${unit.status}`} ></div>
                     {unit.status}
                 </div>
-                <div className="name">{unit.name}</div>
-                <div className="tags">
-                    {tags && tags.length > 0 && tags.map((tag, index) => (
-                            <span key={index} className="tag">
-                                {tag}
-                            </span>
-                        ))}
-                </div>
+                <div className="condition">
+                    <div className={`circle2 ${unit.condition}`} ></div>
+                    {unit.condition}</div>
+            </div>
+            <div className="tags">
+                <div className="gender">{unit.gender}</div>
+                <div className="season">{unit.season}</div>
+                <div className="size">{unit.size}</div>
+                <div className="time">{unit.time_period}</div>
             </div>
             <div className="drop-down">
-                <button className="drop-downBtn" onClick={handleClick}>•••</button>
-            </div>
-            <div>
+                <button className="drop-downBtn" 
+                        onClick={handleClick}
+                        ref = {buttonRef}
+                        >•••</button>
+                { isPrePopupVisible && (
+                    <PrePopup onClose={handleClosePrePopup} 
+                               onOptionSelect={handlePopupOption}
+                               position = {popupPosition}/>
+                )}       
+
                 { isPopupVisible && (
                     <Popup unit={unit} onClose={handleClosePopup} />
                 )}

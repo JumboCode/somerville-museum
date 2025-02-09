@@ -100,9 +100,9 @@ export default function AddPopup() {
 
     return (
         <>
-            <button onClick={() => setIsPopupVisible(true)}>
-                +Item
-            </button>
+                <button onClick={() => window.location.href = '/add'}>
+                    +Item
+                </button>
     
             {isPopupVisible && (
                 <div className="popup-overlay">
