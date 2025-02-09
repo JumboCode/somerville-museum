@@ -150,3 +150,28 @@ p {
   font-weight: 400;
   line-height: normal;
 }
+
+/*-------------Keep Sidebar Unique-------------*/
+.adjacent {
+  margin-left: 90px;
+}
+
+/*-------------Keep Sidebar Unique-------------*/
+.adjacent {
+  margin-left: 90px;
+}
+.h3 {
+  font-family: Akatab;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.p {
+  font-family: Akatab;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}

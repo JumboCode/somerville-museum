@@ -1,0 +1,285 @@
+.filter-component {
+    position: fixed;
+    top: 0;
+    left: -288px;
+    width: 288px;
+    height: 100vh;
+    background: white;
+    transition: left 0.3s ease-in-out;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+}
+
+.filter-component.visible {
+    left: 90px;
+}
+
+.filters {
+    padding: min(2vh, 16px) min(1.5vh, 12px);
+    display: flex;
+    flex-direction: column;
+    gap: min(1vh, 8px);
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: visible;
+    min-height: 0;
+}
+
+@media (max-width: 640px) {
+    .filters {
+        gap: 0.5vh;
+    }
+}
+
+.filter-section {
+    display: flex;
+    flex-direction: column;
+    gap: min(1vh, 10px);
+    flex-shrink: 0;
+}
+
+.status-grid,
+.season-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: min(1vh, 8px);
+    padding: 5px;
+}
+
+.status-grid label,
+.season-grid label {
+    display: flex;
+    align-items: center;
+    gap: min(1vh, 8px);
+}
+
+.filter-section h2 {
+    font-size: min(2vh, 16px);
+    font-weight: 600;
+    margin: 0;
+}
+
+.filter-section label {
+    gap: min(1vh, 4px);
+    font-size: min(1.5vh, 12px);
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    border: 0.2vh solid rgba(155, 82, 95, 1);
+    border-radius: 0.3vh;
+    background-color: white;
+    cursor: pointer;
+    margin: 0;
+    padding: 3px;
+    display: inline-block;
+    vertical-align: middle;
+    width: min(2vh, 16px);
+    height: min(2vh, 16px);
+    border-width: min(0.2vh, 2px);
+}
+
+input[type="checkbox"]:checked {
+    background-color: rgba(155, 82, 95, 1);
+    position: relative;
+}
+
+input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 0.5vh;
+    top: 0.1vh;
+    width: 0.7vh;
+    height: 1.1vh;
+    border: solid white;
+    border-width: 0 0.3vh 0.3vh 0;
+    transform: rotate(45deg);
+}
+
+.filter-section select {
+    width: 100%;
+    padding: 0.5vh;
+    border: 0.2vh solid rgba(155, 82, 95, 1);
+    border-radius: 0.5vh;
+    appearance: none;
+    background: white;
+}
+
+.date-select {
+    position: relative;
+}
+
+.custom-select {
+    position: relative;
+    width: 100%;
+    margin: 0;
+}
+
+.select-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5vh;
+    border: 0.2vh solid rgba(155, 82, 95, 1);
+    border-radius: 0.5vh;
+    background: white;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 3vh);  /* Leave space for the dropdown icon */
+}
+
+.select-box.active {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.select-box span {
+    color: #666;
+}
+
+.dropdown-icon {
+    width: 2.5vh;
+    height: 2.5vh;
+    color: #666;
+    transition: transform 0.2s ease;
+}
+
+.dropdown-icon.rotated {
+    transform: rotate(180deg);
+}
+
+.dropdown-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 0.2vh solid rgba(155, 82, 95, 1);
+    border-top: none;
+    border-bottom-left-radius: 0.5vh;
+    border-bottom-right-radius: 0.5vh;
+    z-index: 1000;
+    max-height: 20vh;
+    overflow-y: auto;
+    box-shadow: 0 0.5vh 0.7vh rgba(0, 0, 0, 0.1);
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown-options li {
+    padding: 1vh;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    list-style-type: none;
+    margin: 0;
+}
+
+.dropdown-options li.selected {
+    background-color: rgba(155, 82, 95, 0.1);
+}
+
+.dropdown-options li.selected::before {
+    content: '✓';
+    margin-right: 8px;
+    color: rgba(155, 82, 95, 1);
+}
+
+.dropdown-options li:hover {
+    background-color: rgba(155, 82, 95, 0.1);
+}
+
+.dropdown-options::-webkit-scrollbar {
+    width: 1vh;
+}
+
+.dropdown-options::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 0.5vh;
+}
+
+.dropdown-options::-webkit-scrollbar-thumb {
+    background: rgba(155, 82, 95, 0.5);
+    border-radius: 0.5vh;
+}
+
+.dropdown-options::-webkit-scrollbar-thumb:hover {
+    background: rgba(155, 82, 95, 0.7);
+}
+
+.calendar-icon {
+    position: absolute;
+    right: 1vh;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2.5vh;
+    height: 2.5vh;
+    color: #666;
+    pointer-events: none;
+}
+
+.reset-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: min(0.5vh, 4px);
+    width: 100%;
+    height: min(5vh, 40px);
+    padding: min(0.5vh, 4px);
+    padding: 0.5vh;
+    background: rgba(155, 82, 95, 1);
+    color: white;
+    border: none;
+    border-radius: 0.5vh;
+    cursor: pointer;
+    margin-top: min(1vh, 8px);
+    flex-shrink: 0;
+}
+
+.reset-icon {
+    width: 2vh;
+    height: 3vh;
+    stroke: currentColor;
+    stroke-width: 0.3vh;
+    fill: none;
+}
+
+/* CALENDAR */
+.calendar-picker {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    margin-left: 1rem;
+    z-index: 1001;
+    background: white;
+    border: 0.2vh solid rgba(155, 82, 95, 1);
+    border-radius: 0.5vh;
+    box-shadow: 0 0.5vh 0.7vh rgba(0, 0, 0, 0.1);
+    padding: 2vh;
+}
+
+.date-select-container {
+    position: relative;
+    width: 100%;
+}
+
+.calendar-picker select {
+    padding: 0.5vh;
+    border: 0.2vh solid rgba(155, 82, 95, 1);
+    border-radius: 0.5vh;
+    background: white;
+    margin-bottom: 1vh;
+}
+
+.calendar-picker button:hover {
+    background-color: rgba(155, 82, 95, 0.1);
+}
+
+.calendar-picker button.selected {
+    background-color: rgba(155, 82, 95, 1);
+    color: white;
+}
