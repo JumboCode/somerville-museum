@@ -27,6 +27,8 @@
     padding: 2.5rem 4rem;
     min-width: 300px;
     min-height: 200px;
+    overflow-wrap: break-word;
+    display: inline-block;
 }
 
 .deleteContent h2 {
