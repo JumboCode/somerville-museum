@@ -1,6 +1,7 @@
 import React from 'react';
 import './Dashboard.css';
 import BarGraph from "./BarGraph";
+import PieChart from './PieChart'; 
 
 const Dashboard = () => {
   // Sample data for now, I'll replace it later when I do the backend stuff
@@ -17,6 +18,16 @@ const Dashboard = () => {
     { name: "Overdue", value: 15 },
     { name: "Missing", value: 5 }
   ];
+
+  const pieChartData = [
+    { name: 'Great Condition', value: 253.44 },
+    { name: 'Good Condition', value: 182.7 },
+    { name: 'Not Usable', value: 85.08 },
+    { name: 'Washing Needed', value: 150.66 },
+    { name: 'Dry Cleaning Needed', value: 134.93 },
+    { name: 'Repairs Needed', value: 118.25 }
+  ];
+ 
 
   return (
     <div className="dashboard-container">
@@ -44,7 +55,7 @@ const Dashboard = () => {
         <div className="chart-card">
           <h2 className="chart-title">Conditions</h2>
           <div className="chart-container">
-            {/* Placeholder for future pie chart */}
+            <PieChart data={pieChartData}/>
           </div>
         </div>
 

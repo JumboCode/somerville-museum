@@ -1,27 +1,42 @@
 'use client'
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import './/../globals.css'; 
 import './BarGraph.css';
 import { select, scaleBand, scaleLinear, max, axisBottom, axisLeft, range } from "d3";
 
 const BarGraph = ({ data }) => {
     const svgRef = useRef();
+    const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
     useEffect(() => {
-        const handleResize = () => {
-            if (data.length) {
-                drawChart(data);
+        // Function to update chart size
+        const updateSize = () => {
+            if (svgRef.current?.parentElement) {
+                setDimensions({
+                    width: svgRef.current.parentElement.clientWidth,
+                    height: svgRef.current.parentElement.clientHeight,
+                });
             }
         };
 
-        window.addEventListener("resize", handleResize);
-        drawChart(data); // Initial render
+        // Observe parent container size changes
+        const resizeObserver = new ResizeObserver(updateSize);
+        if (svgRef.current?.parentElement) {
+            resizeObserver.observe(svgRef.current.parentElement);
+        }
 
-        return () => window.removeEventListener("resize", handleResize);
-    }, [data]);
+        // Cleanup observer
+        return () => resizeObserver.disconnect();
+    }, []);
 
-   const drawChart = (data) => {
-    if (!svgRef.current) return;
+    useEffect(() => {
+        if (dimensions.width > 0 && dimensions.height > 0) {
+            drawChart();
+        }
+    }, [dimensions, data]);
+
+   const drawChart = () => {
+    if (!svgRef.current || !data || data.length === 0) return;
 
     const margin = { top: 25, right: 20, bottom: 60, left: 40};
     const containerWidth = svgRef.current.parentElement.clientWidth;
