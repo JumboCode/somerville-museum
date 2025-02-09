@@ -41,6 +41,21 @@
   /* fonts */
   --sm_font: 'Akatab';
 
+   /* dashboard pie chart colors*/
+  /* great condition */
+  --pie-1: #3CC3DF;
+  /* good-condition */
+  --pie-2: #FFAE4C;
+  /* not-usable */
+  --pie-3: #FF928A;
+  /* washing-needed */
+  --pie-4: #537FF1;
+  /* dry-cleaning-needed */
+  --pie-5: #8979FF;
+  /* repairs-needed */
+  --pie-6: #6FD195;
+
+
 }
 
 /* Will implement dark mode if we have time */
