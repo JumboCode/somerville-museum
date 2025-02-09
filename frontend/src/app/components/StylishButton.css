@@ -79,6 +79,8 @@
     border: none;
     color: white;
     box-shadow: none;
+    height: 40px;
+    width: 20px;
   }
 
   .stylish-button.style6 {
