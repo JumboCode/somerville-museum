@@ -1,38 +1,68 @@
-// Inventory.jsx
+// inventory/page.jsx
 "use client";
+import './15Tablecomp/Inventory.css';
+
 import './15Tablecomp/Inventory.css';
 import InventoryUnit from './15Tablecomp/InventoryUnit.jsx';
 import { useState, useEffect } from "react";
+import { useFilterContext } from '../components/contexts/FilterContext.js';
 import BorrowButton from '../components/BorrowButton.jsx';
 import AddButton from '../components/AddPopup';
 import ReturnButton from '../components/ReturnButton';
 import DeleteItemButton from '../components/DeleteItemButton';
 import StylishButton from '../components/StylishButton.jsx';
-// import Popup from 'Popup.jsx';
+import Filter from '../components/Filter/Filter';
+import './inventory.css'
 
-export default function Inventory() {
+export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
+    const { selectedFilters, triggerFilteredFetch } = useFilterContext();
     const [units, setUnits] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [unitsPerPage, setUnitsPerPage] = useState(15);
     const [totalPages, setTotalPages] = useState();
     const [selectedItems, setSelectedItems] = useState([]);
+    
+    const [refreshTable, setRefreshTable] = useState(false); 
+    useEffect(() => {
+        console.log("FILTERS", selectedFilters)
+        fetch("../../api/fetchInventoryByTag", { 
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify(selectedFilters)
+              }).then(async (response) => {
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error("Error fetching filtered items:", errorData);
+                    throw new Error(errorData.error || 'Failed to fetch filtered items');
+                }
+                return response.json()
+              }).then((data) => {
+                console.log("Received data:", data);
+                setUnits(data);
+              })
+              .catch((error) => {
+                console.error("Failed to fetch or process data:", error);                
+            });
+    }, [selectedItems, triggerFilteredFetch, refreshTable]);
+
     const [selectAllChecked, setSelectAllChecked] = useState(false);
     
     useEffect(() => {
-        console.log(selectedItems);
-        fetchData();
-    }, [selectedItems]);
+        console.log('Filter Visibility Changed:', isFilterVisible);
+    }, [isFilterVisible]);
 
     async function fetchData() {
+        console.log("IM BEING CALLED")
         try {
-            const response = await fetch(`../../api/db`, { 
-                method: 'POST', // Use POST since we are sending SQL as part of the request
+            const response = await fetch(`../../api/fetchInventoryByTag`, { 
+                method: 'GET',
                 headers: {
                   'Content-Type': 'application/json' 
                 },
                 body: JSON.stringify({
-                  text: 'SELECT * FROM dummy_data', // Query for getting all records
-                  params: [] // No parameters needed for this query
+                  tags: selectedFilters
                 })
               });
 
@@ -40,8 +70,8 @@ export default function Inventory() {
                 const data = await response.json();
                 const currentDate = new Date();
                 const updatedData = data.map((item) => {
-                    if (item.status === 'Borrowed' && item.dueDate && new Date(item.dueDate) < currentDate) {
-                        return { ...item, status: 'Overdue' };
+                    if (item.status === "Borrowed" && item.dueDate && new Date(item.dueDate) < currentDate) {
+                        return { ...item, status: "Overdue" };
                     }
                     return item;
                 });
@@ -57,6 +87,8 @@ export default function Inventory() {
     }
 
     const handleBorrowSuccess = () => {
+        // Literally just to call the useeffect with the request. kinda scuffed but whatever
+        setRefreshTable(!refreshTable);
         setSelectedItems([]); 
         fetchData();
     };
@@ -84,13 +116,12 @@ export default function Inventory() {
     const currentUnits = units
         .slice(startIndex, startIndex + unitsPerPage)
         .map((unit) => {
-            console.log(selectedItems);
+            // console.log(selectedItems);
             return (<InventoryUnit
                 key={unit.id}
                 unit={unit}
                 onChange={handleCheckboxChange}
                 checked={selectedItems.some((item) => item?.id && unit?.id && item.id === unit.id)}
-            // checked={true}
             />)
         }
 
@@ -128,7 +159,12 @@ export default function Inventory() {
 
     return (
         <>
-            <div className="Table">
+            <Filter 
+                isVisible={isFilterVisible} 
+                onClose={toggleFilterVisibility} 
+                className={isFilterVisible ? 'visible' : ''}
+            />
+            <div className={`Table ${isFilterVisible ? 'shrink' : ''}`}>
                 <div className="Header">
                     <div className="Items">
                         <div className="Searchbar">

@@ -1,0 +1,254 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+}
+
+.Table {
+    margin: auto;
+    background: #F8F5F5;
+    height: 100vh; /* Increase height to give more space */
+    width: 95vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* border: 3px solid black; */
+}
+
+.Header {
+    background-color: #F8F5F5;
+    height: 15%;
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    border-radius: 10px;
+    padding-top: 2%;
+}   
+
+.Items {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1px;
+}
+
+.Searchbar {
+    display: flex;
+    height: 5vh;
+    width: 30vw;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.Searchbar input[type="text"] {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+border: 1px solid #9B525F;
+background: linear-gradient(0deg, #FFF 0%, #FFF 100%), #F8F5F5;
+box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+
+.TableLabels {
+    display: flex;
+    justify-content: flex-start;
+    padding-bottom: 1vh;
+    width: 90%;
+    padding-right: 10%;
+    position: absolute;
+    bottom: 0; 
+    gap: 2vh;
+    font-size: 1rem;
+    margin-top: 2vh;
+    align-content: flex-start;
+}
+
+.IDLabel {
+    padding-left: 6.2vw;
+    color: #333;
+}
+
+.ItemLabel {
+    padding-left: 8.5%;
+    color: #333;
+}
+
+.AvaiLabel {
+    padding-left: 6vw;
+    color: #333;
+}
+
+.ConLabel {
+    padding-left: 4vw;
+    color: #333;
+}
+
+.TagsLabel {
+    padding-left: 8vw;
+    color: #333;
+}
+
+#NameTag, #SelectAll {
+    cursor: pointer;
+}
+
+#NameTag:hover {
+    transition: all 0.5s ease;
+    color: #1c1c1c;
+    font-weight: 500;
+}
+
+#SelectAll {
+    color: #007BFF;  
+    text-decoration: underline;  
+    cursor: pointer;  
+}
+
+#SelectAll:hover {
+    color: #0056b3;  
+    text-decoration: underline;  
+}
+
+
+.ItemBarHolder {
+    background-color: white;
+    width: 95%;
+    display: flex;
+    height: 80%;
+    flex-direction: column;
+    max-height: 100%; 
+    overflow-y: auto;
+    border-radius: 10px;
+    border: 1px solid #9B525F;
+}
+
+.pagination-controls {
+    display: flex;
+    flex-direction: row;
+    position: sticky;
+    bottom: 0;
+    background: #F8F5F5;
+    padding: 0.5%;
+    padding-bottom: 3%;
+    text-align: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 7%;
+    flex-shrink: 0;
+}
+
+
+.num-items {
+    /* height: 5vh; */
+    flex-direction: row;
+    padding-left: 3%;
+    margin-right: auto;
+    flex: 0; 
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.page-selection {
+    display: flex;
+    padding-right: 5%;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+/* .leftBtn, .rightBtn, .pageNum {
+    padding: 8px 12px;
+    border: none;
+    color: black;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 2px;
+    background: none;
+} */
+
+.pageNum:onClick {
+    background-color: #9B525F;
+}
+
+.view {
+    color: #000;
+    text-align: center;
+    font-family: Akatab;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    line-height: 1; /* Ensure line height matches dropdown height */
+    margin: 0; /* Remove any extra margin */
+    padding: 0; /* Ensure no padding is causing misalignment */
+    display: inline-flex; /* Use flexbox for alignment */
+    align-items: center; /* Vertically align within the inline-flex container */
+    margin-right: 16px; /* Add space to the right of the label */
+    }
+
+.select-num {
+    display: inline-flex;
+    padding: 4px 15px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 2px;
+    border: 1px solid #8184A6;
+    background: #FFF;
+    box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.Table.shrink {
+    margin-left: 300px;
+    width: calc(100% - 300px);
+}
+
+.Table .Header,
+.Table .ItemBarHolder,
+.Table .pagination-controls {
+    transition: all 0.3s ease-in-out;
+}
+
+.Table.shrink .Header,
+.Table.shrink .ItemBarHolder,
+.Table.shrink .pagination-controls {
+    width: calc(100% - 300px);
+    margin-left: auto;
+}
+
+.app-layout {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+.main-content-wrapper {
+    display: flex;
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.main-content {
+    flex-grow: 1;
+    transition: margin-left 0.3s ease-in-out;
+    margin-left: 0;
+    width: 100%;
+    padding: 10px;
+    margin-left: 90px;
+}
+
+.main-content.shrink {
+    margin-left: 390px;
+    width: calc(100% - 390px);
+}
