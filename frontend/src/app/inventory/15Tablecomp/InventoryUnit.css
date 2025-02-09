@@ -1,15 +1,16 @@
+@import url("../../globals.css");
+
 .unit {
     display: flex;
-    background-color: white;
     width: 100%;
-    min-height: 8vh;
+    min-height: 5vh;
     justify-content: space-around;
     align-items: center;
     color: #000000;
     font-size: 1rem;
-    border-bottom: 1px solid #c5bcbc;
-    padding: 0 2vh;
     flex-shrink: 0;
+    border-bottom: 1px solid #9B525F;
+    background: #FFF;
 }
 
 .left-section {
@@ -17,38 +18,54 @@
     align-items: center;
     gap: 1vh;
     margin-left: 1vh;
-    width:9vw;
+    width:6.5vw;
     justify-content: space-between;
 }
 
 .checkbox-input {
-    appearance: none;    
-    height: 3vh;
-    width: 3vh;
-    border: 2px solid #636669;
-    position: relative;
+    display: flex;
+    width: 20px;
+    height: 20px;
+    padding: 5px;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    border-radius: 2px;
+    border: 1px solid #915360;
+    box-shadow: 0px 0.5px 2px 0px rgba(0, 0, 0, 0.25);
+    appearance: none;
     cursor: pointer;
-    background-color: white;
-    transition: background-color 0.2s;
-    margin-left: 2vh;
-    
+    position: relative;
 }
 
 /* Checkbox checked style */
 .checkbox-input:checked {
-    background-color: #4a4b4b;
-    border-color: #2c2a2a;
+    border-color: 0.804px solid #915360;
+    background-color: #803946;
+    box-shadow: 0px 0.402px 1.608px 0px rgba(0, 0, 0, 0.25);
+}
+
+.checkbox-input:checked::after {
+    content: "";
+    width: 5px;
+    height: 9px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -60%) rotate(45deg);
 }
 
 .picture .image-container {
-    width: 6vh; 
-    height: 6vh; 
+    width: 4vh; 
+    height: 4vh; 
     border-radius: 50%;
     overflow: hidden; 
-    background-color: aqua;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: lightgray 50% / cover no-repeat;
 }
 
 .picture img {
@@ -62,36 +79,74 @@
     flex-direction: row;
     align-items: center;
     gap: 5vh;
-    justify-content: center;
-    width: 63vw;
+    justify-content: space-between;
+    width: 50vw;
+    flex-wrap: nowrap; /* Allow wrapping if there are too many items */
 }
 
-.circle {
+.circle1 {
     width: 10px;
     height: 10px;
     border-radius: 50%;
 }
 
 .Borrowed {
-    background-color: red;
+    background-color: var(--borrowed);
 }
 
 .Available {
-    background-color: green;
+    background-color: var(--available);
 }
 
 .Overdue {
-    background-color: orange;
+    background-color: var(--overdue);
 }
 
 .Missing {
-    background-color: red;
+    background-color: var(--missing);
 }
 
-.id, .name, .status, .tags, .drop-down {
+.circle2 {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.Great {
+    background-color: var(--great);
+}
+
+.Good {
+    background-color: var(--good);
+}
+
+.repair{
+    background-color: var(--repairs);
+}
+
+.washing {
+    background-color: var(--washing);
+}
+
+.cleaning {
+    background-color: var(--dry_cleaning);
+}
+
+.Not {
+    background-color: grey;
+}
+
+.id, .name, .status, .drop-down, .condition{
     flex: 1; 
-    width: 5%;
     text-align: center;
+}
+
+.id {
+    width: 1vw;
+}
+
+.name {
+    width: 8vw
 }
 
 .status {
@@ -101,11 +156,21 @@
     justify-content: center;
 }
 
+.condition {
+    display: flex;
+    align-items: center;
+    gap: 1.5vh;
+    justify-content: center;
+    text-wrap: nowrap;
+    justify-content: flex-start;
+}
+
 .drop-down {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     width:5vw;
+    color: #000000;
 }
 
 .drop-downBtn {
@@ -113,29 +178,49 @@
     align-items: center;
     justify-content: center;
     padding: 10px;
-    background-color: none;
     margin: 1vh;
-    width:11vh;
+    width: 5vw;
     height: 4vh;
-    background-color: white;
     border: none;
     cursor: pointer;
+    background: none;
+    box-shadow: none;
+    color: #000000;
+}
+
+.drop-downBtn:hover {
+    background: none;
+    box-shadow: none;
+    appearance: none;
 }
 
 .tags {
+    padding-left: 4vw;
     display: flex;
     align-items: center;
     overflow-x: auto;  
     overflow-y: hidden;
-    white-space: nowrap; 
-    justify-content: center;
-    padding: 0 1vh; 
+    justify-content: left;
     height: 5vh;
-    width: 50vh; 
+    width: 30vw; 
+}
+
+.gender, .season, .size, .time {
+    display: flex;
+    width: vw;
+    height: 2vh;
+    padding: 2px 19px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 2px;
+    border: 1px solid #8184A6;
+    background: #FFF;
+    box-shadow: 0px 0.5px 2px 0px rgba(0, 0, 0, 0.25);
+    font-size: 0.7rem;
 }
 
 .tag {
-    margin-right: 1vh; 
     font-size: 1.5vh; 
 }
 
