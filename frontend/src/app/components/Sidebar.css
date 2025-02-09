@@ -1,9 +1,7 @@
-
-/* Text link styles */
 .sidenav a {
     display: block;
     color: #ffffff;
-    font-size: 1rem;
+    font-size: 1rem; 
     font-weight: normal;
     padding: 6px 0;
     text-align: center;
@@ -46,16 +44,8 @@
     left: 30%;
 }
 
-/* Main content area */
-.main-content {
-    display: flex;
-    height: 100vh; /* Full height of the viewport */
-    overflow: hidden; /* Prevent content overflow */
-}
-
-/* Filter and Inventory sections */
 .filter-section {
-    flex: 0 0 25%; /* 25% of the main content width */
+    flex: 0 0 25%; 
     max-width: 25%;
     overflow-y: auto;
     padding: 16px;
@@ -65,33 +55,30 @@
 }
 
 .inventory-section {
-    flex: 1; /* Takes the remaining width */
+    flex: 1;
     overflow-y: auto;
     padding: 16px;
     background-color: #ffffff;
     box-sizing: border-box;
 }
 
-/* Wrapper for the entire app */
 .app-layout {
-    display: flex; /* Align items horizontally */
-    height: 100vh; /* Full viewport height */
-    overflow: hidden; /* Prevent any overflow issues */
+    display: flex; 
+    height: 100vh;
+    overflow: hidden; 
 }
 
-/* Sidebar (Tabs) */
 .sidenav {
-    width: 4.5vw; /* Fixed width for the Tabs component */
+    width: 4.5vw;
     background-color: #9B525F;
-    position: fixed; /* Make it fixed to the left side */
     top: 0;
     left: 0;
     height: 100%;
-    z-index: 1000; /* Ensure it stays on top */
+    z-index: 1000;
     overflow-x: hidden;
     padding-top: 20px;
     bottom: 0;
-    position: relative;
+    position: fixed;
+
+    min-width: 50px;
 }
-
-
