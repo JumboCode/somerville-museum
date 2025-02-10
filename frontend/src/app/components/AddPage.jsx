@@ -49,19 +49,19 @@ export default function AddPage() {
         { name: "1800s-1840s" }
     ];
     const ageOptions = [
-        { value: "youth", label: "Youth" },
-        { value: "adult", label: "Adult" }
+        { value: "Youth", label: "Youth" },
+        { value: "Adult", label: "Adult" }
     ];
     const genderOptions = [
-        { value: "male", label: "Male" },
-        { value: "female", label: "Female" },
-        { value: "unisex", label: "Unisex" }
+        { value: "Male", label: "Male" },
+        { value: "Female", label: "Female" },
+        { value: "Unisex", label: "Unisex" }
     ];
     const sizes = [
-        { label: "Small", value: "small" },
-        { label: "Medium", value: "medium" },
-        { label: "Large", value: "large" },
-        { label: "X-Large", value: "x-large" }
+        { label: "Small", value: "Small" },
+        { label: "Medium", value: "Medium" },
+        { label: "Large", value: "Large" },
+        { label: "X-Large", value: "X-large" }
     ];
     const seasons = [
         { label: "Fall", value: "Fall" },
