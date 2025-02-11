@@ -1,3 +1,10 @@
+/*
+ * Authors: Angie and Will
+ * Sprint: Dashboard #44
+ * Component: Dashboard
+ * Purpose: This component displays the dashboard overview page.
+*/
+
 "use client";
 
 import React, { useState, useEffect } from 'react';

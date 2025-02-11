@@ -1,3 +1,10 @@
+/*
+ * Authors: Angie and Will
+ * Sprint: Dashboard #44
+ * Component: BarGraph
+ * Purpose: This component displays a bar graph with the status of items.
+*/
+
 'use client'
 import React, { useEffect, useRef, useState } from "react";
 import './/../globals.css'; 

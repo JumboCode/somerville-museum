@@ -1,3 +1,11 @@
+/*
+ * Authors: Will and Angie
+ * Sprint: Dashboard #44
+ * This file is the backend API for the dashboard page. It queries the database
+ * for the total number of items, the number of items that are missing, overdue,
+ * and borrowed.
+*/
+
 import { query } from './db.js';
 
 export default async function handler(req, res) {

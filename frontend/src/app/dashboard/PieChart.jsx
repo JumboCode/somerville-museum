@@ -1,3 +1,10 @@
+/*
+ * Authors: Angie and Will
+ * Sprint: Dashboard #44
+ * Component: Pie Chart
+ * Purpose: This component displays a pie chart with the condition of items.
+*/
+
 'use client'
 import React, { useEffect, useRef } from "react";
 import './/../globals.css';
@@ -86,7 +93,32 @@ const PieChart = ({ data }) => {
    return (
        <div className="chart-container">
            <svg ref={svgRef} className="svg-container"></svg>
-           <div className="chart-label"> Great Condition</div>
+           <div className="key-grid">
+            <div className="key-item">
+                <div className="key-dot" style={{ backgroundColor: '#69D3F5' }}></div>
+                <span className="chart-label">Great Condition</span>
+            </div>
+            <div className="key-item">
+                <div className="key-dot" style={{ backgroundColor: '#FFB572' }}></div>
+                <span className="chart-label">Good Condition</span>
+            </div>
+            <div className="key-item">
+                <div className="key-dot" style={{ backgroundColor: '#FF7CA3' }}></div>
+                <span className="chart-label">Not Usable</span>
+            </div>
+            <div className="key-item">
+                <div className="key-dot" style={{ backgroundColor: '#6C89FF' }}></div>
+                <span className="chart-label">Washing Needed</span>
+            </div>
+            <div className="key-item">
+                <div className="key-dot" style={{ backgroundColor: '#9181DB' }}></div>
+                <span className="chart-label">Dry Cleaning Needed</span>
+            </div>
+            <div className="key-item">
+                <div className="key-dot" style={{ backgroundColor: '#72EFB1' }}></div>
+                <span className="chart-label">Repairs Needed</span>
+            </div>
+            </div>
        </div>
    );
 };
