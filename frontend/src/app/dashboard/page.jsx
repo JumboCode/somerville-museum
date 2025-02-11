@@ -27,15 +27,25 @@ const Dashboard = () => {
     { name: "Missing", value: 0 }
   ]);
 
+  const [pieChartData, setPieChartData] = useState([
+    { name: 'Great', value: 0 },
+    { name: 'Good', value: 0 },
+    { name: 'Not usable', value: 0 },
+    { name: 'Needs washing', value: 0 },
+    { name: 'Needs dry cleaning', value: 0 },
+    { name: 'Needs repair', value: 0 }
+  ]);
+ 
+
   // pie chart integration with real data query can come later
-  const pieChartData = [
-    { name: 'Great Condition', value: 253.44 },
-    { name: 'Good Condition', value: 182.7 },
-    { name: 'Not Usable', value: 85.08 },
-    { name: 'Washing Needed', value: 150.66 },
-    { name: 'Dry Cleaning Needed', value: 134.93 },
-    { name: 'Repairs Needed', value: 118.25 }
-  ];
+  // const pieChartData = [
+  //   { name: 'Great Condition', value: 253.44 },
+  //   { name: 'Good Condition', value: 182.7 },
+  //   { name: 'Not Usable', value: 85.08 },
+  //   { name: 'Washing Needed', value: 150.66 },
+  //   { name: 'Dry Cleaning Needed', value: 134.93 },
+  //   { name: 'Repairs Needed', value: 118.25 }
+  // ];
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -66,7 +76,40 @@ const Dashboard = () => {
       } catch (error) {
         console.error('Error fetching stats:', error);
       }
+
+
+
+     try {
+      console.log('reached pie frontend');
+      const pieResponse = await fetch('/api/getCondition');
+      const PieData = await pieResponse.json();
+      console.log('before set', pieChartData);
+
+
+      setPieChartData([
+        { name: 'Great', value: PieData.great },
+        { name: 'Good', value: PieData.good },
+        { name: 'Not usable', value: PieData.notUsable },
+        { name: 'Needs washing', value: PieData.needsWashing },
+        { name: 'Needs Dry Cleaning', value: PieData.needsDryCleaning },
+        { name: 'Needs repair', value: PieData.needsRepair }
+      ]);
+
+
+      console.log(PieData.good);
+      console.log(PieData.great);
+      console.log(PieData.notUsable);
+      console.log(PieData.needsWashing);
+      console.log(PieData.needsDryCleaning);
+      console.log(PieData.needsRepair);
+
+    } catch (error) {
+      console.error('Error retrieving conditions:', error);
+    }
+
+      
     };
+
 
     fetchStats();
   }, []);
