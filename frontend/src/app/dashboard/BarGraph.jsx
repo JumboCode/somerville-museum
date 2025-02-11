@@ -52,41 +52,19 @@ const BarGraph = ({ data }) => {
     const chart = svg.append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    const yMax = max(data, d => d.value) || 10;
+    const yMax = Math.ceil(max(data, d => d.value) / 10) * 10; // Rounds up to nearest 10
+
     const xScale = scaleBand()
         .domain(data.map(d => d.name))
         .range([0, width])
         .padding(0.1);
 
     const yScale = scaleLinear()
-        .domain([0, yMax])
-        .range([height, 0]);
+        .domain([0, yMax]) // Ensure it covers the full range
+        .range([height, 0]); // Invert so 0 is at bottom
+    
 
     const barWidth = xScale.bandwidth() * 0.7; // Adjusts bar width dynamically
-
-    // Draw gray background bars
-    chart.selectAll(".gray-bar")
-        .data(data)
-        .enter()
-        .append("rect")
-        .attr("class", "gray-bar")
-        .attr("x", d => xScale(d.name) + (xScale.bandwidth() - barWidth) / 2) // Center bars
-        .attr("y", 0)
-        .attr("width", barWidth) // Make sure gray bars match actual bars
-        .attr("height", height)
-        .attr("fill", "var(--gray-bar)");
-
-    // Draw actual data bars
-    chart.selectAll(".bar")
-        .data(data)
-        .enter()
-        .append("rect")
-        .attr("class", "bar")
-        .attr("x", d => xScale(d.name) + (xScale.bandwidth() - barWidth) / 2) // Align bars to center
-        .attr("y", d => yScale(d.value))
-        .attr("width", barWidth)
-        .attr("height", d => Math.max(0, height - yScale(d.value))) // Prevent bars exceeding axis
-        .attr("fill", (d, i) => `var(--bar-color-${i + 1})`);
 
     // ** Remove small tick marks above each bar label **
     const xAxis = axisBottom(xScale).tickSize(0); // Set tick size to 0
@@ -96,6 +74,18 @@ const BarGraph = ({ data }) => {
         .attr("class", "bar-label")
         .call(xAxis)
         .select(".domain") // Hide x-axis base line
+
+    // // ** Add a permanent top dotted line **
+    // chart.append("line")
+    //     .attr("x1", 0)
+    //     .attr("x2", width) // Full width
+    //     .attr("y1", 0) // Top of the graph
+    //     .attr("y2", 0) // Stays at the top
+    //     .style("stroke", "gray")
+    //     .style("stroke-width", 1)
+    //     .style("stroke-dasharray", "2,2") // Dotted effect
+    //     .style("opacity", 0.4); // Slightly visible
+
 
     // ** Append y-axis with only numbers (no ticks or line) **
     const yAxis = chart.append("g")
@@ -109,7 +99,7 @@ const BarGraph = ({ data }) => {
     chart.append("line")
         .attr("x1", 0)
         .attr("x2", 0)
-        .attr("y1", 0)
+        .attr("y1", yScale(yMax))
         .attr("y2", height)
         .style("stroke", "gray")
         .style("stroke-width", 1)
@@ -118,7 +108,7 @@ const BarGraph = ({ data }) => {
 
     // ** Add horizontal grid lines at each tick on y-axis **
     chart.selectAll(".grid-line")
-        .data(yScale.ticks()) // Get tick values
+        .data(range(0, yMax + 10, 10)) // Keep only multiples of 10
         .enter()
         .append("line")
         .attr("class", "grid-line")
@@ -157,6 +147,41 @@ const BarGraph = ({ data }) => {
         .style("stroke-width", 1)
         .style("stroke-dasharray", "2,2") // Dotted effect
         .style("opacity", 0.4);
+    
+    chart.append("line")
+        .attr("x1", width)
+        .attr("x2", 0)
+        .attr("y1", height)
+        .attr("y2", height)
+        .style("stroke", "gray")
+        .style("stroke-width", 1)
+        .style("stroke-dasharray", "2,2") // Dotted effect
+        .style("opacity", 0.4);
+
+           // Draw gray background bars
+    chart.selectAll(".gray-bar")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("class", "gray-bar")
+        .attr("x", d => xScale(d.name) + (xScale.bandwidth() - barWidth) / 2) // Center bars
+        .attr("y", 0)
+        .attr("width", barWidth) // Make sure gray bars match actual bars
+        .attr("height", height)
+        .attr("fill", "var(--gray-bar)");
+
+    // Draw actual data bars
+    chart.selectAll(".bar")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("class", "bar")
+        .attr("x", d => xScale(d.name) + (xScale.bandwidth() - barWidth) / 2) // Align bars to center
+        .attr("y", d => yScale(d.value))
+        .attr("width", barWidth)
+        .attr("height", d => Math.max(0, height - yScale(d.value))) // Prevent bars exceeding axis
+        .attr("fill", (d, i) => `var(--bar-color-${i + 1})`);
+
 };
 
 

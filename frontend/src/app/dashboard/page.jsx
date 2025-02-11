@@ -55,6 +55,7 @@ const Dashboard = () => {
           { name: "Overdue", value: data.overdueItems },
           { name: "Missing", value: data.missingItems }
         ]);
+
       } catch (error) {
         console.error('Error fetching stats:', error);
       }
@@ -62,6 +63,14 @@ const Dashboard = () => {
 
     fetchStats();
   }, []);
+
+  /* temporary data for bar graph esting purposes */ 
+  const tempBar = ([
+    { name: "Available", value: 3 },
+    { name: "Borrowed", value: 34 },
+    { name: "Overdue", value: 56 },
+    { name: "Missing", value: 77 }
+  ])
 
   return (
     <div className="dashboard-container">

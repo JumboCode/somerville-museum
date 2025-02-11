@@ -1,6 +1,7 @@
 .bar {
     align-items: center;
     justify-content: center;
+    opacity: .8;
 }
 
 .gray-bar {
