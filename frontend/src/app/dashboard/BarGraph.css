@@ -1,3 +1,10 @@
+/*
+ * Authors: Will and Angie
+ * Sprint: Dashboard #44
+ * Component: BarGraph
+ * Purpose: This file contains the css for the BarGraph component.
+*/
+
 .bar {
     align-items: center;
     justify-content: center;

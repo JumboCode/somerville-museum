@@ -1,3 +1,10 @@
+/*
+ * Authors: Angie and Will
+ * Sprint: Dashboard #44
+ * Component: Dashboard
+ * Purpose: This file contains the css for the Dashboard component.
+*/
+
 .dashboard-container {
     padding: 3vh 4vw;
     min-height: 100vh;
