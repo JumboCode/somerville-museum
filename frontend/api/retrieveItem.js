@@ -1,3 +1,15 @@
+/**************************************************************
+ *
+ *                     retrieveItem.js
+ *
+ *        Authors: Dan Glorioso & Massimo Bottari
+ *           Date: 02/01/2025
+ *
+ *     Summary: An API route to fetch the details of an item
+ *              from the database using the ID in the request.
+ * 
+ **************************************************************/
+
 import { query } from './db.js';
 
 export default async function handler(req, res) {

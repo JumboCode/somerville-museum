@@ -1,3 +1,14 @@
+/**************************************************************
+ *
+ *                     AddPage.css
+ *
+ *        Authors: Dan Glorioso & Massimo Bottari
+ *           Date: 02/01/2025
+ *
+ *     Summary: CSS styling for AddPage component.
+ * 
+ **************************************************************/
+
 .add-page {
     width: 100vw;
     height: 100vh;
@@ -564,7 +575,6 @@
     font-weight: bold;
     text-align: right;
     bottom: 2rem;
-    margin-right: 2rem;
 }
 
 .cancel-submit-buttons {

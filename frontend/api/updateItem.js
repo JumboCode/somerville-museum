@@ -1,3 +1,15 @@
+/**************************************************************
+ *
+ *                     updateItem.js
+ *
+ *        Authors: Dan Glorioso & Massimo Bottari
+ *           Date: 02/01/2025
+ *
+ *     Summary: An API route to edit an existing item to the database using the
+ *              change input from the fields in EditPage component.
+ * 
+ **************************************************************/
+
 import { query } from './db.js';
 
 export default async function handler(req, res) {
