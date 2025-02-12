@@ -1,10 +1,27 @@
-"use client"; // This file is client-side
+
+/**************************************************************
+ *
+ *                     AddPage.jsx
+ *
+ *        Authors: Dan Glorioso & Massimo Bottari
+ *           Date: 02/01/2025
+ *
+ *     Summary: The AddPage component is a form that allows users to
+ *     add new items to the inventory. It has error checking for empty fields,
+ *     and featured multi-select dropdowns for garment type, time period, 
+ *     season, condition, and color. It also has a drag-and-drop image upload
+ *     feature.
+ * 
+ **************************************************************/
+
+"use client";
 
 import { useState, useEffect } from 'react';
 import "../globals.css";
 import { Dropdown } from 'primereact/dropdown';
 import { MultiSelect } from 'primereact/multiselect';
-import { SelectButton } from 'primereact/selectbutton';
+import StylishButton from './StylishButton.jsx';
+import Link from 'next/link';
 
 export default function AddPage() {
     // Left column state variables
@@ -26,7 +43,6 @@ export default function AddPage() {
     const [selectedColors, setSelectedColors] = useState([]);
 
     // "Overall" state variables
-    const [selectedChoice ] = useState([]);
     const [errors, setErrors] = useState({});
     const [statusMessage, setStatusMessage] = useState("");
     const [statusType, setStatusType] = useState("");
@@ -89,7 +105,6 @@ export default function AddPage() {
         { name: "Gray", hex: "#8E8E93" },
         { name: "Black", hex: "#000000" },
       ];
-    const cancelOrSubmit = ["Cancel", "Submit"];
 
     // Fetch placeholder for current date
     const [placeholderDate, setPlaceholderDate] = useState('');
@@ -210,19 +225,10 @@ export default function AddPage() {
         });
     };
 
-    const handleSubmitCancelClick = (value) => {
-        if (value === "Submit") {
+    const handleSubmit = () => {
             setStatusMessage("Submitting...");
             setStatusType("neutral");
-            handleSubmit();
-        } else if (value === "Cancel") {
-            setStatusMessage("Action canceled.");
-            setStatusType("neutral");
-            resetForm(); 
-        }
-    };
 
-    const handleSubmit = () => {
         const newItem = {
             id: idText,
             name: itemText || null,
@@ -239,7 +245,7 @@ export default function AddPage() {
             status: "Available", // Default status
             authenticity_level: null,
             location: null,
-            date_added: placeholderDate, //is this correct?
+            date_added: placeholderDate, 
             current_borrower: null,
             borrow_history: null
         };
@@ -256,7 +262,7 @@ export default function AddPage() {
         if (!newItem.season) newErrors.season = true;
         if (!newItem.condition) newErrors.condition = true;
         if (!newItem.color) newErrors.color = true;
-        if (!newItem.date_added) newErrors.date_added = true;
+        // if (!newItem.date_added) newErrors.date_added = true;
 
         // If any errors exist, update state and show alert
         if (Object.keys(newErrors).length > 0) {
@@ -387,7 +393,7 @@ export default function AddPage() {
                         {/* ID, Date Added, and Price Text Entries */}
                         <div className="textBoxRow">
                             <div className="allID">
-                                <div className={`idName ${errors.name ? "error-text" : ""}`}>
+                                <div className={`idName`}>
                                     ID
                                 </div>
                                 <div className="idTextBox">
@@ -400,7 +406,7 @@ export default function AddPage() {
                             </div>
 
                             <div className="allDate">
-                                <div className={`dateName ${errors.name ? "error-text" : ""}`}>
+                                <div className={`dateName`}>
                                     Date Added
                                 </div>
                                 <div className="dateTextBox">
@@ -408,7 +414,7 @@ export default function AddPage() {
                                 </div>
                             </div>
                             <div className="allPrice">
-                                <div className={`priceName ${errors.name ? "error-text" : ""}`}>
+                                <div className={`priceName`}>
                                     Price
                                 </div>
                                 <div className="priceInput">
@@ -424,7 +430,7 @@ export default function AddPage() {
                             </div>
                         </div>
 
-                        <div className={`notesName ${errors.name ? "error-text" : ""}`}>
+                        <div className={`notesName`}>
                             Notes
                         </div>
 
@@ -593,13 +599,11 @@ export default function AddPage() {
 
                 {/* Cancel and Submit Buttons */}
                 <div className="cancel-submit-buttons">
-                    <div className="ageButton">
-                        <SelectButton
-                            value={selectedChoice} 
-                            onChange={(e) => handleSubmitCancelClick(e.value)} 
-                            options={cancelOrSubmit}  
-                        />
-                    </div>
+                    <Link href="/inventory">
+                        <StylishButton className="cancel-button" styleType="style1" label="Cancel" />
+                    </Link>
+
+                    <StylishButton className="submit-button" onClick={() => handleSubmit()} styleType="style3" label="Submit" />
                 </div>
             </div>
         </div>
