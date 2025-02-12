@@ -95,27 +95,27 @@ const PieChart = ({ data }) => {
            <svg ref={svgRef} className="svg-container"></svg>
            <div className="key-grid">
             <div className="key-item">
-                <div className="key-dot" style={{ backgroundColor: '#69D3F5' }}></div>
+                <div className="key-dot" style={{ backgroundColor: 'var(--pie-1)' }}></div>
                 <span className="chart-label">Great Condition</span>
             </div>
             <div className="key-item">
-                <div className="key-dot" style={{ backgroundColor: '#FFB572' }}></div>
+                <div className="key-dot" style={{ backgroundColor: 'var(--pie-2)' }}></div>
                 <span className="chart-label">Good Condition</span>
             </div>
             <div className="key-item">
-                <div className="key-dot" style={{ backgroundColor: '#FF7CA3' }}></div>
+                <div className="key-dot" style={{ backgroundColor: 'var(--pie-3)' }}></div>
                 <span className="chart-label">Not Usable</span>
             </div>
             <div className="key-item">
-                <div className="key-dot" style={{ backgroundColor: '#6C89FF' }}></div>
+                <div className="key-dot" style={{ backgroundColor: 'var(--pie-4)' }}></div>
                 <span className="chart-label">Washing Needed</span>
             </div>
             <div className="key-item">
-                <div className="key-dot" style={{ backgroundColor: '#9181DB' }}></div>
+                <div className="key-dot" style={{ backgroundColor: 'var(--pie-5)' }}></div>
                 <span className="chart-label">Dry Cleaning Needed</span>
             </div>
             <div className="key-item">
-                <div className="key-dot" style={{ backgroundColor: '#72EFB1' }}></div>
+                <div className="key-dot" style={{ backgroundColor: 'var(--pie-6)' }}></div>
                 <span className="chart-label">Repairs Needed</span>
             </div>
             </div>
