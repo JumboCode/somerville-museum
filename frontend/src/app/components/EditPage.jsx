@@ -1,4 +1,18 @@
-"use client"; // This file is client-side
+/**************************************************************
+ *
+ *                     EditPage.jsx
+ *
+ *        Authors: Dan Glorioso & Massimo Bottari
+ *           Date: 02/01/2025
+ *
+ *     Summary: A component that allows users to edit an existing item in the
+ *              database. It fetches the current data for the item, populates 
+ *              the fields with that data, and allows users to modify it,
+ *              and submit the changes.
+ * 
+ **************************************************************/
+
+"use client";
 
 import { useState, useEffect } from 'react';
 import "../globals.css";
