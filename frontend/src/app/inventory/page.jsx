@@ -12,6 +12,7 @@ import ReturnButton from '../components/ReturnButton';
 import DeleteItemButton from '../components/DeleteItemButton';
 import StylishButton from '../components/StylishButton.jsx';
 import Filter from '../components/Filter/Filter';
+import SearchBar from '../components/SearchBar';
 import './inventory.css'
 
 export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
@@ -113,20 +114,7 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
     };
 
     const startIndex = (currentPage - 1) * unitsPerPage;
-    const currentUnits = units
-        .slice(startIndex, startIndex + unitsPerPage)
-        .map((unit) => {
-            // console.log(selectedItems);
-            return (<InventoryUnit
-                key={unit.id}
-                unit={unit}
-                onChange={handleCheckboxChange}
-                checked={selectedItems.some((item) => item?.id && unit?.id && item.id === unit.id)}
-            />)
-        }
-
-        );
-
+    
     const sortByName = () => {
         const filteredAndSortedEntries = [...units]
             .sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
@@ -167,9 +155,7 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
             <div className={`Table ${isFilterVisible ? 'shrink' : ''}`}>
                 <div className="Header">
                     <div className="Items">
-                        <div className="Searchbar">
-                            <input type="text" placeholder="Search..." />
-                        </div>
+                        <SearchBar updateSearchResults={setUnits} />
                             <div className='buttons'> 
                                 <AddButton className='addBtn'> </AddButton>
                                 <BorrowButton className='brwBtn'
@@ -213,7 +199,20 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
                     </div>
                 </div>
                 <div className="ItemBarHolder">
-                    {currentUnits}
+                    {units
+                        .slice(startIndex, startIndex + unitsPerPage)
+                        .map((unit) => {
+                        
+                            // console.log(selectedItems);
+                            return (<InventoryUnit
+                                key={unit.id}
+                                unit={unit}
+                                onChange={handleCheckboxChange}
+                                checked={selectedItems.some((item) => item?.id && unit?.id && item.id === unit.id)}
+                            />)
+                        }
+
+                    )}
                 </div>
                 <div className="pagination-controls">
                     <div className="num-items">
