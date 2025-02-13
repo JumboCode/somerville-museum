@@ -1,3 +1,17 @@
+
+/**************************************************************
+ *
+ *                     DeletePopup.jsx
+ *
+ *        Authors: Dan Glorioso & Hannah Jiang & Zack White
+ *           Date: 02/16/2025
+ *
+ *     Summary: The popup that appears when the user clicks the delete button
+ *              in the inventory page. This file just displays the popup and
+ *              does not execute the delete query.
+ * 
+ **************************************************************/
+
 import React from "react";
 import "./DeletePopup.css";
 

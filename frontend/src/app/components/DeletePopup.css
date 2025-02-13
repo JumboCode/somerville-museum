@@ -1,3 +1,16 @@
+
+/**************************************************************
+ *
+ *                     DeleteItemButton.css
+ *
+ *        Authors: Dan Glorioso & Hannah Jiang & Zack White
+ *           Date: 02/16/2025
+ *
+ *     Summary: CSS for the DeletePopup component.
+ * 
+ **************************************************************/
+
+
 .deleteContainer {
     position: fixed;
     top: 0;

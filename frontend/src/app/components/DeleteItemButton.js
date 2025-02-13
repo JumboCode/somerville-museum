@@ -1,4 +1,19 @@
-"use client";  // This directive marks the component as a Client Component
+
+/**************************************************************
+ *
+ *                     DeleteItemButton.js
+ *
+ *        Authors: Dan Glorioso & Hannah Jiang & Zack White
+ *           Date: 02/16/2025
+ *
+ *     Summary: The Delete button in the top bar of the inventory page
+ *              that allows the user to delete the selected item(s). This file
+ *              is responsible for calling and setting the state of the 
+ *              DeletePopup component and executing the delete query.
+ * 
+ **************************************************************/
+
+"use client";
 
 import { useEffect, useState } from "react";
 import StylishButton from "./StylishButton";
