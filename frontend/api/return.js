@@ -17,7 +17,6 @@ export default async function handler(req, res) {
 
       const itemStatus = statusResult.rows[0]?.status; 
       
-      console.log("reached here!");
       //if the item isnt available, add to unavailable items 
       if(itemStatus !== 'Borrowed' && itemStatus !== 'Overdue') {
         invalidItems.push(itemId); 
