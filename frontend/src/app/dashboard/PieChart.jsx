@@ -73,7 +73,6 @@ const PieChart = ({ data }) => {
         .attr("fill", (d, i) => `var(--pie-${i + 1})`)
         .style("stroke", "none"); // ❌ Remove white stroke
 
-    // ** Add value labels inside slices **
     chart.selectAll("text")
         .data(arcs)
         .enter()
@@ -85,7 +84,8 @@ const PieChart = ({ data }) => {
         .style("font-size", "14px")
         .style("font-weight", "600")
         .style("font-family", "Inter")
-        .text(d => d.value); // Display value
+        .text(d => (d.value && d.value > 0) ? d.value : ""); // Display value only if > 0
+    
 
    };
 
