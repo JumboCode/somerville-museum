@@ -146,7 +146,7 @@ const Dashboard = () => {
         <div className="chart-card">
           <h2 className="chart-title">Conditions</h2>
           <div className="chart-container">
-            <PieChart data={tempPieChartData}/>
+            <PieChart data={pieChartData}/>
           </div>
         </div>
       </div>
