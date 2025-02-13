@@ -6,9 +6,6 @@ import PrePopup from "./PrePopup";
 import "./InventoryUnit.css";
 
 export default function InventoryUnit({ unit, onChange, checked }) {
-
-
-
     // Add a condition to make sure `unit` is defined
     if (!unit) {
         return null; // Don't render anything if `unit` is undefined
@@ -48,7 +45,6 @@ export default function InventoryUnit({ unit, onChange, checked }) {
         if (
             event.target.closest('.sidebar') === null &&
             event.target.closest('.unit') === null
-
         ) {
             setIsPopupVisible(false);
         }
@@ -66,7 +62,6 @@ export default function InventoryUnit({ unit, onChange, checked }) {
         }
     }
 
-
     useEffect(() => {
         if (isPopupVisible || isPrePopupVisible) {
             document.addEventListener('click', handleClickOutside);
@@ -75,8 +70,8 @@ export default function InventoryUnit({ unit, onChange, checked }) {
         }
     }, [isPopupVisible]);
 
-    if(checked){
-        console.log("IOSFJNFAS", checked);
+    if(checked) {
+        console.log("Items Checked?", checked);
     }
 
     //not pulling tags
