@@ -38,14 +38,14 @@ const Dashboard = () => {
  
 
   // pie chart integration with real data query can come later
-  // const pieChartData = [
-  //   { name: 'Great Condition', value: 253.44 },
-  //   { name: 'Good Condition', value: 182.7 },
-  //   { name: 'Not Usable', value: 85.08 },
-  //   { name: 'Washing Needed', value: 150.66 },
-  //   { name: 'Dry Cleaning Needed', value: 134.93 },
-  //   { name: 'Repairs Needed', value: 118.25 }
-  // ];
+  const tempPieChartData = [
+    { name: 'Great Condition', value: 10 },
+    { name: 'Good Condition', value: 0 },
+    { name: 'Not Usable', value: 6 },
+    { name: 'Washing Needed', value: 3 },
+    { name: 'Dry Cleaning Needed', value: 15 },
+    { name: 'Repairs Needed', value: 0 }
+  ];
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -116,10 +116,10 @@ const Dashboard = () => {
 
   /* temporary data for bar graph esting purposes */ 
   const tempBar = ([
-    { name: "Available", value: 3 },
-    { name: "Borrowed", value: 34 },
-    { name: "Overdue", value: 56 },
-    { name: "Missing", value: 77 }
+    { name: "Available", value: 570 },
+    { name: "Borrowed", value: 300 },
+    { name: "Overdue", value: 0 },
+    { name: "Missing", value: 20 }
   ])
 
   return (
@@ -146,7 +146,7 @@ const Dashboard = () => {
         <div className="chart-card">
           <h2 className="chart-title">Conditions</h2>
           <div className="chart-container">
-            <PieChart data={pieChartData}/>
+            <PieChart data={tempPieChartData}/>
           </div>
         </div>
       </div>

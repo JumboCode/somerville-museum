@@ -59,7 +59,9 @@ const BarGraph = ({ data }) => {
     const chart = svg.append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    const yMax = Math.ceil(max(data, d => d.value) / 10) * 10; // Rounds up to nearest 10
+    const tickInterval = max(data, d => d.value) > 300 ? 50 : 10;
+    const yMax = Math.ceil(max(data, d => d.value) / tickInterval) * tickInterval;
+
 
     const xScale = scaleBand()
         .domain(data.map(d => d.name))
@@ -93,14 +95,11 @@ const BarGraph = ({ data }) => {
     //     .style("stroke-dasharray", "2,2") // Dotted effect
     //     .style("opacity", 0.4); // Slightly visible
 
-
-    // ** Append y-axis with only numbers (no ticks or line) **
-    const yAxis = chart.append("g")
-        .call(axisLeft(yScale).tickValues(range(0, yMax + 10, 10))) // Only interval numbers
+    chart.append("g")
+        .call(axisLeft(yScale).tickValues(range(0, yMax + tickInterval, tickInterval))) // Adjust interval dynamically
         .attr("class", "bar-label")
         .call(g => g.select(".domain").remove()) // Remove y-axis solid line
         .call(g => g.selectAll("line").remove()); // Remove tick marks
-
 
     // ** Draw the dotted y-axis manually **
     chart.append("line")
@@ -115,7 +114,7 @@ const BarGraph = ({ data }) => {
 
     // ** Add horizontal grid lines at each tick on y-axis **
     chart.selectAll(".grid-line")
-        .data(range(0, yMax + 10, 10)) // Keep only multiples of 10
+        .data(range(0, yMax + tickInterval, tickInterval)) // Keep only multiples of 10
         .enter()
         .append("line")
         .attr("class", "grid-line")
