@@ -18,7 +18,7 @@ export default function Inventory() {
     const [selectAllChecked, setSelectAllChecked] = useState(false);
     
     useEffect(() => {
-        console.log(selectedItems);
+        // console.log(selectedItems);
         fetchData();
     }, [selectedItems]);
 
@@ -141,7 +141,9 @@ export default function Inventory() {
                                 </ReturnButton>
                                 <DeleteItemButton
                                     classname = 'delBtn'
-                                    selectedItems={selectedItems}>
+                                    selectedItems={selectedItems}
+                                    // isChecked={selectedItems.length > 0}
+                                    >
                                 </DeleteItemButton>
                             </div>
                     </div>

@@ -15,7 +15,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import StylishButton from "./StylishButton";
 import DeletePopup from "./DeletePopup";
 
@@ -28,7 +28,7 @@ import DeletePopup from "./DeletePopup";
     };
 
     const handleCancel = () => {
-        setPopupVisible(false);
+        setPopupVisible(false);  // Hide the popup
     };
 
     const checkIfItemsSelected = () => {
@@ -41,7 +41,7 @@ import DeletePopup from "./DeletePopup";
     };
 
     const handleConfirm = async () => {
-        setPopupVisible(false);
+        setPopupVisible(false);   // Close the popup
 
         // Delete the item using the query
         try {
@@ -70,6 +70,7 @@ import DeletePopup from "./DeletePopup";
 
         return (
             <div>
+                {/* Delete Button */}
                 <StylishButton
                     label = "Delete"
                     styleType={isItemSelected ? "style1" : "style6"}
@@ -77,6 +78,7 @@ import DeletePopup from "./DeletePopup";
                 >
                 </StylishButton>
 
+                {/* Popup Component */}
                 {isPopupVisible && isItemSelected && (
                 <DeletePopup 
                     onConfirm={handleConfirm} 
