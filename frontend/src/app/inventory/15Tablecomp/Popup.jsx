@@ -13,6 +13,7 @@
 "use client";
 import "./Popup.css";
 import StylishButton from "../../components/StylishButton";
+import "./InventoryUnit.css";
 import Link from "next/link";
 import { useEffect } from "react";
 
@@ -53,6 +54,13 @@ export default function Popup( { unit, onClose } ) {
         };
     }, []);
     
+    // Set the status missing/found status statement based on the status
+    const statusStatement = status === "Missing" ? (
+        <span style={{ color: "red", textDecoration: "underline"}}>Mark Item as <strong style={{ color: "red", textDecoration: "underline"}}>Found</strong></span>
+    ) : (
+        <span style={{ color: "red", textDecoration: "underline" }}>Mark Item as <strong style={{ color: "red", textDecoration: "underline"}}>Missing</strong></span>
+    );
+
     return (
         <div className="expandedContainer" onClick={handleContainerClick}>
             <div className="expandedContent">
@@ -122,15 +130,28 @@ export default function Popup( { unit, onClose } ) {
                             <td><strong>Season: </strong>{season}</td>
                         </tr>
                         <tr>
-                            <td><strong>Condition: </strong>{condition}</td>
+                            <td>
+                                <strong>Condition: </strong>
+                                <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                                    <div className={`circle2 ${unit.condition}`}></div>
+                                    {condition}
+                                </span>
+                            </td>
                             <td><strong>Color: </strong>{color}</td>
                         </tr>
                         <tr>
-                            <td><strong>Status: </strong>{status}</td>
+                            <td>
+                                <strong>Status: </strong>
+                                <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                                    <div className={`circle1 ${status}`}></div>
+                                    {status}
+                                </span>
+                            </td>
                             <td><strong>Garment Type: </strong>{garment_type}</td>
                         </tr>
+
                         <tr>
-                            <td>Mark Item as <strong>Found</strong></td>
+                            <td>{statusStatement}</td>
                             <td><strong>Time Period: </strong>{time_period}</td>
                         </tr>
                     </tbody>
@@ -138,7 +159,7 @@ export default function Popup( { unit, onClose } ) {
 
                 {/* Divider */}
                 <div className="noteSection"> 
-                    <h3>Notes</h3>
+                    <p><strong>Notes</strong></p>
                     <textarea readOnly id="noteBox">
                         {notes}
                     </textarea>
@@ -146,6 +167,19 @@ export default function Popup( { unit, onClose } ) {
 
                 {/* Horizontal diver */}
                 <br></br>
+                
+                <div className="borrowerSection">
+                    <h3>Borrower Information</h3>
+                    <div className="returnButton">
+                        <Link href={`/return?id=${id}`}>
+                            <StylishButton
+                                styleType={"style1"}
+                                label={"Return"}>
+                            </StylishButton>
+                        </Link>
+                    </div>
+                </div>
+
             </div> 
         </div>
     );
