@@ -26,21 +26,21 @@
     font-size: 14px;
   }
   
-  table {
+  #borrowTable {
     width: 100%;
     border-collapse: collapse;
   }
   
-  th, td {
+  #borrowTable th, #borrowTable td {
     padding: 12px 8px;
     text-align: left;
     border-bottom: 1px solid #f0f0f0;
   }
   
-  th {
-    font-weight: bold;
+  #borrowTable th {
+    border-bottom: 1px solid #f0f0f0;
   }
   
-  td {
-    font-size: 14px;
+  #borrowTable td {
+    border-bottom: 1px solid #f0f0f0;
   }

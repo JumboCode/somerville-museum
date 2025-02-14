@@ -1,138 +1,131 @@
-/* Sidebar Container */
-.sidebar {
+/**************************************************************
+ *
+ *                     Popup.jsx
+ *
+ *        Authors: Dan Glorioso & Hannah Jiang & Zack White
+ *           Date: 02/16/2025
+ *
+ *     Summary: CSS styling for the Popup inventory sidebar component.
+ * 
+ **************************************************************/
+
+.expandedContainer {
     position: fixed;
-    right: 0;
     top: 0;
-    height: 100%;
-    width: 30%;
-    background-color: #fff;
-    box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1);
-    padding: 2vh;
-    padding-left: 5vh;
-    overflow-y: auto;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.25);
+    display: flex;
+    justify-content: right;
+    align-items: flex-start;
     z-index: 10000;
-    font-family: Arial, sans-serif;
-  }
-  
-  .header {
+    overflow-y: auto;
+}
+
+.expandedContent {
+    background-color: white;
+    position: relative;
+    width: 33vw;
+    height: auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-  }
-  
-  .header h2 {
-    margin: 0;
-  }
-  
-  .buttons {
-    display: flex;
-    gap: 1vh;
-  }
-  
-  .edit-btn, .close-btn {
-    background-color: transparent;
-    border: 1px solid #333;
-    padding: 0.5vh 1vh;
-    cursor: pointer;
-  }
-  
-  /* Item Details Section */
-  .item-details {
-    display: flex;
-    padding: 0.25vh;
-  }
-  
-  .details-left {
-    gap: 0vh;
-  }
-  
-  .image-placeholder {
-    width: 30vh;
-    height: 30vh;
-    background-color: #ccc;
-    border-radius: 5%;
-  }
-  
-  /* Tags Section */
-  .tags-section {
-    padding: 1vh 0;
-  }
-  
-  .tags {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 1vh;
-    overflow-x: auto;
-    padding-bottom: 1vh;
-  }
-  
-  .tag {
-    background-color: #c3c9c9;
-    padding: 0.5vh 1vh;
-    border-radius: 4px;
-    font-size: 1.5vh;
-  }
-  
-  /* Notes Section */
-  .notes-section {
-    padding: 1vh 0;
-  }
-  
-  textarea {
-    width: 100%;
-    height: 10vh;
-    resize: none;
-    padding: 1vh;
-    border: 1px solid #333;
-    background-color: #fff;
-    border-radius: 4px;
-    font-size: 1.5vh;
-  }
-  
-  /* Borrower Information Section */
-  .borrower-info {
-    padding: 2vh 0;
-  }
-  
-  .borrower-info p {
-    margin: 0.5vh 0;
-  }
-  
-  .return-btn {
-    display: block;
-    margin-bottom: 2vh;
-    padding: 1vh 2vh;
-    background-color: #333;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  /* History Section */
-  .history-section {
-    padding: 2vh 0;
-  }
-  
-  .history-section table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .history-section table tr td {
-    border-bottom: 1px solid #ccc;
-    padding: 1vh 0;
-    font-size: 1.5vh;
-  }
-  
-  .history-section h3 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .history-section a {
-    font-size: 1.5vh;
-    text-decoration: underline;
-    cursor: pointer;
-  }
-  
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+    min-width: 450px;
+    overflow-wrap: break-word;
+    display: inline-block;
+    padding: 1rem 1.5rem;
+}
+
+.headerEC {
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.titleButton {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1.25rem;
+  align-content: center;
+  align-items: center;
+}
+
+.exit {
+  align-items: center;
+  display: flex;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.imageContainer {
+  width: auto;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  background-color: #fff;
+  border-radius: 5px;
+  margin-top: 1.25rem;
+  border: 1px solid #9B525F;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.imageSelection {
+  background-color: #9B525F;
+  height: 5vh;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.infoHeader {
+  margin-top: 30px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#itemInformation {
+  width: 100%;
+  table-layout: fixed;
+  text-align: left;
+  margin-top: 15px;
+}
+
+#itemInformation td {
+  height: 30px;
+  vertical-align: bottom;
+}
+
+.noteSection {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  width: 100%;
+  justify-content: left;
+  align-items: flex-start;
+}
+
+textarea {
+  width: 100%;
+  height: auto;
+  min-height: 20vh;
+  resize: none;
+  background-color: #fff;
+  border: 1px solid #9B525F;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  padding-left: 1rem;
+  padding-top: 0.75rem;
+  margin-top: 30px;
+}
+
