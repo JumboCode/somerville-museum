@@ -105,3 +105,26 @@
 
     height: 5vh;
   }
+
+  .stylish-button.style7 {
+    display: inline-flex;
+    /* padding: auto; */
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 5px;
+    border: 1px solid #9B525F;
+    background: #FFF;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+    color: #000;
+    text-align: center;
+    font-family: Akatab;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    flex-shrink: 1;
+
+    height: 3vh;
+    width: 1vw;
+  }
