@@ -5,27 +5,46 @@ import StylishButton from "./StylishButton.jsx";
 import ItemBoxes from "./ReturnItemBoxes.jsx";
 
 
-export default function ReturnPopup( { unit, onClose } ) {
+const ReturnPopup = ( { unit = [], onSuccess, onClose } ) => {
     if (!unit){
         return null;
     }
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(unit.length / 6 + 1);
     const buttons = Array.from({ length: totalPages }, (_, index) => index + 1); // an array of buttons for page selection
-    // const { id, name, status, tags } = unit; // change
-    // const startIndex = (currentPage - 1) * unitsPerPage;
-    // const currentUnits = units
-    //     .slice(startIndex, startIndex + unitsPerPage)
-    //     .map((unit) => {
-    //         console.log(selectedItems);
-    //         return (<InventoryUnit
-    //             key={unit.id}
-    //             unit={unit}
-    //             onChange={handleCheckboxChange}
-    //             checked={selectedItems.some((item) => item?.id && unit?.id && item.id === unit.id)}
-    //         />)
-    //     });
 
+    const handleReturn = async (e) => {
+        try {
+            const response = await fetch('../../api/return', {   //call return API 
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    selectedItems: unit?.map(item => item.id),  //send in selected items 
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Fetch error: ${response.status} - ${response.statusText}`);
+            }
+
+            const result = await response.json(); 
+
+            if (result.message) {
+                alert(result.message);  //display result message 
+            }
+
+            if (onSuccess) {
+                onSuccess(); 
+            }
+
+            location.reload(); // refresh to go to main inventory + update availability
+        }
+        catch (error) {
+            console.error("Error returning data:", error);
+        }
+    }
     const goToPreviousPage = () => {
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
     };
@@ -53,7 +72,7 @@ export default function ReturnPopup( { unit, onClose } ) {
                 <div className="heading">Return Item(s)</div>
                 <div className="buttons">
                     <StylishButton label = "Cancel" onClick={onClose} styleType = "style1"> </StylishButton>
-                    <StylishButton label = "Return All"> </StylishButton>
+                    <StylishButton label = "Return All" onClick={handleReturn}> </StylishButton>
                 </div>
             </div>
             {/* container for all return items */}
@@ -87,3 +106,5 @@ export default function ReturnPopup( { unit, onClose } ) {
         </div>
     );
 }
+
+export default ReturnPopup;
