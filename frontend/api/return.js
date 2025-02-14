@@ -6,8 +6,8 @@ export default async function handler(req, res) {
   try {
 
     //arrays to keep track of items 
-    let invalidItems = [];
-    let validItems = []; 
+    const invalidItems = [];
+    const validItems = []; 
 
     for (const itemId of selectedItems) {
       //checks status of each item 
@@ -15,7 +15,7 @@ export default async function handler(req, res) {
         'SELECT status FROM dummy_data WHERE id = $1', [itemId] 
       ); 
 
-      const itemStatus = statusResult.rows[0]?.status; 
+      const itemStatus = statusResult.rows[0].status; 
       
       //if the item isnt available, add to unavailable items 
       if(itemStatus !== 'Borrowed' && itemStatus !== 'Overdue') {
@@ -23,10 +23,6 @@ export default async function handler(req, res) {
         continue;   //continue to next item
       }
 
-        const today = new Date();
-        const todayFormatted = today.toLocaleDateString().split('T')[0];
-
-        // let curr_borrower = `Date Returned: ${todayFormatted}`; 
       
         // Using array_append with COALESCE to borrower_history, sending all other data
         await query(
@@ -52,6 +48,7 @@ export default async function handler(req, res) {
     res.status(200).json({message}); // Send the result back to the frontend
   } catch (error) {
     console.error("Database query error:", error);
+    console.error("in catch error");
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
