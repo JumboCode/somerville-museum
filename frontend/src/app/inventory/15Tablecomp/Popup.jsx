@@ -115,7 +115,7 @@ export default function Popup( { unit, onClose } ) {
                         </tr>
                         <tr>
                             <td><strong>Cost: </strong>${cost}</td>
-                            <td><strong>Gender: </strong>{gender}</td>
+                            <td><strong>Sex: </strong>{gender}</td>
                         </tr>
                         <tr>
                             <td><strong>Date Added: </strong>{date_added}</td>
