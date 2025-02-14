@@ -86,15 +86,13 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
         }
     }
 
-    async function sendEmail() {
 
-    }
-
-    const handleSendEmail = async () => {
+    const handleSendEmail = async (borrowedItems) => {
         try {
-            const response = await fetch("/api/sendEmail", { 
+            const response = await fetch("/api/sendBorrowedEmail", { 
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ selectedItems }) // ✅ Send items in request body
             });
     
             const data = await response.json();
@@ -114,10 +112,10 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
     const handleBorrowSuccess = () => {
         // Literally just to call the useeffect with the request. kinda scuffed but whatever
         setRefreshTable(!refreshTable);
-        setSelectedItems([]); 
-        fetchData();
+        fetchDaata();
 
         handleSendEmail();
+        setSelectedItems([]); 
         // console.log("lmao sent");
     };
 

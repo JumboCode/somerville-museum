@@ -31,6 +31,30 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
 
     const dueDate = calculateDueDate(returnWeeks);
   
+
+    const handleSendBorrowEmail = async (recipientEmail, recipientName, items) => {
+
+        console.log("HEYYYYY");
+        try {
+            const response = await fetch("/api/sendBorrowedEmail", { 
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ recipientEmail, recipientName, items })
+            });
+    
+            const data = await response.json();
+    
+            if (response.ok) {
+                console.log("Borrowed email sent successfully!");
+            } else {
+                console.error("Failed to send borrowed email:", data.error);
+            }
+        } catch (error) {
+            console.error("Error sending borrowed email:", error);
+        }
+    };
+    
+
     //calculates the current day NOTEEEEEE this for some reason logs one day after
     const calculateBorrowDay = () => {
       const today = new Date();
@@ -50,17 +74,17 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
    
     //submits the information, updates all data columns with appropriate information
     const handleSubmit = async (e) => {
-    e.preventDefault(); 
+        e.preventDefault(); 
 
-    if (!isEmailValid) {
-        alert("Please enter a valid email in the format XXX@domain.YYY");
-        return;
-    }
+        if (!isEmailValid) {
+            alert("Please enter a valid email in the format XXX@domain.YYY");
+            return;
+        }
 
-    if (!isPhoneValid) {
-        alert("Please enter a valid phone number in the format XXX-XXX-XXXX");
-        return;
-    }
+        if (!isPhoneValid) {
+            alert("Please enter a valid phone number in the format XXX-XXX-XXXX");
+            return;
+        }
 
         try {
             if (borrowItems == 0) {
@@ -80,13 +104,17 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
                         selectedItems: borrowItems.map(item => item.id),
                     }),
                 });
-            
-                if (!response.ok) {
-                    const errorText = await response.text(); // Fetch error text
-                    throw new Error(`Fetch failed: ${response.status} ${errorText}`);
-                }
+
+                const itemNames = borrowItems.map(item => item.name);
+                console.log(borrowerEmail, itemNames);
+                await handleSendBorrowEmail(borrowerEmail, `${borrowerFirstName} ${borrowerLastName}`, itemNames);
+                // if (!response.ok) {
+                //     const errorText = await response.text(); // Fetch error text
+                //     throw new Error(`Fetch failed: ${response.status} ${errorText}`);
+                // }
             
                 const result = await response.json();
+
     
                 setIsSuccessPopupVisible(true);
                 // resetFields(); 
