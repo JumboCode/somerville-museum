@@ -2,10 +2,10 @@ import { query } from "./db.js";
 
 export default async function handler(req, res) {
     const searchQuery = req.body.searchQuery;
-    const databaseQuery = isNaN(parseInt(searchQuery)) ? 
+    let databaseQuery = isNaN(parseInt(searchQuery)) ? 
         `SELECT * FROM dummy_data WHERE name ILIKE '%'||$1||'%' OR notes ILIKE '%'||$1||'%'` : 
         `SELECT * FROM dummy_data WHERE name ILIKE '%'||$1||'%' OR notes ILIKE '%'||$1||'%' OR id = ${parseInt(searchQuery)}`;
-
+    
     try {
         // Select all entries where searchQuery is a substring of name, notes, or id
         const result = await query(
