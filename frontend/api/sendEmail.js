@@ -15,12 +15,12 @@ export default async function handler(req, res) {
             Messages: [
                 {
                     From: {
-                        Email: "your-email@example.com",
+                        Email: "somerville.museum1@gmail.com",
                         Name: "Your Name"
                     },
                     To: [
                         {
-                            Email: "recipient@example.com",
+                            Email: "eliasl.swartz@gmail.com",
                             Name: "Recipient Name"
                         }
                     ],

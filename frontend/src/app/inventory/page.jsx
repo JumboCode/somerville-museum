@@ -92,7 +92,7 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
 
     const handleSendEmail = async () => {
         try {
-            const response = await fetch("/api/sendEmail", { // ✅ Absolute path
+            const response = await fetch("/api/sendEmail", { 
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
             });
