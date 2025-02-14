@@ -86,11 +86,39 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
         }
     }
 
+    async function sendEmail() {
+
+    }
+
+    const handleSendEmail = async () => {
+        try {
+            const response = await fetch("/api/sendEmail", { // ✅ Absolute path
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+            });
+    
+            const data = await response.json();
+    
+            if (response.ok) {
+                alert("Email sent successfully!");
+            } else {
+                alert("Failed to send email: " + data.error);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("An error occurred while sending the email.");
+        }
+    };
+    
+
     const handleBorrowSuccess = () => {
         // Literally just to call the useeffect with the request. kinda scuffed but whatever
         setRefreshTable(!refreshTable);
         setSelectedItems([]); 
         fetchData();
+
+        handleSendEmail();
+        // console.log("lmao sent");
     };
 
     const handleCheckboxChange = (unit, isChecked) => {
@@ -174,13 +202,17 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
                                 <AddButton className='addBtn'> </AddButton>
                                 <BorrowButton className='brwBtn'
                                     selectedItems={selectedItems}
-                                    onSuccess={handleBorrowSuccess}>Borrow
+                                    onSuccess={handleBorrowSuccess}>
                                 </BorrowButton>
                                 <ReturnButton className='rtnBtn'
                                     selectedItems={selectedItems}
                                     onSuccess={handleBorrowSuccess}>
                                 </ReturnButton>
                                 <DeleteItemButton classname = 'delBtn'></DeleteItemButton>
+
+                                <StylishButton className='tmpBtn'
+                                onClick={handleSendEmail}>
+                                </StylishButton>
                             </div>
                     </div>
                     <div className="TableLabels">

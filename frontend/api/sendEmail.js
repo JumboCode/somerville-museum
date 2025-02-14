@@ -1,11 +1,15 @@
-const Mailjet = require('node-mailjet');
+import Mailjet from 'node-mailjet';
 
 const mailjet = Mailjet.apiConnect(
     process.env.MJ_APIKEY_PUBLIC,
     process.env.MJ_APIKEY_PRIVATE
 );
 
-async function sendEmail() {
+export default async function handler(req, res) {
+    if (req.method !== "POST") {
+        return res.status(405).json({ error: "Method Not Allowed" });
+    }
+
     try {
         const response = await mailjet.post("send", { version: "v3.1" }).request({
             Messages: [
@@ -28,10 +32,10 @@ async function sendEmail() {
         });
 
         console.log("Email sent successfully:", response.body);
+        return res.status(200).json({ message: "Email sent successfully!" });
+
     } catch (error) {
         console.error("Error sending email:", error);
+        return res.status(500).json({ error: "Failed to send email" });
     }
 }
-
-
-sendEmail();
