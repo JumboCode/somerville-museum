@@ -114,7 +114,7 @@ export default function Popup( { unit, onClose } ) {
                             <td><strong>Age Group: </strong>{age_group}</td>
                         </tr>
                         <tr>
-                            <td><strong>Cost: </strong>{cost}</td>
+                            <td><strong>Cost: </strong>${cost}</td>
                             <td><strong>Gender: </strong>{gender}</td>
                         </tr>
                         <tr>
