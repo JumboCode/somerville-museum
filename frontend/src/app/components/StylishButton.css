@@ -84,6 +84,7 @@
   }
 
   .stylish-button.style6 {
+    cursor: not-allowed;
     display: inline-flex;
     padding: 11px 20px;
     justify-content: center;
