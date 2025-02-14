@@ -18,7 +18,9 @@ import { useState, useEffect } from 'react';
 import "../globals.css";
 import { Dropdown } from 'primereact/dropdown';
 import { MultiSelect } from 'primereact/multiselect';
-import { SelectButton } from 'primereact/selectbutton';
+import StylishButton from './StylishButton';
+import Link from 'next/link';
+
 
 export default function EditPage() {
     // Left column state variables
@@ -227,28 +229,10 @@ export default function EditPage() {
         });
     };
 
-    const handleSubmitCancelClick = (value) => {
-        if (value === "Submit") {
-            setStatusMessage("Updating...");
-            setStatusType("neutral");
-            handleSubmit();
-        } else if (value === "Cancel") {
-            setStatusMessage("Action canceled.");
-            setStatusType("neutral");
-            resetForm();
-        }
-    };
-
     // Fetch data from the API about the item to edit
     const retrieveItem = async () => {
         setStatusMessage("Retrieving item data...");
         setStatusType("neutral");
-
-        if (!idText) {
-            setStatusMessage("Error: No ID set.");
-            setStatusType("error");
-            return;
-        }
     
         try {
             const response = await fetch(`/api/retrieveItem?id=${idText}`);
@@ -294,31 +278,18 @@ export default function EditPage() {
     };
     
     useEffect(() => {
-        // Prompt user for ID if not already set
-        if (!idText) {
-            let id;
-
-            // Keep prompting until a valid ID is entered
-            do {
-                id = prompt("Please enter the ID of the item to edit:");
-                if (id === null) {
-                    alert("ID entry canceled. Reload the page to try again.");
-                    return;
-                }
-                id = id.trim();
-            } while (!id);
-    
-            setIDText(id);
+        const urlParams = new URLSearchParams(window.location.search);
+        const itemId = urlParams.get('id');
+        if (itemId) {
+            retrieveItem(itemId);
         }
-    
-        // Fetch data for the item with the given ID only if it's set
-        if (idText) {
-            retrieveItem();
-        }
-    }, [idText]);
+    }, []);
     
 
     const handleSubmit = () => {
+        setStatusMessage("Updating...");
+        setStatusType("neutral");
+
         const newItem = {
             id: idText,
             name: itemText || null,
@@ -589,7 +560,7 @@ export default function EditPage() {
 
                         {/* Gender Buttons */}
                         <div className="allGender">
-                            <h3 className={errors.gender ? "error-text" : ""}>Gender*</h3>
+                            <h3 className={errors.gender ? "error-text" : ""}>Sex*</h3>
                             <div className="genderButtons p-selectbutton">
                                 {genderOptions.map((option) => (
                                     <button
@@ -686,13 +657,11 @@ export default function EditPage() {
 
                 {/* Cancel and Submit Buttons */}
                 <div className="cancel-submit-buttons">
-                    <div className="ageButton">
-                        <SelectButton
-                            value={selectedChoice} 
-                            onChange={(e) => handleSubmitCancelClick(e.value)} 
-                            options={cancelOrSubmit}  
-                        />
-                    </div>
+                    <Link href="/inventory">
+                        <StylishButton className="cancel-button" styleType="style1" label="Cancel" />
+                    </Link>
+
+                    <StylishButton className="submit-button" onClick={() => handleSubmit()} styleType="style3" label="Submit" />
                 </div>
             </div>
         </div>

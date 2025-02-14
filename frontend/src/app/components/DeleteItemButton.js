@@ -15,29 +15,29 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StylishButton from "./StylishButton";
 import DeletePopup from "./DeletePopup";
 
- export default function DeleteItemButton( { selectedItems = [] }) {
+ export default function DeleteItemButton( { selectedItems, isChecked }) {
     const [isPopupVisible, setPopupVisible] = useState(false);
     const [isItemSelected, setItemSelected] = useState(false);
+
+    // Update the selected item state when the isChecked prop changes
+    useEffect(() => {
+        setItemSelected(isChecked);
+    }, [isChecked]);
+
+    // Handle the delete button click
     const handleClick = () => {
-        checkIfItemsSelected();
-        setPopupVisible(true)
+        if (isItemSelected) {
+            setPopupVisible(true)
+        }
     };
 
+    // Handle the cancel button click
     const handleCancel = () => {
         setPopupVisible(false);  // Hide the popup
-    };
-
-    const checkIfItemsSelected = () => {
-        // Check if the selectedItem input is empty
-        if (selectedItems.length === 0) {
-            setItemSelected(false);
-        } else {
-            setItemSelected(true);
-        }
     };
 
     const handleConfirm = async () => {
@@ -75,6 +75,7 @@ import DeletePopup from "./DeletePopup";
                     label = "Delete"
                     styleType={isItemSelected ? "style1" : "style6"}
                     onClick={handleClick}
+                    disabled={!isItemSelected}
                 >
                 </StylishButton>
 
