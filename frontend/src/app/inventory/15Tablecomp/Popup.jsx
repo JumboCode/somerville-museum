@@ -59,7 +59,7 @@ export default function Popup( { unit, onClose } ) {
     useEffect(() => {
         const fetchBorrowers = async () => {
             try {
-                const response = await fetch(`../../api/db`, {
+                const response = await fetch(`../../../../api/db`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -72,7 +72,19 @@ export default function Popup( { unit, onClose } ) {
 
                 if (response.ok) {
                     const data = await response.json();
-                    setBorrowers(data);
+
+                    const borrowData = data.map((borrower) => {
+                        return {
+                            name: borrower.name,
+                            email: borrower.email,
+                            date_borrowed: borrower.date_borrowed,
+                            return_date: borrower.return_date,
+                            approved_by: borrower.approved_by,
+                            notes: borrower.notes
+                        };
+                    });
+
+                    setBorrowers(borrowData);
                 } else {
                     console.error("Failed to fetch borrower data");
                 }
@@ -91,6 +103,12 @@ export default function Popup( { unit, onClose } ) {
         <span style={{ color: "red", textDecoration: "underline" }}>Mark Item as <strong style={{ color: "red", textDecoration: "underline"}}>Missing</strong></span>
     );
 
+    useEffect(() => {
+        if (borrowers && borrowers.length > 0) {
+          console.log("borrowers:", borrowers[0].name);
+        }
+      }, [borrowers]);
+      
     return (
         <div className="expandedContainer" onClick={handleContainerClick}>
             <div className="expandedContent">
@@ -211,24 +229,27 @@ export default function Popup( { unit, onClose } ) {
                 </div>
 
                 <table id="currentBorrower">
+                    <thead>
+                        <tr>
+                        <th><strong>Current Borrower</strong></th>
+                        </tr>
+                    </thead>
                     <tbody>
-                        <th>
-                            <strong>Current Borrower</strong>
-                        </th>
                         <tr>
-                            <td><strong>Name: </strong>{borrowers.name}</td>
-                            <td><strong>Date Borrowed: </strong>{}</td>
+                        <td><strong>Name: </strong>{borrowers.length > 0 ? borrowers[0].name : "N/A"}</td>
+                        <td><strong>Date Borrowed: </strong>{borrowers.length > 0 ? borrowers[0].date_borrowed : "N/A"}</td>
                         </tr>
                         <tr>
-                            <td><strong>Email: </strong>{}</td>
-                            <td><strong>Return Date: </strong>{}</td>
+                        <td><strong>Email: </strong>{borrowers.length > 0 ? borrowers[0].email : "N/A"}</td>
+                        <td><strong>Return Date: </strong>{borrowers.length > 0 ? borrowers[0].return_date : "N/A"}</td>
                         </tr>
                         <tr>
-                            <td><strong>Cell: </strong>{}</td>
-                            <td><strong>Approved By: </strong>{}</td>
+                        <td><strong>Cell: </strong>{borrowers.length > 0 ? borrowers[0].phone_number : "N/A"}</td>
+                        <td><strong>Approved By: </strong>{borrowers.length > 0 ? borrowers[0].approved_by : "N/A"}</td>
                         </tr>
                     </tbody>
-                </table>
+                    </table>
+
 
                 <div className="noteSection"> 
                     <p><strong>Notes</strong></p>
