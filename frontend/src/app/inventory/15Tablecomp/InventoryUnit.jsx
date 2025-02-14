@@ -84,8 +84,7 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                     id={`customCheckbox-${id}`} 
                     className="checkbox-input" 
                     checked={checked} 
-                    onChange={(e) => onChange(unit, e.target.checked)} 
-                    
+                    onChange={(e) => onChange(unit, e.target.checked)}
                 />
                 </div>
                 <div className="picture">
