@@ -44,7 +44,7 @@ export default async function handler(req, res) {
         dateReturned, 
         approver,
         note
-      }; 
+      };
 
       //not updating borrowers with correct information
       const historyUpdateResult = await query(

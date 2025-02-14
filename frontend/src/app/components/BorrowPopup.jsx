@@ -108,6 +108,7 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
                 const itemNames = borrowItems.map(item => item.name);
                 console.log(borrowerEmail, itemNames);
                 await handleSendBorrowEmail(borrowerEmail, `${borrowerFirstName} ${borrowerLastName}`, itemNames);
+                
                 // if (!response.ok) {
                 //     const errorText = await response.text(); // Fetch error text
                 //     throw new Error(`Fetch failed: ${response.status} ${errorText}`);
