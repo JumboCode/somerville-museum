@@ -91,6 +91,7 @@ export default function AddPage() {
         { name: "Needs washing" },
         { name: "Not usable" },
         { name: "Great" },
+        { name: "Good" },
     ]
     const colors = [
         { name: "Red", hex: "#FF3B30" },
