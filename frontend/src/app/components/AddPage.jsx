@@ -502,7 +502,7 @@ export default function AddPage() {
 
                         {/* Gender Buttons */}
                         <div className="allGender">
-                            <h3 className={errors.gender ? "error-text" : ""}>Gender*</h3>
+                            <h3 className={errors.gender ? "error-text" : ""}>Sex*</h3>
                             <div className="genderButtons p-selectbutton">
                                 {genderOptions.map((option) => (
                                     <button
