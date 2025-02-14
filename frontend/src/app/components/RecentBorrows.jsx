@@ -32,7 +32,7 @@ const RecentBorrows = () => {
           SEE ALL
         </div>
       </div>
-      <table>
+      <table id="borrowTable">
         <thead>
           <tr>
             <th>ID#</th>
