@@ -98,7 +98,7 @@
   width: 100%;
   table-layout: fixed;
   text-align: left;
-  margin-top: 15px;
+  margin-top: 5px;
 }
 
 #itemInformation td {
@@ -115,7 +115,7 @@
   align-items: flex-start;
 }
 
-#noteBox {
+.noteBox {
   width: 100%;
   height: auto;
   min-height: 20vh;
@@ -129,7 +129,7 @@
   margin-top: 10px;
 }
 
-.borrowerSection {
+.borrowerTitle {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -139,3 +139,25 @@
   display: block;
 }
 
+#currentBorrower {
+  width: 100%;
+  table-layout: fixed;
+  text-align: left;
+  margin-top: 5px;
+}
+
+#currentBorrower td {
+  height: 30px;
+  vertical-align: bottom;
+}
+
+#currentBorrower th {
+  font-size: 1.25rem;
+}
+
+#borrowerHistory {
+  width: 100%;
+  table-layout: fixed;
+  text-align: left;
+  margin-top: 15px;
+}

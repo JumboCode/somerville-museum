@@ -15,10 +15,11 @@ import "./Popup.css";
 import StylishButton from "../../components/StylishButton";
 import "./InventoryUnit.css";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Popup( { unit, onClose } ) {
-    
+    const [borrowers, setBorrowers] = useState([]);
+
     // Case for no unit selected
     if (!unit){
         return null;
@@ -54,6 +55,35 @@ export default function Popup( { unit, onClose } ) {
         };
     }, []);
     
+    // Fetch borrower information
+    useEffect(() => {
+        const fetchBorrowers = async () => {
+            try {
+                const response = await fetch(`../../api/db`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: 'SELECT * FROM borrowers WHERE id = $1',
+                        params: [id]
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setBorrowers(data);
+                } else {
+                    console.error("Failed to fetch borrower data");
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchBorrowers();
+    }, [id]);
+
     // Set the status missing/found status statement based on the status
     const statusStatement = status === "Missing" ? (
         <span style={{ color: "red", textDecoration: "underline"}}>Mark Item as <strong style={{ color: "red", textDecoration: "underline"}}>Found</strong></span>
@@ -160,7 +190,7 @@ export default function Popup( { unit, onClose } ) {
                 {/* Divider */}
                 <div className="noteSection"> 
                     <p><strong>Notes</strong></p>
-                    <textarea readOnly id="noteBox">
+                    <textarea readOnly className="noteBox">
                         {notes}
                     </textarea>
                 </div>
@@ -168,7 +198,7 @@ export default function Popup( { unit, onClose } ) {
                 {/* Horizontal diver */}
                 <br></br>
                 
-                <div className="borrowerSection">
+                <div className="borrowerTitle">
                     <h3>Borrower Information</h3>
                     <div className="returnButton">
                         <Link href={`/return?id=${id}`}>
@@ -179,6 +209,58 @@ export default function Popup( { unit, onClose } ) {
                         </Link>
                     </div>
                 </div>
+
+                <table id="currentBorrower">
+                    <tbody>
+                        <th>
+                            <strong>Current Borrower</strong>
+                        </th>
+                        <tr>
+                            <td><strong>Name: </strong>{borrowers.name}</td>
+                            <td><strong>Date Borrowed: </strong>{}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Email: </strong>{}</td>
+                            <td><strong>Return Date: </strong>{}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cell: </strong>{}</td>
+                            <td><strong>Approved By: </strong>{}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div className="noteSection"> 
+                    <p><strong>Notes</strong></p>
+                    <textarea readOnly className="noteBox">
+                        {/* {notes} need to get borrower notes column*/}
+                    </textarea>
+                </div>
+
+
+                <p>Borrower History</p> 
+                <table id="borrowerHistory">
+                    <tbody>
+                        {/* {borrowers.map((borrower) => (
+                            <tr key={borrower.id}>
+                                <td>{borrower.date_borrowed}</td>
+                                <td>{borrower.name}</td>
+                                <td>{borrower.notes}</td>
+                            </tr>
+                        ))} */}
+
+                        {/* <th>
+                            <strong>Borrower History</strong> 
+                        </th> */}
+                        <tr>
+                            <td>XX/XX/XXXX-XX/XX/XXXX</td>
+                            <td>M. Janet</td>
+                            <td>Notes</td>
+                        </tr>
+
+
+                    </tbody>
+                </table>
 
             </div> 
         </div>
