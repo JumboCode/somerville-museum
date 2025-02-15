@@ -214,7 +214,8 @@ export default function Popup( { unit, onClose } ) {
                 </div>
 
                 {/* Horizontal diver */}
-                <br></br>
+                <div id = "divider"></div>
+
                 
                 <div className="borrowerTitle">
                     <h3>Borrower Information</h3>
@@ -228,61 +229,73 @@ export default function Popup( { unit, onClose } ) {
                     </div>
                 </div>
 
-                <table id="currentBorrower">
-                    <thead>
-                        <tr>
-                        <th><strong>Current Borrower</strong></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                        <td><strong>Name: </strong>{borrowers.length > 0 ? borrowers[0].name : "N/A"}</td>
-                        <td><strong>Date Borrowed: </strong>{borrowers.length > 0 ? borrowers[0].date_borrowed : "N/A"}</td>
-                        </tr>
-                        <tr>
-                        <td><strong>Email: </strong>{borrowers.length > 0 ? borrowers[0].email : "N/A"}</td>
-                        <td><strong>Return Date: </strong>{borrowers.length > 0 ? borrowers[0].return_date : "N/A"}</td>
-                        </tr>
-                        <tr>
-                        <td><strong>Cell: </strong>{borrowers.length > 0 ? borrowers[0].phone_number : "N/A"}</td>
-                        <td><strong>Approved By: </strong>{borrowers.length > 0 ? borrowers[0].approved_by : "N/A"}</td>
-                        </tr>
-                    </tbody>
-                    </table>
+                <div id="currentBorrowerContainer">
+                    <table id="currentBorrower">
+                        <thead>
+                            <tr>
+                            <th><strong>Current Borrower</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                            <td><strong>Name: </strong>{borrowers.length > 0 ? borrowers[0].name : "N/A"}</td>
+                            <td><strong>Date Borrowed: </strong>{borrowers.length > 0 ? borrowers[0].date_borrowed : "N/A"}</td>
+                            </tr>
+                            <tr>
+                            <td><strong>Email: </strong>{borrowers.length > 0 ? borrowers[0].email : "N/A"}</td>
+                            <td><strong>Return Date: </strong>{borrowers.length > 0 ? borrowers[0].return_date : "N/A"}</td>
+                            </tr>
+                            <tr>
+                            <td><strong>Cell: </strong>{borrowers.length > 0 ? borrowers[0].phone_number : "N/A"}</td>
+                            <td><strong>Approved By: </strong>{borrowers.length > 0 ? borrowers[0].approved_by : "N/A"}</td>
+                            </tr>
+                        </tbody>
+                        </table>
 
 
-                <div className="noteSection"> 
-                    <p><strong>Notes</strong></p>
-                    <textarea readOnly className="noteBox">
-                        {/* {notes} need to get borrower notes column*/}
-                    </textarea>
+                    <div className="noteSection"> 
+                        <p><strong>Notes</strong></p>
+                        <textarea readOnly className="noteBox">
+                            {/* {notes} need to get borrower notes column*/}
+                        </textarea>
+                    </div>
                 </div>
 
+                <div id="borrowerHistoryContainer">
+                    <p id="borrowerHistoryth">Borrower History</p> 
+                    <table id="borrowerHistory">
+                        <tbody>
+                            {/* {borrowers.map((borrower) => (
+                                <tr key={borrower.id}>
+                                    <td>{borrower.date_borrowed}</td>
+                                    <td>{borrower.name}</td>
+                                    <td>{borrower.notes}</td>
+                                </tr>
+                            ))} */}
 
-                <p>Borrower History</p> 
-                <table id="borrowerHistory">
-                    <tbody>
-                        {/* {borrowers.map((borrower) => (
-                            <tr key={borrower.id}>
-                                <td>{borrower.date_borrowed}</td>
-                                <td>{borrower.name}</td>
-                                <td>{borrower.notes}</td>
+                            {/* <th>
+                                <strong>Borrower History</strong> 
+                            </th> */}
+                            <tr>
+                                <td>XX/XX/XX-XX/XX/XX</td>
+                                <td>M. Janet</td>
+                                <td>Notes</td>
                             </tr>
-                        ))} */}
+                            <tr>
+                                <td>XX/XX/XX-XX/XX/XX</td>
+                                <td>M. Janet</td>
+                                <td>Notes</td>
+                            </tr>
+                            <tr>
+                                <td>XX/XX/XX-XX/XX/XX</td>
+                                <td>M. Janet</td>
+                                <td>Notes</td>
+                            </tr>
 
-                        {/* <th>
-                            <strong>Borrower History</strong> 
-                        </th> */}
-                        <tr>
-                            <td>XX/XX/XXXX-XX/XX/XXXX</td>
-                            <td>M. Janet</td>
-                            <td>Notes</td>
-                        </tr>
 
-
-                    </tbody>
-                </table>
-
+                        </tbody>
+                    </table>
+                </div>
             </div> 
         </div>
     );
