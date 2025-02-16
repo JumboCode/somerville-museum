@@ -63,6 +63,23 @@
 }
 
 /* note: will need separate css class for handling exit button */
+.exitBtn {
+    padding: 0;
+    background: none; 
+    border: none;
+    color: #000000;
+    box-shadow: none;
+    padding-right: 1px; 
+}
+
+.exitBtn:hover {
+    padding: 0;
+    background: none; 
+    border: none;
+    color: #000000;
+    box-shadow: none;
+    padding-right: 0.6vw; 
+}
 /* note: image will need white border styling and sizing */
 
 .notesWrapper {

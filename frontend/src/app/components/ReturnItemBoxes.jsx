@@ -29,12 +29,12 @@ export default function ItemBoxes({ unit, onNotesChange, itemId, onClose }) {
                     <p>{unit.name}</p>
                     <p>ID #{unit.id}</p>
                 </div>
-                <StylishButton className="exit" styleType ="style4"
-                    label = {<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-                        <path d="M21.7774 2.29391L19.6627 0.179199L11.2788 8.56305L2.89498 0.179199L0.780273 2.29391L9.16412 10.6778L0.780273 19.0616L2.89498 21.1763L11.2788 12.7925L19.6627 21.1763L21.7774 19.0616L13.3935 10.6778L21.7774 2.29391Z" fill="black"/>
-                    </svg>}
+                <button className="exitBtn" 
                     onClick={onClose}>
-                </StylishButton>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                        <path d="M21.7774 2.29391L19.6627 0.179199L11.2788 8.56305L2.89498 0.179199L0.780273 2.29391L9.16412 10.6778L0.780273 19.0616L2.89498 21.1763L11.2788 12.7925L19.6627 21.1763L21.7774 19.0616L13.3935 10.6778L21.7774 2.29391Z" fill="black"/>
+                    </svg>
+                </button>
             </div>
             <div className="notesWrapper">
                 <p>Notes</p>
