@@ -40,7 +40,7 @@ export default function Popup( { unit, onClose } ) {
         setIsClosing(true);
         setTimeout(() => {
             onClose();
-        }, 350);
+        }, 200);
     }
 
     // Add event listener for Escape key
