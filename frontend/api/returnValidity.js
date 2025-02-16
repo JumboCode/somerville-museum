@@ -8,10 +8,6 @@ export default async function handler(req, res) {
     const availableItems = [];
     const unavailableItems = [];
 
-    console.log("in return Validity: ");
-
-    console.log(Array.isArray(selectedItems));
-
     for (const itemId of selectedItems) {
       // Query the status of each item
       const statusResult = await query(

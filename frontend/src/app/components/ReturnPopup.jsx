@@ -10,8 +10,9 @@ const ReturnPopup = ( { unit = [], onSuccess, onClose } ) => {
         return null;
     }
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(unit.length / 6 + 1);
+    const totalPages = Math.ceil(unit.length / 6);
     const buttons = Array.from({ length: totalPages }, (_, index) => index + 1); // an array of buttons for page selection
+    const [notes, setNotes] = useState([]);
 
     const handleReturn = async (e) => {
         try {
@@ -22,6 +23,8 @@ const ReturnPopup = ( { unit = [], onSuccess, onClose } ) => {
                 },
                 body: JSON.stringify({ 
                     selectedItems: unit?.map(item => item.id),  //send in selected items 
+                    notes_id: Object.keys(notes),
+                    notes_content: Object.values(notes)
                 })
             });
             
@@ -53,6 +56,12 @@ const ReturnPopup = ( { unit = [], onSuccess, onClose } ) => {
         setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
     };
 
+    const handleNotesChange = (id, value) => {
+        setNotes({...notes, [id]: value});
+        console.log('in handle notes change');
+        console.log(notes);
+    };
+
     const startIndex = (currentPage - 1) * 6;
     const selectedUnits = unit
     .slice(startIndex, startIndex + 6)
@@ -60,6 +69,7 @@ const ReturnPopup = ( { unit = [], onSuccess, onClose } ) => {
         return (<ItemBoxes
             key={unit.id}
             unit={unit}
+            onNotesChange={handleNotesChange}
         />)
     }
 
