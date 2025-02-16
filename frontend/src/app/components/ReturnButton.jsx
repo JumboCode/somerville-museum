@@ -70,7 +70,7 @@ const ReturnButton = ( {selectedItems = [], onSuccess } ) => {  //takes in selec
                            onClick={handleSubmit}/>
             { isPopupVisible && (
                 <ReturnPopup onClose={handleClosePopup}
-                             unit = {borrowedSelectedItems}/>
+                             units = {borrowedSelectedItems}/>
             )
 
             }
