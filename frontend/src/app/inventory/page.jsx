@@ -22,8 +22,11 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
     const [unitsPerPage, setUnitsPerPage] = useState(15);
     const [totalPages, setTotalPages] = useState();
     const [selectedItems, setSelectedItems] = useState([]);
+    const [searchResults, setSearchResults] = useState([]);
+    const [filterResults, setFilterResults] = useState([]);
     
-    const [refreshTable, setRefreshTable] = useState(false); 
+    const [refreshTable, setRefreshTable] = useState(false);
+     
     useEffect(() => {
         console.log("FILTERS", selectedFilters)
         fetch("../../api/fetchInventoryByTag", { 
@@ -41,12 +44,23 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
                 return response.json()
               }).then((data) => {
                 console.log("Received data:", data);
-                setUnits(data);
+                setFilterResults(data);
               })
               .catch((error) => {
                 console.error("Failed to fetch or process data:", error);                
             });
     }, [selectedItems, triggerFilteredFetch, refreshTable]);
+
+    // Called any time new filters/search results are applied to update displayed units
+    useEffect(() => {
+        // Takes intersection of search results and filter results to get correct ones.
+        const filteredAndSearchResults = () => {
+            const filteredUnitIds = new Set(filterResults.map(unit => unit.id));
+            return searchResults.filter(item => filteredUnitIds.has(item.id));
+        };
+        
+        setUnits(filteredAndSearchResults())
+    }, [searchResults, filterResults])
 
     const [selectAllChecked, setSelectAllChecked] = useState(false);
     
@@ -155,7 +169,7 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
             <div className={`Table ${isFilterVisible ? 'shrink' : ''}`}>
                 <div className="Header">
                     <div className="Items">
-                        <SearchBar updateSearchResults={setUnits} />
+                        <SearchBar updateSearchResults={setSearchResults} currentUnits={units} />
                             <div className='buttons'> 
                                 <AddButton className='addBtn'> </AddButton>
                                 <BorrowButton className='brwBtn'
