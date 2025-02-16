@@ -117,8 +117,8 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                         >•••</button>
                 { isPrePopupVisible && (
                     <PrePopup onClose={handleClosePrePopup} 
-                               onOptionSelect={handlePopupOption}
-                               position = {popupPosition}/>
+                        onOptionSelect={handlePopupOption}
+                        position = {popupPosition}/>
                 )}       
 
                 { isPopupVisible && (

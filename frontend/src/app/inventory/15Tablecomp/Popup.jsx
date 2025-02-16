@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 
 export default function Popup( { unit, onClose } ) {
     const [borrowers, setBorrowers] = useState([]);
+    const [isClosing, setIsClosing] = useState(false);
 
     // Case for no unit selected
     if (!unit){
@@ -31,12 +32,15 @@ export default function Popup( { unit, onClose } ) {
     // Close container if anywhere but the container is clicked
     const handleContainerClick = (e) => {
         if (e.target.classList.contains("expandedContainer")) {
-            onClose();
+            closePopup();
         }
     }
 
     const closePopup = () => {
-        onClose();
+        setIsClosing(true);
+        setTimeout(() => {
+            onClose();
+        }, 350);
     }
 
     // Add event listener for Escape key
@@ -110,8 +114,8 @@ export default function Popup( { unit, onClose } ) {
       }, [borrowers]);
       
     return (
-        <div className="expandedContainer" onClick={handleContainerClick}>
-            <div className="expandedContent">
+        <div className={`expandedContainer ${isClosing ? 'fade-out' : 'fade-in'}`} onClick={handleContainerClick}>
+            <div className={`expandedContent ${isClosing ? 'slide-out' : 'slide-in'}`}>
                 <div className="headerEC">
 
                     {/* Title and arrow buttons */}
