@@ -3,14 +3,15 @@ import "./ReturnButton.css";
 import { useState, useEffect } from "react";
 import StylishButton from "./StylishButton.jsx";
 import ItemBoxes from "./ReturnItemBoxes.jsx";
+import { setSelectionRange } from "@testing-library/user-event/dist/utils";
 
 
-const ReturnPopup = ( { unit = [], onSuccess, onClose } ) => {
-    if (!unit){
+const ReturnPopup = ( { units = [], onSuccess, onClose } ) => {
+    if (!units){
         return null;
     }
     const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = Math.ceil(unit.length / 6);
+    const totalPages = Math.ceil(units.length / 6);
     const buttons = Array.from({ length: totalPages }, (_, index) => index + 1); // an array of buttons for page selection
     const [notes, setNotes] = useState([]);
 
@@ -22,7 +23,7 @@ const ReturnPopup = ( { unit = [], onSuccess, onClose } ) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ 
-                    selectedItems: unit?.map(item => item.id),  //send in selected items 
+                    selectedItems: units?.map(item => item.id),  //send in selected items 
                     notes_id: Object.keys(notes),
                     notes_content: Object.values(notes)
                 })
@@ -62,18 +63,37 @@ const ReturnPopup = ( { unit = [], onSuccess, onClose } ) => {
         console.log(notes);
     };
 
+    const handleDeselect = (removeUnit) => {
+        const index = units.findIndex(unit => unit.id === removeUnit.id);
+        if (index !== -1) {
+            units.splice(index, 1);  // Remove the unit at the found index
+        }
+        if (units.length == 0) {
+            location.reload();
+        }
+        setSelectedUnits(units
+            .slice(startIndex, startIndex + 6)
+            .map((unit) => {
+                return (<ItemBoxes
+                    key={unit.id}
+                    unit={unit}
+                    onNotesChange={handleNotesChange}
+                    onClose={() => handleDeselect(unit)}
+                />)
+            }));
+    }
+
     const startIndex = (currentPage - 1) * 6;
-    const selectedUnits = unit
+    const [selectedUnits, setSelectedUnits] = useState(units
     .slice(startIndex, startIndex + 6)
     .map((unit) => {
         return (<ItemBoxes
             key={unit.id}
             unit={unit}
             onNotesChange={handleNotesChange}
+            onClose={() => handleDeselect(unit)}
         />)
-    }
-
-    );
+    }));
 
     return (
         <div className="wrapper"> 
