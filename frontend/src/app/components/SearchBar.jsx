@@ -1,16 +1,24 @@
+/**
+ * @fileoverview Component containing the logic and design of the search bar 
+ * used to filter results based on name, notes, id, or borrower name.
+ * 
+ * @file SearchBar.jsx
+ * @date February 16th, 2025
+ * @authors Peter Morganelli & Shayne Sidman 
+ *  
+ */
+
 "use client";
 
 import "./SearchBar.css";
 import { useState, useEffect } from "react"; 
 
-export default function SearchBar({ updateSearchResults }) {
+export default function SearchBar({ updateSearchResults, currentUnits }) {
     const [query, setQuery] = useState("");
 
-    const enterQuery = (e) => {
-        setQuery(e.target.value);
-    };
-    // TODO: integrate w/ filters
-    useEffect(() => {  // Fetch relevant search results when search query is changed
+    // Fetch relevant search results when search query is changed
+    useEffect(() => { 
+        console.log(query)
         const fetchData = async () => {
             try {
                 const response = await fetch(`../../api/search`, {
@@ -26,6 +34,7 @@ export default function SearchBar({ updateSearchResults }) {
                 }
 
                 const data = await response.json();
+                console.log(data)
                 updateSearchResults(data);  // Update results on inventory page
             } catch (error) {
                 console.log(error);
@@ -40,9 +49,14 @@ export default function SearchBar({ updateSearchResults }) {
                 type="text" 
                 placeholder="Search..."
                 value={query}
-                onChange={enterQuery}
-                onKeyDown={(e) => {if (e.key == 'Backspace') {enterQuery}}}  // Added for redundancy in detecting backspace; should work w/out this
+                onChange={(e) => { setQuery(e.target.value); }}
+                onKeyDown={(e) => {
+                    if (e.key === "Backspace" || e.key === "Delete") {
+                        setQuery(e.target.value);
+                    }
+                }}
             />
+
         </div>
     );
 }
