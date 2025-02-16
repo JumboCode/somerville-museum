@@ -77,14 +77,14 @@ export default function Popup( { unit, onClose } ) {
                         return {
                             name: borrower.name,
                             email: borrower.email,
-                            date_borrowed: borrower.date_borrowed,
-                            return_date: borrower.return_date,
-                            approved_by: borrower.approved_by,
-                            notes: borrower.notes
+                            phone_number: borrower.phone_number,
+                            borrow_history: borrower.borrow_history,
+                            id_borrows_borrower_id: borrower.id_borrows_borrower_id,
                         };
                     });
 
                     setBorrowers(borrowData);
+                    console.log(borrowData);
                 } else {
                     console.error("Failed to fetch borrower data");
                 }
@@ -256,7 +256,7 @@ export default function Popup( { unit, onClose } ) {
                     <div className="noteSection"> 
                         <p><strong>Notes</strong></p>
                         <textarea readOnly className="noteBox">
-                            {/* {notes} need to get borrower notes column*/}
+                            {borrowers.length > 0 ? borrowers[0].notes : ""}
                         </textarea>
                     </div>
                 </div>
@@ -265,34 +265,15 @@ export default function Popup( { unit, onClose } ) {
                     <p id="borrowerHistorytitle">Borrower History</p> 
                     <table id="borrowerHistory">
                         <tbody>
-                            {/* {borrowers.map((borrower) => (
-                                <tr key={borrower.id}>
-                                    <td>{borrower.date_borrowed}</td>
-                                    <td>{borrower.name}</td>
-                                    <td>{borrower.notes}</td>
-                                </tr>
-                            ))} */}
-
-                            {/* <th>
-                                <strong>Borrower History</strong> 
-                            </th> */}
-                            <tr>
-                                <td>XX/XX/XX-XX/XX/XX</td>
-                                <td>M. Janet</td>
-                                <td>Notes</td>
-                            </tr>
-                            <tr>
-                                <td>XX/XX/XX-XX/XX/XX</td>
-                                <td>M. Janet</td>
-                                <td>Notes</td>
-                            </tr>
-                            <tr>
-                                <td>XX/XX/XX-XX/XX/XX</td>
-                                <td>M. Janet</td>
-                                <td>Notes</td>
-                            </tr>
-
-
+                            {borrowers.map((borrower, index) => (
+                                Object.entries(borrower.borrow_history || {}).map(([itemId, history]) => (
+                                    <tr key={`${index}-${itemId}`}>
+                                        <td>{history.dateBorrowed || "N/A"} - {history.dateReturned || "N/A"}</td>
+                                        <td>{history.approver || "N/A"}</td>
+                                        <td>{history.note || "N/A"}</td>
+                                    </tr>
+                                ))
+                            ))}
                         </tbody>
                     </table>
                 </div>
