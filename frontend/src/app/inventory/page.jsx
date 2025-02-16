@@ -169,7 +169,7 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
             <div className={`Table ${isFilterVisible ? 'shrink' : ''}`}>
                 <div className="Header">
                     <div className="Items">
-                        <SearchBar updateSearchResults={setSearchResults} currentUnits={units} />
+                        <SearchBar updateSearchResults={setSearchResults} />
                             <div className='buttons'> 
                                 <AddButton className='addBtn'> </AddButton>
                                 <BorrowButton className='brwBtn'

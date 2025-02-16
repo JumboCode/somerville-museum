@@ -13,7 +13,7 @@
 import "./SearchBar.css";
 import { useState, useEffect } from "react"; 
 
-export default function SearchBar({ updateSearchResults, currentUnits }) {
+export default function SearchBar({ updateSearchResults }) {
     const [query, setQuery] = useState("");
 
     // Fetch relevant search results when search query is changed
