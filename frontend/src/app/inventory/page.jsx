@@ -93,6 +93,13 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
         fetchData();
     };
 
+    const handleReturnSuccess = () => {
+        console.log("Return operation successful, refreshing inventory...");
+        setRefreshTable(prev => !prev); // Refresh table to show updated status
+        setSelectedItems([]); // Clear selected items
+    };
+    
+
     const handleCheckboxChange = (unit, isChecked) => {
         setSelectedItems((prevSelected) => {
             if (isChecked) {
@@ -178,7 +185,7 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
                                 </BorrowButton>
                                 <ReturnButton className='rtnBtn'
                                     selectedItems={selectedItems}
-                                    onSuccess={handleBorrowSuccess}>
+                                    onSuccess={handleReturnSuccess}>Return
                                 </ReturnButton>
                                 <DeleteItemButton classname = 'delBtn'></DeleteItemButton>
                             </div>

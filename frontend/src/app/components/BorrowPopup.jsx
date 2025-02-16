@@ -50,17 +50,17 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
    
     //submits the information, updates all data columns with appropriate information
     const handleSubmit = async (e) => {
-    e.preventDefault(); 
+        e.preventDefault(); 
 
-    if (!isEmailValid) {
-        alert("Please enter a valid email in the format XXX@domain.YYY");
-        return;
-    }
+        if (!isEmailValid) {
+            alert("Please enter a valid email in the format XXX@domain.YYY");
+            return;
+        }
 
-    if (!isPhoneValid) {
-        alert("Please enter a valid phone number in the format XXX-XXX-XXXX");
-        return;
-    }
+        if (!isPhoneValid) {
+            alert("Please enter a valid phone number in the format XXX-XXX-XXXX");
+            return;
+        }
 
         try {
             if (borrowItems == 0) {
@@ -80,6 +80,39 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
                         selectedItems: borrowItems.map(item => item.id),
                     }),
                 });
+
+                //EMAIL FOR BORROWED ITEMS BELOW
+
+                const itemNames = borrowItems.map(item => item.name);
+
+                // Debugging: Log the request payload
+                console.log("Sending email request:", {
+                    recipientEmail: borrowerEmail,
+                    recipientName: `${borrowerFirstName} ${borrowerLastName}`,
+                    items: itemNames,
+                });
+
+                // Make the API call
+                const emailResponse = await fetch("/api/sendBorrowedEmail", { 
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        recipientEmail: borrowerEmail,
+                        recipientName: `${borrowerFirstName} ${borrowerLastName}`,
+                        items: itemNames,
+                    }),
+                });
+
+                // Read response as text (to catch non-JSON errors)
+                const responseText = await emailResponse.text();
+                console.log("Email API Response:", responseText);
+
+                if (!emailResponse.ok) {
+                    throw new Error(`Email sending failed: ${emailResponse.status} ${responseText}`);
+                }
+
+
+                //EMAIL FOR BORROWED ITEMS ABOVE
             
                 if (!response.ok) {
                     const errorText = await response.text(); // Fetch error text
