@@ -52,17 +52,18 @@ export default async function handler(req, res) {
         UPDATE borrowers
         SET borrow_history = COALESCE(
           jsonb_set(
-            borrow_history,
-            ARRAY[$1],
-            COALESCE(borrow_history->$1, '{}'::jsonb) || $2::jsonb
+            borrow_history::jsonb,  -- Explicit cast to JSONB
+            ARRAY[$1::text],        -- Ensure itemId is treated as text
+            COALESCE(borrow_history->$1::text, '{}'::jsonb) || $2::jsonb
           ),
-          jsonb_build_object($1, $2::jsonb)
+          jsonb_build_object($1::text, $2::jsonb)
         )
         WHERE id = $3 RETURNING borrow_history
         `,
-        [itemId, JSON.stringify(borrowObject), borrowerId]
+        [itemId.toString(), JSON.stringify(borrowObject), borrowerId]
       );
-
+      
+      
       let borrowHistory = historyUpdateResult.rows[0].borrow_history; 
     
       //now updating the borrows table with correct information
@@ -95,8 +96,8 @@ export default async function handler(req, res) {
         WHERE id = $5 `,
         [itemId, JSON.stringify(borrowObject), 'Borrowed', borrowerId, itemId]
       
-      ); 
-
+      );
+      
     }
 
     message = 'Borrowing process completed. ';

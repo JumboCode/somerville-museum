@@ -30,7 +30,7 @@ export default async function handler(req, res) {
       
         // Using array_append with COALESCE to borrower_history, sending all other data
         await query(
-        'UPDATE dummy_data SET status = $1, borrower_history = array_append(COALESCE(borrower_history, \'{}\'), $2) WHERE id = $3', 
+        'UPDATE dummy_data SET status = $1, borrow_history = array_append(COALESCE(borrow_history, \'{}\'), $2) WHERE id = $3', 
         ['Available', returnNote, itemId]
       );
 
