@@ -1,3 +1,13 @@
+/**
+ * @fileoverview Contains layout and logic for the signup confirmed page. Page 
+ * is not currently being used for anything b/c of how clerk handles creating accounts.
+ * 
+ * @file signup_confirmed/page.jsx
+ * @date 16 February, 2025
+ * @authors Ari Goshtasby & Shayne Sidman
+ *  
+ */
+
 "use client";
 
 import '../app.css';
@@ -5,10 +15,6 @@ import { useRouter } from 'next/navigation';
 
 export default function ConfirmSignup() {
   const router = useRouter();
-
-  const onButtonClick = () => {
-    router.push('/login'); // Navigate to the login page
-  };
 
   return (
     <div className={'login-bg'}>
@@ -23,7 +29,7 @@ export default function ConfirmSignup() {
           <input
             className={'returnButton'}
             type="button"
-            onClick={onButtonClick}
+            onClick={() => {router.push("/login")}}
             value={'Back to Login'}
           />
         </div>

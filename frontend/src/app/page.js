@@ -10,8 +10,8 @@ const App = () => {
   return (
     <div className={'login-bg'}>
       <div className="mainContainer">
-      <div className="titleContainer logo-shrink">
-        <div className="SMLogo"></div>
+      <div className="titleContainer">
+        <div className="SMLogo sm-logo-small"></div>
         <div className="clothing-database">CLOTHING DATABASE</div>
       </div>
         <div className={'buttonContainer'}>
