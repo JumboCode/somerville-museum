@@ -37,16 +37,6 @@ const Dashboard = () => {
   ]);
  
 
-  // pie chart integration with real data query can come later
-  const tempPieChartData = [
-    { name: 'Great Condition', value: 10 },
-    { name: 'Good Condition', value: 0 },
-    { name: 'Not Usable', value: 6 },
-    { name: 'Washing Needed', value: 3 },
-    { name: 'Dry Cleaning Needed', value: 15 },
-    { name: 'Repairs Needed', value: 0 }
-  ];
-
   useEffect(() => {
     const fetchStats = async () => {
       try {
@@ -80,10 +70,8 @@ const Dashboard = () => {
 
 
      try {
-      console.log('reached pie frontend');
       const pieResponse = await fetch('/api/getCondition');
       const PieData = await pieResponse.json();
-      console.log('before set', pieChartData);
 
 
       setPieChartData([
@@ -96,13 +84,6 @@ const Dashboard = () => {
       ]);
 
 
-      console.log(PieData.good);
-      console.log(PieData.great);
-      console.log(PieData.notUsable);
-      console.log(PieData.needsWashing);
-      console.log(PieData.needsDryCleaning);
-      console.log(PieData.needsRepair);
-
     } catch (error) {
       console.error('Error retrieving conditions:', error);
     }
@@ -113,14 +94,6 @@ const Dashboard = () => {
 
     fetchStats();
   }, []);
-
-  /* temporary data for bar graph esting purposes */ 
-  const tempBar = ([
-    { name: "Available", value: 570 },
-    { name: "Borrowed", value: 300 },
-    { name: "Overdue", value: 0 },
-    { name: "Missing", value: 20 }
-  ])
 
   return (
     <div className="dashboard-container">
