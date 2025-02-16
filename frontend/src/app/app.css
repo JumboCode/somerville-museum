@@ -1,3 +1,12 @@
+/*
+ * @fileoverview CSS for the entire login/signup/reset_password flow.
+ * 
+ * @file app.css
+ * @date 16 February, 2025
+ * @authors Ari Goshtasby & Shayne Sidman
+ *  
+ */
+
 .login-bg {
     background-color: #F8F5F5;
     width: 100vw;
@@ -37,20 +46,30 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background-image: url("../../public/SM_LOGO.svg");
+  /* background-image: url("../../public/SM_LOGO.svg");  // re-add this to get SM logo
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: center; */
+  background-color: black;
+}
+
+.sm-logo-large {
   height: 100%;
   width: 100%;
 }
 
-.logo-shrink {
-  scale: 0.7;
+.sm-logo-small {
+  height: 60%;
+  width: 60%;
 }
 
 .clothing-database {
   color: #5E6171;
   font-size: 1.5rem;
+}
+
+.clothing-database-small {
+  color: #5E6171;
+  font-size: 1rem;
 }
 
 .confirmContainer {
@@ -59,18 +78,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
   height: 35vh;
-  width: 30vw;
+  width: 40%;
+  padding: 0 5vw 0 5vw;
   border-radius: 8px;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.19);
-  padding: 5% 0% 5% 0%;
-  font-size: 1.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.19)
 }
 
 .bodyConfirmContainer {
   font-weight: normal;
-  max-width: 60%;
+  max-width: 70%;
 }
 
 .resultContainer,
@@ -164,7 +181,6 @@
 }
 
 .errorLabel {
-  /*background-color: rgba(255, 44, 44, 0.2);*/
   color: rgba(255, 44, 44, 1);
   margin-bottom: 10px;
   padding: 0.5rem;
@@ -175,6 +191,7 @@
   flex-flow: column nowrap;
   border-radius: 5px;
   font-size: 0.75rem;
+
 }
 
 .remember-pwd {
@@ -249,22 +266,22 @@
 }
 
 
-/* Forgot password-specific CSS */
+/* reset password-specific CSS */
 
-.forgot-password-container {
+.reset-password-container {
   background-color: #FFFFFF;
   flex-direction: column;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 60%;
+  height: 65vh;
   width: 40%;
   padding: 0 5vw 0 5vw;
   border-radius: 8px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.19)
 }
 
-.forgot-password-text {
+.reset-password-text {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -273,4 +290,38 @@
 
 .password-text-larger {
   font-size: 1.5rem;
+}
+
+.bottom {
+  margin-bottom: 5vh;
+}
+
+.error {
+  font-size: 0.75rem;
+  color:rgba(255, 44, 44, 1);
+  background-color: rgba(255, 44, 44, 0.2);
+  border-radius: 5px;
+  align-self: flex-start;
+  padding: 1.5%;
+}
+
+.no-error {
+  font-size: 0.75rem;
+  color:rgba(255, 44, 44, 1);
+  border-radius: 5px;
+  align-self: flex-start;
+  padding: 2%;
+  height: 4vh;
+}
+
+.back-to-login {
+  color: #633740;
+  font-size: 1rem;
+  align-self: flex-start;
+  margin-left: -4vw;
+  margin-top: 1vh;
+}
+
+.back-to-login:hover {
+  cursor: pointer;
 }

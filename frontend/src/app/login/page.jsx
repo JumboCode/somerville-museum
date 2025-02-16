@@ -1,8 +1,17 @@
+/**
+ * @fileoverview Contains layout and logic for the login page with a custom clerk flow.
+ * 
+ * @file login/page.jsx
+ * @date 16 February, 2025
+ * @authors Ari Goshtasby & Shayne Sidman
+ *  
+ */
+
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSignIn } from "@clerk/nextjs";
+import { useSignIn, useAuth } from "@clerk/nextjs";
 import { Icon } from "react-icons-kit";
 import { eyeOff } from "react-icons-kit/feather/eyeOff";
 import { eye } from "react-icons-kit/feather/eye";
@@ -21,8 +30,12 @@ export default function Signin() {
   const [loginAttempts, setLoginAttempts] = useState(0);
 
   const {isLoaded, signIn, setActive} = useSignIn();
-  
+  const { isSignedIn } = useAuth();
   const router = useRouter();
+
+  if (isSignedIn) {
+    router.push('/dashboard');
+  }
 
   const handleToggle = () => {
     setType(type === "password" ? "text" : "password");
@@ -34,34 +47,35 @@ export default function Signin() {
     setPassword("");
   };
 
-  const handleLoginError = () => {
+  const handleLoginError = () => {  // Turn it all red when error occurs
     setErrorBG("rgba(255, 44, 44, 0.2)");
     setErrorBorder("red");
   };
 
-  const typeEmail = (e) => {
+  const typeEmail = (e) => {  // Remove error once typing starts again
     setEmail(e.target.value);
     setErrorBG("#FFFFFF");
     setErrorBorder("#9B525F");
     setError("");
   };
 
-  const typePassword = (e) => {
+  const typePassword = (e) => {  // Remove error once typing starts again
     setPassword(e.target.value);
     setErrorBG("#FFFFFF");
     setErrorBorder("#9B525F");
     setError("");
   }
 
-  const onButtonClick = () => {
+  const onButtonClick = () => {  // Handler for trying to log in.
     setLoginAttempts(loginAttempts + 1);
 
     setError("");
 
-    if (loginAttempts >= 5) {
-      router.push("/");
+    if (loginAttempts >= 5) {  // Too many attempts == booted back to main page
+      router.push("/"); 
     }
 
+    // All email and password validation
     if (!email) {
       setError("Please enter your email.");
       handleLoginError();
@@ -83,18 +97,11 @@ export default function Signin() {
       return false;
     }
 
-    // if (password.length < 9 || !/[A-Z]/.test(password) || !/[^a-zA-Z0-9]/.test(password)) {
-    //   setError("Invalid password.");
-    //   handleLoginError();
-    //   resetFields();
-    //   return false;
-    // }
-
     return true;
   };
 
   const signInWithEmail = async () => {
-    if (!onButtonClick()) {
+    if (!onButtonClick()) {  // Validate email and password
       return;
     }
 
@@ -108,16 +115,15 @@ export default function Signin() {
         password,
       });
       if (result.status === "complete") {
-        console.log(result);
         await setActive({session: result.createdSessionId});
         router.push("/dashboard");
       } else {
         console.log(result);
       }
     } catch (err) {
-      console.log(JSON.stringify(err, null, 2));
-      alert("Error logging in.")
-      router.push("/")
+      setError('Something went wrong. Please try again.');
+      handleLoginError();
+      resetFields();
     }
   };
 
@@ -125,7 +131,7 @@ export default function Signin() {
     <div className="login-bg">
       <div className="mainContainer">
         <div className="titleContainer">
-          <div className="SMLogo"></div>
+          <div className="SMLogo sm-logo-large"></div>
           <div className="clothing-database">CLOTHING DATABASE</div>
         </div>
         <div className="inputContainer">
@@ -158,7 +164,7 @@ export default function Signin() {
         </div>
         <div className="remember-pwd">
           <Checkbox className="check" label="Remember me" />
-          <button className="textButton" onClick={() => router.push("/forgot_password")}>
+          <button className="textButton" onClick={() => router.push("/reset_password")}>
             <strong>
               <p className="tiny">Forgot password?</p>
             </strong>
@@ -169,7 +175,7 @@ export default function Signin() {
         </div>
         <div className="create-account">
           <div>Don't have an account?</div>
-          <button className="textButton" onClick={() => router.push("/create_account")}>
+          <button className="textButton" onClick={() => router.push("/signup")}>
             <strong>Create an account</strong>
           </button>
         </div>

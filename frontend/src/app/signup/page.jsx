@@ -1,98 +1,23 @@
-//   return (
-//     <div className={'login-bg'}>
-//       <div className={'mainContainer'}>
-//         <div className={'titleContainer logo-shrink'}>
-//           <div className={'SMLogo'}></div>
-//           <div className="clothing-database">CLOTHING DATABASE</div>
-//         </div>
-//         <div className={'namesContainer'}>
-//           <div className={'inputContainer'}>
-//             <label className="errorLabel" style={{ backgroundColor: errorBG }}>{error}</label>
-//             <input
-//               value={firstName}
-//               placeholder="First Name"
-//               onChange={(ev) => setFirstName(ev.target.value)}
-//               className={'names'}
-//               style={{ borderColor: errorBorder }}
-//             />
-//           </div>
-//           <div className={'inputContainer'}>
-//             <input
-//               value={lastName}
-//               placeholder="Last Name"
-//               onChange={(ev) => setLastName(ev.target.value)}
-//               className={'names'}
-//               style={{ borderColor: errorBorder }}
-//             />
-//           </div>
-//         </div>
-//         <div className={'inputContainer'}>
-//           <input
-//             value={email}
-//             placeholder="Email"
-//             onChange={(ev) => setEmail(ev.target.value)}
-//             className={'inputBox'}
-//             style={{ borderColor: errorBorder }}
-//           />
-//         </div>
-//         <div className={'inputContainer password'}>
-//           <input
-//             value={password}
-//             name="password"
-//             type={passType}
-//             placeholder="Password"
-//             onChange={(ev) => setPassword(ev.target.value)}
-//             className={'inputBox'}
-//             style={{ borderColor: errorBorder }}
-//             autoComplete="current-password"
-//           />
-//           <span className={'eyecon'} onClick={handlePassToggle}>
-//             <Icon icon={passIcon} size={20} />
-//           </span>
-//         </div>
-//         <div className={'inputContainer password'}>
-//           <input
-//             value={confirmPassword}
-//             name="confirmPassword"
-//             type={confirmPassType}
-//             placeholder="Confirm Password"
-//             onChange={(ev) => setConfirmPassword(ev.target.value)}
-//             className={'inputBox'}
-//             style={{ borderColor: errorBorder }}
-//           />
-//           <span className={'eyecon'} onClick={handleConfirmPassToggle}>
-//             <Icon icon={confirmPassIcon} size={20} />
-//           </span>
-//         </div>
-//         <div className={'passwordInfo'}>
-//           <p className={'passwordInfoP'}>Password must contain the following:</p>
-//           <p className={'passwordInfoP'}>- 1 Uppercase character</p>
-//           <p className={'passwordInfoP'}>- 1 Special character - !"$%@#</p>
-//           <p className={'passwordInfoP'}>- Must be longer than 8 characters</p>
-//         </div>
-
-//         <div className={'inputContainer'}>
-//           <input className={'inputButton'} type="button" onClick={onButtonClick} value={'Sign Up'} />
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default CreateAccount;
+/**
+ * @fileoverview Contains layout and logic for the signup page with a custom clerk flow.
+ * 
+ * @file signup/page.jsx
+ * @date 16 February, 2025
+ * @authors Ari Goshtasby & Shayne Sidman
+ *  
+ */
 
 'use client'
 
 import { useState } from 'react'
-import { useSignUp } from '@clerk/nextjs'
+import { useSignUp, useAuth } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
 import { Icon } from 'react-icons-kit';
 import { eyeOff } from 'react-icons-kit/feather/eyeOff';
 import { eye } from 'react-icons-kit/feather/eye';
 import "../app.css"
 
-export default function CreateAccout() {
-  const { isLoaded, signUp, setActive } = useSignUp()
+export default function SignUp() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('')
@@ -107,7 +32,14 @@ export default function CreateAccout() {
   const [errorBorder, setErrorBorder] = useState('#9B525F');
   const [verifying, setVerifying] = useState(false)
   const [code, setCode] = useState('')
+
+  const { isLoaded, signUp, setActive } = useSignUp()
+  const { isSignedIn } = useAuth();
   const router = useRouter()
+
+  if (isSignedIn) {
+    router.push('/dashboard')
+  }
 
   const resetFields = () => {
     setFirstName('');
@@ -117,18 +49,18 @@ export default function CreateAccout() {
     setConfirmPassword('');
   }
 
-  const handleCreateError = () => {
+  const handleCreateError = () => {  // Make everything red when sign up error
     setErrorBG(errorBG === '#FFFFFF' ? 'rgba(255, 44, 44, 0.2)' : '#FFFFFF');
     setErrorBorder(errorBorder === '#9B525F' ? 'red' : '#9B525F');
   };
 
-  function containsUppercaseAndSymbol(str) {
+  function containsUppercaseAndSymbol(str) {  // Validate password
     const hasUppercase = /[A-Z]/.test(str); // Check for uppercase letters
     const hasSymbol = /[^a-zA-Z0-9]/.test(str); // Check for symbols (non-alphanumeric characters)
     return hasUppercase && hasSymbol;
   }
 
-  const handlePassToggle = () => {
+  const handlePassToggle = () => {  // Toggle between showing passwords
     if (passType === 'password') {
       setPassIcon(eye);
       setPassType('text');
@@ -138,7 +70,7 @@ export default function CreateAccout() {
     }
   };
 
-  const handleConfirmPassToggle = () => {
+  const handleConfirmPassToggle = () => {  // Toggle between showing passwords
     if (confirmPassType === 'password') {
       setConfirmPassIcon(eye);
       setConfirmPassType('text');
@@ -148,6 +80,7 @@ export default function CreateAccout() {
     }
   };
 
+  // Handle validation of names, email, and password
   const onButtonClick = () => {
     // Set initial error values to empty
     setError('');
@@ -238,15 +171,10 @@ export default function CreateAccout() {
 
       // Send the user an email with the verification code
       await signUp.prepareEmailAddressVerification({
-        strategy: "",
+        strategy: "email_code",
       })
-
-      // Set 'verifying' true to display second form
-      // and capture the OTP code
       setVerifying(true)
     } catch (err) {
-      // See https://clerk.com/docs/custom-flows/error-handling
-      // for more info on error handling
       console.error(err)
     }
   }
@@ -263,44 +191,53 @@ export default function CreateAccout() {
         code,
       })
 
-      // If verification was completed, set the session to active
-      // and redirect the user
+      // If verification was completed, set the session to active and redirect the user
       if (signUpAttempt.status === 'complete') {
         await setActive({ session: signUpAttempt.createdSessionId })
-        router.push('/')
+        router.push('/dashboard')
       } else {
-        
-        // If the status is not complete, check why. User may need to
-        // complete further steps.
-        console.error(JSON.stringify(signUpAttempt, null, 2))
+        alert("Invalid verification code. Try again.")
       }
     } catch (err) {
-      // See https://clerk.com/docs/custom-flows/error-handling
-      // for more info on error handling
-      console.error('Error:', JSON.stringify(err, null, 2))
+      alert("Invalid verification code. Try again.")
     }
   }
 
-  // Display the verification form to capture the OTP code
   if (verifying) {
     return (
-      <>
-        <h1>Verify your email</h1>
-        <form onSubmit={handleVerify}>
-          <label id="code">Enter your verification code</label>
-          <input value={code} id="code" name="code" onChange={(e) => setCode(e.target.value)} />
-          <button type="submit">Verify</button>
-        </form>
-      </>
+      <div className="login-bg">
+        <div className="confirmContainer">
+          <div className="reset-password-text">
+            <div className="password-text-larger">Thank you for signing up!</div>
+            <div>Please enter the verification code sent to your email below.</div>
+          </div>
+          <div className='inputContainer'>
+            <input
+              value={code}
+              placeholder="Verification Code"
+              onChange={(e) => setCode(e.target.value)}
+              className={'inputBox'}
+            />
+          </div>
+          <div className={'inputContainer'}>
+            <input 
+              className={'inputButton'} 
+              type="button" 
+              onClick={handleVerify} 
+              value={'Sign Up'} />
+          </div>
+        </div>
+      </div>
     )
   }
 
-  // Display the initial sign-up form to capture the email and password
+  // Sign-up form to capture email, password, name, etc.
   return (
     <div className="login-bg">
       <div className="mainContainer">
+        <div className="back-to-login" onClick={() => {router.push("/login")}}>&lt; Back to Login</div>
         <div className="titleContainer logo-shrink">
-          <div className="SMLogo"></div>
+          <div className="SMLogo sm-logo-small"></div>
           <div className="clothing-database">CLOTHING DATABASE</div>
         </div>
         <div className={'namesContainer'}>
