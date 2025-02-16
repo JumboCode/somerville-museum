@@ -262,7 +262,7 @@ export default function Popup( { unit, onClose } ) {
                 </div>
 
                 <div id="borrowerHistoryContainer">
-                    <p id="borrowerHistoryth">Borrower History</p> 
+                    <p id="borrowerHistorytitle">Borrower History</p> 
                     <table id="borrowerHistory">
                         <tbody>
                             {/* {borrowers.map((borrower) => (
