@@ -4,14 +4,20 @@ import { useState, useEffect, useRef, forwardRef} from "react";
 import "./ReturnButton.css";
 import StylishButton from "./StylishButton";
 
-export default function ItemBoxes({ unit }) {
+export default function ItemBoxes({ unit, onNotesChange, itemId }) {
+    const [notes, setNotes] = useState("");
 
     // Add a condition to make sure `unit` is defined
     if (!unit) {
         return null; // Don't render anything if `unit` is undefined
     }
 
-    const { id, name, status, tags, condition, gender, season, size, time_period} = unit; 
+    const { id, tags, name, condition} = unit; 
+
+    const handleNotesChange = (event) => {
+        setNotes(event.target.value);
+        onNotesChange(unit.id, event.target.value);
+    };
 
     //not pulling tags
     console.log(unit.tags);  
@@ -29,15 +35,20 @@ export default function ItemBoxes({ unit }) {
                     </svg>}>
                 </StylishButton>
             </div>
-            <p>Notes</p>
-            <form>
-                <input type="text" className="notesTextbox" name="notes"></input>
-            </form>
+            <div className="notesWrapper">
+                <p>Notes</p>
+                <form>
+                    <input type="text" className="notesTextbox" name="notes" 
+                        value = {notes} onChange = {handleNotesChange}></input>
+                </form>
+            </div>
+            <div className="conditionWrapper">
             <p>Condition*</p> 
-            <select name="condition" className="conditionDropdown">
-                <option className="dropdownContent" value="needs">Needs Dry Cleaning</option>
-                {/* add more condition tags */}
-            </select>
+                <select name="condition" className="conditionDropdown">
+                    <option className="dropdownContent" value="needs">Needs Dry Cleaning</option>
+                    {/* add more condition tags */}
+                </select>
+            </div>
         </div>
     );
 }
