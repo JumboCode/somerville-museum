@@ -6,9 +6,11 @@
  * @authors Entire Somerville Museum Team
  *  
  */
-
 'use client'
-
+import localFont from "next/font/local";
+import './components/Popup.css';
+import "./globals.css"
+import { ClerkProvider } from '@clerk/nextjs'
 import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar/NavigationBar';
 import Filter from './components/Filter/Filter';
@@ -16,8 +18,18 @@ import { usePathname } from 'next/navigation';
 import { FilterProvider } from './components/contexts/FilterContext';
 import './inventory/inventory.css';
 
+// export default function RootLayout({ children, currentPage }) {
+//     const [isFilterVisible, setIsFilterVisible] = useState(false);
+//     const pathname = usePathname();
+
+//     // Close filter when page changes
+//     useEffect(() => {
+//         setIsFilterVisible(false);
+//     }, [pathname]);
+
 export default function RootLayout({ children, currentPage }) {
-    const [isFilterVisible, setIsFilterVisible] = useState(false);
+
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
     const pathname = usePathname();
 
     // Close filter when page changes
@@ -37,8 +49,10 @@ export default function RootLayout({ children, currentPage }) {
         })
     );
 
-    return (
-        <FilterProvider>
+
+  return (
+    <ClerkProvider>
+      <FilterProvider>
             <html lang="en">
                 <head>
                     <title>Database</title>
@@ -68,5 +82,6 @@ export default function RootLayout({ children, currentPage }) {
                 </body>
             </html>
         </FilterProvider>
-    );
-}
+    </ClerkProvider>
+  );
+ }
