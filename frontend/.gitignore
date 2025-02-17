@@ -1,5 +1,9 @@
 .vercel
 node_modules
+
+
+# clerk configuration (can include secrets)
+/.clerk/
 package.json
 package-lock.json
 .env

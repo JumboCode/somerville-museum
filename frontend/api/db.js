@@ -25,6 +25,7 @@ export async function query(text, params) {
 export default async function handler(req, res) {
     const text = req.body.text;
     const params = req.body.params;
+
     try {
       const result = await query(text, params);
       res.status(200).json(result.rows);
