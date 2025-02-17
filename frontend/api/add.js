@@ -1,3 +1,15 @@
+/**************************************************************
+ *
+ *                     add.js
+ *
+ *        Authors: Dan Glorioso & Massimo Bottari
+ *           Date: 02/01/2025
+ *
+ *     Summary: An API route to add a new item to the database using the
+ *              input from the fields in AddPage component.
+ * 
+ **************************************************************/
+
 import { query } from './db.js';
 
 export default async function handler(req, res) {
