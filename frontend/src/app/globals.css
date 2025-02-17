@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Akatab:wght@400;500;600;700;800;900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 :root {
 
@@ -75,12 +76,13 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 * {
+  font-family: "Akatab", cursive;
+  font-weight: 700;
   box-sizing: border-box;
   padding: 0;
   margin: 0;
@@ -91,11 +93,11 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
-}
+} */
 
 /* EditNoteButtonComponents*/
 
@@ -146,7 +148,7 @@ a {
   background-color: darkgreen;
 }
 
-.tag{
+.tag {
   background-color: #f1f1f1;
   color: #333;
   border: 2px solid #333;
@@ -166,6 +168,31 @@ h3 {
 }
 
 p {
+  font-family: Akatab;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+/*-------------Keep Sidebar Unique-------------*/
+.adjacent {
+  margin-left: 90px;
+}
+
+/*-------------Keep Sidebar Unique-------------*/
+.adjacent {
+  margin-left: 90px;
+}
+.h3 {
+  font-family: Akatab;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.p {
   font-family: Akatab;
   font-size: 1rem;
   font-style: normal;

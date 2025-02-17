@@ -26,11 +26,13 @@
     color: #000;
     text-align: center;
     font-family: Akatab;
-    font-size: 20px;
+    font-size: 1rem;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
     flex-shrink: 1;
+
+    height: 5vh;
   }
   
   /* style option 2: gray background*/
@@ -45,11 +47,24 @@
   /* style option 3: blue background (+item button?) */
   .stylish-button.style3 {
     display: inline-flex;
-    background: #418CFE;
-    border: none;
     padding: 11px 20px;
-    color: white;
-    border-radius: 2px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 5px;
+    border: 1px solid #9B525F;
+    background: #007781;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+    color: #FFF;
+    text-align: center;
+    font-family: Akatab;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    flex-shrink: 1;
+
+    height: 5vh;
   }
 
   .stylish-button.style4 {
@@ -64,4 +79,51 @@
     border: none;
     color: white;
     box-shadow: none;
+    height: 40px;
+    width: 20px;
+  }
+
+  .stylish-button.style6 {
+    cursor: not-allowed;
+    display: inline-flex;
+    padding: 11px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 5px;
+    border: 1px solid #585555;
+    background: #C6C6C6;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+    color: #4F4141;
+    text-align: center;
+    font-family: Akatab;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    flex-shrink: 1;
+
+    height: 5vh;
+  }
+
+  .stylish-button.style7 {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 5px;
+    border: 1px solid #9B525F;
+    background: #FFF;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+    color: #000;
+    text-align: center;
+    font-family: Akatab;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    flex-shrink: 1;
+
+    height: 5vh;
+    width: 3vw;
   }

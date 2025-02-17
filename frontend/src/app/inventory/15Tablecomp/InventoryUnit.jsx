@@ -6,15 +6,12 @@ import PrePopup from "./PrePopup";
 import "./InventoryUnit.css";
 
 export default function InventoryUnit({ unit, onChange, checked }) {
-
-
-
     // Add a condition to make sure `unit` is defined
     if (!unit) {
         return null; // Don't render anything if `unit` is undefined
     }
 
-    const { id, name, status, tags, condition, gender, season, size, time_period} = unit; 
+    const { id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, borrow_history, notes} = unit; 
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [isPrePopupVisible, setIsPrePopupVisible] = useState(false);
     const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
@@ -48,7 +45,6 @@ export default function InventoryUnit({ unit, onChange, checked }) {
         if (
             event.target.closest('.sidebar') === null &&
             event.target.closest('.unit') === null
-
         ) {
             setIsPopupVisible(false);
         }
@@ -66,7 +62,6 @@ export default function InventoryUnit({ unit, onChange, checked }) {
         }
     }
 
-
     useEffect(() => {
         if (isPopupVisible || isPrePopupVisible) {
             document.addEventListener('click', handleClickOutside);
@@ -75,12 +70,11 @@ export default function InventoryUnit({ unit, onChange, checked }) {
         }
     }, [isPopupVisible]);
 
-    if(checked){
-        console.log("IOSFJNFAS", checked);
+    if(checked) {
+        console.log("Items Checked?", checked);
     }
 
     //not pulling tags
-    console.log(unit.tags);  
     return (  
         <div className="unit" onDoubleClick={handleDoubleClick}> 
             <div className="left-section">
@@ -90,8 +84,7 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                     id={`customCheckbox-${id}`} 
                     className="checkbox-input" 
                     checked={checked} 
-                    onChange={(e) => onChange(unit, e.target.checked)} 
-                    
+                    onChange={(e) => onChange(unit, e.target.checked)}
                 />
                 </div>
                 <div className="picture">
@@ -124,8 +117,8 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                         >•••</button>
                 { isPrePopupVisible && (
                     <PrePopup onClose={handleClosePrePopup} 
-                               onOptionSelect={handlePopupOption}
-                               position = {popupPosition}/>
+                        onOptionSelect={handlePopupOption}
+                        position = {popupPosition}/>
                 )}       
 
                 { isPopupVisible && (

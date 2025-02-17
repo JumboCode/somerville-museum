@@ -1,139 +1,246 @@
-/* Sidebar Container */
-.sidebar {
+/**************************************************************
+ *
+ *                     Popup.jsx
+ *
+ *        Authors: Dan Glorioso & Hannah Jiang & Zack White
+ *           Date: 02/16/2025
+ *
+ *     Summary: CSS styling for the Popup inventory sidebar component.
+ * 
+ **************************************************************/
+
+.expandedContainer {
     position: fixed;
-    right: 0;
     top: 0;
-    height: 100%;
-    width: 30%;
-    background-color: #fff;
-    box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1);
-    padding: 2vh;
-    padding-left: 5vh;
-    overflow-y: auto;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.25);
+    display: flex;
+    justify-content: right;
+    align-items: flex-start;
     z-index: 10000;
-    font-family: Arial, sans-serif;
-  }
-  
-  /* Header */
-  .header {
+    overflow-y: auto;
+}
+
+.expandedContent {
+    background-color: white;
+    position: relative;
+    width: 33vw;
+    height: auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+    min-width: 450px;
+    overflow-wrap: break-word;
+    display: inline-block;
+    padding: 1rem 1.5rem;
+}
+
+.fade-in {
+  animation: fade-in 0.5s ease-in-out;
+}
+
+.fade-out {
+  animation: fade-out 0.5s ease-in-out;
+}
+
+@keyframes fade-in {
+  from {
+      opacity: 0;
   }
-  
-  .header h2 {
-    margin: 0;
+  to {
+      opacity: 1;
   }
-  
-  .buttons {
+}
+
+@keyframes fade-out {
+  from {
+      opacity: 1;
+  }
+  to {
+      opacity: 0;
+  }
+}
+
+
+.slide-in {
+  animation: slide-in 0.5s forwards;
+}
+
+.slide-out {
+  animation: slide-out 0.5s forwards;
+}
+
+@keyframes slide-in {
+  from {
+      transform: translateX(100%);
+      opacity: 0;
+  }
+  to {
+      transform: translateX(0);
+      opacity: 1;
+  }
+}
+
+@keyframes slide-out {
+  from {
+      transform: translateX(0);
+      opacity: 1;
+  }
+  to {
+      transform: translateX(100%);
+      opacity: 0;
+  }
+}
+.headerEC {
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.titleButton {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1.25rem;
+  align-content: center;
+  align-items: center;
+}
+
+.exit {
+  align-items: center;
+  display: flex;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.imageContainer {
+  width: auto;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  background-color: #fff;
+  border-radius: 5px;
+  margin-top: 1.25rem;
+  border: 1px solid #9B525F;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.imageSelection {
+  background-color: #9B525F;
+  height: 5vh;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.infoHeader {
+  margin-top: 30px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#itemInformation {
+  width: 100%;
+  table-layout: fixed;
+  text-align: left;
+  margin-top: 5px;
+}
+
+#itemInformation td {
+  height: 30px;
+  vertical-align: bottom;
+}
+
+.noteSection {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  width: 100%;
+  justify-content: left;
+  align-items: flex-start;
+}
+
+.noteBox {
+  width: 100%;
+  height: auto;
+  min-height: 20vh;
+  resize: none;
+  background-color: #fff;
+  border: 1px solid #9B525F;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  padding-left: 0.75rem;
+  padding-top: 0.5rem;
+  margin-top: 10px;
+}
+
+.borrowerTitle {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.returnButton {
+  display: block;
+}
+
+#currentBorrower {
+  width: 100%;
+  table-layout: fixed;
+  text-align: left;
+  margin-top: 5px;
+}
+
+#currentBorrower td {
+  height: 30px;
+  vertical-align: bottom;
+}
+
+#currentBorrower th {
+  font-size: 1.25rem;
+}
+
+#borrowerHistorytitle {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-top: 20px;
     display: flex;
-    gap: 1vh;
-  }
-  
-  .edit-btn, .close-btn {
-    background-color: transparent;
-    border: 1px solid #333;
-    padding: 0.5vh 1vh;
-    cursor: pointer;
-  }
-  
-  /* Item Details Section */
-  .item-details {
-    display: flex;
-    padding: 0.25vh;
-  }
-  
-  .details-left {
-    gap: 0vh;
-  }
-  
-  .image-placeholder {
-    width: 30vh;
-    height: 30vh;
-    background-color: #ccc;
-    border-radius: 5%;
-  }
-  
-  /* Tags Section */
-  .tags-section {
-    padding: 1vh 0;
-  }
-  
-  .tags {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 1vh;
-    overflow-x: auto;
-    padding-bottom: 1vh;
-  }
-  
-  .tag {
-    background-color: #c3c9c9;
-    padding: 0.5vh 1vh;
-    border-radius: 4px;
-    font-size: 1.5vh;
-  }
-  
-  /* Notes Section */
-  .notes-section {
-    padding: 1vh 0;
-  }
-  
-  textarea {
+}
+
+#divider {
+    border-bottom: 1px solid #D9D9D9; 
     width: 100%;
-    height: 10vh;
-    resize: none;
-    padding: 1vh;
-    border: 1px solid #333;
-    background-color: #fff;
-    border-radius: 4px;
-    font-size: 1.5vh;
-  }
-  
-  /* Borrower Information Section */
-  .borrower-info {
-    padding: 2vh 0;
-  }
-  
-  .borrower-info p {
-    margin: 0.5vh 0;
-  }
-  
-  .return-btn {
-    display: block;
-    margin-bottom: 2vh;
-    padding: 1vh 2vh;
-    background-color: #333;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  /* History Section */
-  .history-section {
-    padding: 2vh 0;
-  }
-  
-  .history-section table {
+    margin: 40px 0;
+}
+
+#borrowerHistory {
     width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .history-section table tr td {
-    border-bottom: 1px solid #ccc;
-    padding: 1vh 0;
-    font-size: 1.5vh;
-  }
-  
-  .history-section h3 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .history-section a {
-    font-size: 1.5vh;
-    text-decoration: underline;
-    cursor: pointer;
-  }
-  
+    border-collapse: separate; 
+    border-spacing: 0;
+    border: 1px solid #9B525F;
+    border-radius: 5px;
+    overflow: hidden; 
+    text-align: left;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+    margin-top: 10px;
+}
+
+#borrowerHistory th, #borrowerHistory td {
+    padding: 10px;
+    border-bottom: 1px solid #D9D9D9;
+}
+
+#borrowerHistory tr:last-child td {
+    border-bottom: none; 
+}
