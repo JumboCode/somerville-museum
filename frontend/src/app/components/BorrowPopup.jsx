@@ -65,7 +65,7 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
   const isPhoneValid = phoneRegex.test(phoneNumber);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+        e.preventDefault();
 
     if (!isEmailValid) {
       alert("Please enter a valid email in the format XXX@domain.YYY");
