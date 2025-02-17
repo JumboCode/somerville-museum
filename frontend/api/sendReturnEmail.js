@@ -1,8 +1,6 @@
 import Mailjet from "node-mailjet";
 import { query } from './db.js';
 
-const MJ_APIKEY_PUBLIC='00abc5ea2cb2dc82c1d4613a4794823f'
-const MJ_APIKEY_PRIVATE='b74f4b1d4834f8ceee7da28ad504e96d'
 
 const mailjet = Mailjet.apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE);
 
