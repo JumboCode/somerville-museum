@@ -82,7 +82,7 @@ export default async function handler(req, res) {
         phoneNumber,
         borrowHistory
       };
-
+      await query("UPDATE dummy_data SET status = 'Available' WHERE id = $1", itemId)
       await query(
         `UPDATE dummy_data
         SET borrow_history = COALESCE(
