@@ -1,6 +1,7 @@
 "use client";  // This directive marks the component as a Client Component
 
  import { useState } from "react";
+import StylishButton from "./StylishButton";
 
  export default function DeleteItemButton() {
      const handleClick = () => {
@@ -31,13 +32,17 @@
                              if (confirm("Do you really want to delete the selected item(s)? \nSelected Item(s): " + itemIds)) {
                                  // For each item ID, make a GET request to the 'delete' endpoint
                                  itemIds.forEach(id => {
-                                    fetch(`../../api/delete`, { 
-                                        method: 'PUT',
+                                    fetch(`../../api/db`, { 
+                                        method: 'PUT', // Use the PUT method
                                         headers: {
-                                        'Content-Type': 'application/json' // Specify the content type
+                                          'Content-Type': 'application/json' // Specify the content type
                                         },
-                                        body: JSON.stringify({ id }) // Send the name as a JSON object
-                                      })})
+                                        body: JSON.stringify({
+                                          text: 'DELETE FROM dummy_data WHERE id = $1', // SQL query for deletion
+                                          params: [id] // Parameters for the query
+                                        })
+                                      });
+                                 });
                                 } else {
                                     alert('User cancelled the deletion.');
                                 }
@@ -54,11 +59,12 @@
         };
    
         return (
-            <button
+            <StylishButton
                 className="text-center border p-2 rounded bg-gray-100 hover:bg-gray-200"
                 onClick={handleClick}
+                label = "Delete"
             >
-                Delete Item
-            </button>
+
+            </StylishButton>
         );
     }
