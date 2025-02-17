@@ -1,121 +1,355 @@
-h4 {
-    width: 13.75rem;
-    color: #000;
-    font-family: Akatab, sans-serif;
-    font-size: 2.5rem;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    margin-bottom: 1.5rem;
-}
+/* BorrowPopup.css
+//
+// Edited by Peter Morganelli, 2/16/25
+//
+// Purpose: 
+//     This file contains all the styling for the BorrowPopup and 
+//     BorrowUnit components */
 
-label input:first-of-type {
+.container {
     display: flex;
-    padding: 0.6875rem 1.125rem;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.625rem;
-    flex: 1 0 0;
-    align-self: stretch;
-    border-radius: 0.3125rem;
-    border: 1px solid #9b525f;
-    background: #fff;
-    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.25);
-}
-
-label input:nth-of-type(2) {
-    display: flex;
-    padding: 0.6875rem 1.125rem;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.625rem;
-    flex: 1 0 0;
-    align-self: stretch;
-    border-radius: 0.3125rem;
-    border: 1px solid #9b525f;
-    background: #fff;
-    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.25);
-}
-
-label input:nth-of-type(4) {
-    display: flex;
-    padding: 0.6875rem 1.125rem;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.625rem;
-    flex: 1 0 0;
-    align-self: stretch;
-    border-radius: 0.3125rem;
-    border: 1px solid #9b525f;
-    background: #fff;
-    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.25);
-}
-
-label input {
-    width: 100%;
-    margin-bottom: 1rem;
-    font-family: Arial, sans-serif;
-    font-size: 1rem;
-    color: #333;
+    flex-direction: row;
+    align-items: stretch;
+    background-color: #fff;
+    width: 60rem;
+    height: 50rem;
+    margin: auto;
     box-sizing: border-box;
+  }
+  
+.borrowItemsHeader,
+.info-form {
+  height: 100%;
+}
+  
+.info-header {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 0.5rem;
+  align-self: flex-start;
 }
 
-button {
+.borrowItemsHeader {
+    flex: 0 0 45%;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    color: #000;
+  }
+  
+  .info-form {
+    flex: 0 0 55%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 2rem;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+  
+  .borrow-header {
+    margin-bottom: 1rem;
+  }
+  
+  .borrowItemsContent {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
+  }
+  
+  .borrowed-items-container {
+    flex: 1;
+    overflow-y: auto;
+    width: 100%;
+  }
+  
+  .borrowed-item-box {
+    background-color: #ffe5e5;
+    border: 1px solid #9b525f;
+    border-radius: 4px;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 0.5rem;
+  }
+  
+  .item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  
+  .item-name {
+    flex: 1;
+    margin: 0 1rem;
+    font-size: 1rem;
+    color: #000;
+    font-weight: 1000;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .item-id {
+    flex: 0 0 auto;
+    font-size: 1rem;
+    color: #000;
+    font-weight: 1000;
+    margin-right: 1rem;
+  }
+  
+  .delete-button {
+    background: transparent;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    color: #000;
+    line-height: 1;
+    flex-shrink: 0;
+    padding: 0;               
+    outline: none;            
+    box-shadow: none;         
+    -webkit-appearance: none; 
+    -moz-appearance: none;    
+    appearance: none;
+  }
+  
+  
+  .pagination-container {
+    margin-top: auto;
+    padding-top: 1rem;
+  }
+  
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .pagination button {
+    margin: 0 0.25rem;
+    border-radius: 0.3125rem;
+    background: transparent;  
+    color: black;             
+    border: none;
+    cursor: pointer;
+    padding: 0.3rem 0.5rem;    
+    font-size: 0.8rem;       
+    box-shadow: none;        
+    outline: none;           
+    -webkit-appearance: none;
+    -moz-appearance: none;   
+    appearance: none;
+  }
+  
+  .pagination button.active {
+    background: #9b525f;   
+    color: white;          
+  }
+  
+  .pagination button:disabled {
+    color: #d3d3d3;
+    cursor: not-allowed;
+  }
+  
+  
+  .form-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  
+  .form-row.full-width {
+    flex-direction: column;
+  }
+  
+  
+  .form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  
+  .form-group.full-width {
+    width: 100%;
+  }
+  
+  .form-group label {
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+    color: #000;
+  }
+  
+  .form-group input,
+  .form-group select {
+    background-color: #fff;
+    color: #000;
+    padding: 0.75rem;
+    border: 1px solid #9b525f;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .form-group select.form-group-dropdown {
+    border: 0.5px solid transparent !important;
+  }
+  
+  
+
+  
+  .form-group textarea {
+    background-color: #fff;
+    color: #000;
+    padding: 0.75rem;
+    border: 1px solid #9b525f;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  
+.info-form input.non-editable {
+    background-color: #e0e0e0 !important;
+    border: 1px solid #ccc !important;
+    color: #777 !important;          
+    cursor: not-allowed;
+    padding: 0.75rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+  
+  
+  .return-date-box {
+    background-color: #fff;
+    border: 1px solid #9b525f;
+    border-radius: 4px;
+    padding: 0.3rem;
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  
+  .selected-return {
+    background-color: #9b525f;
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  
+  .remove-return {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    margin-left: 0.5rem;
+    cursor: pointer;
+  }
+  
+  
+  .return-select {
+    background-color: transparent;
+    color: #000;
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 1rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+  
+  
+  .form-group textarea {
+    resize: vertical;
+    min-height: 150px;
+  }
+  
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+  
+  
+  .form-actions button {
     padding: 0.625rem 1.25rem;
     font-size: 1rem;
     font-weight: bold;
-    border-radius: 0.3125rem;
+    border-radius: 4px;
     border: none;
     cursor: pointer;
-}
-    
-button[type="submit"] {
+  }
+  
+  
+  .form-actions button[type="submit"] {
     background-color: #FFFFFF;
-    border: #9B525F;
+    border: 1px solid #9B525F;
     color: #000000;
-}
-
-button[type="button"] {
+  }
+  
+  .form-actions button[type="button"] {
     background-color: #007781;
     color: #ffffff;
-}
-
-.pagination button {
-    margin: 0 0.25rem;
-    padding: 0.5rem 1rem;
-    border-radius: 0.3125rem;
-    background: #9b525f;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-.pagination button.active {
-    background: #4caf50;
-}
-
-.pagination button:disabled {
-    background: #d3d3d3;
-    cursor: not-allowed;
-}
-    
-.reactjs-popup-content {
+  }
+  
+  .reactjs-popup-content {
     padding: 2rem;
     text-align: center;
     font-family: Arial, sans-serif;
     border-radius: 0.5rem;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-}
-    
-.reactjs-popup-content h2 {
+  }
+  
+
+  .dividerNew {
+    width: 2px;
+    background-color: #9b525f;
+    height: 100%;
+    flex-shrink: 0;
+  }
+
+  .reactjs-popup-content h2 {
     font-size: 1.75rem;
     color: #4caf50;
-}
-    
-.reactjs-popup-content button {
+  }
+  
+  .due-date-text {
+    font-style: italic;
+    color: #000;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+    font-weight: 200;
+  }
+  
+
+  .reactjs-popup-content button {
     background: #4caf50;
     color: white;
     padding: 0.625rem 1.25rem;
     border-radius: 0.3125rem;
-}
-    
+  }
+  
