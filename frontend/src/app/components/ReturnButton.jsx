@@ -75,7 +75,7 @@ const ReturnButton = ( {selectedItems = [], onSuccess } ) => {  //takes in selec
 
             }
         </div>
-    )
+    );
 }
 
 export default ReturnButton;
