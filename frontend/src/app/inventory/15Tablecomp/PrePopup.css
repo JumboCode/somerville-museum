@@ -1,0 +1,49 @@
+/* Style the overlay that darkens the background */
+.Popup {
+    position: absolute;
+    background: none;
+    padding: 10px;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style the actual popup container */
+.Popup > .Header {
+    background-color: white;
+    padding: 20px;
+    text-align: center;
+    width: 300px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Style the buttons container */
+.Popup .Buttons {
+    display: flex;
+    flex-direction: column;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    background-color: #9B525F;
+}
+
+/* Style individual buttons */
+.popupBtn {
+    background: #9B525F;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: none;
+}
+
+.popupBtn:hover {
+    background: #9B525F;
+}
+
+/* Style when the popup is closed (optional) */
+.Popup .popupBtn:focus {
+    outline: none;
+}
