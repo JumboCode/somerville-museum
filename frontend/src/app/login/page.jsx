@@ -1,0 +1,184 @@
+/**
+ * @fileoverview Contains layout and logic for the login page with a custom clerk flow.
+ * 
+ * @file login/page.jsx
+ * @date 16 February, 2025
+ * @authors Ari Goshtasby & Shayne Sidman
+ *  
+ */
+
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSignIn, useAuth } from "@clerk/nextjs";
+import { Icon } from "react-icons-kit";
+import { eyeOff } from "react-icons-kit/feather/eyeOff.js";
+import { eye } from "react-icons-kit/feather/eye.js";
+import Checkbox from "../components/Checkbox";
+import "../app.css";
+
+export default function Signin() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [type, setType] = useState("password");
+  const [icon, setIcon] = useState(eyeOff);
+  const [error, setError] = useState("");
+  const [errorBG, setErrorBG] = useState("#FFFFFF");
+  const [errorBorder, setErrorBorder] = useState("#9B525F");
+  const [loginAttempts, setLoginAttempts] = useState(0);
+
+  const {isLoaded, signIn, setActive} = useSignIn();
+  const { isSignedIn } = useAuth();
+  const router = useRouter();
+
+  if (isSignedIn) {
+    router.push('/dashboard');
+  }
+
+  const handleToggle = () => {
+    setType(type === "password" ? "text" : "password");
+    setIcon(type === "password" ? eye : eyeOff);
+  };
+
+  const resetFields = () => {
+    setEmail("");
+    setPassword("");
+  };
+
+  const handleLoginError = () => {  // Turn it all red when error occurs
+    setErrorBG("rgba(255, 44, 44, 0.2)");
+    setErrorBorder("red");
+  };
+
+  const typeEmail = (e) => {  // Remove error once typing starts again
+    setEmail(e.target.value);
+    setErrorBG("#FFFFFF");
+    setErrorBorder("#9B525F");
+    setError("");
+  };
+
+  const typePassword = (e) => {  // Remove error once typing starts again
+    setPassword(e.target.value);
+    setErrorBG("#FFFFFF");
+    setErrorBorder("#9B525F");
+    setError("");
+  }
+
+  const onButtonClick = () => {  // Handler for trying to log in.
+    setLoginAttempts(loginAttempts + 1);
+
+    setError("");
+
+    if (loginAttempts >= 5) {  // Too many attempts == booted back to main page
+      router.push("/"); 
+    }
+
+    // All email and password validation
+    if (!email) {
+      setError("Please enter your email.");
+      handleLoginError();
+      resetFields();
+      return false;
+    }
+
+    if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+      setError("Please enter a valid email.");
+      handleLoginError();
+      resetFields();
+      return false;
+    }
+
+    if (!password) {
+      setError("Please enter a password.");
+      handleLoginError();
+      resetFields();
+      return false;
+    }
+
+    return true;
+  };
+
+  const signInWithEmail = async () => {
+    if (!onButtonClick()) {  // Validate email and password
+      return;
+    }
+
+    if (!isLoaded) {
+      return;
+    }
+
+    try {
+      const result = await signIn.create({
+        identifier: email,
+        password,
+      });
+      if (result.status === "complete") {
+        await setActive({session: result.createdSessionId});
+        router.push("/dashboard");
+      } else {
+        console.log(result);
+      }
+    } catch (err) {
+      setError('Something went wrong. Please try again.');
+      handleLoginError();
+      resetFields();
+    }
+  };
+
+  return (
+    <div className="login-bg">
+      <div className="mainContainer">
+        <div className="titleContainer">
+          <div className="SMLogo sm-logo-large"></div>
+          <div className="clothing-database">CLOTHING DATABASE</div>
+        </div>
+        <div className="inputContainer">
+          <label className="errorLabel" style={{ backgroundColor: errorBG }}>
+            {error}
+          </label>
+          <input
+            value={email}
+            name="email"
+            placeholder="Email"
+            onChange={typeEmail}
+            className="inputBox"
+            style={{ borderColor: errorBorder }}
+          />
+        </div>
+        <div className="inputContainer password">
+          <input
+            value={password}
+            name="password"
+            type={type}
+            placeholder="Password"
+            onChange={typePassword}
+            className="inputBox"
+            style={{ borderColor: errorBorder }}
+            autoComplete="current-password"
+          />
+          {/* <span className="eyecon" onClick={handleToggle}>
+            <Icon icon={icon} size={20} />
+          </span> */}
+        </div>
+        <div className="remember-pwd">
+          <Checkbox className="check" label="Remember me" />
+          <button className="textButton" onClick={() => router.push("/reset_password")}>
+            <strong>
+              <p className="tiny">Forgot password?</p>
+            </strong>
+          </button>
+        </div>
+        <div className="inputContainer login-button">
+          <input className="inputButton" type="button" onClick={signInWithEmail} value="Login" />
+        </div>
+        <div className="create-account">
+          <div>Don't have an account?</div>
+          <button className="textButton" onClick={() => router.push("/signup")}>
+            <strong>Create an account</strong>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
