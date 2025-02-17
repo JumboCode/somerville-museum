@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Akatab:wght@400;500;600;700;800;900&display=swap');
+
+/* container for all return items */
+.wrapper {
+    position: absolute;
+    display: flex;
+    z-index: 100000;
+    justify-content: space-between;
+    flex-direction: column;
+    left:0;
+    top:0;
+    height: 100vh;
+    padding: 5vh;
+    background: #F8F5F5;
+}
+
+.header {
+    font-size: 2.5rem; 
+    justify-content: space-between;
+}
+
+/* container for all return items */
+.itemContainer {
+    display: flex;
+    justify-content: flex-start;
+    flex-flow: row wrap;
+    justify-items: flex-start;
+    align-items: baseline;
+    margin-top: 2vh;
+    width: 85vw;
+}
+
+/* one translucent red box */
+.returnItem {
+    display: flex;
+    margin: 1vh 1vw;
+    flex-direction: column;
+    background-color: #E3CECE;
+    border: 1px solid #9B525F;
+    padding: 1vh 1vw;
+    width: 26vw;
+    height: 34vh;
+    color: black;
+    font-family: "Akatab", serif;
+    border-radius: 4.813px;
+    box-shadow: 0px 1.925px 4.813px 0px rgba(0, 0, 0, 0.25);
+    justify-content: space-evenly;
+}
+
+/* top row in a given return item box -- containing img, name/id info, 
+ * and close out button */
+.itemID {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+/* container for item name and id number -- middle element in .itemID */
+.itemInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+/* note: will need separate css class for handling exit button */
+.exitBtn {
+    padding: 0;
+    background: none; 
+    border: none;
+    color: #000000;
+    box-shadow: none;
+    padding-right: 1px; 
+}
+
+.exitBtn:hover {
+    padding: 0;
+    background: none; 
+    border: none;
+    color: #000000;
+    box-shadow: none;
+    padding-right: 0.6vw; 
+}
+/* note: image will need white border styling and sizing */
+
+.notesWrapper {
+    height: 15vh;
+}
+
+.conditionWrapper {
+    height: 8vh;
+}
+/* textbox for "notes" about return item */
+.notesTextbox {
+    width: 100%;
+    height: 11vh;
+    flex: 0;
+    border: 1px solid #9B525F;
+    background-color: #F8F5F5;
+}
+
+/* dropdown to specify condition of return item 
+ * this should be an element of type <select> with dropdown items as <option> */
+.conditionDropdown {
+    width: 100%;
+    height: 60%;
+    position: relative;
+    display: inline-block;
+    border: 1px solid #9B525F;
+    background-color: #F8F5F5;
+}
+  
+/* styling individual dropdown elements */
+.dropdownContent {
+    display: none;
+    position: absolute;
+    background-color: #9B525F;
+    min-width: 100%;
+    height: 7vh;
+}
+  
+.conditionDropdown:hover .dropdown-content {
+    display: block;
+}
+
+.page-select {
+    display: flex;
+    padding-right: 5%;
+    align-items: flex-end;
+    justify-content: center;
+    flex: 1;
+}
