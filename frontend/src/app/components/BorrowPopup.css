@@ -1,0 +1,121 @@
+h4 {
+    width: 13.75rem;
+    color: #000;
+    font-family: Akatab, sans-serif;
+    font-size: 2.5rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 1.5rem;
+}
+
+label input:first-of-type {
+    display: flex;
+    padding: 0.6875rem 1.125rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.625rem;
+    flex: 1 0 0;
+    align-self: stretch;
+    border-radius: 0.3125rem;
+    border: 1px solid #9b525f;
+    background: #fff;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.25);
+}
+
+label input:nth-of-type(2) {
+    display: flex;
+    padding: 0.6875rem 1.125rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.625rem;
+    flex: 1 0 0;
+    align-self: stretch;
+    border-radius: 0.3125rem;
+    border: 1px solid #9b525f;
+    background: #fff;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.25);
+}
+
+label input:nth-of-type(4) {
+    display: flex;
+    padding: 0.6875rem 1.125rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.625rem;
+    flex: 1 0 0;
+    align-self: stretch;
+    border-radius: 0.3125rem;
+    border: 1px solid #9b525f;
+    background: #fff;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.25);
+}
+
+label input {
+    width: 100%;
+    margin-bottom: 1rem;
+    font-family: Arial, sans-serif;
+    font-size: 1rem;
+    color: #333;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 0.625rem 1.25rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 0.3125rem;
+    border: none;
+    cursor: pointer;
+}
+    
+button[type="submit"] {
+    background-color: #FFFFFF;
+    border: #9B525F;
+    color: #000000;
+}
+
+button[type="button"] {
+    background-color: #007781;
+    color: #ffffff;
+}
+
+.pagination button {
+    margin: 0 0.25rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.3125rem;
+    background: #9b525f;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.pagination button.active {
+    background: #4caf50;
+}
+
+.pagination button:disabled {
+    background: #d3d3d3;
+    cursor: not-allowed;
+}
+    
+.reactjs-popup-content {
+    padding: 2rem;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    border-radius: 0.5rem;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+    
+.reactjs-popup-content h2 {
+    font-size: 1.75rem;
+    color: #4caf50;
+}
+    
+.reactjs-popup-content button {
+    background: #4caf50;
+    color: white;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.3125rem;
+}
+    

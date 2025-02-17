@@ -1,16 +1,49 @@
 @import url('https://fonts.googleapis.com/css2?family=Akatab:wght@400;500;600;700;800;900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+
+  /* Somerville Museum Global vars */
+
+  /* Colors */
+  --background: #F8F5F5;
+
+  /* fills */
+  --grayed_out: #F0F0F0;
+  --sm_red: #9B525F;
+  --sm_light_red: #E3CECE;
+  --sm_blue: #007781;
+
+  /* states */
+  --available: #33CF48;
+  --borrowed: #F2BA54;
+  --overdue: #CF3336;
+  --missing: #9000FF;
+
+  --great: #33CF48;
+  --good: #F2BA54;
+  --washing: #235DF1;
+  --dry_cleaning: #55ACEA;
+  --repairs: #BD33CF;
+
+  /* text colors */
+  --error_red: #DD1717;
+  --sm_red: #592A33;
+  --white: #ffffff;
+  --black: #000000;
+  --gray: #5E6171;
+
+  /* fonts */
+  --sm_font: 'Akatab';
+
 }
 
-@media (prefers-color-scheme: dark) {
+/* Will implement dark mode if we have time */
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 html,
 body {
@@ -63,7 +96,7 @@ a {
   padding: 20px;
   border-radius: 8px;
   text-align: center;
-  color: #000000; /* Change this value to the color you want for the text */
+  color: #000000;
 }
 
 .modal-content button {
@@ -102,4 +135,45 @@ a {
   margin-right: 5px;
   margin-top: 5px;
   display: inline-block;
+}
+
+h3 {
+  font-family: Akatab;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+p {
+  font-family: Akatab;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+/*-------------Keep Sidebar Unique-------------*/
+.adjacent {
+  margin-left: 90px;
+}
+
+/*-------------Keep Sidebar Unique-------------*/
+.adjacent {
+  margin-left: 90px;
+}
+.h3 {
+  font-family: Akatab;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.p {
+  font-family: Akatab;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }

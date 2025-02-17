@@ -13,11 +13,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSignIn, useAuth } from "@clerk/nextjs";
 import { Icon } from "react-icons-kit";
-import { eyeOff } from "react-icons-kit/feather/eyeOff";
-import { eye } from "react-icons-kit/feather/eye";
+import { eyeOff } from "react-icons-kit/feather/eyeOff.js";
+import { eye } from "react-icons-kit/feather/eye.js";
 import Checkbox from "../components/Checkbox";
 import "../app.css";
-import "../app.css"
 
 export default function Signin() {
   const [email, setEmail] = useState("");
@@ -158,9 +157,9 @@ export default function Signin() {
             style={{ borderColor: errorBorder }}
             autoComplete="current-password"
           />
-          <span className="eyecon" onClick={handleToggle}>
+          {/* <span className="eyecon" onClick={handleToggle}>
             <Icon icon={icon} size={20} />
-          </span>
+          </span> */}
         </div>
         <div className="remember-pwd">
           <Checkbox className="check" label="Remember me" />

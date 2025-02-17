@@ -29,12 +29,15 @@ export default function EditNoteButton() {
         event.preventDefault();
         
         try {
-            const response = await fetch(`../../api/selectId`, { 
-                method: 'PUT',
+            const response = await fetch(`../../api/db`, { 
+                method: 'PUT', // Use the PUT method
                 headers: {
-                'Content-Type': 'application/json' // Specify the content type
+                  'Content-Type': 'application/json' // Specify the content type
                 },
-                body: JSON.stringify({ id: inputValue }) // Send the id as a JSON object
+                body: JSON.stringify({
+                  text: 'SELECT * FROM dummy_data WHERE id = $1', // SQL query for selecting the record
+                  params: [inputValue] // Parameters for the query
+                })
               });
 
             if (!response.ok) {
@@ -55,12 +58,15 @@ export default function EditNoteButton() {
         event.preventDefault();
 
         try {
-            const response = await fetch(`../../api/updateNote`, { 
+            const response = await fetch(`../../api/db`, { 
                 method: 'PUT',
                 headers: {
-                'Content-Type': 'application/json' // Specify the content type
+                  'Content-Type': 'application/json' // Specify the content type
                 },
-                body: JSON.stringify({ id: itemInfo.id, note: noteValue }) // Send the id as a JSON object
+                body: JSON.stringify({
+                  text: 'UPDATE dummy_data SET note = $1 WHERE id = $2', // SQL query
+                  params: [noteValue, itemInfo.id] // Parameters for the query
+                }),
               });
 
             if (!response.ok) {
