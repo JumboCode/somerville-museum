@@ -88,7 +88,7 @@ export default function reset_password () {
           })
           .then((result) => {
             setActive({ session: result.createdSessionId })
-            router.push("/dashboard")
+            router.push("/login")
           })
           .catch((err) => {
             setError('Invalid code. Try again.');
