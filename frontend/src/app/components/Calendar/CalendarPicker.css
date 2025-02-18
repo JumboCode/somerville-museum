@@ -2,8 +2,7 @@
     position: absolute;
     bottom: 40px;
     top: auto;
-    left: 95%;
-    transform: translateX(-50%);
+    left: 0;
     background: white;
     border: 1px solid #ddd;
     border-radius: 8px;
