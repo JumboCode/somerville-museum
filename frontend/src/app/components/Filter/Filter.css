@@ -251,9 +251,8 @@ input[type="checkbox"]:checked::after {
 /* CALENDAR */
 .calendar-picker {
     position: absolute;
-    left: 100%;
+    left: 0;
     top: 0;
-    margin-left: 1rem;
     z-index: 1001;
     background: white;
     border: 0.2vh solid rgba(155, 82, 95, 1);
