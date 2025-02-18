@@ -4,7 +4,7 @@
 .wrapper {
     position: absolute;
     display: flex;
-    z-index: 100000;
+    z-index: 1000;
     justify-content: space-between;
     flex-direction: column;
     left:0;
@@ -39,7 +39,7 @@
     border: 1px solid #9B525F;
     padding: 1vh 1vw;
     width: 26vw;
-    height: 34vh;
+    height: 50vh;
     color: black;
     font-family: "Akatab", serif;
     border-radius: 4.813px;
@@ -87,8 +87,15 @@
 }
 
 .conditionWrapper {
-    height: 8vh;
+    width: 75%; /*
+    position: absolute;
+    /* background-color: DodgerBlue;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 2001; */
 }
+
 /* textbox for "notes" about return item */
 .notesTextbox {
     width: 100%;
@@ -98,28 +105,66 @@
     background-color: #F8F5F5;
 }
 
-/* dropdown to specify condition of return item 
- * this should be an element of type <select> with dropdown items as <option> */
+/* The container must be positioned relative: */
 .conditionDropdown {
-    width: 100%;
-    height: 60%;
     position: relative;
-    display: inline-block;
+    height: 7vh;
     border: 1px solid #9B525F;
-    background-color: #F8F5F5;
+    background-color: #fff;
 }
   
-/* styling individual dropdown elements */
+.conditionDropdown select {
+    display: none; /*hide original SELECT element: */
+}
+  
 .dropdownContent {
-    display: none;
+    color: #9B525F;
+}
+  
+/* Style the arrow inside the select element: */
+.conditionDropdown:after {
+    position: absolute;
+    content: "";
+    top: 14px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-color: #fff transparent transparent transparent;
+}
+  
+/* Point the arrow upwards when the select box is open (active): */
+.conditionDropdown.select-arrow-active:after {
+    border-color: transparent transparent #fff transparent;
+    top: 7px;
+}
+  
+/* style the items (options), including the selected item: */
+.select-items div,.conditionDropdown {
+    color: #000000;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+    cursor: pointer;
+}
+  
+/* Style items (options): */
+.select-items {
     position: absolute;
     background-color: #9B525F;
-    min-width: 100%;
-    height: 7vh;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 99;
 }
   
-.conditionDropdown:hover .dropdown-content {
-    display: block;
+/* Hide the items when the select box is closed: */
+.select-hide {
+    display: none;
+}
+  
+.select-items div:hover, .same-as-selected {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .page-select {

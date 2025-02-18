@@ -3,9 +3,12 @@
 import { useState, useEffect, useRef, forwardRef} from "react";
 import "./ReturnButton.css";
 import StylishButton from "./StylishButton";
+import { Dropdown } from 'primereact/dropdown';
+import { MultiSelect } from 'primereact/multiselect';
 
 export default function ItemBoxes({ unit, onNotesChange, itemId, onClose }) {
     const [notes, setNotes] = useState("");
+    const [conditio, setCondition] = useState([]);
 
     // Add a condition to make sure `unit` is defined
     if (!unit) {
@@ -14,9 +17,34 @@ export default function ItemBoxes({ unit, onNotesChange, itemId, onClose }) {
 
     const { id, tags, name, condition} = unit; 
 
+    const conditions = [
+        { name: "Needs repair" },
+        { name: "Needs dry cleaning" },
+        { name: "Needs washing" },
+        { name: "Not usable" },
+        { name: "Great" },
+        { name: "Good" },
+    ]
+
     const handleNotesChange = (event) => {
         setNotes(event.target.value);
         onNotesChange(unit.id, event.target.value);
+    };
+
+    const handleConditionSelect = (selectedConditions) => {
+        console.log("Selected conditions:", selectedConditions);
+    
+        // Ensure selectedConditions is always an array
+        if (!Array.isArray(selectedConditions)) {
+            setCondition([]); // Set to empty array if selection is cleared
+            return;
+        }
+    
+        // Extract only names, handling undefined values safely
+        const selectedNames = selectedConditions.map(item => item?.name || "").filter(name => name !== "");
+    
+        // Update state
+        setCondition(selectedNames);
     };
 
     //not pulling tags
@@ -46,10 +74,32 @@ export default function ItemBoxes({ unit, onNotesChange, itemId, onClose }) {
             <div className="conditionWrapper">
             <p>Condition*</p> 
                 <select name="condition" className="conditionDropdown">
-                    <option className="dropdownContent" value="needs">Needs Dry Cleaning</option>
-                    {/* add more condition tags */}
+                    <option className="dropdownContent" value="Needs Dry Cleaning">Needs Dry Cleaning</option>
+                    <option className="dropdownContent" value="Good">Good</option>
+                    <option className="dropdownContent" value="Great">Great</option>
+                    <option className="dropdownContent" value="Needs Washing">Needs Washing</option>
+                    <option className="dropdownContent" value="Not Usable">Not Usable</option>
                 </select>
             </div>
+
+            {/* Condition Dropdown */}
+            {/* <div className="condition-component">
+                <div className="dropdown-component">
+                    <h3 className={errors.condition ? "error-text" : ""}>Condition*</h3>
+                    <MultiSelect
+                        value={conditions.filter(cond => condition.includes(cond.name))} // Sync selected values
+                        options={conditions}
+                        onChange={(e) => handleConditionSelect(e.value || [])}
+                        optionLabel="name" 
+                        display="chip" 
+                        maxSelectedLabels={2}
+                        placeholder="Select Condition"
+                        className="dropdown"
+                        showSelectAll={false}
+                    />
+                </div>
+            </div> */}
+
         </div>
     );
 }
