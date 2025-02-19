@@ -15,12 +15,14 @@ export default async function handler(req, res) {
         
   try {
 
+    //check for existing borrower
     const existingBorrowerResult = await query(
       `SELECT * FROM borrowers where email = $1`, [borrowerEmail]
     );
 
     let borrowerId; 
-
+ 
+    //if borrower doesn't exist, create new borrower
     if (existingBorrowerResult.rows.length > 0) {
       borrowerId = existingBorrowerResult.rows[0].id; 
       console.log(`Existing borrower found with ID: ${borrowerId}`);
@@ -35,7 +37,7 @@ export default async function handler(req, res) {
     
     for (const itemId of selectedItems) {
       let dateReturned = null; 
-      //ASK ABOUT THIS, this appears in the database as exactly what the var names are, is that an issue? 
+ 
       const borrowObject = {
         borrowerId, 
         itemId,
@@ -46,7 +48,7 @@ export default async function handler(req, res) {
         note
       }; 
 
-      //not updating borrowers with correct information
+      //updating borrowers with correct information
       const historyUpdateResult = await query(
         `
         UPDATE borrowers
@@ -75,26 +77,23 @@ export default async function handler(req, res) {
       let borrowId = borrowsResult.rows[0].id; 
       console.log(`New borrow created with ID: ${borrowId}`);
 
-      //ASK ABOUT THIS, THERE IS SOME DISCONNECT WITH THE DATABASE AND MASTER SPEC
       const borrowerObject = {
         borrowerName, 
         borrowerEmail,
         phoneNumber,
         borrowHistory
       };
-      await query("UPDATE dummy_data SET status = 'Available' WHERE id = $1", itemId)
+
+      // await query("UPDATE dummy_data SET status = 'Available' WHERE id = $1", itemId)
+      //update each item's current_borrower, borrow_history, and borrower
       await query(
         `UPDATE dummy_data
-        SET borrow_history = COALESCE(
-          jsonb_set(
-            borrow_history,
-            ARRAY[$1],
-            COALESCE(borrow_history->$1, '{}'::jsonb) || $2::jsonb
-          ),
-          jsonb_build_object($1, $2::jsonb)
-        ), status = $3, current_borrower = $4
-        WHERE id = $5 `,
-        [itemId, JSON.stringify(borrowObject), 'Borrowed', borrowerId, itemId]
+        SET borrow_history = ARRAY_APPEND(
+          COALESCE(borrow_history, '{}'), 
+          $1::integer
+        ), status = $2, current_borrower = $1
+        WHERE id = $3 `,
+        [borrowerId, 'Borrowed', itemId]
       
       );
       
