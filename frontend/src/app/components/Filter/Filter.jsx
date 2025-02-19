@@ -46,18 +46,18 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
         ...baseOptions,
         status: [],
         season: [],
-        return_date: "NOT NULL"
+        return_date: { start: null, end: null }
     }
     const [openDropdowns, setOpenDropdowns] = useState({});
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-    const [selectedDate, setSelectedDate] = useState('Select...');
+    const [dateRange, setDateRange] = useState({ start: null, end: null });
     const [selectedOptions, setSelectedOptions] = useState(baseOptions);
     const dropdownRefs = useRef({});
     const checkboxRefs = useRef({});
     const calendarRef = useRef(null);
     const handleReset = () => {
         setSelectedOptions(baseOptions);
-        setSelectedDate('Select...');
+        setDateRange({ start: null, end: null });
     };
 
     useEffect(() => {
@@ -88,11 +88,13 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
         }));
     };
 
-    const handleDateSelect = (date) => {
-        setSelectedDate(date);
+    // Updated to handle date range selection
+    const handleDateRangeSelect = (startDate, endDate) => {
+        setDateRange({ start: startDate, end: endDate });
         setSelectedOptions((curr) => ({
-            ...curr, return_date: date
-        }))
+            ...curr, 
+            return_date: { start: startDate, end: endDate }
+        }));
     };
 
     // Now enables multiple options to be selected
@@ -127,6 +129,17 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
                 };
             }
         });
+    };
+
+    // Format date range display text
+    const getDateRangeText = () => {
+        if (dateRange.start && dateRange.end) {
+            return `${dateRange.start} - ${dateRange.end}`;
+        } else if (dateRange.start) {
+            return `${dateRange.start} - Select end date`;
+        } else {
+            return 'Select date range...';
+        }
     };
 
     return (
@@ -203,20 +216,20 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
                 </div>
 
                 <div className="filter-section">
-                    <h2>Return Date</h2>
+                    <h2>Return Date Range</h2>
                     <div className="date-select-container">
                         <div className="custom-select">
                             <div 
                                 className="select-box"
                                 onClick={() => setIsCalendarOpen(!isCalendarOpen)}
                             >
-                                <span>{selectedDate}</span>
+                                <span>{getDateRangeText()}</span>
                                 <Calendar className="calendar-icon" />
                             </div>
                             <CalendarPicker 
                                 isOpen={isCalendarOpen}
                                 onClose={() => setIsCalendarOpen(false)}
-                                onDateSelect={handleDateSelect}
+                                onDateSelect={handleDateRangeSelect}
                                 ref={calendarRef}
                             />
                         </div>
