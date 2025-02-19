@@ -58,8 +58,8 @@
 .month-nav {
     border: none;
     background: none;
-    padding: 2px 4px; /* Reduced padding */
-    min-width: 24px; /* Added min-width for consistent sizing */
+    padding: 2px 4px;
+    min-width: 24px;
     cursor: pointer;
     color: rgba(155, 82, 95, 1);
     font-weight: bold;
@@ -111,6 +111,12 @@
     color: white;
 }
 
+/* New styles for in-range days */
+.day.in-range {
+    background-color: rgba(155, 82, 95, 0.3);
+    color: #333;
+}
+
 .day.disabled {
     color: #ccc;
     cursor: default;
@@ -124,4 +130,42 @@
 .day.today {
     font-weight: bold;
     color: rgba(155, 82, 95, 1);
+    position: relative;
+    box-shadow: 0 0 0 1px rgba(155, 82, 95, 0.6);
+}
+
+/* If today is also selected, make sure the text remains visible */
+.day.today.selected {
+    color: white;
+    box-shadow: 0 0 0 1px white;
+}
+
+/* New styles for date range selection */
+.selection-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 10px;
+    font-size: 12px;
+}
+
+.selected-date {
+    color: #666;
+    font-weight: 500;
+}
+
+.reset-button {
+    background: none;
+    border: 1px solid rgba(155, 82, 95, 0.6);
+    color: rgba(155, 82, 95, 1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-top: 2px;
+    cursor: pointer;
+    font-size: 11px;
+    align-self: flex-end;
+}
+
+.reset-button:hover {
+    background-color: rgba(155, 82, 95, 0.1);
 }
