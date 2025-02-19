@@ -5,8 +5,8 @@ import StylishButton from '../components/StylishButton.jsx';
 import SearchBar from '../components/SearchBar';
 
 export default function BorrowerPage(){
-    <div className='test'>
+    return (
         <p>hello world</p>
-    </div>
+    )
 }
 
