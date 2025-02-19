@@ -8,14 +8,16 @@ import { MultiSelect } from 'primereact/multiselect';
 
 export default function ItemBoxes({ unit, onNotesChange, itemId, onClose }) {
     const [notes, setNotes] = useState("");
-    const [conditio, setCondition] = useState([]);
+    const [condition, setCondition] = useState([]);
+
+    const [errors, setErrors] = useState({});
 
     // Add a condition to make sure `unit` is defined
     if (!unit) {
         return null; // Don't render anything if `unit` is undefined
     }
 
-    const { id, tags, name, condition} = unit; 
+    // const { id, tags, name, condition} = unit; 
 
     const conditions = [
         { name: "Needs repair" },
@@ -71,19 +73,9 @@ export default function ItemBoxes({ unit, onNotesChange, itemId, onClose }) {
                         value = {notes} onChange = {handleNotesChange}></input>
                 </form>
             </div>
-            <div className="conditionWrapper">
-            <p>Condition*</p> 
-                <select name="condition" className="conditionDropdown">
-                    <option className="dropdownContent" value="Needs Dry Cleaning">Needs Dry Cleaning</option>
-                    <option className="dropdownContent" value="Good">Good</option>
-                    <option className="dropdownContent" value="Great">Great</option>
-                    <option className="dropdownContent" value="Needs Washing">Needs Washing</option>
-                    <option className="dropdownContent" value="Not Usable">Not Usable</option>
-                </select>
-            </div>
 
-            {/* Condition Dropdown */}
-            {/* <div className="condition-component">
+            {/* Condition Dropdown - shoutout Massimo and Dan */}
+            <div className="condition-component">
                 <div className="dropdown-component">
                     <h3 className={errors.condition ? "error-text" : ""}>Condition*</h3>
                     <MultiSelect
@@ -98,7 +90,7 @@ export default function ItemBoxes({ unit, onNotesChange, itemId, onClose }) {
                         showSelectAll={false}
                     />
                 </div>
-            </div> */}
+            </div>
 
         </div>
     );
