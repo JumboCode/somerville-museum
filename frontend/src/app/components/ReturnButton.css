@@ -11,6 +11,7 @@
     top:0;
     height: 100vh;
     padding: 5vh;
+    width: 100%;
     background: #F8F5F5;
 }
 
@@ -86,16 +87,6 @@
     height: 15vh;
 }
 
-.conditionWrapper {
-    width: 75%; /*
-    position: absolute;
-    /* background-color: DodgerBlue;
-    top: 100%;
-    left: 0;
-    right: 0;
-    z-index: 2001; */
-}
-
 /* textbox for "notes" about return item */
 .notesTextbox {
     width: 100%;
@@ -105,66 +96,169 @@
     background-color: #F8F5F5;
 }
 
-/* The container must be positioned relative: */
-.conditionDropdown {
-    position: relative;
-    height: 7vh;
+.dropdown-component {
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    line-height: 2.3rem;
+}
+
+.dropdown-component select {
+    border-radius: 3px;
     border: 1px solid #9B525F;
-    background-color: #fff;
+    background: #FFF;
+    width: 50%;
+    padding: 0.5rem;
 }
-  
-.conditionDropdown select {
-    display: none; /*hide original SELECT element: */
+
+.dropdown {
+    border: 1px solid #9B525F;
+    background: #FFF;
+    padding: 0.5rem;
+    width: 100%;
+    height: 3.5rem;
+    margin-top: 0.6rem;
 }
-  
-.dropdownContent {
-    color: #9B525F;
+
+.dropdown select {
+    border: 1px solid #9B525F;
+    background: #FFF;
+    width: stretch;
 }
-  
-/* Style the arrow inside the select element: */
-.conditionDropdown:after {
-    position: absolute;
-    content: "";
-    top: 14px;
-    right: 10px;
-    width: 0;
-    height: 0;
-    border: 6px solid transparent;
-    border-color: #fff transparent transparent transparent;
+
+.p-dropdown-panel {
+    background-color: #FFF !important;
+    border: 1px solid var(--sm_red);
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
 }
-  
-/* Point the arrow upwards when the select box is open (active): */
-.conditionDropdown.select-arrow-active:after {
-    border-color: transparent transparent #fff transparent;
-    top: 7px;
+
+.p-dropdown-item {
+    padding: 0.5rem;
+    background-color: #FFF;
+    border-bottom: 1px solid #DBDBDB;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 0;
 }
-  
-/* style the items (options), including the selected item: */
-.select-items div,.conditionDropdown {
-    color: #000000;
-    padding: 8px 16px;
-    border: 1px solid transparent;
-    border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+
+.p-dropdown-item:hover {
+    background-color: #efd4da;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out !important;
+}
+
+.p-multiselect-item:hover {
+    background-color: #efd4da;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out !important;
+}
+
+.p-multiselect-panel {
+    background-color: #FFF !important;
+    border: 1px solid var(--sm_red);
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    color: #FFF !important;
+}
+
+.p-multiselect-token {
+    color: #FFFFFF !important;
+    background-color: var(--sm_red) !important;
+    border-radius: 0.2rem;
+    padding: 0.8rem;
+    font-size: 1rem;
+    height: 3.5vh;
+    margin-right: 0.4rem;
+    gap: 0.4rem;
+}
+
+.p-multiselect-token-label {
+    color: #FFFFFF !important;
     cursor: pointer;
 }
-  
-/* Style items (options): */
-.select-items {
+
+
+.p-chips-token .p-chips-token-icon {
+    color: white !important;
+}
+
+.p-multiselect-label-container {
+    justify-content: center;
+    line-height: 2.3rem;
+}
+
+.p-multiselect-item {
+    background-color: #fff;
+    padding: 0.5rem;
+    border-top: 1px solid #DBDBDB;
+    border-radius: 0rem;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+
+.p-multiselect-header {
+    display: none !important;
+}
+
+.p-checkbox input[type="checkbox"] {
+    opacity: 0;
     position: absolute;
-    background-color: #9B525F;
-    top: 100%;
-    left: 0;
-    right: 0;
-    z-index: 99;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
 }
-  
-/* Hide the items when the select box is closed: */
-.select-hide {
-    display: none;
+
+.p-checkbox-icon .p-highlight {
+    background-color: #FFF;
+    transition: background-color 0.4s ease-in-out, border-color 0.4s ease-in-out !important;
 }
-  
-.select-items div:hover, .same-as-selected {
-    background-color: rgba(0, 0, 0, 0.1);
+
+.p-multiselect .p-multiselect-items .p-multiselect-item .p-checkbox {
+    display: flex !important;
+    align-items: center !important;
+    border: 1px solid var(--sm_red);
+}
+
+.p-checkbox-box {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    border: 2px solid var(--sm_red) !important;
+    border-radius: 0.25rem !important;
+    background-color: #FFF;
+    transition: background-color 0.4s ease-in-out, border-color 0.4s ease-in-out !important;
+}
+
+.p-multiselect .p-multiselect-items .p-multiselect-item .p-checkbox .p-checkbox-box.p-highlight {
+    background-color: var(--sm_red) !important;
+    border-color: var(--sm_red) !important;
+}
+
+
+.p-multiselect .p-multiselect-items .p-multiselect-item .p-checkbox .p-checkbox-box.p-highlight .p-checkbox-icon {
+    color: #FFF !important;
+}
+
+.p-highlight {
+    background: #f7e6e9;
+    transition: background 0.1s ease-in-out, border-color 0.1s ease-in-out !important;
+}
+
+.condition-component {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.condition-dropdown {
+    padding: 0.5rem;
+    width: 100%;
+    margin-top: 0.5rem;
 }
 
 .page-select {
