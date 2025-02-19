@@ -58,7 +58,6 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
 
   }
 
-  
   return (
     <div>
       <StylishButton
