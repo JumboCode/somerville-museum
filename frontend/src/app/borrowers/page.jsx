@@ -5,13 +5,14 @@ import { useState, useEffect } from "react";
 import StylishButton from '../components/StylishButton.jsx';
 import SearchBar from '../components/SearchBar';
 
-export default function BorrowerPage(){
+export default function BorrowerPage() {
+    const [searchResults, setSearchResults] = useState([]);
     return (
         <>
-            <div>
+            <div className='Items'>
+                <SearchBar updateSearchResults={setSearchResults} />    
                 <BorrowerTable></BorrowerTable>
             </div>
-            <p>hello world</p>
         </>
     )
 }
