@@ -2,12 +2,33 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.25);
     display: flex;
-    justify-content: right;
+    justify-content: left;
     align-items: flex-start;
-    z-index: 10000;
+    z-index: 1;
     overflow-y: auto;
+    padding-left: 90px;
+    margin: 2vw;
+}
+  
+@media (max-width: 991px) {
+    .tableContainer {
+        padding-left: 70px;
+    }
+}
+
+@media (max-width: 640px) {
+    .tableContainer {
+        padding-left: 60px;
+    }
+}
+
+.tableContent {
+
+}
+
+#BorrowerTable {
+    /* position: fixed; */
 }

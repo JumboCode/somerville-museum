@@ -34,7 +34,6 @@ export default function SearchBar({ updateSearchResults }) {
                 }
 
                 const data = await response.json();
-                console.log(data)
                 updateSearchResults(data);  // Update results on inventory page
             } catch (error) {
                 console.log(error);
