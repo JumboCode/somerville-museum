@@ -62,40 +62,35 @@ export default function BorrowerTable() {
     return (
         <div className='tableContainer'>
             <div className='tableContent'>
-                <table id="BorrowerInfo">
-                <tbody>
-                    {borrowers.map((borrower, index) => (
-                        borrower.borrow_history && Object.keys(borrower.borrow_history).length > 0 ? (
-                            Object.entries(borrower.borrow_history).map(([itemId, history]) => (
-                                <tr key={`${index}-${itemId}`}>
+                <table id="borrowerInfo">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone Number</th>
+                            <th>Borrow History</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {borrowers.map((borrower, index) => {
+                            const hasHistory = borrower.borrow_history && Object.keys(borrower.borrow_history).length > 0;
+                            
+                            return (
+                                <tr key={index}>
                                     <td>{borrower.name}</td>
                                     <td>{borrower.email}</td>
                                     <td>{borrower.phone_number}</td>
+                                    <td>
+                                    {hasHistory ? (
+                                        Object.keys(borrower.borrow_history).join(", ")
+                                        ) : (
+                                            "No Borrowing History"
+                                        )}
+                                    </td>
                                 </tr>
-                            ))
-                        ) : (
-                            <tr key={index}>
-                                <td>{borrower.name}</td>
-                                <td>{borrower.email}</td>
-                                <td>{borrower.phone_number}</td>
-                                <td colSpan="3">No Borrowing History</td>
-                            </tr>
-                        )
-                    ))}
-                </tbody>
-
-
-                    {/* <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Number</th>
-                        <th>Borrowing History</th>
-                    </tr>
-                    <tr>
-                        <td>{borrowers.length > 0 ? borrowers[0].name : "N/A"}</td>
-                        <td>{borrowers.length > 0 ? borrowers[0].email : "N/A"}</td>
-                        <td>{borrowers.length > 0 ? borrowers[0].phone_number : "N/A"}</td>
-                    </tr> */}
+                            );
+                        })}
+                    </tbody>
                 </table>
             </div>
         </div>
