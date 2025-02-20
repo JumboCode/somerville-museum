@@ -10,8 +10,6 @@ export default function ItemBoxes({ unit, onNotesChange, itemId, onClose }) {
     const [notes, setNotes] = useState("");
     const [condition, setCondition] = useState([]);
 
-    const [errors, setErrors] = useState({});
-
     // Add a condition to make sure `unit` is defined
     if (!unit) {
         return null; // Don't render anything if `unit` is undefined
@@ -77,7 +75,7 @@ export default function ItemBoxes({ unit, onNotesChange, itemId, onClose }) {
             {/* Condition Dropdown - shoutout Massimo and Dan */}
             <div className="condition-component">
                 <div className="dropdown-component">
-                    <h3 className={errors.condition ? "error-text" : ""}>Condition*</h3>
+                    <p className="condition">Condition*</p>
                     <MultiSelect
                         value={conditions.filter(cond => condition.includes(cond.name))} // Sync selected values
                         options={conditions}
