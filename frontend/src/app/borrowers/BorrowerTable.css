@@ -15,8 +15,7 @@
     .tableContainer {
         overflow: hidden;
         width: 100%;
-        max-width: 100vw;
-        min-width: 700px;
+        white-space: nowrap;
     }
 }
 
