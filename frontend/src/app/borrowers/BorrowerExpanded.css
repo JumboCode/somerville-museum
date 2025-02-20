@@ -1,0 +1,87 @@
+ .expandedContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.25);
+    display: flex;
+    justify-content: right;
+    align-items: flex-start;
+    z-index: 10000;
+    overflow-y: auto;
+}
+
+.expandedContent {
+    background-color: white;
+    position: relative;
+    width: 33vw;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+    min-width: 450px;
+    overflow-wrap: break-word;
+    display: inline-block;
+    padding: 1rem 1.5rem;
+}
+
+.fade-in {
+  animation: fade-in 0.5s ease-in-out;
+}
+
+.fade-out {
+  animation: fade-out 0.5s ease-in-out;
+}
+
+@keyframes fade-in {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+      opacity: 1;
+  }
+  to {
+      opacity: 0;
+  }
+}
+
+
+.slide-in {
+  animation: slide-in 0.5s forwards;
+}
+
+.slide-out {
+  animation: slide-out 0.5s forwards;
+}
+
+@keyframes slide-in {
+  from {
+      transform: translateX(100%);
+      opacity: 0;
+  }
+  to {
+      transform: translateX(0);
+      opacity: 1;
+  }
+}
+
+@keyframes slide-out {
+  from {
+      transform: translateX(0);
+      opacity: 1;
+  }
+  to {
+      transform: translateX(100%);
+      opacity: 0;
+  }
+}

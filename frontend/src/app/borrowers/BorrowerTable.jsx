@@ -8,6 +8,12 @@ import { MultiSelect } from 'primereact/multiselect';
 import StylishButton from '../components/StylishButton.jsx';
 import Link from 'next/link';
 
-export default function BorrowerPage() {
+export default function BorrowerTable() {
+    return (
+        <div className='tableContainer'>
+            <table id="BorrowerInfo">
 
+            </table>
+        </div>
+    )
 }
