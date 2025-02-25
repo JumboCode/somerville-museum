@@ -31,6 +31,7 @@ export default function AddPage() {
     // Right column state variables
     const [idText, setIDText] = useState("");
     const [itemText, setItemText] = useState("");
+    const [locationText, setLocationText] = useState("");
     const [priceText, setPriceText] = useState("");
     const [notesText, setNotesText] = useState("");
     const [selectedGarment, setSelectedGarment] = useState("");
@@ -233,6 +234,7 @@ export default function AddPage() {
         const newItem = {
             id: idText,
             name: itemText || null,
+            location: locationText || null,
             cost: priceText ? parseInt(priceText.replace('$', ''), 10): null,
             notes: notesText || null,
             garment_type: selectedGarment || null,
@@ -245,7 +247,6 @@ export default function AddPage() {
             color: selectedColors.length > 0 ? selectedColors : null,
             status: "Available", // Default status
             authenticity_level: null,
-            location: null,
             date_added: placeholderDate, 
             current_borrower: null,
             borrow_history: null
@@ -377,19 +378,35 @@ export default function AddPage() {
                                 />
                             )}
                         </div>
-                        <div className={`itemName ${errors.name ? "error-text" : ""}`}>
-                            Item Name*
-                        </div>
 
+                        <div className="textBoxRow">
+                            
                         {/* Item Name Text Entry */}
-                        <label htmlFor="textBox"></label>
-                        <div className="itemTextBox">
-                            <textarea placeholder=""
-                            id = "itemTB"
-                            value={itemText}
-                            onChange={(e) => setItemText(e.target.value)}
+                        <div className="inputGroup">
+                            <label htmlFor="itemTB" className="textLabel">Item Name*</label>
+                            <textarea
+                                className="itemTextBox"
+                                placeholder=""
+                                id="itemTB"
+                                value={itemText}
+                                onChange={(e) => setItemText(e.target.value)}
                             />
                         </div>
+
+                        {/* Location Text Entry */}
+                        <div className="inputGroup">
+                            <label htmlFor="locationTB" className="textLabel">Location</label>
+                            <textarea
+                                className="locationTextBox"
+                                placeholder=""
+                                id="locationTB"
+                                value={locationText}
+                                onChange={(e) => setLocationText(e.target.value)}
+                            />
+                        </div>
+                    </div>
+
+                    
                         
                         {/* ID, Date Added, and Price Text Entries */}
                         <div className="textBoxRow">

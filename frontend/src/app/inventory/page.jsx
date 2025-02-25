@@ -43,7 +43,6 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
                 }
                 return response.json()
               }).then((data) => {
-                console.log("Received data:", data);
                 setFilterResults(data);
               })
               .catch((error) => {
@@ -72,7 +71,7 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
         console.log("IM BEING CALLED")
         try {
             const response = await fetch(`../../api/fetchInventoryByTag`, { 
-                method: 'GET',
+                method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json' 
                 },
@@ -103,9 +102,15 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
 
     const handleBorrowSuccess = () => {
         // Literally just to call the useeffect with the request. kinda scuffed but whatever
-        setRefreshTable(!refreshTable);
+        setRefreshTable(!refreshTable)
+        forceUpdateHandler();
+
         setSelectedItems([]); 
         fetchData();
+    };
+
+    const forceUpdateHandler = () => {
+        this.forceUpdate();
     };
 
     const handleReturnSuccess = () => {
