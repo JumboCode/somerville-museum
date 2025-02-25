@@ -149,26 +149,46 @@
     margin-bottom: .4rem;
 }
 
-.itemTextBox textarea{
+
+.inputGroup {
     display: flex;
-    padding: .5rem;
-    width: stretch;
-    height: 6vh;
     flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 1rem;
-    flex: 1 0 0;
-    align-self: stretch;
+    flex: 1; /* Ensure equal width for both fields */
+}
+
+.textLabel {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    color: #000;
+}
+
+.itemTextBox,
+.locationTextBox {
+    width: 100%;
+    height: 5vh; /* Adjusted height for a compact look */
+    padding: 0.3rem;
+    border-radius: 0.2rem;
+    resize: none;
+}
+
+
+.itemTextBox textarea,
+.locationTextBox textarea {
     border-radius: .2rem;
     border: 1px solid var(--sm_red);
     background: #FFF;
     box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    height: 20vh;
+    width: stretch;
     resize: none;
     overflow: hidden;
-    line-height: 4vh;
+    font-size: 1rem;
+    padding: .35rem;
     outline: none;
+    line-height: 4vh;
 }
+
 
 .idName {
     color: #000;
@@ -339,6 +359,7 @@
     display: flex;
     gap: 1.8rem;
     justify-content: center;
+    width: 100%;
     margin-top: 1rem;
 }
 

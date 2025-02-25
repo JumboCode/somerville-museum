@@ -11,6 +11,7 @@
     transition: background-color 0.3s, color 0.3s;
     border: 1px solid #000;
   }
+
   
   /* style option 1: white background with black border */
   .stylish-button.style1 {
@@ -33,6 +34,10 @@
     flex-shrink: 1;
 
     height: 5vh;
+  }
+
+  .stylish-button.style1:hover {
+    background-color: #e7e7e7; 
   }
   
   /* style option 2: gray background*/
@@ -65,6 +70,10 @@
     flex-shrink: 1;
 
     height: 5vh;
+  }
+
+  .stylish-button.style3:hover {
+    background-color: #02545c;
   }
 
   .stylish-button.style4 {
