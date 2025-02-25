@@ -118,6 +118,7 @@ input[type="checkbox"]:checked::after {
 }
 
 .select-box {
+    max-width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -130,7 +131,6 @@ input[type="checkbox"]:checked::after {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: calc(100% - 3vh);  /* Leave space for the dropdown icon */
 }
 
 .select-box.active {
@@ -157,7 +157,7 @@ input[type="checkbox"]:checked::after {
     position: absolute;
     top: 100%;
     left: 0;
-    right: 0;
+    width: 100%;
     background: white;
     border: 0.2vh solid rgba(155, 82, 95, 1);
     border-top: none;
