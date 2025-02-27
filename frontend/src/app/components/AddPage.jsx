@@ -246,11 +246,12 @@ export default function AddPage() {
             condition: condition.length > 0 ? condition : null,
             color: selectedColors.length > 0 ? selectedColors : null,
             status: "Available", // Default status
-            authenticity_level: null,
             date_added: placeholderDate, 
             current_borrower: null,
             borrow_history: null
         };
+
+        console.log(newItem); 
 
         let newErrors = {};
 
@@ -324,6 +325,7 @@ export default function AddPage() {
         // Reset form fields (states)
         setIDText("");
         setItemText("");
+        setLocationText(""); 
         setPriceText("");
         setNotesText("");
         setSelectedGarment("");
