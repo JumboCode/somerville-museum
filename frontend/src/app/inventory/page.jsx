@@ -18,6 +18,7 @@ import './inventory.css'
 export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
     const { selectedFilters, triggerFilteredFetch } = useFilterContext();
     const [units, setUnits] = useState([]);
+    
     const [currentPage, setCurrentPage] = useState(1);
     const [unitsPerPage, setUnitsPerPage] = useState(15);
     const [totalPages, setTotalPages] = useState();
@@ -155,36 +156,27 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
     };
 
     const sortByAvail = () => {
+        const availability = [
+            "Available",
+            "Borrowed",
+            "Overdue",
+            "Missing"
+        ];
+
         const filteredAndSortedEntries = [...units]
-            .sort((a, b) => a.status.localeCompare(b.staus)); // Sort by availability
+            .sort((a, b) => availability.indexOf(a.status) - availability.indexOf(b.status)); // Sort by availability
 
         setUnits(filteredAndSortedEntries);
     };
 
-    // const sortByCon = () => {
-    //     // Find the highest-ranked condition for each item
-    //     const highestA = a.condition.reduce((best, c) =>
-    //         order.indexOf(c) < order.indexOf(best) ? c : best
-    //     );
-    //     const highestB = b.condition.reduce((best, c) =>
-    //         order.indexOf(c) < order.indexOf(best) ? c : best
-    //     );
-
-    //     // Sort based on the highest condition found
-    //     const filteredAndSortedEntries = [...units]
-    //     .sort((a, b) => order.indexOf(highestA) - order.indexOf(highestB)); // Sort by condition
-
-    //     setUnits(filteredAndSortedEntries);
-    // };
-
-    const sortByCon = () => { // still bad
+    const sortByCon = () => {
         const order = [
-            "Not usable",
-            "Dry cleaning needed",
-            "Repairs needed",
-            "Washing needed",
+            "Great",
             "Good",
-            "Great"
+            "Needs washing",
+            "Needs repair",
+            "Needs dry cleaning",
+            "Not usable"
         ];
     
         const filteredAndSortedEntries = [...units].sort((a, b) => {
@@ -197,11 +189,16 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
             const highestA = getHighestCondition(a.condition);
             const highestB = getHighestCondition(b.condition);
     
-            return order.indexOf(highestB) - order.indexOf(highestA);
+            return order.indexOf(highestA) - order.indexOf(highestB);
         });
     
         setUnits(filteredAndSortedEntries);
-    };    
+    };
+    
+    // Function to undo sorting
+    const undoSort = () => {
+        setUnits(originalUnits);
+    };
 
     //tesing piece of code
     // const totalPages = Math.ceil(20 / unitsPerPage);
