@@ -33,7 +33,6 @@ export default async function handler(req, res) {
             condition = [],
             color = [],
             status,
-            authenticity_level,
             location,
             date_added,
             current_borrower,
@@ -51,10 +50,10 @@ export default async function handler(req, res) {
         // Insert into the database
         const result = await query(
             `INSERT INTO dummy_data 
-            (id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, current_borrower, borrow_history, notes)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
+            (id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, borrow_history, notes)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
             RETURNING *`,
-            [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, current_borrower, borrow_history, notes]
+            [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, borrow_history, notes]
         );
 
         res.status(201).json({ success: true, data: result.rows[0] });
