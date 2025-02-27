@@ -384,7 +384,7 @@ export default function AddPage() {
                         {/* Item Name Text Entry */}
                         <div className="inputGroup">
                             <label htmlFor="itemTB" className="textLabel">Item Name*</label>
-                            <textarea
+                            <input
                                 className="itemTextBox"
                                 placeholder=""
                                 id="itemTB"
@@ -396,7 +396,7 @@ export default function AddPage() {
                         {/* Location Text Entry */}
                         <div className="inputGroup">
                             <label htmlFor="locationTB" className="textLabel">Location</label>
-                            <textarea
+                            <input
                                 className="locationTextBox"
                                 placeholder=""
                                 id="locationTB"
