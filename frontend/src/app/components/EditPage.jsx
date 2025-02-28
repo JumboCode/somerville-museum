@@ -235,7 +235,7 @@ export default function EditPage() {
         setStatusType("neutral");
     
         try {
-            const response = await fetch(`/api/retrieveItem?id=${idText}`);
+            const response = await fetch(`/api/itemManagement?action=retrieve&id=${idText}`);
     
             // Custom error handling for no item found
             if (response.status === 428) {
@@ -336,7 +336,7 @@ export default function EditPage() {
     
         const updateItem = async () => {
             try {
-                const response = await fetch(`../../api/updateItem`, {
+                const response = await fetch(`../../api/inventoryQueries?action=updateItem`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

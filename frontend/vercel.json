@@ -1,7 +1,7 @@
 {
         "crons": [
           {
-            "path": "/api/overdue.js",
+            "path": "/api/borrowManagement?action=overdue.js",
             "schedule": "0 0 * * *"
           }
         ]

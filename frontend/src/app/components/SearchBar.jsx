@@ -21,7 +21,7 @@ export default function SearchBar({ updateSearchResults }) {
         console.log(query)
         const fetchData = async () => {
             try {
-                const response = await fetch(`../../api/search`, {
+                const response = await fetch(`/api/itemManagement?action=search`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
