@@ -170,6 +170,15 @@
     padding: 0.3rem;
     border-radius: 0.2rem;
     resize: none;
+
+    border: 1px solid var(--sm_red);
+    background: #FFF;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    width: stretch;
+    overflow: hidden;
+    font-size: 1rem;
+    padding: .35rem;
+    outline: none;
 }
 
 
