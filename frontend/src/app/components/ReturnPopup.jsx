@@ -17,7 +17,7 @@ const ReturnPopup = ( { units = [], onSuccess, onClose } ) => {
 
     const handleReturn = async (e) => {
         try {
-            const response = await fetch('../../api/return', {   //call return API 
+            const response = await fetch('../../api/returnManagement?action=return', {   //call return API 
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
