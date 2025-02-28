@@ -246,7 +246,8 @@ export default function AddPage() {
             condition: condition.length > 0 ? condition : null,
             color: selectedColors.length > 0 ? selectedColors : null,
             status: "Available", // Default status
-            authenticity_level: null,
+            // authenticity_level: null,
+            location: null,
             date_added: placeholderDate, 
             current_borrower: null,
             borrow_history: null
@@ -255,15 +256,18 @@ export default function AddPage() {
         let newErrors = {};
 
         // Check for missing required fields and set error flags
-        if (!newItem.name) newErrors.name = true;
-        if (!newItem.garment_type) newErrors.garment_type = true;
-        if (!newItem.time_period) newErrors.time_period = true;
-        if (!newItem.age_group) newErrors.age_group = true;
-        if (!newItem.gender) newErrors.gender = true;
-        if (!newItem.size) newErrors.size = true;
-        if (!newItem.season) newErrors.season = true;
-        if (!newItem.condition) newErrors.condition = true;
-        if (!newItem.color) newErrors.color = true;
+        if (!newItem.id) newErrors.id = true;
+        // if (!newItem.name) newErrors.name = true;
+        // if (!newItem.garment_type) newErrors.garment_type = true;
+        // if (!newItem.time_period) newErrors.time_period = true;
+        // if (!newItem.age_group) newErrors.age_group = true;
+        // if (!newItem.gender) newErrors.gender = true;
+        // if (!newItem.size) newErrors.size = true;
+        // if (!newItem.season) newErrors.season = true;
+        // if (!newItem.condition) newErrors.condition = true;
+        // if (!newItem.color) newErrors.color = true;
+
+
         // if (!newItem.date_added) newErrors.date_added = true;
 
         // If any errors exist, update state and show alert
@@ -277,18 +281,13 @@ export default function AddPage() {
         // If no errors, clear previous errors and proceed
         setErrors({});
 
-        // Convert newItem params to JSON object
-        const body = JSON.stringify(newItem);
-
         // Send a POST request to the add API with body data
-        const addItemDB = async () => {
+        const addItemDB = async (newItem) => {
             try {
-                const response = await fetch(`../../api/add`, {
+                const response = await fetch(`/api/itemManagement?action=add`, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body,
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(newItem)
                 });
 
                 if (!response.ok) {

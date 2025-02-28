@@ -26,7 +26,7 @@ const ReturnButton = ( {selectedItems = [], onSuccess } ) => {  //takes in selec
     async function handleValidity() {
 
         try {
-          const response = await fetch('../../api/returnValidity', {
+          const response = await fetch('../../api/borrowManagement?action=returnValidity', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
