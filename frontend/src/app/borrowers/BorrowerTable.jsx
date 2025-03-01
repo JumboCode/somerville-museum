@@ -1,63 +1,23 @@
+/**
+ * @fileoverview Renders all the current Borrowers by default, and updates
+ *               borrowers from the BorrowSearchBar as well.
+ *               It will show a table with the borrower's Name, Email, Phone 
+ *               Number, and Borrow History.
+ *               
+ * @file BorrowerTabls.jsx
+ * @date February 28th, 2025
+ * @authors Peter Morganelli, Zack White, and Hannah Jiang
+ *  
+ */
+
 "use client";
-
-import { useState, useEffect } from 'react';
 import "../globals.css";
-import "./BorrowerTable.css"
-import { Dropdown } from 'primereact/dropdown';
-import { MultiSelect } from 'primereact/multiselect';
-import StylishButton from '../components/StylishButton.jsx';
-import Link from 'next/link';
+import "./BorrowerTable.css";
 
-export default function BorrowerTable() {
-    const [borrowers, setBorrowers] = useState([]);
-
-        // Extract the unit details
-        // const { id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, borrow_history, notes} = unit; 
-
-    useEffect(() => {
-        const fetchBorrowers = async () => {
-            try {
-                const response = await fetch(`../../../../api/db`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        text: 'SELECT * FROM borrowers',
-                    })
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    // DATA IS AT data.rows
-                    const borrowData = data.map((borrower) => {
-                        return {
-                            name: borrower.name,
-                            email: borrower.email,
-                            phone_number: borrower.phone_number,
-                            borrow_history: borrower.borrow_history,
-                            id_borrows_borrower_id: borrower.id_borrows_borrower_id,
-                        };
-                    });
-
-                    setBorrowers(borrowData);
-                    console.log(borrowData);
-                } else {
-                    console.error("Failed to fetch borrower data");
-                }
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        fetchBorrowers();
-    }, []);
-
-    useEffect(() => {
-        if (borrowers && borrowers.length > 0) {
-        //   console.log("borrowers:", borrowers[0].name);
-        }
-    }, [borrowers]);  
+export default function BorrowerTable({ searchResults }) {
+    // uses the searchResults passed as a prop.
+    //if searchResults is empty, it can either stay as an empty array or print an Empty Table message
+    const borrowers = searchResults || [];
 
     return (
         <div className='tableContainer'>
@@ -72,27 +32,33 @@ export default function BorrowerTable() {
                         </tr>
                     </thead>
                     <tbody>
-                        {borrowers.map((borrower, index) => {
-                            const hasHistory = borrower.borrow_history && Object.keys(borrower.borrow_history).length > 0;
-                            
-                            return (
-                                <tr key={index}>
-                                    <td>{borrower.name}</td>
-                                    <td>{borrower.email}</td>
-                                    <td>{borrower.phone_number}</td>
-                                    <td>
-                                    {hasHistory ? (
-                                        Object.keys(borrower.borrow_history).join(", ")
-                                        ) : (
-                                            "No Borrowing History"
-                                        )}
-                                    </td>
-                                </tr>
-                            );
-                        })}
+                        {borrowers.length > 0 ? (
+                            borrowers.map((borrower, index) => {
+                                const hasHistory = borrower.borrow_history && Object.keys(borrower.borrow_history).length > 0;
+                                return (
+                                    <tr key={index}>
+                                        <td>{borrower.name}</td>
+                                        <td>{borrower.email}</td>
+                                        <td>{borrower.phone_number}</td>
+                                        <td>
+                                            {hasHistory ? (
+                                                Object.keys(borrower.borrow_history).join(", ")
+                                            ) : (
+                                                "No Borrowing History"
+                                            )}
+                                        </td>
+                                    </tr>
+                                );
+                            })
+                        ) : (
+                            //print No Borrowers Found in the case of an empty borrowers table
+                            <tr>
+                                <td colSpan="4" style={{ textAlign: "center" }}>No borrowers found.</td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>
         </div>
-    )
+    );
 }

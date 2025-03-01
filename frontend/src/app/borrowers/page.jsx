@@ -3,15 +3,19 @@ import './Borrowers.css';
 import BorrowerTable from './BorrowerTable.jsx';
 import { useState, useEffect } from "react";
 import StylishButton from '../components/StylishButton.jsx';
-import SearchBar from '../components/SearchBar';
+import BorrowerSearchBar from '../components/BorrowerSearchBar'
 
 export default function BorrowerPage() {
     const [searchResults, setSearchResults] = useState([]);
     return (
         <>
-            <div className='Items'>
-                <SearchBar updateSearchResults={setSearchResults} />    
+            {/* <div className='Items'>
+                <BorrowerSearchBar updateSearchResults={setSearchResults} />    
                 <BorrowerTable></BorrowerTable>
+            </div> */}
+            <div className='Items'>
+                <BorrowerSearchBar updateSearchResults={setSearchResults} />    
+                <BorrowerTable searchResults={searchResults} />
             </div>
         </>
     )
