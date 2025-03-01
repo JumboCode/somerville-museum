@@ -32,7 +32,12 @@ export default function BorrowerSearchBar({ updateSearchResults }) {
                     },
                     //use parameterized query to prevent sql injection :p
                     body: JSON.stringify({
-                        text: 'SELECT * FROM borrowers WHERE name ILIKE $1',
+                        text: `SELECT * FROM borrowers
+                               WHERE id::text ILIKE $1
+                               OR name ILIKE $1
+                               OR email ILIKE $1
+                               OR phone_number ILIKE $1
+                               OR borrow_history::text ILIKE $1`,
                         params: [`%${query}%`],
                       }),
                 });
