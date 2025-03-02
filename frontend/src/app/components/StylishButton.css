@@ -12,7 +12,10 @@
     border: 1px solid #000;
   }
 
-  
+  .stylish-button:hover {
+    background-color: #adadad;
+  }
+
   /* style option 1: white background with black border */
   .stylish-button.style1 {
     display: inline-flex;
@@ -48,6 +51,11 @@
     background: #D9D9D9;
     border: none;
   }
+
+  .stylish-button.style2:hover {
+    background-color: #adadad;
+  }
+
   
   /* style option 3: blue background (+item button?) */
   .stylish-button.style3 {
@@ -81,6 +89,10 @@
     border: none;
     color: #000000;
     box-shadow: none;
+  }
+
+  .stylish-button.style4:hover {
+    background-color: #C6C6C6;
   }
 
   .stylish-button.style5 {
