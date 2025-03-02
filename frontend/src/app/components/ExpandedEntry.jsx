@@ -133,7 +133,7 @@ function ExpandedEntry({ itemData, onClose }) {
         if (!itemData) return;
     
         try {
-            const response = await fetch(`../../api/updateTags`, {
+            const response = await fetch(`../../api/inventoryQueries?action=updateTags`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -153,7 +153,7 @@ function ExpandedEntry({ itemData, onClose }) {
     
     const handleUpdateID = async (event) => {
         try {
-            const response = await fetch('../../api/updateID', {
+            const response = await fetch('/api/itemManagement?action=update', {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
