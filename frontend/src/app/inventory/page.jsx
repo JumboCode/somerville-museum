@@ -28,7 +28,7 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
     const [refreshTable, setRefreshTable] = useState(false);
      
     useEffect(() => {
-        console.log("FILTERS", selectedFilters)
+
         fetch("../../api/fetchInventoryByTag", { 
                 method: 'POST',
                 headers: {
@@ -68,10 +68,10 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
     }, [selectedItems]);
 
     async function fetchData() {
-        console.log("IM BEING CALLED")
+
         try {
             const response = await fetch(`../../api/fetchInventoryByTag`, { 
-                method: 'PUT',
+                method: 'POST',
                 headers: {
                   'Content-Type': 'application/json' 
                 },
@@ -91,6 +91,7 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
                 });
 
                 setUnits(updatedData);
+
                 setTotalPages(Math.ceil(updatedData.length / unitsPerPage));
             } else {
                 console.error("failed to fetch data");
@@ -102,19 +103,14 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
 
     const handleBorrowSuccess = () => {
         // Literally just to call the useeffect with the request. kinda scuffed but whatever
-        setRefreshTable(!refreshTable)
-        forceUpdateHandler();
+        setRefreshTable(!refreshTable);
 
         setSelectedItems([]); 
-        fetchData();
-    };
 
-    const forceUpdateHandler = () => {
-        this.forceUpdate();
     };
+  
 
     const handleReturnSuccess = () => {
-        console.log("Return operation successful, refreshing inventory...");
         setRefreshTable(prev => !prev); // Refresh table to show updated status
         setSelectedItems([]); // Clear selected items
     };
@@ -143,7 +139,7 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
     const currentUnits = units
         .slice(startIndex, startIndex + unitsPerPage)
         .map((unit) => {
-            // console.log(selectedItems);
+
             return (<InventoryUnit
                 key={unit.id}
                 unit={unit}
@@ -243,7 +239,6 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
                         .slice(startIndex, startIndex + unitsPerPage)
                         .map((unit) => {
                         
-                            // console.log(selectedItems);
                             return (<InventoryUnit
                                 key={unit.id}
                                 unit={unit}
