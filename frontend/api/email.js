@@ -4,7 +4,6 @@ import { query } from './db.js';
 const mailjet = Mailjet.apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE);
 
 export default async function handler(req, res) {
-    console.log("Email API received request:", req.method, req.query.type);
 
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Method Not Allowed" });
@@ -38,8 +37,6 @@ export default async function handler(req, res) {
 async function handleBorrowedEmail(req, res) {
     const { recipientEmail, recipientName, items } = req.body;
 
-    console.log("Received borrowed email request data:", { recipientEmail, recipientName, items });
-
     if (!recipientEmail || !items || items.length === 0) {
         console.error("ERROR: Missing required fields.");
         return res.status(400).json({ error: "Missing required fields." });
@@ -71,8 +68,6 @@ async function handleOverdueEmail(req, res) {
         GROUP BY borrower_name, borrower_email, due_date
     `);
 
-    console.log("Overdue items:", result);
-
     // Send email to each borrower with overdue items
     for (const { borrower_name, borrower_email, due_date, items } of result) {
         const itemList = formatItemList(items);
@@ -101,8 +96,6 @@ async function handleReminderEmail(req, res) {
         GROUP BY borrower_name, borrower_email, due_date
     `);
 
-    console.log("Items due soon:", result);
-
     // Send reminder emails for each borrower
     for (const { borrower_name, borrower_email, due_date, items } of result) {
         const itemList = formatItemList(items);
@@ -129,8 +122,6 @@ async function handleReturnEmail(req, res) {
     if (!borrower_email || !borrower_name || !returned_items || returned_items.length === 0) {
         return res.status(400).json({ error: "Missing required fields." });
     }
-
-    console.log(`Sending return confirmation email to ${borrower_email}...`);
 
     // Format returned items list
     const itemList = formatItemList(returned_items);
@@ -169,7 +160,6 @@ async function sendEmail({ to, subject, htmlContent }) {
         ],
     });
 
-    console.log(`Email sent to ${to.email}:`, response.body);
     return response;
 }
 
