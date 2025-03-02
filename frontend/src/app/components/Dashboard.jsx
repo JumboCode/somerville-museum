@@ -25,7 +25,7 @@ const Dashboard = () => {
   // Function to fetch the count from the backend for a specific status
   const fetchCountForStatus = async (status) => {
     try {
-      const response = await fetch(`../../api/selectCounts`, {
+      const response = await fetch(`../../api/inventoryQueries?action=selectCounts`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

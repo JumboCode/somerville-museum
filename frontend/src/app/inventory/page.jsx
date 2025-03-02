@@ -28,8 +28,8 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
     const [refreshTable, setRefreshTable] = useState(false);
      
     useEffect(() => {
-
-        fetch("../../api/fetchInventoryByTag", { 
+        console.log("FILTERS", selectedFilters)
+        fetch("../../api/inventoryQueries?action=fetchInventoryByTag", { 
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json' 
@@ -70,8 +70,8 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
     async function fetchData() {
 
         try {
-            const response = await fetch(`../../api/fetchInventoryByTag`, { 
-                method: 'POST',
+            const response = await fetch(`../../api/inventoryQueries?action=fetchInventoryByTag`, { 
+                method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json' 
                 },
