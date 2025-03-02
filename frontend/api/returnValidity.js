@@ -24,7 +24,7 @@ export default async function handler(req, res) {
       }
 
       // If the item is not available, add to unavailable items
-      if (itemDetails.status !== 'Borrowed') {
+      if (itemDetails.status !== 'Borrowed' && itemDetails.status !== 'Overdue') {
         unavailableItems.push(itemDetails);
         continue; // Skip to the next item
       }

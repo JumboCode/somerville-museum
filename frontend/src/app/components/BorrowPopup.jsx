@@ -112,6 +112,7 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
       setIsSuccessPopupVisible(true);
 
       if (onSuccess) {
+        console.log("borrow success!"); 
         onSuccess();
       }
     } catch (error) {
