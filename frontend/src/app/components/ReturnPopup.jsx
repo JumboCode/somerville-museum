@@ -17,7 +17,7 @@ const ReturnPopup = ( { units = [], onSuccess, onClose } ) => {
 
     const handleReturn = async (e) => {
         try {
-            const response = await fetch('../../api/returnManagement?action=return', {   //call return API 
+            const response = await fetch('../../api/borrowManagement?action=return', {   //call return API 
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -99,10 +99,11 @@ const ReturnPopup = ( { units = [], onSuccess, onClose } ) => {
         <div className="wrapper"> 
             {/* */}
             <div className="header" > 
-                <div className="heading">Return Item(s)</div>
+                <div className="heading">Return Item(s)
                 <div className="buttons">
                     <StylishButton label = "Cancel" onClick={onClose} styleType = "style1"> </StylishButton>
-                    <StylishButton label = "Return All" onClick={handleReturn}> </StylishButton>
+                    <StylishButton label = "Return All" onClick={handleReturn} styleType="style3"> </StylishButton>
+                </div>
                 </div>
             </div>
             {/* container for all return items */}
