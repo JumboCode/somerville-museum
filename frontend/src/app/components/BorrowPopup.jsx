@@ -88,7 +88,7 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
     }
 
     try {
-      const response = await fetch('/api/borrow', {
+      const response = await fetch('/api/borrowManagement?action=borrow', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
