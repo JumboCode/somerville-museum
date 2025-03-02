@@ -20,7 +20,6 @@ const ReturnButton = ( {selectedItems = [], onSuccess } ) => {  //takes in selec
                 alert('Some items are invalid. Please try again.');
             }
         }
-        console.log(selectedItems);
     }
 
     async function handleValidity() {

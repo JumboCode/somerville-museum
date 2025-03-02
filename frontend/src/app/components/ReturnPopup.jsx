@@ -59,8 +59,6 @@ const ReturnPopup = ( { units = [], onSuccess, onClose } ) => {
 
     const handleNotesChange = (id, value) => {
         setNotes({...notes, [id]: value});
-        console.log('in handle notes change');
-        console.log(notes);
     };
 
     const handleDeselect = (removeUnit) => {

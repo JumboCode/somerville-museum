@@ -186,7 +186,6 @@ export default function EditPage() {
     };
 
     const handleConditionSelect = (selectedConditions) => {
-        console.log("Selected conditions:", selectedConditions);
     
         // Ensure selectedConditions is always an array
         if (!Array.isArray(selectedConditions)) {

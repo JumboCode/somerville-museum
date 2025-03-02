@@ -20,7 +20,6 @@ function AddTagButton() {
         throw new Error(`Network response was not ok: ${response.statusText}`);
       }
 
-      console.log("clicked");
 
       const result = await response.json();
       setData(result); // Set the data

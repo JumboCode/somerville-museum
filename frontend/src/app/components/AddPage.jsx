@@ -184,7 +184,6 @@ export default function AddPage() {
     };
 
     const handleConditionSelect = (selectedConditions) => {
-        console.log("Selected conditions:", selectedConditions);
     
         // Ensure selectedConditions is always an array
         if (!Array.isArray(selectedConditions)) {
@@ -253,7 +252,6 @@ export default function AddPage() {
             borrow_history: null
         };
 
-        console.log(newItem); 
 
         let newErrors = {};
 

@@ -175,10 +175,8 @@ function ExpandedEntry({ itemData, onClose }) {
                 throw new Error(data.message || 'Failed to update ID');
             }
             if (response.status === 201) {
-                console.log(data.message);
                 alert(data.message);
             } else {
-                console.log('ID updated successfully');
                 alert('ID updated successfully');
             }
         } catch (error) {
