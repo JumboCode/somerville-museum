@@ -1,7 +1,6 @@
 import { query } from './db.js';
 
 export async function borrowHandler(req, res) {
-  console.log('reached borrow API', req.body); 
 
   let message; 
 
@@ -25,14 +24,12 @@ export async function borrowHandler(req, res) {
     //if borrower doesn't exist, create new borrower
     if (existingBorrowerResult.rows.length > 0) {
       borrowerId = existingBorrowerResult.rows[0].id; 
-      console.log(`Existing borrower found with ID: ${borrowerId}`);
     } else {
       const newBorrowerResult = await query(
         `INSERT INTO borrowers (name, email, phone_number) VALUES ($1, $2, $3) RETURNING id`,
         [borrowerName, borrowerEmail, phoneNumber]
       );
       borrowerId = newBorrowerResult.rows[0].id;
-      console.log(`New borrower created with ID: ${borrowerId}`);
     }
     
     for (const itemId of selectedItems) {
@@ -75,7 +72,6 @@ export async function borrowHandler(req, res) {
       );
 
       let borrowId = borrowsResult.rows[0].id; 
-      console.log(`New borrow created with ID: ${borrowId}`);
 
       const borrowerObject = {
         borrowerName, 
@@ -114,9 +110,7 @@ export async function returnHandler(req, res) {
   const { selectedItems } = req.body;
   const { notes_id } = req.body;
   const { notes_content } = req.body;
-  
-  console.log(notes_id);
-  console.log(notes_content);
+
 
   try {
 
@@ -133,9 +127,6 @@ export async function returnHandler(req, res) {
       ); 
       const curr_borrower = statusResult.rows[0].current_borrower;
       //update notes in borrows table 
-      console.log(notes_content[i]);
-      console.log(notes_id[i]);
-      console.log(curr_borrower);
       await query(
         "UPDATE borrows SET notes = $1 FROM dummy_data WHERE borrows.borrower_id = $2 AND borrows.item_id = $3",
         [notes_content[i], curr_borrower, notes_id[i]]

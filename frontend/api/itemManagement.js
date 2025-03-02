@@ -37,8 +37,6 @@ export async function addHandler(req, res) {
             return res.status(427).json({ error: 'Item with this ID already exists' });
         }
 
-        console.log('request body:', req.body);
-
         // Insert into the database
         const result = await query(
             // `INSERT INTO dummy_data 
@@ -53,7 +51,6 @@ export async function addHandler(req, res) {
             [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, borrow_history, notes]
         );
 
-        console.log('New item added:', result.rows[0]);
 
         res.status(201).json({ success: true, data: result.rows[0] });
 
