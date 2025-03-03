@@ -16,6 +16,7 @@ import Sidebar from './components/Sidebar/NavigationBar';
 import Filter from './components/Filter/Filter';
 import { usePathname } from 'next/navigation';
 import { FilterProvider } from './components/contexts/FilterContext';
+import { GlobalProvider } from './components/contexts/ToggleContext';
 import './inventory/inventory.css';
 
 // export default function RootLayout({ children, currentPage }) {
@@ -53,6 +54,7 @@ export default function RootLayout({ children, currentPage }) {
   return (
     <ClerkProvider>
       <FilterProvider>
+        <GlobalProvider>
             <html lang="en">
                 <head>
                     <title>Database</title>
@@ -81,6 +83,7 @@ export default function RootLayout({ children, currentPage }) {
                     </div>
                 </body>
             </html>
+            </GlobalProvider>
         </FilterProvider>
     </ClerkProvider>
   );

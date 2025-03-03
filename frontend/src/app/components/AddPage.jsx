@@ -22,6 +22,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { MultiSelect } from 'primereact/multiselect';
 import StylishButton from './StylishButton.jsx';
 import Link from 'next/link';
+import { useGlobalContext } from './contexts/ToggleContext';
 
 export default function AddPage() {
     // Left column state variables
@@ -30,6 +31,9 @@ export default function AddPage() {
 
     // Right column state variables
     const [idText, setIDText] = useState("");
+    const { isToggleEnabled } = useGlobalContext(); // TOGGLE FUNCTIONALITY
+
+
     const [itemText, setItemText] = useState("");
     const [locationText, setLocationText] = useState("");
     const [priceText, setPriceText] = useState("");
@@ -259,15 +263,17 @@ export default function AddPage() {
 
         // Check for missing required fields and set error flags
         if (!newItem.id) newErrors.id = true;
-        // if (!newItem.name) newErrors.name = true;
-        // if (!newItem.garment_type) newErrors.garment_type = true;
-        // if (!newItem.time_period) newErrors.time_period = true;
-        // if (!newItem.age_group) newErrors.age_group = true;
-        // if (!newItem.gender) newErrors.gender = true;
-        // if (!newItem.size) newErrors.size = true;
-        // if (!newItem.season) newErrors.season = true;
-        // if (!newItem.condition) newErrors.condition = true;
-        // if (!newItem.color) newErrors.color = true;
+        if (isToggleEnabled) {
+            if (!newItem.name) newErrors.name = true;
+            if (!newItem.garment_type) newErrors.garment_type = true;
+            if (!newItem.time_period) newErrors.time_period = true;
+            if (!newItem.age_group) newErrors.age_group = true;
+            if (!newItem.gender) newErrors.gender = true;
+            if (!newItem.size) newErrors.size = true;
+            if (!newItem.season) newErrors.season = true;
+            if (!newItem.condition) newErrors.condition = true;
+            if (!newItem.color) newErrors.color = true;
+        }
 
 
         // if (!newItem.date_added) newErrors.date_added = true;
@@ -339,6 +345,25 @@ export default function AddPage() {
         setSelectedColors([]);
     };
 
+    // TOGGLE FUNCTIONALITY
+    useEffect(() => {
+        const fetchNextId = async () => {
+            try {
+                const response = await fetch('/api/inventoryQueries?action=getNextAvailableId');
+                const data = await response.json();
+                if (response.ok) {
+                    setIDText(data.nextId);
+                } else {
+                    console.error(data.error);
+                }
+            } catch (error) {
+                console.error("Error fetching next ID:", error);
+            }
+        };
+
+        fetchNextId();
+    }, []);
+
     return (
         <div className="main">
             <div className="column">
@@ -386,7 +411,7 @@ export default function AddPage() {
                             
                         {/* Item Name Text Entry */}
                         <div className="inputGroup">
-                            <label htmlFor="itemTB" className="textLabel">Item Name*</label>
+                            <h3 htmlFor="itemTB" className={errors.condition ? "error-text" : ""}>Item Name*</h3>
                             <input
                                 className="itemTextBox"
                                 placeholder=""
@@ -419,8 +444,8 @@ export default function AddPage() {
                                 <div className="idTextBox">
                                     <textarea 
                                         type="text"
-                                        placeholder="1256"
-                                        onChange={(e) => setIDText(e.target.value)}
+                                        placeholder="Loading..."
+                                        value={idText}
                                     />
                                 </div>
                             </div>

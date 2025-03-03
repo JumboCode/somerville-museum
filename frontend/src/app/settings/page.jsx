@@ -10,15 +10,19 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import './settings.css';
+import { useGlobalContext } from '../components/contexts/ToggleContext';
 
 const Settings = () => {
   const [normalDataEntry, setNormalDataEntry] = useState(true);
   const [fading, setFading] = useState(false);
   const [displayText, setDisplayText] = useState('Data Input');
+  const { isToggleEnabled, setIsToggleEnabled } = useGlobalContext();
 
   const handleToggle = () => {
     setFading(true);
-    
+
+    setIsToggleEnabled(!isToggleEnabled); // ACTUALLY CHANGE THE GLOBAL CONTEXT
+
     // Wait for fade out to complete before changing the text
     setTimeout(() => {
       setNormalDataEntry(!normalDataEntry);
