@@ -180,28 +180,39 @@ export async function getConditionHandler(req, res) {
     }
 }
 
-  
+
+export async function getNextAvailableIdHandler(req, res) {
+  try {
+      const result = await query('SELECT MAX(id) AS maxId FROM dummy_data');
+      const nextId = result.rows[0].maxid ? result.rows[0].maxid + 1 : 1; // Increment maxId or start from 1 if no IDs exist
+
+      res.status(200).json({ nextId }); // Send the next available ID back to the frontend
+  } catch (error) {
+      console.error("Database query error:", error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
 
 
 export default async function handler(req, res) {
-    const { action } = req.query;
-    
-    switch(action) {
-        case 'selectByName':
-            return selectByNameHandler(req, res);
-        case 'selectCounts':
-            return selectCountsHandler(req, res);
-        case 'fetchInventoryByTag':
-            return fetchInventoryByTagHandler(req, res);
-        case 'fetchTags':
-            return fetchTagsHandler(req, res);
-        case 'filterStatusTags':
-            return filterStatusTagsHandler(req, res);
-        case 'getCondition':
-            return getConditionHandler(req, res);
-        
-    
-        default:
-            return res.status(400).json({ error: 'Invalid action' });
-    }
+  const { action } = req.query;
+  
+  switch(action) {
+      case 'selectByName':
+          return selectByNameHandler(req, res);
+      case 'selectCounts':
+          return selectCountsHandler(req, res);
+      case 'fetchInventoryByTag':
+          return fetchInventoryByTagHandler(req, res);
+      case 'fetchTags':
+          return fetchTagsHandler(req, res);
+      case 'filterStatusTags':
+          return filterStatusTagsHandler(req, res);
+      case 'getCondition':
+          return getConditionHandler(req, res);
+      case 'getNextAvailableId':
+          return getNextAvailableIdHandler(req, res);
+      default:
+          return res.status(400).json({ error: 'Invalid action' });
+  }
 }
