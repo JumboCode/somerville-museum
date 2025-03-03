@@ -2,6 +2,7 @@ import { query } from './db.js';
 
 // Handler for adding a new item (previously add.js)
 export async function addHandler(req, res) {
+    
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
@@ -11,6 +12,7 @@ export async function addHandler(req, res) {
         const {
             id,
             name,
+            location,
             cost,
             notes,
             garment_type,
@@ -23,11 +25,11 @@ export async function addHandler(req, res) {
             color = [],
             status,
             // authenticity_level,
-            location,
             date_added,
             current_borrower,
             borrow_history = {}
         } = req.body;
+
 
         // Check if an item with the given id already exists
         const existingItem = await query(`SELECT id FROM dummy_data WHERE id = $1`, [id]);

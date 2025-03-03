@@ -227,8 +227,11 @@ export default function AddPage() {
     };
 
     const handleSubmit = () => {
+        console.error("reached handlesubmit new item"); 
+
             setStatusMessage("Submitting...");
             setStatusType("neutral");
+
 
         const newItem = {
             id: idText,
@@ -246,7 +249,6 @@ export default function AddPage() {
             color: selectedColors.length > 0 ? selectedColors : null,
             status: "Available", // Default status
             // authenticity_level: null,
-            location: null,
             date_added: placeholderDate, 
             current_borrower: null,
             borrow_history: null
@@ -283,6 +285,7 @@ export default function AddPage() {
 
         // Send a POST request to the add API with body data
         const addItemDB = async (newItem) => {
+
             try {
                 const response = await fetch(`/api/itemManagement?action=add`, {
                     method: "POST",
@@ -313,7 +316,7 @@ export default function AddPage() {
         };
 
         // Call the function to send the API request
-        addItemDB();
+        addItemDB(newItem);
 
         // Reset form fields
         resetForm();
@@ -406,7 +409,6 @@ export default function AddPage() {
                         </div>
                     </div>
 
-                    
                         
                         {/* ID, Date Added, and Price Text Entries */}
                         <div className="textBoxRow">
@@ -621,7 +623,7 @@ export default function AddPage() {
                         <StylishButton className="cancel-button" styleType="style1" label="Cancel" />
                     </Link>
 
-                    <StylishButton className="submit-button" onClick={() => handleSubmit()} styleType="style3" label="Submit" />
+                    <StylishButton className="submit-button" onClick={handleSubmit} styleType="style3" label="Submit" />
                 </div>
             </div>
         </div>
