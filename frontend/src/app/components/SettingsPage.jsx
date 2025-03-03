@@ -3,11 +3,13 @@
 import "../globals.css";
 import "./SettingsPage.css";
 import React, { useState } from "react";
-import { useClerk } from '@clerk/nextjs'
+import { useClerk,  useUser } from '@clerk/nextjs'
+
 
 export default function SettingsPage() {
     const [hasSecondBoxContent, setHasSecondBoxContent] = useState(false);
     const { signOut } = useClerk();
+    const { user } = useUser();
 
     return (
         <div className="main">
@@ -22,7 +24,7 @@ export default function SettingsPage() {
                         <div className="first-name-box">
                             <textarea 
                                 type="text"
-                                placeholder="Holdun"
+                                placeholder={user?.emailAddresses?.[0]?.emailAddress}
                             />
                         </div>
 
