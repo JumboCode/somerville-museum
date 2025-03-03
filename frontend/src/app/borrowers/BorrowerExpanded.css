@@ -1,3 +1,14 @@
+ /**************************************************************
+ *
+ *                     BorrowerExpanded.css
+ *
+ *        Authors: Hannah Jiang & Peter Morganelli & Zack White
+ *           Date: 03/05/2025
+ *
+ *     Summary: CSS styling for the BorrowerExpanded inventory sidebar component.
+ * 
+ **************************************************************/
+
  .expandedContainer {
     position: fixed;
     top: 0;
