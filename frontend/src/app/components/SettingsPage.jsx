@@ -3,9 +3,11 @@
 import "../globals.css";
 import "./SettingsPage.css";
 import React, { useState } from "react";
+import { useClerk } from '@clerk/nextjs'
 
 export default function SettingsPage() {
     const [hasSecondBoxContent, setHasSecondBoxContent] = useState(false);
+    const { signOut } = useClerk();
 
     return (
         <div className="main">
@@ -38,6 +40,15 @@ export default function SettingsPage() {
                                 placeholder="email"
                             />
                         </div>
+                    </div>
+
+                    <div className="inputContainer">
+                        <input 
+                            className="inputButton" 
+                            type="button" 
+                            value="Log out"
+                            onClick={() => signOut({ redirectUrl: '/' })}  // If not signed in, clicking wont do anything 
+                            />
                     </div>
                 </div>
 
