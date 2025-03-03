@@ -113,7 +113,8 @@ export default function Inventory({
 
     const handleBorrowSuccess = () => {
         // Literally just to call the useeffect with the request. kinda scuffed but whatever
-        setRefreshTable(!refreshTable);
+        fetchData(); 
+        setRefreshTable(prev => !prev);
 
         setSelectedItems([]); 
 

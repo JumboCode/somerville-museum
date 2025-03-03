@@ -24,6 +24,7 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
   const [dateBorrowed, setDateBorrowed] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [returnWeeks, setReturnWeeks] = useState(''); // no selection initially
+  const [dueDate, setDueDate] = useState(''); // Initially emptyw
   const [approver, setApprover] = useState('');
   const [note, setNote] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,29 +34,53 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
   const totalPages = Math.ceil(borrowItems.length / itemsPerPage);
 
   // Calculate due date based on selected return weeks (in MM/dd/yy)
-  const calculateDueDate = (weeks) => {
-    const today = new Date();
-    today.setDate(today.getDate() + weeks * 7);
-    const month = (today.getMonth() + 1).toString().padStart(2, '0');
-    const day = today.getDate().toString().padStart(2, '0');
-    const year = today.getFullYear().toString().slice(-2);
-    return `${month}/${day}/${year}`;
-  };
+  // const calculateDueDate = (weeks) => {
+  //   const today = new Date();
+  //   today.setDate(today.getDate() + weeks * 7);
+  //   const month = (today.getMonth() + 1).toString().padStart(2, '0');
+  //   const day = today.getDate().toString().padStart(2, '0');
+  //   const year = today.getFullYear().toString().slice(-2);
+  //   return `${month}/${day}/${year}`;
+  // };
 
-  const dueDate = returnWeeks ? calculateDueDate(Number(returnWeeks)) : '';
+  // const dueDate = returnWeeks ? calculateDueDate(Number(returnWeeks)) : '';
 
-  //calculate today's date in MM/DD/YY format
-  const calculateBorrowDay = () => {
-    const today = new Date();
-    const month = (today.getMonth() + 1).toString().padStart(2, '0');
-    const day = today.getDate().toString().padStart(2, '0');
-    const year = today.getFullYear().toString().slice(-2);
-    return `${month}/${day}/${year}`;
-  };
+  // //calculate today's date in MM/DD/YY format
+  // const calculateBorrowDay = () => {
+  //   const today = new Date();
+  //   const month = (today.getMonth() + 1).toString().padStart(2, '0');
+  //   const day = today.getDate().toString().padStart(2, '0');
+  //   const year = today.getFullYear().toString().slice(-2);
+  //   return `${month}/${day}/${year}`;
+  // };
 
+  // useEffect(() => {
+  //   setDateBorrowed(calculateBorrowDay());
+  // }, []);
+
+  const formatDate = (date) => {
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
+    const day = date.getDate().toString().padStart(2,'0'); 
+    const year = date.getFullYear().toString().slice(-2);
+    return `${month}/${day}/${year}`; 
+  }
+
+  // Update dateBorrowed when component mounts 
   useEffect(() => {
-    setDateBorrowed(calculateBorrowDay());
-  }, []);
+    const today = new Date(); 
+    setDateBorrowed(formatDate(today)); 
+  }, []); 
+
+  //update dueDate when returnWeeks changes 
+  useEffect(() => {
+    if (returnWeeks) {
+      const today = new Date(); 
+      today.setDate(today.getDate() + Number(returnWeeks * 7))
+      setDueDate(formatDate(today)); 
+    } else {
+      setDueDate(''); 
+    }
+  }, [returnWeeks]); 
 
   // set some regex variables for expected phone + email formats
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
