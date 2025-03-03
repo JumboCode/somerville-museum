@@ -10,7 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.11.3",
+    "@clerk/nextjs": "^6.12.2",
     "@neondatabase/serverless": "^0.10.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -21,8 +21,8 @@
     "d3": "^7.9.0",
     "dotenv": "^16.4.5",
     "i": "^0.3.7",
-    "node-mailjet": "^6.0.6",
     "next": "^15.0.0",
+    "node-mailjet": "^6.0.6",
     "pg": "^8.13.1",
     "primeicons": "^7.0.0",
     "primereact": "^10.9.2",
