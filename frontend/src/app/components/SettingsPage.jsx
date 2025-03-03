@@ -16,6 +16,21 @@ export default function SettingsPage() {
                 {/* Main Box (Always Present) */}
                 <div className="settings-box">
                     <p>Main Box Content</p>
+                    <div className="textBoxRow">
+                            <div className="first-name-box">
+                                <textarea 
+                                    type="text"
+                                    placeholder="1256"
+                                />
+                            </div>
+
+                            <div className="last-name-box">
+                                <textarea 
+                                    type="text"
+                                    placeholder="1256"
+                                />
+                            </div>
+                        </div>
                 </div>
 
                 {/* Second Box (Empty Initially, Add Content Dynamically) */}
@@ -29,5 +44,7 @@ export default function SettingsPage() {
                 Toggle Second Box Content
             </button>
         </div>
+
+        
     );
 }
