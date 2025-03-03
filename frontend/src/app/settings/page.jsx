@@ -7,8 +7,19 @@
  *  
  */
 
-export default function Settings() {
+"use client";
+
+import React, { useState, useEffect } from "react";
+import SettingsPage from "../components/SettingsPage";
+import "../components/SettingsPage.css"
+
+
+const Settings = () => {
     return (
-        <>Hello</>
+        <div className="settings-page">
+        <SettingsPage />
+        </div>
     );
 }
+
+export default Settings;
