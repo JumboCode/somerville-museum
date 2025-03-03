@@ -17,20 +17,28 @@ export default function SettingsPage() {
                 <div className="settings-box">
                     <p>Main Box Content</p>
                     <div className="textBoxRow">
-                            <div className="first-name-box">
-                                <textarea 
-                                    type="text"
-                                    placeholder="1256"
-                                />
-                            </div>
-
-                            <div className="last-name-box">
-                                <textarea 
-                                    type="text"
-                                    placeholder="1256"
-                                />
-                            </div>
+                        <div className="first-name-box">
+                            <textarea 
+                                type="text"
+                                placeholder="Holdun"
+                            />
                         </div>
+
+                        <div className="last-name-box">
+                            <textarea 
+                                type="text"
+                                placeholder="kitleburger"
+                            />
+                        </div>
+                    </div>
+                    <div className = "emailTextRow">
+                        <div className="email-box">
+                            <textarea 
+                                type="text"
+                                placeholder="email"
+                            />
+                        </div>
+                    </div>
                 </div>
 
                 {/* Second Box (Empty Initially, Add Content Dynamically) */}
