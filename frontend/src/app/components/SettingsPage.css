@@ -1,0 +1,100 @@
+.settings-title{
+    color: #000;
+    font-family: Akatab;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+
+    position: fixed;
+    top: 2.5rem;
+    left: 10rem;
+}
+
+.acc-and-info-title{
+    color: #000;
+    font-family: Akatab;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 1.5rem;
+
+    position: relative;
+    left: -5.2rem;
+}
+
+/* Main container */
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+
+}
+
+/* Box container (default: center-align main box) */
+.settings-container {
+    display: flex;
+    justify-content: center; /* Center main box by default */
+    align-items: center;
+    width: 80%; /* Adjust width */
+}
+
+/* First box (always visible) */
+.settings-box {
+    padding: 6rem;
+    width: 42rem;
+    height: 33rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    border-radius: 15px;
+    background: #FFF;
+
+    box-shadow: 0px 3px 15px -5px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(15px);
+}
+
+/* Second box (initially hidden) */
+.second-box {
+    background-color: white;
+    border: 2px dashed #999;
+    padding: 20px;
+    width: 250px;
+    height: 150px;
+    display: none; /* Hide it initially */
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* When second box has content, show both side by side */
+.settings-container.has-content {
+    justify-content: space-between; /* Place boxes side by side */
+}
+
+/* Show the second box when it has content */
+.settings-container.has-content .second-box {
+    display: flex;
+}
+
+/* Toggle button for testing */
+.toggle-button {
+    margin-top: 5rem;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.toggle-button:hover {
+    background-color: #0056b3;
+}
