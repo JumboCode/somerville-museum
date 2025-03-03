@@ -15,7 +15,17 @@ import Filter from '../components/Filter/Filter';
 import SearchBar from '../components/SearchBar';
 import './inventory.css'
 
-export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
+import PropTypes from 'prop-types';
+
+Inventory.propTypes = {
+    isFilterVisible: PropTypes.bool.isRequired,
+    toggleFilterVisibility: PropTypes.func.isRequired,
+};
+
+export default function Inventory({ 
+    isFilterVisible = false, 
+    toggleFilterVisibility = () => {} 
+  }) {
     const { selectedFilters, triggerFilteredFetch } = useFilterContext();
     const [units, setUnits] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
