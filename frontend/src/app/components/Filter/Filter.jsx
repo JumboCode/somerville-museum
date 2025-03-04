@@ -18,8 +18,8 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
         Color: {
             options: ["Red", "Black", "Blue", "Green", "Purple", "Yellow", "Pink", "Gray", "Brown", "Orange", "White"]
         }, 
-        Type: {
-            options: ["Winter", "Summer", "Spring", "Fall"]
+        Garment_Type: {
+            options: ["Gowns/dresses", "Outerwear", "Accessories", "Bottoms", "Shoes", "Socks/hose", "Tops", "Vests"]
         }, 
         Size: {
             options: ["One Size", "Small", "Medium", "Large"]
