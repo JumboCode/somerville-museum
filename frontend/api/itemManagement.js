@@ -30,7 +30,6 @@ export async function addHandler(req, res) {
             borrow_history = {}
         } = req.body;
 
-
         // Check if an item with the given id already exists
         const existingItem = await query(`SELECT id FROM dummy_data WHERE id = $1`, [id]);
 

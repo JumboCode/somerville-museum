@@ -400,9 +400,6 @@
     padding: .35rem;
     outline: none;
     line-height: 3.5vh; 
-    pointer-events: none; 
-     /* Disables text selection */
-    user-select: none;
 }
 
 .priceInput input {
