@@ -13,33 +13,25 @@ import './settings.css';
 import { useGlobalContext } from '../components/contexts/ToggleContext';
 
 const Settings = () => {
-  const [normalDataEntry, setNormalDataEntry] = useState(true);
-  const [fading, setFading] = useState(false);
-  const [displayText, setDisplayText] = useState('Data Input');
   const { isToggleEnabled, setIsToggleEnabled } = useGlobalContext();
+  const [fading, setFading] = useState(false);
+  const [displayText, setDisplayText] = useState(isToggleEnabled ? 'Data Input' : 'Normal Data Entry');
 
   const handleToggle = () => {
     setFading(true);
 
-    setIsToggleEnabled(!isToggleEnabled); // ACTUALLY CHANGE THE GLOBAL CONTEXT
+    // Directly use the current state to toggle
+    const newToggleState = !isToggleEnabled;
+    setIsToggleEnabled(newToggleState);
 
     // Wait for fade out to complete before changing the text
     setTimeout(() => {
-      setNormalDataEntry(!normalDataEntry);
-    }, 100); // Half the transition time to change the state mid-transition
-  };
-
-  useEffect(() => {
-    // Text changes only after fade out is complete
-    const timer = setTimeout(() => {
-      setDisplayText(normalDataEntry ? 'Data Input' : 'Normal Data Entry');
+      setDisplayText(newToggleState ? 'Data Input' : 'Normal Data Entry');
       setTimeout(() => {
         setFading(false);
       }, 25);
     }, 100);
-    
-    return () => clearTimeout(timer);
-  }, [normalDataEntry]);
+  };
 
   return (
     <div className="container">
@@ -47,7 +39,7 @@ const Settings = () => {
             <label className="toggleWrapper">
             <input 
                 type="checkbox"
-                checked={normalDataEntry}
+                checked={isToggleEnabled}
                 onChange={handleToggle}
                 className="toggleInput"
             />
