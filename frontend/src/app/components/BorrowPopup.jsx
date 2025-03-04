@@ -15,15 +15,21 @@ import React, { useState, useEffect } from 'react';
 import Popup from 'reactjs-popup';
 import BorrowUnit from './BorrowUnit';
 import './BorrowPopup.css';
+import { useGlobalContext } from './contexts/ToggleContext';
 
 const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
+  const { isToggleEnabled } = useGlobalContext(); // TOGGLE FUNCTIONALITY
+
   const [borrowerFirstName, setBorrowerFirstName] = useState('');
   const [borrowItems, setBorrowItems] = useState(selectedItems);
   const [borrowerLastName, setBorrowerLastName] = useState('');
   const [borrowerEmail, setBorrowerEmail] = useState('');
   const [dateBorrowed, setDateBorrowed] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+
   const [returnWeeks, setReturnWeeks] = useState(''); // no selection initially
+  const [returnDate, setReturnDate] = useState(""); // New state for return date
+
   const [dueDate, setDueDate] = useState(''); // Initially emptyw
   const [approver, setApprover] = useState('');
   const [note, setNote] = useState('');
@@ -33,31 +39,6 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
   const itemsPerPage = 5;
   const totalPages = Math.ceil(borrowItems.length / itemsPerPage);
 
-  // Calculate due date based on selected return weeks (in MM/dd/yy)
-  // const calculateDueDate = (weeks) => {
-  //   const today = new Date();
-  //   today.setDate(today.getDate() + weeks * 7);
-  //   const month = (today.getMonth() + 1).toString().padStart(2, '0');
-  //   const day = today.getDate().toString().padStart(2, '0');
-  //   const year = today.getFullYear().toString().slice(-2);
-  //   return `${month}/${day}/${year}`;
-  // };
-
-  // const dueDate = returnWeeks ? calculateDueDate(Number(returnWeeks)) : '';
-
-  // //calculate today's date in MM/DD/YY format
-  // const calculateBorrowDay = () => {
-  //   const today = new Date();
-  //   const month = (today.getMonth() + 1).toString().padStart(2, '0');
-  //   const day = today.getDate().toString().padStart(2, '0');
-  //   const year = today.getFullYear().toString().slice(-2);
-  //   return `${month}/${day}/${year}`;
-  // };
-
-  // useEffect(() => {
-  //   setDateBorrowed(calculateBorrowDay());
-  // }, []);
-
   const formatDate = (date) => {
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
     const day = date.getDate().toString().padStart(2,'0'); 
@@ -66,10 +47,10 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
   }
 
   // Update dateBorrowed when component mounts 
-  useEffect(() => {
-    const today = new Date(); 
-    setDateBorrowed(formatDate(today)); 
-  }, []); 
+  // useEffect(() => {
+  //   const today = new Date(); 
+  //   setDateBorrowed(formatDate(today)); 
+  // }, []); 
 
   //update dueDate when returnWeeks changes 
   useEffect(() => {
@@ -82,12 +63,23 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
     }
   }, [returnWeeks]); 
 
+  // Update dueDate when returnWeeks changes 
+  useEffect(() => {
+    if (!isToggleEnabled && returnWeeks) {
+        const today = new Date(); 
+        today.setDate(today.getDate() + Number(returnWeeks * 7));
+        setDueDate(formatDate(today)); 
+    }
+  }, [returnWeeks, isToggleEnabled]);
+
   // set some regex variables for expected phone + email formats
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
+  const dateRegex = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/\d{4}$/;
 
   const isEmailValid = emailRegex.test(borrowerEmail);
   const isPhoneValid = phoneRegex.test(phoneNumber);
+  const isDateValid = dateRegex.test(returnDate);
 
   const handleSubmit = async (e) => {
         e.preventDefault();
@@ -107,7 +99,13 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
       return;
     }
 
-    if (!returnWeeks) {
+    // both return date cases
+    if (isToggleEnabled && !isDateValid) {
+      alert(`Please enter a valid date in the format MM/DD/YYYY ${returnDate}`);
+      return;
+    }
+
+    if (!isToggleEnabled && !returnWeeks) {
       alert("Please select a return period.");
       return;
     }
@@ -273,6 +271,15 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
         <div className="form-row">
           <div className="form-group">
             <label>Return Period*</label>
+            {isToggleEnabled ? (
+            <input
+                type="text"
+                placeholder="MM/DD/YYYY"
+                value={returnDate}
+                onChange={(e) => setReturnDate(e.target.value)}
+                required
+            />
+            ) : (
             <div className="return-date-box">
               {returnWeeks ? (
                 <div className="selected-return">
@@ -301,7 +308,9 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
                   <option value="6">6 weeks</option>
                 </select>
               )}
+            
             </div>
+            )}
               {returnWeeks && (
                 <div className="due-date-text">Due: {dueDate}</div>
               )}
