@@ -1,4 +1,3 @@
-
 /**************************************************************
  *
  *                     AddPage.jsx
@@ -25,13 +24,17 @@ import Link from 'next/link';
 import { useGlobalContext } from './contexts/ToggleContext';
 
 export default function AddPage() {
+
     // Left column state variables
     const [dragOver, setDragOver] = useState(false);
     const [preview, setPreview] = useState(null);
 
     // Right column state variables
-    const [idText, setIDText] = useState("");
     const { isToggleEnabled } = useGlobalContext(); // TOGGLE FUNCTIONALITY
+    const [idText, setIDText] = useState("");
+    const [placeholderDate, setPlaceholderDate] = useState("");
+    const [manualIdText, setManualIdText] = useState("");
+    const [manualDateText, setManualDateText] = useState("");
 
 
     const [itemText, setItemText] = useState("");
@@ -111,16 +114,6 @@ export default function AddPage() {
         { name: "Gray", hex: "#8E8E93" },
         { name: "Black", hex: "#000000" },
       ];
-
-    // Fetch placeholder for current date
-    const [placeholderDate, setPlaceholderDate] = useState('');
-    useEffect(() => {
-        const today = new Date();
-        const month = String(today.getMonth() + 1).padStart(2, '0'); 
-        const day = String(today.getDate()).padStart(2, '0');
-        const year = today.getFullYear();
-        setPlaceholderDate(`${month}/${day}/${year}`);
-    }, []);
 
     // Function to handle and update file selection
     const handleFileSelect = (file) => {
@@ -238,8 +231,8 @@ export default function AddPage() {
 
 
         const newItem = {
-            id: idText,
-            name: itemText || null,
+            id: isToggleEnabled ? manualIdText : idText,
+            name: isToggleEnabled ? itemText || "unnamed" : itemText,
             location: locationText || null,
             cost: priceText ? parseInt(priceText.replace('$', ''), 10): null,
             notes: notesText || null,
@@ -253,7 +246,7 @@ export default function AddPage() {
             color: selectedColors.length > 0 ? selectedColors : null,
             status: "Available", // Default status
             // authenticity_level: null,
-            date_added: placeholderDate, 
+            date_added: isToggleEnabled ? manualDateText : placeholderDate, 
             current_borrower: null,
             borrow_history: null
         };
@@ -262,8 +255,7 @@ export default function AddPage() {
         let newErrors = {};
 
         // Check for missing required fields and set error flags
-        if (!newItem.id) newErrors.id = true;
-        if (isToggleEnabled) {
+        if (!isToggleEnabled) {
             if (!newItem.name) newErrors.name = true;
             if (!newItem.garment_type) newErrors.garment_type = true;
             if (!newItem.time_period) newErrors.time_period = true;
@@ -273,6 +265,9 @@ export default function AddPage() {
             if (!newItem.season) newErrors.season = true;
             if (!newItem.condition) newErrors.condition = true;
             if (!newItem.color) newErrors.color = true;
+        }
+        else {
+            if (!newItem.id) newErrors.id = true;
         }
 
 
@@ -331,6 +326,7 @@ export default function AddPage() {
     const resetForm = () => {
         // Reset form fields (states)
         setIDText("");
+        setPlaceholderDate("");
         setItemText("");
         setLocationText(""); 
         setPriceText("");
@@ -347,8 +343,9 @@ export default function AddPage() {
 
     // TOGGLE FUNCTIONALITY
     useEffect(() => {
-        const fetchNextId = async () => {
+        const fetchData = async () => {
             try {
+                // Fetch next available ID
                 const response = await fetch('/api/inventoryQueries?action=getNextAvailableId');
                 const data = await response.json();
                 if (response.ok) {
@@ -356,12 +353,19 @@ export default function AddPage() {
                 } else {
                     console.error(data.error);
                 }
+
+                // Set placeholder date
+                const today = new Date();
+                const month = String(today.getMonth() + 1).padStart(2, '0'); 
+                const day = String(today.getDate()).padStart(2, '0');
+                const year = today.getFullYear();
+                setPlaceholderDate(`${month}/${day}/${year}`);
             } catch (error) {
-                console.error("Error fetching next ID:", error);
+                console.error("Error fetching data:", error);
             }
         };
 
-        fetchNextId();
+        fetchData();
     }, []);
 
     return (
@@ -411,10 +415,10 @@ export default function AddPage() {
                             
                         {/* Item Name Text Entry */}
                         <div className="inputGroup">
-                            <h3 htmlFor="itemTB" className={errors.condition ? "error-text" : ""}>Item Name*</h3>
+                            <h3 htmlFor="itemTB" className={errors.name ? "error-text" : ""}>Item Name*</h3>
                             <input
                                 className="itemTextBox"
-                                placeholder=""
+                                placeholder="Enter Name"
                                 id="itemTB"
                                 value={itemText}
                                 onChange={(e) => setItemText(e.target.value)}
@@ -438,14 +442,20 @@ export default function AddPage() {
                         {/* ID, Date Added, and Price Text Entries */}
                         <div className="textBoxRow">
                             <div className="allID">
-                                <div className={`idName`}>
+                                <div className={errors.id ? "error-text idName" : "idName"}>
                                     ID
                                 </div>
                                 <div className="idTextBox">
                                     <textarea 
                                         type="text"
-                                        placeholder="Loading..."
-                                        value={idText}
+                                        placeholder={isToggleEnabled ? "Enter ID" : "Loading..."}
+                                        value={isToggleEnabled ? manualIdText : idText}
+                                        onChange={(e) => {
+                                            if (isToggleEnabled) {
+                                                setManualIdText(e.target.value);
+                                            }
+                                        }}
+                                        readOnly={!isToggleEnabled}
                                     />
                                 </div>
                             </div>
@@ -455,7 +465,16 @@ export default function AddPage() {
                                     Date Added
                                 </div>
                                 <div className="dateTextBox">
-                                    <textarea placeholder={placeholderDate}></textarea>
+                                    <textarea 
+                                        placeholder={isToggleEnabled ? "MM/DD/YYYY" : "Loading..."}
+                                        value={isToggleEnabled ? manualDateText : placeholderDate}
+                                        onChange={(e) => {
+                                            if (isToggleEnabled) {
+                                                setManualDateText(e.target.value);
+                                            }
+                                        }}
+                                        readOnly={!isToggleEnabled}
+                                    />
                                 </div>
                             </div>
                             <div className="allPrice">
