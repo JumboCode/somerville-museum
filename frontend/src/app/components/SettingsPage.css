@@ -1,181 +1,195 @@
-.settings-title{
-    color: #000;
-    font-family: Akatab;
-    font-size: 40px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
 
-    position: fixed;
-    top: 2.5rem;
-    left: 10rem;
-}
-
-.acc-and-info-title{
-    color: #000;
-    font-family: Akatab;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    margin-bottom: 1.5rem;
-
-    position: relative;
-    left: -5.2rem;
-}
-
-/* Main container */
-.main {
+.body {
+    font-family: Arial, sans-serif;
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     height: 100vh;
-
+    margin: 0;
+    flex-direction: row;
 }
 
-/* Box container (default: center-align main box) */
+.body p {
+    color: #000000;
+    font-size: 1.2em;
+}
+
 .settings-container {
-    display: flex;
-    justify-content: center; /* Center main box by default */
-    align-items: center;
-    width: 80%; /* Adjust width */
-}
-
-/* First box (always visible) */
-.settings-box {
-    padding: 6rem;
-    width: 42rem;
-    height: 33rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     text-align: center;
-
-    border-radius: 15px;
-    background: #FFF;
-
-    box-shadow: 0px 3px 15px -5px rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(15px);
 }
 
-/* Second box (initially hidden) */
-.second-box {
-    background-color: white;
-    border: 2px dashed #999;
-    padding: 20px;
-    width: 250px;
-    height: 150px;
-    display: none; /* Hide it initially */
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+h1 {
+    font-size: 24px;
+    margin-bottom: 5px;
 }
 
-/* When second box has content, show both side by side */
-.settings-container.has-content {
-    justify-content: space-between; /* Place boxes side by side */
+.subheading {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
 }
 
-/* Show the second box when it has content */
-.settings-container.has-content .second-box {
-    display: flex;
-}
-
-/* Toggle button for testing */
-.toggle-button {
-    margin-top: 5rem;
-    padding: 10px 15px;
-    font-size: 16px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-.toggle-button:hover {
-    background-color: #0056b3;
-}
-
-
-.profile-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    max-width: 400px;
-    margin: auto;
-  }
-  
-  .profile-box, .settings-box {
+.profile-card, .options-card {
     background: white;
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    width: 100%;
-  }
-  
-  .input-group {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .input-group input {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .settings-box {
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    margin-bottom: 15px;
+}
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+form {
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-  
-  .toggle-switch {
+}
+
+label {
+    align-self: flex-start;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+input:disabled {
+    background: #e9e9e9;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.change-password {
+    display: block;
+    color: #0077cc;
+    text-decoration: none;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.options-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+}
+
+.toggle {
     display: flex;
     justify-content: space-between;
     width: 100%;
-  }
-  
-  .export-btn {
-    background-color: #8B5CF6;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.toggle input {
+    cursor: pointer;
+    transform: scale(1.3);
+}
+
+.export-btn {
+    background: #804a4a;
     color: white;
-    padding: 0.75rem;
     border: none;
+    padding: 10px 15px;
     border-radius: 5px;
+    font-size: 14px;
     cursor: pointer;
     width: 100%;
-  }
-  
-  .logout-btn {
-    text-align: center;
-    color: red;
-    margin-top: 1rem;
-  }
-
-  .textBoxRow {
-    display: flex;
-    gap: 10px; /* Adds space between text boxes */
     margin-top: 10px;
-  }
-
-.first-name-box,
-.last-name-box {
-    flex: 1; /* Allows both boxes to take equal width */
 }
 
-textarea {
-    width: 100%; /* Makes textareas fill their container */
-    min-height: 40px;
-    padding: 8px;
-    border: 1px solid #ccc;
+.logout {
+    color: black;
+    text-decoration: none;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.adminapprovals {
+    text-align: left;
+    height: 48vh;
+    margin-left: 5vw;
+    width: 25vw;
+}
+
+/* Container for the approvals list */
+.approvalscontainer {
+    width: 90%;
+    margin: 20px auto;
+}
+
+
+.newaccountapprovalbutton {
+    background: white;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+/* User info section */
+.info h2 {
+    font-size: 16px;
+    margin: 0;
+    font-weight: bold;
+}
+
+.info p {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0 0;
+}
+
+/* Buttons section */
+.buttons {
+    display: flex;
+    gap: 8px; /* Space between buttons */
+}
+
+/* Approve and Deny buttons */
+.buttons button {
+    padding: 6px 12px;
+    border: none;
     border-radius: 5px;
-    resize: none; /* Prevents resizing */
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
 }
-  
+
+/* Approve button */
+.buttons button:first-child {
+    background-color: #ffffff;
+    color: #000000;
+    border:#000000;
+}
+
+.buttons button:first-child:hover {
+    background-color: #6d6d6d;
+}
+
+/* Deny button */
+.buttons button:last-child {
+    background-color: #804a4a;
+    color: rgb(255, 255, 255);
+}
+
+.buttons button:last-child:hover {
+    background-color: #663a3a;
+}
+
