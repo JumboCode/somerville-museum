@@ -12,7 +12,10 @@ const pool = new Pool({
 
 // Utility function to query the database using the pool
 export async function query(text, params) {
+  console.log(pool);
   const client = await pool.connect();
+  const result = client.query("SELECT * from dummy_data");
+  console.log(result.rows);
   try {
     const res = await client.query(text, params);
     return res;
