@@ -89,7 +89,7 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                 </div>
                 <div className="picture">
                     <div className="image-container">
-                        <img src="" alt="Profile" />
+                        <img alt="Profile" />
                     </div>
                 </div>
             </div>
