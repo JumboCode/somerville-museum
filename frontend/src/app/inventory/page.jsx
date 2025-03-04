@@ -38,7 +38,6 @@ export default function Inventory({
     const [refreshTable, setRefreshTable] = useState(false);
      
     useEffect(() => {
-        console.log("FILTERS", selectedFilters)
         fetch("../../api/inventoryQueries?action=fetchInventoryByTag", { 
                 method: 'POST',
                 headers: {
@@ -62,10 +61,13 @@ export default function Inventory({
 
     // Called any time new filters/search results are applied to update displayed units
     useEffect(() => {
+        if (filterResults.length === 0 && searchResults.length === 0) return;
         // Takes intersection of search results and filter results to get correct ones.
         const filteredAndSearchResults = () => {
             const filteredUnitIds = new Set(filterResults.map(unit => unit.id));
-            return searchResults.filter(item => filteredUnitIds.has(item.id));
+            return searchResults.length > 0 
+            ? searchResults.filter(item => filteredUnitIds.has(item.id)) 
+            : filterResults;
         };
         
         setUnits(filteredAndSearchResults())
@@ -101,6 +103,7 @@ export default function Inventory({
                 });
 
                 setUnits(updatedData);
+                setFilterResults(updatedData);
 
                 setTotalPages(Math.ceil(updatedData.length / unitsPerPage));
             } else {
@@ -113,10 +116,12 @@ export default function Inventory({
 
     const handleBorrowSuccess = () => {
         // Literally just to call the useeffect with the request. kinda scuffed but whatever
-        fetchData(); 
-        setRefreshTable(prev => !prev);
+        // setRefreshTable(prev => !prev);
 
+        setFilterResults([]); 
+        setSearchResults([]); 
         setSelectedItems([]); 
+        fetchData(); 
 
     };
   
