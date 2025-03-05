@@ -5,7 +5,7 @@ export default {
             const url = new URL(request.url);
             const key = url.pathname.slice(1);
             // Retrieve the key "image.png"
-            const object = await env.MY_BUCKET.get(key);
+            const object = await env.SOMERVILLE_MUSEUM.get(key);
         
             if (object === null) {
                 return new Response("Object Not Found", { status: 404 });
@@ -38,4 +38,4 @@ export default {
         // You can include any other methods or logic below here...
     },
 
-  };
+};
