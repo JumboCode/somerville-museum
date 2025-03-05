@@ -2,8 +2,7 @@
 .Popup {
     position: absolute;
     background: none;
-    padding: 10px;
-    z-index: 9999;
+    z-index: 1000;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,20 +11,21 @@
 /* Style the actual popup container */
 .Popup > .Header {
     background-color: white;
-    padding: 20px;
     text-align: center;
     width: 300px;
     font-size: 16px;
     font-weight: 500;
+    padding: 0vh 1vw;
 }
 
 /* Style the buttons container */
-.Popup .Buttons {
+.Buttons {
     display: flex;
     flex-direction: column;
-    padding-top: 1vh;
-    padding-bottom: 1vh;
     background-color: #9B525F;
+    width: 12vw;
+    padding: 7% 0.5vw;
+    border-radius: 2px;
 }
 
 /* Style individual buttons */
@@ -33,17 +33,45 @@
     background: #9B525F;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 2% 10%;
     font-size: 14px;
     cursor: pointer;
     box-shadow: none;
+}
+
+.popupBtn a {
+    all: unset; /* Resets all inherited styles */
+    color: inherit; /* Inherits text color */
+    cursor: pointer; /* Makes it clickable */
 }
 
 .popupBtn:hover {
     background: #9B525F;
 }
 
+.editBtn, .expandBtn, .missingBtn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0% 5%;
+}
+
 /* Style when the popup is closed (optional) */
 .Popup .popupBtn:focus {
     outline: none;
+}
+
+
+.Buttons::after {
+    content: "";
+    position: absolute;
+    top: -7px; /* Position the triangle above the menu */
+    right: 30px; /* Align it to the top-right */
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 10px solid #9B525F; /* Match the background color */
+    border-radius: 5px;
 }
