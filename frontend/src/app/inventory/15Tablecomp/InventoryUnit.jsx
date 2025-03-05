@@ -26,8 +26,8 @@ export default function InventoryUnit({ unit, onChange, checked }) {
         if (buttonRef.current) {
             const rect = buttonRef.current.getBoundingClientRect();
             setPopupPosition({
-                top: rect.bottom + window.scrollY - 2, // Position below button
-                left: rect.left + window.scrollX - 100, // Align left with button
+                top: rect.bottom + window.scrollY - 10, // Position below button
+                right: rect.right + window.scrollX - 90, // Align left with button
             });
         }
     }
@@ -42,11 +42,17 @@ export default function InventoryUnit({ unit, onChange, checked }) {
     }
 
     const handleClickOutside = (event) => {
+
         if (
             event.target.closest('.sidebar') === null &&
             event.target.closest('.unit') === null
         ) {
             setIsPopupVisible(false);
+        } else if (
+            event.target.closest('.Popup') === null &&
+            event.target.closest('.sidebar') === null
+        ) {
+            setIsPrePopupVisible(false);
         }
     }
 
@@ -54,9 +60,8 @@ export default function InventoryUnit({ unit, onChange, checked }) {
     const handlePopupOption = (option) => {
         if (option === "expand") {
             console.log("Navigating to expanded view..."); 
-
-            setIsPrePopupVisible(false); 
             setIsPopupVisible(true);
+            setIsPrePopupVisible(false);
         } else {
             console.log("Edit option selected...");
         }
@@ -118,12 +123,13 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                 { isPrePopupVisible && (
                     <PrePopup onClose={handleClosePrePopup} 
                         onOptionSelect={handlePopupOption}
-                        position = {popupPosition}/>
-                )}       
+                        position = {popupPosition}
+                        unit={unit}/>
+                )}   
 
                 { isPopupVisible && (
-                    <Popup unit={unit} onClose={handleClosePopup} />
-                )}
+                <Popup unit={unit} onClose={handleClosePopup} />
+                )}    
             </div>
         </div>
     );
