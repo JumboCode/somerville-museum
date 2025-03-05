@@ -224,8 +224,7 @@ export default function AddPage() {
     };
 
     const handleSubmit = () => {
-        console.error("reached handlesubmit new item"); 
-
+        
             setStatusMessage("Submitting...");
             setStatusType("neutral");
 
