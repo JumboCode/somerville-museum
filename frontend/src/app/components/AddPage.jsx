@@ -230,6 +230,7 @@ export default function AddPage() {
             setStatusMessage("Submitting...");
             setStatusType("neutral");
 
+        // Reset fields
         const newItem = {
             id: idText,
             name: itemText || null,
@@ -275,6 +276,9 @@ export default function AddPage() {
 
         // If no errors, clear previous errors and proceed
         setErrors({});
+
+        // Image upload to Cloudflare
+        
 
         // Convert newItem params to JSON object
         const body = JSON.stringify(newItem);
