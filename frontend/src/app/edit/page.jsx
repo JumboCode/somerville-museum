@@ -3,12 +3,51 @@
 import React, { useState, useEffect } from "react";
 import EditPage from "../components/EditPage";
 import "../components/EditPage.css"
-
+import { useSearchParams } from 'next/navigation';
 
 const Edit = () => {
+    /* use serachParams to fetch for id */
+    const searchParams = useSearchParams();
+    const unitId = searchParams.get("id");
+
+    const [unit, setUnit] = useState(null);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function loadItem() {
+            try {
+                const response = await fetch(`/api/retrieveItem?id=${unitId}`);
+                
+                if (!response.ok) {
+                    if (response.status === 428) {
+                        throw new Error('Item does not exist');
+                    }
+                    throw new Error('Failed to fetch item');
+                }
+                
+                const itemData = await response.json();
+                setUnit(itemData);
+                setError(null);
+            } catch (error) {
+                setError(error.message);
+                setItem(null);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        loadItem();
+    }, [unitId]);
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
+    if (!unit) return <div>No item found</div>;
+
+
     return (
         <div className="edit-page">
-        <EditPage />
+        <EditPage unit={unit}/>
         </div>
     );
 };
