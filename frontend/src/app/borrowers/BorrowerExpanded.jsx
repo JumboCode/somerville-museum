@@ -10,12 +10,16 @@
  **************************************************************/
 
 "use client";
-
 import "./BorrowerExpanded.css";
-import StylishButton from "../components/StylishButton";
 
 export default function BorrowerExpanded({ borrower, onClose }) {
   if (!borrower) return null;
+
+  //pre format the borrow history since it is a JSON object
+  // hannah make it look prett :3
+  const formattedBorrowHistory = borrower.borrow_history 
+    ? JSON.stringify(borrower.borrow_history, null, 2)
+    : "No Borrowing History";
 
   return (
     <div className="popup-overlay" onClick={onClose}>
@@ -24,12 +28,10 @@ export default function BorrowerExpanded({ borrower, onClose }) {
         <h2>{borrower.name}</h2>
         <p><strong>Email:</strong> {borrower.email}</p>
         <p><strong>Cell:</strong> {borrower.phone_number}</p>
-        <p>
-          <strong>Borrow History:</strong>{" "}
-          {borrower.borrow_history && Object.keys(borrower.borrow_history).length > 0
-            ? Object.keys(borrower.borrow_history).join(", ")
-            : "No Borrowing History"}
-        </p>
+        <div>
+          <strong>Borrow History:</strong>
+          <pre>{formattedBorrowHistory}</pre>
+        </div>
       </div>
     </div>
   );
