@@ -23,6 +23,7 @@ import { MultiSelect } from 'primereact/multiselect';
 import StylishButton from './StylishButton.jsx';
 import Link from 'next/link';
 
+
 export default function AddPage() {
     // Left column state variables
     const [dragOver, setDragOver] = useState(false);
@@ -245,7 +246,6 @@ export default function AddPage() {
             condition: condition.length > 0 ? condition : null,
             color: selectedColors.length > 0 ? selectedColors : null,
             status: "Available", // Default status
-            authenticity_level: null,
             location: null,
             date_added: placeholderDate, 
             current_borrower: null,
@@ -278,7 +278,66 @@ export default function AddPage() {
         setErrors({});
 
         // Image upload to Cloudflare
+        const uploadImage = async () => {
+            try {
+                // const response = await fetch(`../../../upload-r2-assets/src/worker`, {
+                //     method: "PUT",
+                //     headers: {
+                //         "Content-Type": "application/json"
+                //     },
+                //     body: preview
+                // });
+
+                const response = await fetch("/api/upload", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ fileName: idText, fileContent: preview }),
+                });
         
+                const data = await response.json();
+            
+
+
+                // headers: {
+                //     "Content-Type": "application/json",
+                //     "Authorization": `Bearer ${AUTH_SECRET}`
+                // },
+                
+                // const API_URL = "https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/images/v1";
+                // https://cb5242ce9666c9276ccb555723ddfd95.r2.cloudflarestorage.com/somerville-museum
+                // const TOKEN = "<YOUR_TOKEN_HERE>";
+                
+                // const image = await fetch("https://example.com/image.png");
+                // const bytes = await image.bytes();
+                
+                // const formData = new FormData();
+                // formData.append('file', new File([bytes], 'image.png'));
+                
+                // const response = await fetch(API_URL, {
+                //   method: 'POST',
+                //   headers: {
+                //     'Authorization': `Bearer ${TOKEN}`,
+                //   },
+                //   body: formData,
+                // });
+
+                if (!response.ok) {
+                    setStatusMessage("An error uploading image occurred. Please try again.");
+                    setStatusType("error");
+                    return;
+                }
+                
+                print("Image uploaded successfully to Cloudflare.");
+
+            } catch (error) {
+                setStatusMessage("An error uploading image occurred. Please try again.");
+                setStatusType("error");
+                return;
+            }
+        };
+
+        // Call the serverless route to
+        uploadImage();
 
         // Convert newItem params to JSON object
         const body = JSON.stringify(newItem);
@@ -291,7 +350,7 @@ export default function AddPage() {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body,
+                    body
                 });
 
                 if (!response.ok) {
