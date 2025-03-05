@@ -47,35 +47,31 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
   }
 
   // Update dateBorrowed when component mounts 
-  // useEffect(() => {
-  //   const today = new Date(); 
-  //   setDateBorrowed(formatDate(today)); 
-  // }, []); 
-
-  //update dueDate when returnWeeks changes 
   useEffect(() => {
-    if (returnWeeks) {
-      const today = new Date(); 
-      today.setDate(today.getDate() + Number(returnWeeks * 7))
-      setDueDate(formatDate(today)); 
-    } else {
-      setDueDate(''); 
-    }
-  }, [returnWeeks]); 
+    const today = new Date(); 
+    setDateBorrowed(formatDate(today)); 
+  }, []); 
 
   // Update dueDate when returnWeeks changes 
   useEffect(() => {
-    if (!isToggleEnabled && returnWeeks) {
-        const today = new Date(); 
-        today.setDate(today.getDate() + Number(returnWeeks * 7));
-        setDueDate(formatDate(today)); 
+    if (isToggleEnabled) {
+      // Set dueDate to returnDate when toggle is enabled
+      setDueDate(returnDate);
+    } else if (returnWeeks && !isToggleEnabled) {
+      // Calculate dueDate based on returnWeeks when toggle is disabled
+      const today = new Date(); 
+      today.setDate(today.getDate() + Number(returnWeeks * 7));
+      setDueDate(formatDate(today)); 
+    } else {
+      // Reset dueDate if no returnWeeks and toggle is disabled
+      setDueDate(''); 
     }
-  }, [returnWeeks, isToggleEnabled]);
+  }, [returnWeeks, isToggleEnabled, returnDate]);
 
   // set some regex variables for expected phone + email formats
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
-  const dateRegex = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/\d{4}$/;
+  const dateRegex = /^(0?[1-9]|1[0-2])\/(0?[1-9]|[12]\d|3[01])\/\d{2,4}$/;
 
   const isEmailValid = emailRegex.test(borrowerEmail);
   const isPhoneValid = phoneRegex.test(phoneNumber);
@@ -101,7 +97,7 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
 
     // both return date cases
     if (isToggleEnabled && !isDateValid) {
-      alert(`Please enter a valid date in the format MM/DD/YYYY ${returnDate}`);
+      alert(`Please enter a valid date in the format MM/DD/YYYY .${returnDate}.`);
       return;
     }
 
