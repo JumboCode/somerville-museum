@@ -1,5 +1,6 @@
 export default {
     async fetch(request, env) {
+        console.log("IN WORKER")
         if (request.method === "GET") {
             // For example, the request URL my-worker.account.workers.dev/image.png
             const url = new URL(request.url);
