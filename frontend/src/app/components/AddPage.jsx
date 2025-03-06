@@ -28,7 +28,7 @@ export default function AddPage() {
     // Left column state variables
     const [dragOver, setDragOver] = useState(false);
     const [preview, setPreview] = useState(null);
-    const [imageID, setImageID] = useState([]); // For image UUID
+    const [imageID, setImageID] = useState([]); // For image UUIDs
 
     // Right column state variables
     const [idText, setIDText] = useState("");
@@ -125,6 +125,10 @@ export default function AddPage() {
             const reader = new FileReader();
             reader.onload = (e) => setPreview(e.target.result);
             reader.readAsDataURL(file);
+
+            // Generate UUID for uploaded image
+            setImageID([...imageID, uuidv4()]);
+            console.log(imageID);
         } else {
             alert("Please upload a valid image file.");
         }
@@ -228,9 +232,9 @@ export default function AddPage() {
 
     const handleSubmit = () => {
             setStatusMessage("Submitting...");
-            setStatusType("neutral");
+            setStatusType("neutral");        
 
-        // Reset fields
+        // Declaring fields
         const newItem = {
             id: idText,
             name: itemText || null,
@@ -248,7 +252,8 @@ export default function AddPage() {
             location: null,
             date_added: placeholderDate, 
             current_borrower: null,
-            borrow_history: null
+            borrow_history: null,
+            image_keys: imageID.length > 0 ? imageID : null
         };
 
         let newErrors = {};
@@ -263,7 +268,6 @@ export default function AddPage() {
         if (!newItem.season) newErrors.season = true;
         if (!newItem.condition) newErrors.condition = true;
         if (!newItem.color) newErrors.color = true;
-        // if (!newItem.date_added) newErrors.date_added = true;
 
         // If any errors exist, update state and show alert
         if (Object.keys(newErrors).length > 0) {
@@ -276,9 +280,10 @@ export default function AddPage() {
         // If no errors, clear previous errors and proceed
         setErrors({});
 
-        // Upload image and corresponding name to upload endpoint 
-        const uploadImage = async () => {                
-            const imageID = uuidv4();
+
+
+        // Upload image and corresponding id to upload endpoint 
+        const uploadImage = async () => {    
             try {
                 const response = await fetch(`/api/upload`, {
                     method: "POST",
@@ -291,7 +296,7 @@ export default function AddPage() {
                 if (!response.ok) {
                     setStatusMessage("An error uploading image occurred. Please try again.");
                     setStatusType("error");
-                    return;``
+                    return;
                 }
                 
             } catch (error) {
@@ -361,6 +366,7 @@ export default function AddPage() {
         setSelectedSeason([]);
         setCondition([]);
         setSelectedColors([]);
+        setImageID([]);
     };
 
     return (
