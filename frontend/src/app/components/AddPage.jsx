@@ -22,12 +22,13 @@ import { Dropdown } from 'primereact/dropdown';
 import { MultiSelect } from 'primereact/multiselect';
 import StylishButton from './StylishButton.jsx';
 import Link from 'next/link';
-
+import { v4 as uuidv4 } from 'uuid';
 
 export default function AddPage() {
     // Left column state variables
     const [dragOver, setDragOver] = useState(false);
     const [preview, setPreview] = useState(null);
+    const [imageID, setImageID] = useState([]); // For image UUID
 
     // Right column state variables
     const [idText, setIDText] = useState("");
@@ -183,9 +184,7 @@ export default function AddPage() {
         }
     };
 
-    const handleConditionSelect = (selectedConditions) => {
-        console.log("Selected conditions:", selectedConditions);
-    
+    const handleConditionSelect = (selectedConditions) => {    
         // Ensure selectedConditions is always an array
         if (!Array.isArray(selectedConditions)) {
             setCondition([]); // Set to empty array if selection is cleared
@@ -277,58 +276,24 @@ export default function AddPage() {
         // If no errors, clear previous errors and proceed
         setErrors({});
 
-        // Image upload to Cloudflare
-        const uploadImage = async () => {
+        // Upload image and corresponding name to upload endpoint 
+        const uploadImage = async () => {                
+            const imageID = uuidv4();
             try {
-                // const response = await fetch(`../../../upload-r2-assets/src/worker`, {
-                //     method: "PUT",
-                //     headers: {
-                //         "Content-Type": "application/json"
-                //     },
-                //     body: preview
-                // });
-
-                const response = await fetch("/api/upload", {
+                const response = await fetch(`/api/upload`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ fileName: idText, fileContent: preview }),
+                    body: JSON.stringify({ fileName: imageID, fileContent: preview }),
                 });
         
                 const data = await response.json();
-            
-
-
-                // headers: {
-                //     "Content-Type": "application/json",
-                //     "Authorization": `Bearer ${AUTH_SECRET}`
-                // },
-                
-                // const API_URL = "https://api.cloudflare.com/client/v4/accounts/<ACCOUNT_ID>/images/v1";
-                // https://cb5242ce9666c9276ccb555723ddfd95.r2.cloudflarestorage.com/somerville-museum
-                // const TOKEN = "<YOUR_TOKEN_HERE>";
-                
-                // const image = await fetch("https://example.com/image.png");
-                // const bytes = await image.bytes();
-                
-                // const formData = new FormData();
-                // formData.append('file', new File([bytes], 'image.png'));
-                
-                // const response = await fetch(API_URL, {
-                //   method: 'POST',
-                //   headers: {
-                //     'Authorization': `Bearer ${TOKEN}`,
-                //   },
-                //   body: formData,
-                // });
 
                 if (!response.ok) {
                     setStatusMessage("An error uploading image occurred. Please try again.");
                     setStatusType("error");
-                    return;
+                    return;``
                 }
                 
-                print("Image uploaded successfully to Cloudflare.");
-
             } catch (error) {
                 setStatusMessage("An error uploading image occurred. Please try again.");
                 setStatusType("error");
@@ -336,7 +301,7 @@ export default function AddPage() {
             }
         };
 
-        // Call the serverless route to
+        // Call the serverless route
         uploadImage();
 
         // Convert newItem params to JSON object
