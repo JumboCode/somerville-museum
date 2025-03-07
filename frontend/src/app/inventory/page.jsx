@@ -1,8 +1,6 @@
 // inventory/page.jsx
 "use client";
 import './15Tablecomp/Inventory.css';
-
-import './15Tablecomp/Inventory.css';
 import InventoryUnit from './15Tablecomp/InventoryUnit.jsx';
 import { useState, useEffect } from "react";
 import { useFilterContext } from '../components/contexts/FilterContext.js';
@@ -27,28 +25,28 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
     const [filterResults, setFilterResults] = useState([]);
     
     const [refreshTable, setRefreshTable] = useState(false);
-//     const [sortType, setSortType] = useState('id'); // Track last sorted property
-// const [isSorted, setIsSorted] = useState(false); // Track if already sorted
+    const [sortType, setSortType] = useState('id'); // Track last sorted property
+    const [isSorted, setIsSorted] = useState(false); // Track if already sorted
 
-// const sortBy = (property) => {
-//     if (sortType === property && isSorted) {
-//         // Reset to ID sorting
-//         setSortType('id');
-//         setIsSorted(false);
-//         setUnits(sortingFunctions.id()); // Always sorts by ID when reset
-//     } else {
-//         // Sort based on the selected property
-//         setSortType(property);
-//         setIsSorted(true);
+    const sortBy = (property) => {
+        if (sortType === property && isSorted) {
+            // Reset to ID sorting
+            setSortType('id');
+            setIsSorted(false);
+            setUnits(sortingFunctions.id()); // Always sorts by ID when reset
+        } else {
+            // Sort based on the selected property
+            setSortType(property);
+            setIsSorted(true);
 
-//         if (sortingFunctions[property]) {
-//             setUnits(sortingFunctions[property]()); // Dynamically call the function
-//         }
-//     }
-// };
+            if (sortingFunctions[property]) {
+                setUnits(sortingFunctions[property]()); // Dynamically call the function
+            }
+        }
+    };
 
 // const sortingFunctions = {
-//     id: () => sortByID,
+//     id: () => sortByID(),
 //     con: () => sortByCon(),
 //     avail: () => sortByAvail(),
 //     name: () => sortByName()
@@ -57,12 +55,14 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
      
     useEffect(() => {
         console.log("FILTERS", selectedFilters)
-        fetch("../../api/fetchInventoryByTag", { 
-                method: 'POST',
+        fetch("../../api/db", { 
+                method: 'GET',
                 headers: {
                   'Content-Type': 'application/json' 
                 },
-                body: JSON.stringify(selectedFilters)
+                body: JSON.stringify({
+                    text: 'SELECT * from dummy_data ORDER BY id'
+                })
               }).then(async (response) => {
                 if (!response.ok) {
                     const errorData = await response.json();
@@ -97,20 +97,20 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
     }, [selectedItems]);
 
     async function fetchData() {
-        console.log("IM BEING CALLED")
         try {
-            const response = await fetch(`../../api/fetchInventoryByTag`, { 
-                method: 'GET',
+            const response = await fetch(`../../api/db`, { 
+                method: 'POST',
                 headers: {
                   'Content-Type': 'application/json' 
                 },
                 body: JSON.stringify({
-                  tags: selectedFilters
+                  text: 'SELECT * from dummy_data ORDER BY id'
                 })
               });
 
             if (response.ok) {
                 const data = await response.json();
+                console.log("in fetch data: " + data);
                 const currentDate = new Date();
                 const updatedData = data.map((item) => {
                     if (item.status === "Borrowed" && item.dueDate && new Date(item.dueDate) < currentDate) {
@@ -119,7 +119,6 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
                     return item;
                 });
 
-                // sortById();
                 setUnits(updatedData);
                 
                 setTotalPages(Math.ceil(updatedData.length / unitsPerPage));
@@ -204,17 +203,6 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
 
         setUnits(filteredAndSortedEntries);
     };
-
-    // const handleSort = (key) => {
-    //     if (key === lastSortKey) {
-    //     sortByID();
-    //     } else {
-    //     if(key === "con") { sortByCon(); }
-    //     else if(key === "avail") { sortByAvail(); }
-    //     else if(key === "name") { sortBy(); }
-    //     if(key === "id") { sortByCon(); }
-    //     }
-    // };
 
     const sortByCon = () => {
         const order = [
