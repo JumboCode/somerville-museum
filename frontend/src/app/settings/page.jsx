@@ -6,9 +6,13 @@
  * @authors Ari Goshtasby & Shayne Sidman
  *  
  */
+"use client";
+import { useClerk } from "@clerk/nextjs"
 
 export default function Settings() {
+    const { signOut } = useClerk();
+
     return (
-        <>Hello</>
+        <div onClick={signOut({ redirectUrl: '/' })}>Hello</div>
     );
 }

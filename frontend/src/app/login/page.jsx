@@ -16,6 +16,7 @@ import { Icon } from "react-icons-kit";
 import { eyeOff } from "react-icons-kit/feather/eyeOff.js";
 import { eye } from "react-icons-kit/feather/eye.js";
 import Checkbox from "../components/Checkbox";
+import Image from "next/image";
 import "../app.css";
 
 export default function Signin() {
@@ -130,7 +131,9 @@ export default function Signin() {
     <div className="login-bg">
       <div className="mainContainer">
         <div className="titleContainer">
-          <div className="SMLogo sm-logo-large"></div>
+          <div className="SMLogo sm-logo-large">
+            <Image src="/SM_LOGO.svg" alt="No image found" fill />
+          </div>
           <div className="clothing-database">CLOTHING DATABASE</div>
         </div>
         <div className="inputContainer">
