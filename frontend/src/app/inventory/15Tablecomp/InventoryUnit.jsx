@@ -23,11 +23,12 @@ export default function InventoryUnit({ unit, onChange, checked }) {
 
     const handleClick = () => {
         setIsPrePopupVisible(true);
+        console.log("prepopupvisible" + isPrePopupVisible)
         if (buttonRef.current) {
             const rect = buttonRef.current.getBoundingClientRect();
             setPopupPosition({
                 top: rect.bottom + window.scrollY - 10, // Position below button
-                right: rect.right + window.scrollX - 90, // Align left with button
+                right: rect.right + window.scrollX - 1455, // Align right with button
             });
         }
     }
@@ -42,24 +43,18 @@ export default function InventoryUnit({ unit, onChange, checked }) {
     }
 
     const handleClickOutside = (event) => {
-
         if (
             event.target.closest('.sidebar') === null &&
             event.target.closest('.unit') === null
         ) {
-            setIsPopupVisible(false);
-        } else if (
-            event.target.closest('.Popup') === null &&
-            event.target.closest('.sidebar') === null
-        ) {
-            setIsPrePopupVisible(false);
-        }
-    }
+            setTimeout(() => setIsPrePopupVisible(false), 100); // Delay to allow re-opening
+        } 
+    };
 
     //CALL BACK FOR PREPOPUP
     const handlePopupOption = (option) => {
         if (option === "expand") {
-            console.log("Navigating to expanded view..."); 
+            console.log("in expand " + isPopupVisible)
             setIsPopupVisible(true);
         } else if (option === "Missing" || option === "Available") {
             setAsMissingFound(option);
@@ -117,7 +112,7 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                 </div>
                 <div className="picture">
                     <div className="image-container">
-                        <img src="" alt="Profile" />
+                        <img src={null} alt="Profile" />
                     </div>
                 </div>
             </div>

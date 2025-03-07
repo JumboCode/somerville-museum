@@ -52,33 +52,6 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
 //     name: () => sortByName()
 // };
 
-     
-    useEffect(() => {
-        console.log("FILTERS", selectedFilters)
-        fetch("../../api/db", { 
-                method: 'GET',
-                headers: {
-                  'Content-Type': 'application/json' 
-                },
-                body: JSON.stringify({
-                    text: 'SELECT * from dummy_data ORDER BY id'
-                })
-              }).then(async (response) => {
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error("Error fetching filtered items:", errorData);
-                    throw new Error(errorData.error || 'Failed to fetch filtered items');
-                }
-                return response.json()
-              }).then((data) => {
-                console.log("Received data:", data);
-                setFilterResults(data);
-              })
-              .catch((error) => {
-                console.error("Failed to fetch or process data:", error);                
-            });
-    }, [selectedItems, triggerFilteredFetch, refreshTable]);
-
     // Called any time new filters/search results are applied to update displayed units
     useEffect(() => {
         // Takes intersection of search results and filter results to get correct ones.
@@ -167,7 +140,6 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
     const currentUnits = units
         .slice(startIndex, startIndex + unitsPerPage)
         .map((unit) => {
-            // console.log(selectedItems);
             return (<InventoryUnit
                 key={unit.id}
                 unit={unit}
