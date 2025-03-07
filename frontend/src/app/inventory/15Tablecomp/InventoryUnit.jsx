@@ -11,7 +11,8 @@ export default function InventoryUnit({ unit, onChange, checked }) {
         return null; // Don't render anything if `unit` is undefined
     }
 
-    const { id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, borrow_history, notes} = unit; 
+    const { id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, borrow_history, notes, image_keys} = unit; 
+    console.log(unit)
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [isPrePopupVisible, setIsPrePopupVisible] = useState(false);
     const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
