@@ -61,11 +61,34 @@ export default function InventoryUnit({ unit, onChange, checked }) {
         if (option === "expand") {
             console.log("Navigating to expanded view..."); 
             setIsPopupVisible(true);
-            setIsPrePopupVisible(false);
-        } else {
-            console.log("Edit option selected...");
-        }
+        } else if (option === "Missing" || option === "Available") {
+            setAsMissingFound(option);
+        } 
+        setIsPrePopupVisible(false);
     }
+
+    const setAsMissingFound = async (option) => {
+        try {
+            const response = await fetch(`../../../api/db`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: 'UPDATE dummy_data SET status=$1 WHERE id=$2',
+                    params: [option, id],
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Fetch error: ${response.status} - ${response.statusText}`);
+            }
+            window.location.reload();
+        } catch (error){
+            alert("An error occurred. Please try again.");
+            return;
+        }
+    };
 
     useEffect(() => {
         if (isPopupVisible || isPrePopupVisible) {
@@ -124,6 +147,7 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                     <PrePopup onClose={handleClosePrePopup} 
                         onOptionSelect={handlePopupOption}
                         position = {popupPosition}
+                        status = {status}
                         unit={unit}/>
                 )}   
 

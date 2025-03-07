@@ -4,7 +4,7 @@ const buildQuery = (filters) => {
   // Specify which columns are stored as arrays in the database
   const arrayColumns = ['color', 'season', 'time_period', 'condition'];
 
-  let baseQuery = "SELECT * FROM dummy_data WHERE 1=1";
+  let baseQuery = "SELECT * FROM dummy_data ORDER BY id";
   let queryParams = [];
   let paramIndex = 1;
 
