@@ -35,7 +35,7 @@ export default function PrePopup({ unit, onClose, onOptionSelect, position, stat
 
     return (
         <div className="Popup" 
-              style = {{top: position.top, left: position.left}}
+              style = {{top: position.top, right: position.right}}
               ref={popupRef}>
             <div className="Buttons">
                 <div className="editBtn">

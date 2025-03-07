@@ -51,6 +51,8 @@ export default function Popup( { unit, onClose } ) {
             }
         };
 
+        console.log("pop up is open")
+
         document.addEventListener("keydown", handleKeyDown);
 
         // Cleanup event listener on component unmount
