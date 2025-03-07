@@ -127,6 +127,43 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
         throw new Error(`Fetch failed: ${response.status} ${errorText}`);
       }
 
+
+      //EMAIL FOR BORROWED ITEMS BELOW
+
+      const itemNames = borrowItems.map(item => item.name);
+
+      // Debugging: Log the request payload
+      console.log("Sending email request:", {
+          recipientEmail: borrowerEmail,
+          recipientName: `${borrowerFirstName} ${borrowerLastName}`,
+          items: itemNames,
+      });
+
+      // Make the API call
+      if (!isToggleEnabled) {
+        const emailResponse = await fetch('/api/email?emailType=sendBorrowedEmail', { 
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                recipientEmail: borrowerEmail,
+                recipientName: `${borrowerFirstName} ${borrowerLastName}`,
+                items: itemNames,
+            }),
+        });
+
+        // Read response as text (to catch non-JSON errors)
+        const responseText = await emailResponse.text();
+        console.log("Email API Response:", responseText);
+
+        if (!emailResponse.ok) {
+            throw new Error(`Email sending failed: ${emailResponse.status} ${responseText}`);
+        }
+      }
+
+
+      //EMAIL FOR BORROWED ITEMS ABOVE
+
+
       const result = await response.json();
       setIsSuccessPopupVisible(true);
 
