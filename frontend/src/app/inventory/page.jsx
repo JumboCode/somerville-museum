@@ -127,6 +127,7 @@ export default function Inventory({
   
 
     const handleReturnSuccess = () => {
+        console.log("Return operation successful, refreshing inventory...");
         setRefreshTable(prev => !prev); // Refresh table to show updated status
         setSelectedItems([]); // Clear selected items
     };
