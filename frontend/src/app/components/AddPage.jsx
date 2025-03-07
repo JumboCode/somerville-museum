@@ -250,7 +250,6 @@ export default function AddPage() {
             borrow_history: null
         };
 
-
         let newErrors = {};
 
         // Check for missing required fields and set error flags
@@ -269,9 +268,6 @@ export default function AddPage() {
             if (!newItem.id) newErrors.id = true;
         }
 
-
-        // if (!newItem.date_added) newErrors.date_added = true;
-
         // If any errors exist, update state and show alert
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
@@ -282,6 +278,16 @@ export default function AddPage() {
 
         // If no errors, clear previous errors and proceed
         setErrors({});
+
+        // Validate date format if toggle is enabled
+        if (isToggleEnabled) {
+            // Allow blank inputs in addition to valid date formats
+            const regex = /^(0?[1-9]|1[0-2])\/(0?[1-9]|[12]\d|3[01])\/\d{2,4}$/;
+            if (manualDateText && !regex.test(manualDateText)) {
+                alert("Please enter a valid date in the format mm/dd/yyyy.");
+                return;
+            }
+        }
 
         // Send a POST request to the add API with body data
         const addItemDB = async (newItem) => {
@@ -392,7 +398,9 @@ export default function AddPage() {
                             >
                             <div className="upload-icon-and-text">
                             <img src="/icons/upload.svg" className="upload-icon" />
-                                <p style={{color: "#9B525F"}}>Upload image*</p>
+                                <p style={{color: "#9B525F"}}>
+                                    Upload image
+                                </p>
                             </div>
                             <input
                                 type="file"
@@ -414,7 +422,9 @@ export default function AddPage() {
                             
                         {/* Item Name Text Entry */}
                         <div className="inputGroup">
-                            <h3 htmlFor="itemTB" className={errors.name ? "error-text" : ""}>Item Name*</h3>
+                            <h3 htmlFor="itemTB" className={errors.name ? "error-text" : ""}>
+                                {isToggleEnabled ? "Item Name" : "Item Name*"}
+                            </h3>
                             <input
                                 className="itemTextBox"
                                 placeholder="Enter Name"
@@ -442,7 +452,7 @@ export default function AddPage() {
                         <div className="textBoxRow">
                             <div className="allID">
                                 <div className={errors.id ? "error-text idName" : "idName"}>
-                                    ID
+                                    {isToggleEnabled ? "ID*" : "ID"}
                                 </div>
                                 <div className="idTextBox">
                                     <textarea 
@@ -455,13 +465,14 @@ export default function AddPage() {
                                             }
                                         }}
                                         readOnly={!isToggleEnabled}
+                                        style={{ background: isToggleEnabled ? "#FFF" : "var(--grayed_out)" }}
                                     />
                                 </div>
                             </div>
 
                             <div className="allDate">
                                 <div className={`dateName`}>
-                                    Date Added
+                                    {isToggleEnabled ? "Date Added" : "Date Added"}
                                 </div>
                                 <div className="dateTextBox">
                                     <textarea 
@@ -473,6 +484,7 @@ export default function AddPage() {
                                             }
                                         }}
                                         readOnly={!isToggleEnabled}
+                                        style={{ background: isToggleEnabled ? "#FFF" : "var(--grayed_out)" }}
                                     />
                                 </div>
                             </div>
@@ -518,7 +530,9 @@ export default function AddPage() {
                     
                         {/* Garment Title and Dropdown */}
                         <div className="dropdown-component">
-                            <h3 className={errors.garment_type ? "error-text" : ""}>Garment Type*</h3>
+                            <h3 className={errors.garment_type ? "error-text" : ""}>
+                                {isToggleEnabled ? "Garment Type" : "Garment Type*"}
+                            </h3>
                             <Dropdown
                                 value={selectedGarment}
                                 options={garmentOptions}
@@ -530,7 +544,10 @@ export default function AddPage() {
 
                         {/* Time Period Title and Dropdown */}
                         <div className="dropdown-component">
-                            <h3 className={errors.time_period ? "error-text" : ""}>Time Period*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3>                            
+                            <h3 className={errors.time_period ? "error-text" : ""}>
+                                {isToggleEnabled ? "Time Period" : "Time Period*"}
+                                <span style={{fontWeight: "400"}}> (Max of 2)</span>
+                            </h3>                            
                                 <MultiSelect
                                     value={timePeriods.filter(period => selectedTimePeriod.includes(period.name))} // Sync selected values
                                     options={timePeriods}
@@ -549,7 +566,9 @@ export default function AddPage() {
                     <div className="age-and-gender">
                         {/* Age Buttons */}
                         <div className="allAge">
-                            <h3 className={errors.age_group ? "error-text" : ""}>Age Group*</h3>
+                            <h3 className={errors.age_group ? "error-text" : ""}>
+                                {isToggleEnabled ? "Age Group" : "Age Group*"}
+                            </h3>
                             <div className="ageButtons p-selectbutton">
                                 {ageOptions.map((option) => (
                                     <button
@@ -565,7 +584,9 @@ export default function AddPage() {
 
                         {/* Gender Buttons */}
                         <div className="allGender">
-                            <h3 className={errors.gender ? "error-text" : ""}>Sex*</h3>
+                            <h3 className={errors.gender ? "error-text" : ""}>
+                                {isToggleEnabled ? "Sex" : "Sex*"}
+                            </h3>
                             <div className="genderButtons p-selectbutton">
                                 {genderOptions.map((option) => (
                                     <button
@@ -582,7 +603,9 @@ export default function AddPage() {
 
                     {/* Size Buttons */}
                     <div className="size-buttons p-selectbutton">
-                        <h3 className={errors.size ? "error-text" : ""}>Size*</h3>
+                        <h3 className={errors.size ? "error-text" : ""}>
+                            {isToggleEnabled ? "Size" : "Size*"}
+                        </h3>
                         {sizes.map((option) => (
                             <button 
                                 key={option.value} 
@@ -596,7 +619,8 @@ export default function AddPage() {
 
                     <div className="season-buttons p-selectbutton">
                         <h3 className={errors.season ? "error-text" : ""}>
-                            Season* <span style={{ fontWeight: "400" }}> (Max of 2)</span>
+                            {isToggleEnabled ? "Season" : "Season*"}
+                            <span style={{ fontWeight: "400" }}> (Max of 2)</span>
                         </h3>
                         {seasons.map((option) => (
                             <button
@@ -612,7 +636,10 @@ export default function AddPage() {
                     {/* Condition Dropdown */}
                     <div className="condition-component">
                         <div className="dropdown-component">
-                            <h3 className={errors.condition ? "error-text" : ""}>Condition*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3> 
+                            <h3 className={errors.condition ? "error-text" : ""}>
+                                {isToggleEnabled ? "Condition" : "Condition*"}
+                                <span style={{fontWeight: "400"}}> (Max of 2)</span>
+                            </h3> 
                             <MultiSelect
                                 value={conditions.filter(cond => condition.includes(cond.name))} // Sync selected values
                                 options={conditions}
@@ -630,7 +657,10 @@ export default function AddPage() {
                     {/* Color Selector */}
                     <div className="color-component">
                         <div className="color-dropdown">
-                            <h3 className={errors.color ? "error-text" : ""}>Color*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3> 
+                            <h3 className={errors.color ? "error-text" : ""}>
+                                {isToggleEnabled ? "Color" : "Color*"}
+                                <span style={{fontWeight: "400"}}> (Max of 2)</span>
+                            </h3> 
                             <div className="color-selector">
                                 <div className="color-options">
                                     {colors.map((color) => (
