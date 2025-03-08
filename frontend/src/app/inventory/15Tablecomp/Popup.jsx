@@ -15,6 +15,7 @@ import "./Popup.css";
 import StylishButton from "../../components/StylishButton";
 import "./InventoryUnit.css";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function Popup( { unit, onClose } ) {
@@ -148,7 +149,18 @@ export default function Popup( { unit, onClose } ) {
                     </div>
                 </div>
                 
-                <div className="imageContainer">{}</div>
+                <div className="imageContainer">
+                    {image_keys.map((key, index) => (
+                        <div key={index}>
+                            <Image 
+                                src={`https://upload-r2-assets.somerville-museum1.workers.dev/${key}`} 
+                                fill 
+                                alt="No image found"
+                                className="borrow-image"
+                            />
+                        </div>
+                    ))}
+                </div>
                 <div className="imageSelection">
                     {/* TODO: Implement image page selectors */}
                 </div>
