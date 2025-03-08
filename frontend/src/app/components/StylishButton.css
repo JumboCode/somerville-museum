@@ -89,6 +89,8 @@
     border: none;
     color: #000000;
     box-shadow: none;
+    height: 40px;
+    width: 20px;
   }
 
   .stylish-button.style4:hover {
