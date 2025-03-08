@@ -1,10 +1,10 @@
-export default function userVerificationCard({props}) {
+export default function userVerificationCard({name, email}) {
     return (
 
         <div className="newaccountapprovalbutton">
             <div className="info">
-            <h2> {props.name} </h2>
-            <p>{props.email}</p>
+            <h2> {name} </h2>
+            <p>{email}</p>
             </div>
             <div className="buttons">
                 <button>Approve</button>
