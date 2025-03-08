@@ -9,11 +9,13 @@ import Filter from '../../assets/Filter.jsx';
 import Brick from '../../assets/Brick.jsx';
 import Logo from '../../assets/Logo.jsx';
 import styles from './NavBar.module.css';
+import User from "../../assets/User.jsx";
 
 const initialNavigationItems = [
   { id: 'dashboard', icon: Pie, label: 'Dashboard', href: '/dashboard' },
   { id: 'inventory', icon: Brick, label: 'Inventory', href: '/inventory' },
   { id: 'settings', icon: Gear, label: '', isSettings: true, href: '/settings' },
+  { id: 'borrowers', icon: User, label: 'Borrowers', href: '/borrowers' },
 ];
 
 

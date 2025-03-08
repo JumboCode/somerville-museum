@@ -17,50 +17,32 @@
   position: relative;
   width: 33vw;
   height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
-  gap: 10px;
-  text-align: center;
+  gap: 5rem;
+  text-align: left;
   min-width: 450px;
-  overflow-wrap: break-word;
-  display: inline-block;
   padding: 1rem 1.5rem;
+  overflow-wrap: break-word;
 }
 
 @keyframes slideIn {
-from {
-  transform: translateX(100%);
-}
-to {
-  transform: translateX(0);
-}
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 .close-btn {
-background: none;
-border: none;
-font-size: 1.2rem;
-position: absolute;
-top: 10px;
-right: 10px;
-cursor: pointer;
-}
-
-.exit {
-  align-items: center;
-  display: flex;
-}
-
-.header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.emailcell {
-  text-align: left;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #9B525F; 
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
 }
 
 #borrowerHistory {
@@ -80,14 +62,30 @@ cursor: pointer;
   border-bottom: 1px solid #D9D9D9;
 }
 
-
 #borrowerHistory tr:last-child td {
   border-bottom: none; 
 }
 
-#borrowerHistorytitle {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin-top: 20px;
+.history-divider td {
+  border-bottom: 3px solid #9B525F;
+}
+
+.navigation-arrows {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 1rem;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: white;
+}
+
+.nav-arrow {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #9B525F;
+  cursor: pointer;
 }
