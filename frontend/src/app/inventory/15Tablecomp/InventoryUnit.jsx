@@ -89,10 +89,9 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                 </div>
                 <div className="picture">
                     <div className="image-container">
-                        {image_keys.length > 0 &&<Image 
+                        {image_keys.length > 0 && <Image 
                             src={`https://upload-r2-assets.somerville-museum1.workers.dev/${image_keys[0]}`} 
-                            width={100} 
-                            height={100} 
+                            fill
                             alt="No image found"
                         />}
                     </div>
