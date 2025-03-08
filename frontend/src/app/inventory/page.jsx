@@ -154,7 +154,6 @@ export default function Inventory({
     const currentUnits = units
         .slice(startIndex, startIndex + unitsPerPage)
         .map((unit) => {
-
             return (<InventoryUnit
                 key={unit.id}
                 unit={unit}

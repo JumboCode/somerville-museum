@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation'
 import { Icon } from 'react-icons-kit';
 import { eyeOff } from 'react-icons-kit/feather/eyeOff';
 import { eye } from 'react-icons-kit/feather/eye';
+import Image from "next/image";
 import "../app.css"
 
 export default function SignUp() {
@@ -237,8 +238,10 @@ export default function SignUp() {
       <div className="mainContainer">
         <div className="back-to-login" onClick={() => {router.push("/login")}}>&lt; Back to Login</div>
         <div className="titleContainer logo-shrink">
-          <div className="SMLogo sm-logo-small"></div>
-          <div className="clothing-database">CLOTHING DATABASE</div>
+          <div className="SMLogo sm-logo-small">
+            <Image src="/SM_LOGO.svg" alt="No image found" fill />
+          </div>
+          <div className="clothing-database-small">CLOTHING DATABASE</div>
         </div>
         <div className={'namesContainer'}>
           <div className={'inputContainer'}>

@@ -303,7 +303,6 @@ export default function EditPage() {
             condition: condition.length > 0 ? condition : null,
             color: selectedColors.length > 0 ? selectedColors : null,
             status: "Available",
-            authenticity_level: null,
             location: null,
             date_added: placeholderDate,
             current_borrower: null,

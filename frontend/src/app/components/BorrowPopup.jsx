@@ -35,7 +35,6 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
   const [note, setNote] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [isSuccessPopupVisible, setIsSuccessPopupVisible] = useState(false);
-
   const itemsPerPage = 5;
   const totalPages = Math.ceil(borrowItems.length / itemsPerPage);
 

@@ -12,6 +12,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth, useSignIn } from '@clerk/nextjs'
+import Image from "next/image"
 import '../app.css'
 import 'dotenv/config'
 
@@ -105,7 +106,9 @@ export default function reset_password () {
             <div className="reset-password-container">
               <div className="back-to-login" onClick={() => {router.push("/login")}}>&lt; Back to Login</div>
               <div className="titleContainer">
-                <div className="SMLogo sm-logo-small"></div>
+                <div className="SMLogo sm-logo-small">
+                  <Image src="/SM_LOGO.svg" alt="No image found" fill />
+                </div>
                 <div className="clothing-database-small">CLOTHING DATABASE</div>
               </div>
               <div className="reset-password-text">
