@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, forwardRef} from "react";
 import Popup from "./Popup";
 import PrePopup from "./PrePopup";
+import Image from "next/image"
 import "./InventoryUnit.css";
 
 export default function InventoryUnit({ unit, onChange, checked }) {
@@ -12,7 +13,6 @@ export default function InventoryUnit({ unit, onChange, checked }) {
     }
 
     const { id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, borrow_history, notes, image_keys} = unit; 
-
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [isPrePopupVisible, setIsPrePopupVisible] = useState(false);
     const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
@@ -36,7 +36,6 @@ export default function InventoryUnit({ unit, onChange, checked }) {
     const handleClosePrePopup = () => {
         setIsPrePopupVisible(false);
     } 
-
 
     const handleClosePopup = () => {
         setIsPopupVisible(false);
@@ -90,7 +89,16 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                 </div>
                 <div className="picture">
                     <div className="image-container">
-                        <img src="" alt="Profile" />
+                        {image_keys.map((key, index) => (
+                            <div key={index}>
+                                <Image 
+                                    src={`https://upload-r2-assets.somerville-museum1.workers.dev/${key}`} 
+                                    width={100} 
+                                    height={100} 
+                                    alt="No image found"
+                                />
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
