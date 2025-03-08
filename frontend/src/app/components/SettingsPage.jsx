@@ -37,6 +37,19 @@ export default function SettingsPage() {
         }
     }, [user]);
 
+    // Load approvals from localStorage on page load
+    useEffect(() => {
+        const savedApprovals = localStorage.getItem("approvals");
+        if (savedApprovals) {
+            setApprovals(JSON.parse(savedApprovals));
+        }
+    }, []);
+
+    // Save approvals to localStorage whenever they change
+    useEffect(() => {
+        localStorage.setItem("approvals", JSON.stringify(approvals));
+    }, [approvals]);
+
     const addVerificationBox = () => {
         console.log("Adding new verification box...");
         setApprovals((prev) => [
@@ -78,11 +91,9 @@ export default function SettingsPage() {
                             </div>
                             <div className="name">
                                 <input type="text" id="first-name" value={user?.firstName || "Holden"} disabled />
-
                                 <input type="text" id="last-name" value={user?.lastName || "Kittleburger"} disabled />
                             </div>
                             <form>
-
                                 <label htmlFor="email">Email</label>
                                 <input type="email" id="email" value={user?.emailAddresses?.[0]?.emailAddress || "holdenlovesburgers@hotmail.com"} disabled />
 
@@ -108,7 +119,6 @@ export default function SettingsPage() {
                                     <span className="slider round"></span>
                                 </label>
                                 <label>Normal Data Entry</label>
-                                
                                 <button className="export-btn">⬆ Export Data</button>
                             </div>
                             <div className="toggle">
@@ -123,7 +133,6 @@ export default function SettingsPage() {
                                 <label>Light Mode</label>
                                 <a href="#" className="logout" onClick={() => signOut()}>Logout ↪</a>
                             </div>
-
 
                             <button className="addv" onClick={addVerificationBox}>
                                 Temp Add Verify
