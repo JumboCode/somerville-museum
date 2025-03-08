@@ -34,7 +34,6 @@ export default function ItemBoxes({ unit, onNotesChange, itemId, onClose }) {
     };
 
     const handleConditionSelect = (selectedConditions) => {
-        console.log("Selected conditions:", selectedConditions);
     
         // Ensure selectedConditions is always an array
         if (!Array.isArray(selectedConditions)) {
@@ -50,7 +49,6 @@ export default function ItemBoxes({ unit, onNotesChange, itemId, onClose }) {
     };
 
     //not pulling tags
-    console.log(unit.tags);  
     return (  
         <div className="returnItem">
             <div className="itemID">

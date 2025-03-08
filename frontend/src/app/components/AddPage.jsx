@@ -1,4 +1,3 @@
-
 /**************************************************************
  *
  *                     AddPage.jsx
@@ -22,15 +21,24 @@ import { Dropdown } from 'primereact/dropdown';
 import { MultiSelect } from 'primereact/multiselect';
 import StylishButton from './StylishButton.jsx';
 import Link from 'next/link';
+import { useGlobalContext } from './contexts/ToggleContext';
 
 export default function AddPage() {
+
     // Left column state variables
     const [dragOver, setDragOver] = useState(false);
     const [preview, setPreview] = useState(null);
 
     // Right column state variables
+    const { isToggleEnabled } = useGlobalContext(); // TOGGLE FUNCTIONALITY
     const [idText, setIDText] = useState("");
+    const [placeholderDate, setPlaceholderDate] = useState("");
+    const [manualIdText, setManualIdText] = useState("");
+    const [manualDateText, setManualDateText] = useState("");
+
+
     const [itemText, setItemText] = useState("");
+    const [locationText, setLocationText] = useState("");
     const [priceText, setPriceText] = useState("");
     const [notesText, setNotesText] = useState("");
     const [selectedGarment, setSelectedGarment] = useState("");
@@ -107,16 +115,6 @@ export default function AddPage() {
         { name: "Black", hex: "#000000" },
       ];
 
-    // Fetch placeholder for current date
-    const [placeholderDate, setPlaceholderDate] = useState('');
-    useEffect(() => {
-        const today = new Date();
-        const month = String(today.getMonth() + 1).padStart(2, '0'); 
-        const day = String(today.getDate()).padStart(2, '0');
-        const year = today.getFullYear();
-        setPlaceholderDate(`${month}/${day}/${year}`);
-    }, []);
-
     // Function to handle and update file selection
     const handleFileSelect = (file) => {
         if (file && file.type.startsWith("image/")) {
@@ -183,7 +181,6 @@ export default function AddPage() {
     };
 
     const handleConditionSelect = (selectedConditions) => {
-        console.log("Selected conditions:", selectedConditions);
     
         // Ensure selectedConditions is always an array
         if (!Array.isArray(selectedConditions)) {
@@ -227,12 +224,15 @@ export default function AddPage() {
     };
 
     const handleSubmit = () => {
+        
             setStatusMessage("Submitting...");
             setStatusType("neutral");
 
+
         const newItem = {
-            id: idText,
-            name: itemText || null,
+            id: isToggleEnabled ? manualIdText : idText,
+            name: itemText,
+            location: locationText || null,
             cost: priceText ? parseInt(priceText.replace('$', ''), 10): null,
             notes: notesText || null,
             garment_type: selectedGarment || null,
@@ -244,9 +244,8 @@ export default function AddPage() {
             condition: condition.length > 0 ? condition : null,
             color: selectedColors.length > 0 ? selectedColors : null,
             status: "Available", // Default status
-            authenticity_level: null,
-            location: null,
-            date_added: placeholderDate, 
+            // authenticity_level: null,
+            date_added: isToggleEnabled ? manualDateText : placeholderDate, 
             current_borrower: null,
             borrow_history: null
         };
@@ -254,16 +253,20 @@ export default function AddPage() {
         let newErrors = {};
 
         // Check for missing required fields and set error flags
+        if (!isToggleEnabled) {
+            if (!newItem.garment_type) newErrors.garment_type = true;
+            if (!newItem.time_period) newErrors.time_period = true;
+            if (!newItem.age_group) newErrors.age_group = true;
+            if (!newItem.gender) newErrors.gender = true;
+            if (!newItem.size) newErrors.size = true;
+            if (!newItem.season) newErrors.season = true;
+            if (!newItem.condition) newErrors.condition = true;
+            if (!newItem.color) newErrors.color = true;
+        }
+        else {
+            if (!newItem.id) newErrors.id = true;
+        }
         if (!newItem.name) newErrors.name = true;
-        if (!newItem.garment_type) newErrors.garment_type = true;
-        if (!newItem.time_period) newErrors.time_period = true;
-        if (!newItem.age_group) newErrors.age_group = true;
-        if (!newItem.gender) newErrors.gender = true;
-        if (!newItem.size) newErrors.size = true;
-        if (!newItem.season) newErrors.season = true;
-        if (!newItem.condition) newErrors.condition = true;
-        if (!newItem.color) newErrors.color = true;
-        // if (!newItem.date_added) newErrors.date_added = true;
 
         // If any errors exist, update state and show alert
         if (Object.keys(newErrors).length > 0) {
@@ -276,18 +279,24 @@ export default function AddPage() {
         // If no errors, clear previous errors and proceed
         setErrors({});
 
-        // Convert newItem params to JSON object
-        const body = JSON.stringify(newItem);
+        // Validate date format if toggle is enabled
+        if (isToggleEnabled) {
+            // Allow blank inputs in addition to valid date formats
+            const regex = /^(0?[1-9]|1[0-2])\/(0?[1-9]|[12]\d|3[01])\/\d{2,4}$/;
+            if (manualDateText && !regex.test(manualDateText)) {
+                alert("Please enter a valid date in the format mm/dd/yyyy.");
+                return;
+            }
+        }
 
         // Send a POST request to the add API with body data
-        const addItemDB = async () => {
+        const addItemDB = async (newItem) => {
+
             try {
-                const response = await fetch(`../../api/add`, {
+                const response = await fetch(`/api/itemManagement?action=add`, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body,
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(newItem)
                 });
 
                 if (!response.ok) {
@@ -313,7 +322,7 @@ export default function AddPage() {
         };
 
         // Call the function to send the API request
-        addItemDB();
+        addItemDB(newItem);
 
         // Reset form fields
         resetForm();
@@ -322,7 +331,9 @@ export default function AddPage() {
     const resetForm = () => {
         // Reset form fields (states)
         setIDText("");
+        setPlaceholderDate("");
         setItemText("");
+        setLocationText(""); 
         setPriceText("");
         setNotesText("");
         setSelectedGarment("");
@@ -334,6 +345,33 @@ export default function AddPage() {
         setCondition([]);
         setSelectedColors([]);
     };
+
+    // TOGGLE FUNCTIONALITY
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Fetch next available ID
+                const response = await fetch('/api/inventoryQueries?action=getNextAvailableId');
+                const data = await response.json();
+                if (response.ok) {
+                    setIDText(data.nextId);
+                } else {
+                    console.error(data.error);
+                }
+
+                // Set placeholder date
+                const today = new Date();
+                const month = String(today.getMonth() + 1).padStart(2, '0'); 
+                const day = String(today.getDate()).padStart(2, '0');
+                const year = today.getFullYear();
+                setPlaceholderDate(`${month}/${day}/${year}`);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     return (
         <div className="main">
@@ -360,7 +398,9 @@ export default function AddPage() {
                             >
                             <div className="upload-icon-and-text">
                             <img src="/icons/upload.svg" className="upload-icon" />
-                                <p style={{color: "#9B525F"}}>Upload image*</p>
+                                <p style={{color: "#9B525F"}}>
+                                    Upload image
+                                </p>
                             </div>
                             <input
                                 type="file"
@@ -377,41 +417,75 @@ export default function AddPage() {
                                 />
                             )}
                         </div>
-                        <div className={`itemName ${errors.name ? "error-text" : ""}`}>
-                            Item Name*
-                        </div>
 
+                        <div className="textBoxRow">
+                            
                         {/* Item Name Text Entry */}
-                        <label htmlFor="textBox"></label>
-                        <div className="itemTextBox">
-                            <textarea placeholder=""
-                            id = "itemTB"
-                            value={itemText}
-                            onChange={(e) => setItemText(e.target.value)}
+                        <div className="inputGroup">
+                            <h3 htmlFor="itemTB" className={errors.name ? "error-text" : ""}>
+                                Item Name*
+                            </h3>
+                            <input
+                                className="itemTextBox"
+                                placeholder="Enter Name"
+                                id="itemTB"
+                                value={itemText}
+                                onChange={(e) => setItemText(e.target.value)}
                             />
                         </div>
+
+                        {/* Location Text Entry */}
+                        <div className="inputGroup">
+                            <label htmlFor="locationTB" className="textLabel">Location</label>
+                            <input
+                                className="locationTextBox"
+                                placeholder=""
+                                id="locationTB"
+                                value={locationText}
+                                onChange={(e) => setLocationText(e.target.value)}
+                            />
+                        </div>
+                    </div>
+
                         
                         {/* ID, Date Added, and Price Text Entries */}
                         <div className="textBoxRow">
                             <div className="allID">
-                                <div className={`idName`}>
-                                    ID
+                                <div className={errors.id ? "error-text idName" : "idName"}>
+                                    {isToggleEnabled ? "ID*" : "ID"}
                                 </div>
                                 <div className="idTextBox">
                                     <textarea 
                                         type="text"
-                                        placeholder="1256"
-                                        onChange={(e) => setIDText(e.target.value)}
+                                        placeholder={isToggleEnabled ? "Enter ID" : "Loading..."}
+                                        value={isToggleEnabled ? manualIdText : idText}
+                                        onChange={(e) => {
+                                            if (isToggleEnabled) {
+                                                setManualIdText(e.target.value);
+                                            }
+                                        }}
+                                        readOnly={!isToggleEnabled}
+                                        style={{ background: isToggleEnabled ? "#FFF" : "var(--grayed_out)" }}
                                     />
                                 </div>
                             </div>
 
                             <div className="allDate">
                                 <div className={`dateName`}>
-                                    Date Added
+                                    {isToggleEnabled ? "Date Added" : "Date Added"}
                                 </div>
                                 <div className="dateTextBox">
-                                    <textarea placeholder={placeholderDate}></textarea>
+                                    <textarea 
+                                        placeholder={isToggleEnabled ? "MM/DD/YYYY" : "Loading..."}
+                                        value={isToggleEnabled ? manualDateText : placeholderDate}
+                                        onChange={(e) => {
+                                            if (isToggleEnabled) {
+                                                setManualDateText(e.target.value);
+                                            }
+                                        }}
+                                        readOnly={!isToggleEnabled}
+                                        style={{ background: isToggleEnabled ? "#FFF" : "var(--grayed_out)" }}
+                                    />
                                 </div>
                             </div>
                             <div className="allPrice">
@@ -456,7 +530,9 @@ export default function AddPage() {
                     
                         {/* Garment Title and Dropdown */}
                         <div className="dropdown-component">
-                            <h3 className={errors.garment_type ? "error-text" : ""}>Garment Type*</h3>
+                            <h3 className={errors.garment_type ? "error-text" : ""}>
+                                {isToggleEnabled ? "Garment Type" : "Garment Type*"}
+                            </h3>
                             <Dropdown
                                 value={selectedGarment}
                                 options={garmentOptions}
@@ -468,7 +544,10 @@ export default function AddPage() {
 
                         {/* Time Period Title and Dropdown */}
                         <div className="dropdown-component">
-                            <h3 className={errors.time_period ? "error-text" : ""}>Time Period*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3>                            
+                            <h3 className={errors.time_period ? "error-text" : ""}>
+                                {isToggleEnabled ? "Time Period" : "Time Period*"}
+                                <span style={{fontWeight: "400"}}> (Max of 2)</span>
+                            </h3>                            
                                 <MultiSelect
                                     value={timePeriods.filter(period => selectedTimePeriod.includes(period.name))} // Sync selected values
                                     options={timePeriods}
@@ -487,7 +566,9 @@ export default function AddPage() {
                     <div className="age-and-gender">
                         {/* Age Buttons */}
                         <div className="allAge">
-                            <h3 className={errors.age_group ? "error-text" : ""}>Age Group*</h3>
+                            <h3 className={errors.age_group ? "error-text" : ""}>
+                                {isToggleEnabled ? "Age Group" : "Age Group*"}
+                            </h3>
                             <div className="ageButtons p-selectbutton">
                                 {ageOptions.map((option) => (
                                     <button
@@ -503,7 +584,9 @@ export default function AddPage() {
 
                         {/* Gender Buttons */}
                         <div className="allGender">
-                            <h3 className={errors.gender ? "error-text" : ""}>Sex*</h3>
+                            <h3 className={errors.gender ? "error-text" : ""}>
+                                {isToggleEnabled ? "Sex" : "Sex*"}
+                            </h3>
                             <div className="genderButtons p-selectbutton">
                                 {genderOptions.map((option) => (
                                     <button
@@ -520,7 +603,9 @@ export default function AddPage() {
 
                     {/* Size Buttons */}
                     <div className="size-buttons p-selectbutton">
-                        <h3 className={errors.size ? "error-text" : ""}>Size*</h3>
+                        <h3 className={errors.size ? "error-text" : ""}>
+                            {isToggleEnabled ? "Size" : "Size*"}
+                        </h3>
                         {sizes.map((option) => (
                             <button 
                                 key={option.value} 
@@ -534,7 +619,8 @@ export default function AddPage() {
 
                     <div className="season-buttons p-selectbutton">
                         <h3 className={errors.season ? "error-text" : ""}>
-                            Season* <span style={{ fontWeight: "400" }}> (Max of 2)</span>
+                            {isToggleEnabled ? "Season" : "Season*"}
+                            <span style={{ fontWeight: "400" }}> (Max of 2)</span>
                         </h3>
                         {seasons.map((option) => (
                             <button
@@ -550,7 +636,10 @@ export default function AddPage() {
                     {/* Condition Dropdown */}
                     <div className="condition-component">
                         <div className="dropdown-component">
-                            <h3 className={errors.condition ? "error-text" : ""}>Condition*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3> 
+                            <h3 className={errors.condition ? "error-text" : ""}>
+                                {isToggleEnabled ? "Condition" : "Condition*"}
+                                <span style={{fontWeight: "400"}}> (Max of 2)</span>
+                            </h3> 
                             <MultiSelect
                                 value={conditions.filter(cond => condition.includes(cond.name))} // Sync selected values
                                 options={conditions}
@@ -568,7 +657,10 @@ export default function AddPage() {
                     {/* Color Selector */}
                     <div className="color-component">
                         <div className="color-dropdown">
-                            <h3 className={errors.color ? "error-text" : ""}>Color*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3> 
+                            <h3 className={errors.color ? "error-text" : ""}>
+                                {isToggleEnabled ? "Color" : "Color*"}
+                                <span style={{fontWeight: "400"}}> (Max of 2)</span>
+                            </h3> 
                             <div className="color-selector">
                                 <div className="color-options">
                                     {colors.map((color) => (
@@ -604,7 +696,7 @@ export default function AddPage() {
                         <StylishButton className="cancel-button" styleType="style1" label="Cancel" />
                     </Link>
 
-                    <StylishButton className="submit-button" onClick={() => handleSubmit()} styleType="style3" label="Submit" />
+                    <StylishButton className="submit-button" onClick={handleSubmit} styleType="style3" label="Submit" />
                 </div>
             </div>
         </div>

@@ -78,7 +78,7 @@ export default function SelectItemButton() {
 //       alert("User cancelled the prompt.");
 //     } else {
 //       // Making a GET request to the serverless function endpoint
-//       fetch(`../../api/selectByName`, { 
+//       fetch(`../../api/inventoryQueries?action=selectByName`, { 
 //         method: 'PUT',
 //         headers: {
 //           'Content-Type': 'application/json' // Specify the content type

@@ -124,8 +124,10 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                     {unit.status}
                 </div>
                 <div className="condition">
-                    <div className={`circle2 ${unit.condition}`} ></div>
-                    {unit.condition}</div>
+                    <div className={`circle2 ${Array.isArray(unit.condition) ? unit.condition[0] : unit.condition}`} ></div>
+                        {Array.isArray(unit.condition) ? unit.condition[0] : unit.condition}
+                </div>
+
             </div>
             <div className="tags">
                 <div className="gender">{unit.gender}</div>

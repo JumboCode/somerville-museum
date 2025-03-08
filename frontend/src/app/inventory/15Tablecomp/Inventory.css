@@ -9,11 +9,13 @@ body, html {
 .Table {
     background: #F8F5F5;
     height: 100vh;
-    width: 95vw;
+    width: calc(100vw - 90px);
+    max-width: 100vw;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     position: relative;
+    transition: width 0.3s ease-in-out;
     flex-shrink: 0;
 }
 
@@ -22,13 +24,17 @@ body, html {
     height: 15%;
     width: 95%;
     display: flex;
+    border: 1px solid #9B525F;
+    background: linear-gradient(0deg, #FFF, 0%, #FFF, 100%), #F8F5F5;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+    padding-left: 1rem;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     position: relative;
     border-radius: 10px;
     padding-top: 2%;
-}   
+}
 
 .Items {
     display: flex;
@@ -65,6 +71,7 @@ body, html {
     width: 100%;
     padding-right: 10%;
     position: absolute;
+    width:100%;
     bottom: 0; 
     gap: 2vh;
     font-size: 1vw;
@@ -141,15 +148,15 @@ body, html {
 
 .ItemBarHolder {
     background-color: white;
-    width: 95%;
+    width: 100%;
     display: flex;
     height: 80%;
     flex-direction: column;
-    max-height: 100%; 
     overflow-y: auto;
     border-radius: 10px;
     border: 1px solid #9B525F;
 }
+
 
 .pagination-controls {
     display: flex;

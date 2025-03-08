@@ -8,44 +8,50 @@
  *  
  */
 
-export default function Settings() {
-    async function exportData() {
-        console.log("IM BEING CALLED")
-        try {
-            console.log("got here");
-            const response = await fetch(`../../api/db`, { 
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json' 
-                },
-                body: JSON.stringify({
-                  text: 'SELECT * from dummy_data ORDER BY id'
-                })
-              });
-    
-            if (response.ok) {
-                const data = await response.json();
-                console.log("in fetch data: " + data);
-                const currentDate = new Date();
-                const updatedData = data.map((item) => {
-                    if (item.status === "Borrowed" && item.dueDate && new Date(item.dueDate) < currentDate) {
-                        return { ...item, status: "Overdue" };
-                    }
-                    return item;
-                });
-    
-                setUnits(updatedData);
-                
-                setTotalPages(Math.ceil(updatedData.length / unitsPerPage));
-            } else {
-                console.error("failed to fetch data");
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
-    
-    return (
-        <button className="IDLabel" onClick={exportData} id='SortTag'>Export Data</button>
-    );
-}
+"use client";
+import React, { useState, useEffect } from 'react';
+import './settings.css';
+import { useGlobalContext } from '../components/contexts/ToggleContext';
+
+const Settings = () => {
+  const { isToggleEnabled, setIsToggleEnabled } = useGlobalContext();
+  const [fading, setFading] = useState(false);
+  const [displayText, setDisplayText] = useState(isToggleEnabled ? 'Data Input' : 'Normal Data Entry');
+
+  const handleToggle = () => {
+    setFading(true);
+
+    // Directly use the current state to toggle
+    const newToggleState = !isToggleEnabled;
+    setIsToggleEnabled(newToggleState);
+
+    // Wait for fade out to complete before changing the text
+    setTimeout(() => {
+      setDisplayText(newToggleState ? 'Data Input' : 'Normal Data Entry');
+      setTimeout(() => {
+        setFading(false);
+      }, 25);
+    }, 100);
+  };
+
+  return (
+    <div className="container">
+        <div className="wrapper">
+            <label className="toggleWrapper">
+            <input 
+                type="checkbox"
+                checked={isToggleEnabled}
+                onChange={handleToggle}
+                className="toggleInput"
+            />
+            <span className="toggleSlider"></span>
+            </label>
+            <span className={`toggleLabel ${fading ? 'fading' : ''}`}>
+              {displayText}
+            </span>
+        </div>
+    </div>
+  );
+};
+
+export default Settings;

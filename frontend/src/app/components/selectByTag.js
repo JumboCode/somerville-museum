@@ -36,7 +36,7 @@ export default function SelectByTag() {
         const fetchTags = async () => {
             try {
                 // Fetch all tags from the API
-                const response = await fetch('/api/fetchTags');
+                const response = await fetch('/api/inventoryQueries?action=fetchTags');
                 if (!response.ok) throw new Error('Network response was not ok');
                 const data = await response.json();
 
@@ -71,7 +71,7 @@ export default function SelectByTag() {
 
         // Run the request to get the filtered items
         try {
-            const response = await fetch (`../../api/filterStatusTags`, {
+            const response = await fetch (`../../api/inventoryQueries?action=filterStatusTags`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
