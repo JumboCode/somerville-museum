@@ -151,12 +151,11 @@ export default function Popup( { unit, onClose } ) {
                 
                 <div className="imageContainer">
                     {image_keys.map((key, index) => (
-                        <div key={index}>
+                        <div key={index} className="borrow-image">
                             <Image 
                                 src={`https://upload-r2-assets.somerville-museum1.workers.dev/${key}`} 
                                 fill 
                                 alt="No image found"
-                                className="borrow-image"
                             />
                         </div>
                     ))}

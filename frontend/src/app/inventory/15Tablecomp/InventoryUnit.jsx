@@ -89,16 +89,12 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                 </div>
                 <div className="picture">
                     <div className="image-container">
-                        {image_keys.map((key, index) => (
-                            <div key={index}>
-                                <Image 
-                                    src={`https://upload-r2-assets.somerville-museum1.workers.dev/${key}`} 
-                                    width={100} 
-                                    height={100} 
-                                    alt="No image found"
-                                />
-                            </div>
-                        ))}
+                        {image_keys.length > 0 &&<Image 
+                            src={`https://upload-r2-assets.somerville-museum1.workers.dev/${image_keys[0]}`} 
+                            width={100} 
+                            height={100} 
+                            alt="No image found"
+                        />}
                     </div>
                 </div>
             </div>
