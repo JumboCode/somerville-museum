@@ -1,8 +1,6 @@
 // inventory/page.jsx
 "use client";
-import './15Tablecomp/Inventory.css';
 
-import './15Tablecomp/Inventory.css';
 import InventoryUnit from './15Tablecomp/InventoryUnit.jsx';
 import { useState, useEffect } from "react";
 import { useFilterContext } from '../components/contexts/FilterContext.js';

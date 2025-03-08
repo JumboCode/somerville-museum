@@ -231,7 +231,7 @@ export default function AddPage() {
 
         const newItem = {
             id: isToggleEnabled ? manualIdText : idText,
-            name: isToggleEnabled ? itemText || "unnamed" : itemText,
+            name: itemText,
             location: locationText || null,
             cost: priceText ? parseInt(priceText.replace('$', ''), 10): null,
             notes: notesText || null,
@@ -254,7 +254,6 @@ export default function AddPage() {
 
         // Check for missing required fields and set error flags
         if (!isToggleEnabled) {
-            if (!newItem.name) newErrors.name = true;
             if (!newItem.garment_type) newErrors.garment_type = true;
             if (!newItem.time_period) newErrors.time_period = true;
             if (!newItem.age_group) newErrors.age_group = true;
@@ -267,6 +266,7 @@ export default function AddPage() {
         else {
             if (!newItem.id) newErrors.id = true;
         }
+        if (!newItem.name) newErrors.name = true;
 
         // If any errors exist, update state and show alert
         if (Object.keys(newErrors).length > 0) {
@@ -423,7 +423,7 @@ export default function AddPage() {
                         {/* Item Name Text Entry */}
                         <div className="inputGroup">
                             <h3 htmlFor="itemTB" className={errors.name ? "error-text" : ""}>
-                                {isToggleEnabled ? "Item Name" : "Item Name*"}
+                                Item Name*
                             </h3>
                             <input
                                 className="itemTextBox"
