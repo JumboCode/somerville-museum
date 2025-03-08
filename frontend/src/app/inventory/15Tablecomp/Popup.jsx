@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
 export default function Popup( { unit, onClose } ) {
     const [borrowers, setBorrowers] = useState([]);
     const [isClosing, setIsClosing] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(0);
 
     // Case for no unit selected
     if (!unit){
@@ -149,21 +150,35 @@ export default function Popup( { unit, onClose } ) {
                     </div>
                 </div>
                 
+                {/* Image Viewer */}
                 <div className="imageContainer">
-                    {image_keys.map((key, index) => (
-                        <div key={index} className="borrow-image">
-                            <Image 
-                                src={`https://upload-r2-assets.somerville-museum1.workers.dev/${key}`} 
-                                fill 
-                                alt="No image found"
-                            />
+                    {image_keys && image_keys.length > 0 && (
+                        // Note: adding the styling here is the only way I could get the image to fill the container
+                        <div className="borrow-image" style={{ width: "100%", height: "100%" }}>
+                        <Image
+                            src={`https://upload-r2-assets.somerville-museum1.workers.dev/${image_keys[selectedImage]}`}
+                            fill
+                            alt="No image found"
+                            style={{ objectFit: "cover" }}  // Ensures the image covers the container
+                        />
                         </div>
-                    ))}
-                </div>
-                <div className="imageSelection">
-                    {/* TODO: Implement image page selectors */}
+                    )}
                 </div>
 
+<div className="imageSelection">
+  {image_keys &&
+    image_keys.map((key, index) => (
+      <StylishButton
+        key={index}
+        styleType="style1"
+        onClick={() => setSelectedImage(index)}
+        label={`${index + 1}`}
+      />
+    ))}
+</div>
+
+
+                {/* Info Title and Edit Button */}
                 <div className="infoHeader">
                     <h3>Item Information</h3>
                     <Link href={`/edit?id=${id}`}>
@@ -174,6 +189,7 @@ export default function Popup( { unit, onClose } ) {
                     </Link>
                 </div>
 
+                {/* Item Information Table */}
                 <table id="itemInformation">
                     <tbody>
                         <tr>
@@ -220,7 +236,7 @@ export default function Popup( { unit, onClose } ) {
                     </tbody>
                 </table>
 
-                {/* Divider */}
+                {/* Big Notes Box */}
                 <div className="noteSection"> 
                     <p><strong>Notes</strong></p>
                     <textarea readOnly className="noteBox">
@@ -230,8 +246,8 @@ export default function Popup( { unit, onClose } ) {
 
                 {/* Horizontal diver */}
                 <div id = "divider"></div>
-
                 
+                {/* Borrow Title and Return Button */}
                 <div className="borrowerTitle">
                     <h3>Borrower Information</h3>
                     <div className="returnButton">
@@ -244,6 +260,7 @@ export default function Popup( { unit, onClose } ) {
                     </div>
                 </div>
 
+                {/* Borrower Info */}
                 <div id="currentBorrowerContainer">
                     <table id="currentBorrower">
                         <thead>
@@ -267,7 +284,7 @@ export default function Popup( { unit, onClose } ) {
                         </tbody>
                         </table>
 
-
+                    {/* Borrow's Notes */}
                     <div className="noteSection"> 
                         <p><strong>Notes</strong></p>
                         <textarea readOnly className="noteBox">
@@ -276,6 +293,7 @@ export default function Popup( { unit, onClose } ) {
                     </div>
                 </div>
 
+                {/* Borrow History Table */}
                 <div id="borrowerHistoryContainer">
                     <p id="borrowerHistorytitle">Borrower History</p> 
                     <table id="borrowerHistory">
