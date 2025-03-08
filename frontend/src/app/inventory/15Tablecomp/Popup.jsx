@@ -28,7 +28,7 @@ export default function Popup( { unit, onClose } ) {
     }
 
     // Extract the unit details
-    const { id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, borrow_history, notes, image_keys} = unit; 
+    const { id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, borrow_history, notes, image_keys} = unit; 
 
     // Close container if anywhere but the container is clicked
     const handleContainerClick = (e) => {
