@@ -138,11 +138,17 @@
   align-items: center;
 }
 
+.borrow-image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 .imageSelection {
-  background-color: #9B525F;
   height: 5vh;
   width: 100%;
   margin-top: 15px;
+  justify-content: center;
 }
 
 .infoHeader {
