@@ -41,14 +41,6 @@ export default function RootLayout({ children, currentPage }) {
     const toggleFilterVisibility = () => {
         setIsFilterVisible(prev => !prev);
     };
-    
-    // Clone children and pass props
-    const childrenWithProps = React.Children.map(children, child => 
-        React.cloneElement(child, { 
-            isFilterVisible, 
-            toggleFilterVisibility 
-        })
-    );
 
 
   return (
@@ -77,7 +69,7 @@ export default function RootLayout({ children, currentPage }) {
                                 className={isFilterVisible ? 'visible' : ''}
                             />
                             <main className={`main-content ${isFilterVisible ? 'shrink' : ''}`}>
-                                {childrenWithProps}
+                                {children}
                             </main>
                         </div>
                     </div>
