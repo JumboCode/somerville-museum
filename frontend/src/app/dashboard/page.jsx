@@ -70,7 +70,7 @@ const Dashboard = () => {
 
 
      try {
-      const pieResponse = await fetch('/api/getCondition');
+      const pieResponse = await fetch('/api/inventoryQueries?action=getCondition');
       const PieData = await pieResponse.json();
 
 

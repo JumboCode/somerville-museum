@@ -3,8 +3,11 @@ import './CalendarPicker.css';
 
 const CalendarPicker = ({ onDateSelect, isOpen, onClose }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [selectedEndDate, setSelectedEndDate] = useState(null);
+  const [selectionMode, setSelectionMode] = useState('start'); // 'start' or 'end'
   const calendarRef = useRef(null);
+  const today = new Date(); // Get today's date
 
   const months = [
     "January", "February", "March", "April", "May", "June",
@@ -12,11 +15,38 @@ const CalendarPicker = ({ onDateSelect, isOpen, onClose }) => {
   ];
 
   const handleDateClick = (day) => {
-    const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-    setSelectedDate(date);
-    const formattedDate = `${currentDate.getMonth() + 1}/${day}/${currentDate.getFullYear()}`;
-    onDateSelect(formattedDate);
-    onClose();
+    const clickedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+    
+    if (selectionMode === 'start') {
+      setSelectedStartDate(clickedDate);
+      setSelectedEndDate(null);
+      setSelectionMode('end');
+    } else {
+      // Ensure start date comes before end date
+      if (selectedStartDate && clickedDate < selectedStartDate) {
+        setSelectedEndDate(selectedStartDate);
+        setSelectedStartDate(clickedDate);
+      } else {
+        setSelectedEndDate(clickedDate);
+      }
+      
+      // Format dates for the query
+      const formattedStartDate = selectedStartDate ? 
+        `${selectedStartDate.getMonth() + 1}/${selectedStartDate.getDate()}/${selectedStartDate.getFullYear()}` :
+        null;
+      
+      const formattedEndDate = clickedDate ?
+        `${clickedDate.getMonth() + 1}/${clickedDate.getDate()}/${clickedDate.getFullYear()}` : 
+        null;
+      
+      // Only call onDateSelect when both dates are selected
+      if (formattedStartDate && formattedEndDate) {
+        onDateSelect(formattedStartDate, formattedEndDate);
+        onClose();
+      }
+      
+      setSelectionMode('start'); // Reset selection mode
+    }
   };
 
   const handlePrevMonth = (e) => {
@@ -27,6 +57,12 @@ const CalendarPicker = ({ onDateSelect, isOpen, onClose }) => {
   const handleNextMonth = (e) => {
     e.stopPropagation(); // Prevent event from bubbling
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+  };
+
+  const resetSelection = () => {
+    setSelectedStartDate(null);
+    setSelectedEndDate(null);
+    setSelectionMode('start');
   };
 
   useEffect(() => {
@@ -62,6 +98,41 @@ const CalendarPicker = ({ onDateSelect, isOpen, onClose }) => {
   const totalDaysDisplayed = Math.ceil((firstDayOfMonth + daysInMonth) / 7) * 7;
   const leadingDays = Array.from({ length: totalDaysDisplayed - (firstDayOfMonth + daysInMonth) }, (_, i) => i + 1);
 
+  // Function to check if a day is today
+  const isToday = (day) => {
+    return (
+      today.getDate() === day &&
+      today.getMonth() === currentDate.getMonth() &&
+      today.getFullYear() === currentDate.getFullYear()
+    );
+  };
+
+  // Function to check if a day is within the selected range
+  const isInRange = (day) => {
+    if (!selectedStartDate || !selectedEndDate) return false;
+    
+    const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+    return date >= selectedStartDate && date <= selectedEndDate;
+  };
+
+  // Function to check if a day is selected (start or end)
+  const isSelected = (day) => {
+    if (!selectedStartDate && !selectedEndDate) return false;
+    
+    const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+    
+    return (
+      (selectedStartDate && 
+       date.getDate() === selectedStartDate.getDate() && 
+       date.getMonth() === selectedStartDate.getMonth() && 
+       date.getFullYear() === selectedStartDate.getFullYear()) ||
+      (selectedEndDate && 
+       date.getDate() === selectedEndDate.getDate() && 
+       date.getMonth() === selectedEndDate.getMonth() && 
+       date.getFullYear() === selectedEndDate.getFullYear())
+    );
+  };
+
   return (
     <div 
       ref={calendarRef} 
@@ -73,6 +144,22 @@ const CalendarPicker = ({ onDateSelect, isOpen, onClose }) => {
         <button className="month-nav prev" onClick={handlePrevMonth}>&lt;</button>
         <span className="current-month">{months[currentDate.getMonth()]} {currentDate.getFullYear()}</span>
         <button className="month-nav next" onClick={handleNextMonth}>&gt;</button>
+      </div>
+      
+      <div className="selection-info">
+        {selectedStartDate && (
+          <div className="selected-date">
+            Start: {`${selectedStartDate.getMonth() + 1}/${selectedStartDate.getDate()}/${selectedStartDate.getFullYear()}`}
+          </div>
+        )}
+        {selectedEndDate && (
+          <div className="selected-date">
+            End: {`${selectedEndDate.getMonth() + 1}/${selectedEndDate.getDate()}/${selectedEndDate.getFullYear()}`}
+          </div>
+        )}
+        {(selectedStartDate || selectedEndDate) && (
+          <button className="reset-button" onClick={resetSelection}>Reset</button>
+        )}
       </div>
       
       <div className="calendar-body">
@@ -90,14 +177,10 @@ const CalendarPicker = ({ onDateSelect, isOpen, onClose }) => {
           {days.map(day => (
             <div
               key={`current-${day}`}
-              className={`day ${
-                selectedDate && 
-                selectedDate.getDate() === day && 
-                selectedDate.getMonth() === currentDate.getMonth() && 
-                selectedDate.getFullYear() === currentDate.getFullYear()
-                  ? 'selected'
-                  : ''
-              }`}
+              className={`day 
+                ${isSelected(day) ? 'selected' : ''} 
+                ${isInRange(day) ? 'in-range' : ''}
+                ${isToday(day) ? 'today' : ''}`}
               onClick={() => handleDateClick(day)}
             >
               {day}

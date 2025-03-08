@@ -1,6 +1,6 @@
 // inventory/page.jsx
 "use client";
-import './15Tablecomp/Inventory.css';
+
 import InventoryUnit from './15Tablecomp/InventoryUnit.jsx';
 import { useState, useEffect } from "react";
 import { useFilterContext } from '../components/contexts/FilterContext.js';
@@ -13,7 +13,17 @@ import Filter from '../components/Filter/Filter';
 import SearchBar from '../components/SearchBar';
 import './inventory.css'
 
-export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
+import PropTypes from 'prop-types';
+
+Inventory.propTypes = {
+    isFilterVisible: PropTypes.bool.isRequired,
+    toggleFilterVisibility: PropTypes.func.isRequired,
+};
+
+export default function Inventory({ 
+    isFilterVisible = false, 
+    toggleFilterVisibility = () => {} 
+  }) {
     const { selectedFilters, triggerFilteredFetch } = useFilterContext();
     const [units, setUnits] = useState([]);
     
@@ -54,10 +64,13 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
 
     // Called any time new filters/search results are applied to update displayed units
     useEffect(() => {
+        if (filterResults.length === 0 && searchResults.length === 0) return;
         // Takes intersection of search results and filter results to get correct ones.
         const filteredAndSearchResults = () => {
             const filteredUnitIds = new Set(filterResults.map(unit => unit.id));
-            return searchResults.filter(item => filteredUnitIds.has(item.id));
+            return searchResults.length > 0 
+            ? searchResults.filter(item => filteredUnitIds.has(item.id)) 
+            : filterResults;
         };
         
         setUnits(filteredAndSearchResults())
@@ -70,6 +83,7 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
     }, [selectedItems]);
 
     async function fetchData() {
+
         try {
             const response = await fetch(`../../api/db`, { 
                 method: 'POST',
@@ -93,7 +107,8 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
                 });
 
                 setUnits(updatedData);
-                
+                setFilterResults(updatedData);
+
                 setTotalPages(Math.ceil(updatedData.length / unitsPerPage));
             } else {
                 console.error("failed to fetch data");
@@ -105,10 +120,15 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
 
     const handleBorrowSuccess = () => {
         // Literally just to call the useeffect with the request. kinda scuffed but whatever
-        setRefreshTable(!refreshTable);
+        // setRefreshTable(prev => !prev);
+
+        setFilterResults([]); 
+        setSearchResults([]); 
         setSelectedItems([]); 
-        fetchData();
+        fetchData(); 
+
     };
+  
 
     const handleReturnSuccess = () => {
         console.log("Return operation successful, refreshing inventory...");
@@ -140,6 +160,7 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
     const currentUnits = units
         .slice(startIndex, startIndex + unitsPerPage)
         .map((unit) => {
+
             return (<InventoryUnit
                 key={unit.id}
                 unit={unit}
@@ -286,7 +307,6 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
                         .slice(startIndex, startIndex + unitsPerPage)
                         .map((unit) => {
                         
-                            // console.log(selectedItems);
                             return (<InventoryUnit
                                 key={unit.id}
                                 unit={unit}
