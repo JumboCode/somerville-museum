@@ -1,3 +1,13 @@
+/**************************************************************
+ *
+ *                     SettingsPage.css
+ *
+ *        Authors: Massimo Bottari, Elias Swartz
+ *           Date: 03/07/2025
+ *
+ *     Summary: styling for the settings page
+ * 
+ **************************************************************/
 
 .body {
     font-family: Arial, sans-serif;
@@ -16,6 +26,7 @@
 
 .settings-container {
     text-align: center;
+    
 }
 
 h1 {
@@ -36,6 +47,8 @@ h1 {
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
     width: 350px;
     margin-bottom: 15px;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+
 }
 
 h2 {
@@ -62,6 +75,8 @@ input {
     margin-top: 5px;
     border-radius: 5px;
     border: 1px solid #ccc;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+
 }
 
 input:disabled {
@@ -76,38 +91,52 @@ input:disabled {
     text-decoration: none;
     margin-top: 10px;
     font-size: 14px;
+    align-items: left;
+    
+}
+
+.change-password-container {
+    width: 100%;
+    text-align: left;
 }
 
 .options-card {
     display: flex;
     flex-direction: column;
-    align-items: center;
     padding: 15px;
 }
 
+/* Fixes Spacing Between Label and Switch */
 .toggle {
     display: flex;
-    justify-content: space-between;
-    width: 100%;
-    align-items: center;
-    margin: 10px 0;
+    align-items: left;  /* Keep label and switch aligned */
+    justify-content: space-between; /* Ensures label and switch stay on the same row */
+    gap: 5px; /* Reduce spacing between label and toggle */
+    width: 50%;
+    margin: 5px 0; /* Keep rows close together */
+    
 }
 
-.toggle input {
-    cursor: pointer;
-    transform: scale(1.3);
+
+/* Ensure Labels Align Well */
+.toggle-label {
+    flex: 1; /* Allows label to take up equal space */
+    font-size: 14px;
+    margin-right: 10px; /* Adds slight spacing from the switch */
 }
+
 
 .export-btn {
     background: #804a4a;
     color: white;
     border: none;
-    padding: 10px 15px;
     border-radius: 5px;
     font-size: 14px;
     cursor: pointer;
-    width: 100%;
-    margin-top: 10px;
+    width: 120px;
+    height: 30px;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+
 }
 
 .logout {
@@ -115,6 +144,7 @@ input:disabled {
     text-decoration: none;
     margin-top: 10px;
     font-size: 14px;
+    
 }
 
 .adminapprovals {
@@ -192,4 +222,119 @@ input:disabled {
 .buttons button:last-child:hover {
     background-color: #663a3a;
 }
+
+.name {
+    display: flex;
+    gap: 15px; /* Adjust the spacing between first and last name inputs */
+}
+
+.nameText {
+    display: flex;
+    gap: 96px; /* Adjust the spacing between first and last name inputs */
+}
+
+/* Toggle Switch Container */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    
+}
+
+/* Hide Default Checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The Slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 20px;
+}
+
+/* Round Style */
+.slider.round {
+    border-radius: 34px;
+}
+
+/* Before Element (Toggle Circle) */
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+/* When Checkbox is Checked */
+input:checked + .slider {
+    background-color: #9A525F; /* Change to desired active color */
+}
+
+/* Move Toggle Circle to Right */
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+/* Fixes Toggle Switch Size */
+.switch {
+    width: 36px;
+    height: 18px;
+}
+
+/* Fixes Toggle Switch Circle */
+.slider:before {
+    height: 14px;
+    width: 14px;
+    left: 2px;
+    bottom: 2px;
+}
+
+/* Selects ONLY the second .toggle div and applies margin to its label */
+.toggle:nth-of-type(2) label {
+    margin-right: 8rem; /* Adjust as needed */
+}
+
+/* Selects ONLY the second .toggle div and applies margin to its label */
+.toggle:nth-of-type(1) label {
+    margin-right: 1rem; /* Adjust as needed */
+}
+
+/* Targets ONLY the second .toggle div and applies styles to its switch */
+.toggle:nth-of-type(2) .switch {
+    margin-right: 0px; /* Moves only the Light Mode switch further right */
+}
+
+.toggle:nth-of-type(1) .switch {
+    margin-right: 0px; /* Moves only the Light Mode switch further right */
+}
+
+.toggle {
+    display: flex;
+    align-items: center;  /* Keep everything in a row */
+    justify-content: space-between; /* Keep the row balanced */
+    width: 100%;
+}
+
+/* Ensure the switch stays properly aligned */
+.switch {
+    margin-right: auto; /* Pushes switch as far right as possible */
+}
+
+
+
 

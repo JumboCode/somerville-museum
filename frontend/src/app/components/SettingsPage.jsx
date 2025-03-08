@@ -1,3 +1,15 @@
+/**************************************************************
+ *
+ *                     SettingsPage.jsx
+ *
+ *        Authors: Massimo Bottari, Elias Swartz
+ *           Date: 03/07/2025
+ *
+ *     Summary: Allows users to log out, change password, view account information,
+ *              verify accounts (if admin), and toggle between light and dark mode.
+ * 
+ **************************************************************/
+
 "use client";
 
 import "../globals.css";
@@ -20,21 +32,31 @@ export default function SettingsPage() {
     useEffect(() => {
         if (user) {
             console.log("user id: " + user?.id);
-            console.log("user id string: " + "user_2tB9Ny3ALEWuch9VvjlrQemjV8A")
             setIsAdmin(checkisAdmin(user?.id));
             console.log("Admin status updated:", checkisAdmin(user?.id));
         }
     }, [user]);
 
     const addVerificationBox = () => {
-        console.log("User object id:", user?.id);
         console.log("Adding new verification box...");
+        setApprovals((prev) => [
+            ...prev,
+            { id: Date.now(), name: `User ${prev.length + 1}`, email: `user${prev.length + 1}@example.com` }
+        ]);
+    };
 
-        setApprovals((prev) => {
-            const updatedApprovals = [...prev, { name: `User ${prev.length + 1}`, email: `user${prev.length + 1}@example.com` }];
-            console.log("Updated approvals:", updatedApprovals);
-            return updatedApprovals;
-        });
+    const approveVerification = (id) => {
+        console.log(`User with ID ${id} approved.`);
+        setApprovals((prev) => prev.filter((approval) => approval.id !== id));
+    };
+
+    const denyVerification = (id) => {
+        console.log(`User with ID ${id} denied.`);
+        setApprovals((prev) => prev.filter((approval) => approval.id !== id));
+    };
+
+    const handleForgotPassword = () => {
+        window.location.href = "/reset_password"; // Redirects user to reset password page
     };
 
     console.log("Admin status:", isAdmin);
@@ -43,7 +65,6 @@ export default function SettingsPage() {
     return (
         <>
             <h1>Settings</h1>
-            <p>Admin Status: {isAdmin ? "Yes" : "No"}</p> {/* Debugging */}
             <div className="body">
                 <div className="settings-container">
                     <div className="cardHolders">
@@ -51,12 +72,16 @@ export default function SettingsPage() {
 
                         <div className="profile-card">
                             <h2>Profile</h2>
-                            <form>
+                            <div className="nameText">
                                 <label htmlFor="first-name">First Name</label>
+                                <label htmlFor="last-name">Last Name</label>
+                            </div>
+                            <div className="name">
                                 <input type="text" id="first-name" value={user?.firstName || "Holden"} disabled />
 
-                                <label htmlFor="last-name">Last Name</label>
                                 <input type="text" id="last-name" value={user?.lastName || "Kittleburger"} disabled />
+                            </div>
+                            <form>
 
                                 <label htmlFor="email">Email</label>
                                 <input type="email" id="email" value={user?.emailAddresses?.[0]?.emailAddress || "holdenlovesburgers@hotmail.com"} disabled />
@@ -64,45 +89,61 @@ export default function SettingsPage() {
                                 <label htmlFor="password">Password</label>
                                 <input type="password" id="password" value="************" disabled />
 
-                                <a href="#" className="change-password">Change Password</a>
+                                <div className="change-password-container">
+                                    <a href="#" className="change-password" onClick={handleForgotPassword}>
+                                        Change Password
+                                    </a>
+                                </div>
                             </form>
                         </div>
 
                         <div className="options-card">
                             <div className="toggle">
+                                <label className="switch">
+                                    <input
+                                        type="checkbox"
+                                        checked={normalDataEntry}
+                                        onChange={() => setNormalDataEntry(!normalDataEntry)}
+                                    />
+                                    <span className="slider round"></span>
+                                </label>
                                 <label>Normal Data Entry</label>
-                                <input
-                                    type="checkbox"
-                                    checked={normalDataEntry}
-                                    onChange={() => setNormalDataEntry(!normalDataEntry)}
-                                />
+                                
+                                <button className="export-btn">⬆ Export Data</button>
                             </div>
                             <div className="toggle">
+                                <label className="switch">
+                                    <input
+                                        type="checkbox"
+                                        checked={lightMode}
+                                        onChange={() => setLightMode(!lightMode)}
+                                    />
+                                    <span className="slider round"></span>
+                                </label>
                                 <label>Light Mode</label>
-                                <input
-                                    type="checkbox"
-                                    checked={lightMode}
-                                    onChange={() => setLightMode(!lightMode)}
-                                />
+                                <a href="#" className="logout" onClick={() => signOut()}>Logout ↪</a>
                             </div>
+
 
                             <button className="addv" onClick={addVerificationBox}>
                                 Temp Add Verify
                             </button>
-
-                            <button className="export-btn">⬆ Export Data</button>
-                            <a href="#" className="logout" onClick={() => signOut()}>Logout ↪</a>
                         </div>
                     </div>
                 </div>
 
-                {isAdmin && (
+                {isAdmin && approvals.length > 0 && (
                     <div className="adminapprovals">
                         <p className="subheading">New Account Approvals</p>
                         <div className="approvalscontainer">
-                            <UserVerificationCard name="Massimoooo" email="Mass@grailed.com" />
-                            {approvals.map((approval, index) => (
-                                <UserVerificationCard key={index} name={approval.name} email={approval.email} />
+                            {approvals.map((approval) => (
+                                <UserVerificationCard 
+                                    key={approval.id} 
+                                    name={approval.name} 
+                                    email={approval.email} 
+                                    onApprove={() => approveVerification(approval.id)} 
+                                    onDeny={() => denyVerification(approval.id)} 
+                                />
                             ))}
                         </div>
                     </div>
