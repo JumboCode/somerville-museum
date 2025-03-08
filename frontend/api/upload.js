@@ -1,3 +1,14 @@
+/**************************************************************
+ *
+ *                     upload.js
+ *
+ *        Authors: Dan Glorioso & Shayne Sidman
+ *           Date: 03/06/2025
+ *
+ *     Summary: The API route for uploading files to the R2 bucket.
+ * 
+ **************************************************************/
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
       return res.status(405).json({ message: "Method Not Allowed" });
