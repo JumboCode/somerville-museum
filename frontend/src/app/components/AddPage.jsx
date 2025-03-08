@@ -27,7 +27,7 @@ import { v4 as uuidv4 } from 'uuid';
 export default function AddPage() {
     // Left column state variables
     const [dragOver, setDragOver] = useState(false);
-    const [preview, setPreview] = useState(null);
+    const [preview, setPreview] = useState([]);
     const [imageID, setImageID] = useState([]); // For image UUIDs
 
     // Right column state variables
@@ -122,13 +122,16 @@ export default function AddPage() {
     // Function to handle and update file selection
     const handleFileSelect = (file) => {
         if (file && file.type.startsWith("image/")) {
-            const reader = new FileReader();
-            reader.onload = (e) => setPreview(e.target.result);
-            reader.readAsDataURL(file);
+            if (preview.length < 2) {
+                const reader = new FileReader();
+                reader.onload = (e) => setPreview([...preview, e.target.result]);
+                reader.readAsDataURL(file);
 
-            // Generate UUID for uploaded image
-            setImageID([...imageID, uuidv4()]);
-            console.log(imageID);
+                // Generate UUID for uploaded image
+                setImageID([...imageID, uuidv4()]);
+            } else {
+                alert("You can only upload 2 images per item.");
+            }
         } else {
             alert("Please upload a valid image file.");
         }
@@ -253,7 +256,7 @@ export default function AddPage() {
             date_added: placeholderDate, 
             current_borrower: null,
             borrow_history: null,
-            image_keys: imageID.length > 0 ? imageID : null
+            image_keys: imageID
         };
 
         let newErrors = {};
@@ -280,15 +283,13 @@ export default function AddPage() {
         // If no errors, clear previous errors and proceed
         setErrors({});
 
-
-
         // Upload image and corresponding id to upload endpoint 
-        const uploadImage = async () => {    
+        const uploadImages = async () => {    
             try {
                 const response = await fetch(`/api/upload`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ fileName: imageID, fileContent: preview }),
+                    body: JSON.stringify({ fileNames: imageID, fileContents: preview }),
                 });
         
                 const data = await response.json();
@@ -307,7 +308,7 @@ export default function AddPage() {
         };
 
         // Call the serverless route
-        uploadImage();
+        uploadImages();
 
         // Convert newItem params to JSON object
         const body = JSON.stringify(newItem);
@@ -366,6 +367,7 @@ export default function AddPage() {
         setSelectedSeason([]);
         setCondition([]);
         setSelectedColors([]);
+        setPreview([]);
         setImageID([]);
     };
 
@@ -392,10 +394,11 @@ export default function AddPage() {
                             onDragLeave={() => setDragOver(false)}
                             onDrop={handleDrop}
                             >
-                            <div className="upload-icon-and-text">
-                            <img src="/icons/upload.svg" className="upload-icon" />
-                                <p style={{color: "#9B525F"}}>Upload image*</p>
-                            </div>
+                            {preview.length === 0 && 
+                                <div className="upload-icon-and-text">
+                                    <img src="/icons/upload.svg" className="upload-icon" />
+                                    <p style={{color: "#9B525F"}}>Upload image*</p>
+                                </div>}
                             <input
                                 type="file"
                                 id="file-input"
@@ -403,13 +406,11 @@ export default function AddPage() {
                                 style={{ display: "none" }}
                                 onChange={handleFileInputChange}
                             />
-                            {preview && (
-                                <img
-                                src={preview}
-                                alt="Preview"
-                                className="preview"
-                                />
-                            )}
+                            {preview.length > 0 && preview.map((image, key) => (
+                                <div key={key} className="image">
+                                    <img src={image} alt="Preview" className="preview"/>
+                                </div>
+                            ))}
                         </div>
                         <div className={`itemName ${errors.name ? "error-text" : ""}`}>
                             Item Name*
