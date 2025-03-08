@@ -138,7 +138,6 @@ export default function Inventory({ isFilterVisible, toggleFilterVisibility }) {
     const currentUnits = units
         .slice(startIndex, startIndex + unitsPerPage)
         .map((unit) => {
-            // console.log(selectedItems);
             return (<InventoryUnit
                 key={unit.id}
                 unit={unit}
