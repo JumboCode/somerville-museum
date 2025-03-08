@@ -6,6 +6,8 @@
  * @authors Ari Goshtasby & Shayne Sidman
  *  
  */
+"use client";
+import { useClerk } from "@clerk/nextjs"
 
 "use client";
 import React, { useState, useEffect } from 'react';
@@ -13,6 +15,7 @@ import './settings.css';
 import { useGlobalContext } from '../components/contexts/ToggleContext';
 
 const Settings = () => {
+  const { signOut } = useClerk();
   const { isToggleEnabled, setIsToggleEnabled } = useGlobalContext();
   const [fading, setFading] = useState(false);
   const [displayText, setDisplayText] = useState(isToggleEnabled ? 'Data Input' : 'Normal Data Entry');
@@ -48,9 +51,9 @@ const Settings = () => {
             <span className={`toggleLabel ${fading ? 'fading' : ''}`}>
               {displayText}
             </span>
+            <div onClick={signOut({ redirectUrl: '/' })}>Hello</div>
         </div>
     </div>
   );
 };
 
-export default Settings;
