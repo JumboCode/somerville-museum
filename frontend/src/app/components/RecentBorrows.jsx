@@ -5,6 +5,7 @@ import "./RecentBorrows.css";
 
 const RecentBorrows = () => {
   const [borrowedItems, setBorrowedItems] = useState([]);
+  console.log(borrowedItems)
 
   useEffect(() => {
     const getFirstTwoBorrowedItems = async () => {

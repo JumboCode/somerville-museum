@@ -2,6 +2,7 @@
 "use client";
 import { useState, useEffect, useRef, forwardRef} from "react";
 import "./ReturnButton.css";
+import Image from "next/image";
 import StylishButton from "./StylishButton";
 import { Dropdown } from 'primereact/dropdown';
 import { MultiSelect } from 'primereact/multiselect';
@@ -54,7 +55,13 @@ export default function ItemBoxes({ unit, onNotesChange, itemId, onClose }) {
     return (  
         <div className="returnItem">
             <div className="itemID">
-                <div className="thisIsInPlaceOfAnImage"></div>
+                <div className="return-image">
+                    {unit.image_keys && <Image 
+                        src={`https://upload-r2-assets.somerville-museum1.workers.dev/${unit.image_keys[0]}`} 
+                        fill
+                        alt="No image found"
+                    />}
+                </div>
                 <div className="itemInfo">
                     <p>{unit.name}</p>
                     <p>ID #{unit.id}</p>

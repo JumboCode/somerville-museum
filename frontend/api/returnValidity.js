@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     for (const itemId of selectedItems) {
       // Query the status of each item
       const statusResult = await query(
-        'SELECT id, name, status FROM dummy_data WHERE id = $1',
+        'SELECT id, name, status, image_keys FROM dummy_data WHERE id = $1',
         [itemId]
       );
 

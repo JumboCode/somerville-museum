@@ -8,21 +8,24 @@
 'use client'
 
 import React from 'react';
+import Image from "next/image";
 import "./BorrowPopup.css";
 
 const BorrowUnit = ({ item, onDelete }) => {
   if (!item) return null;
-  const { id, name } = item;
+  const { id, name, image_keys } = item;
   //truncate the name to at most 12 characters with additional ellipsis if needed
   const truncatedName = name.length > 12 ? name.substring(0, 12) + "..." : name;
 
   return (
     <div className="borrowed-item-box">
-      <img
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT29tUf96oPGTyLihMp4z4rM2kgSzX4rXeTow&s"
-        alt="image placeholder"
-        className="item-image"
-      />
+      <div className="borrow-image">
+          {image_keys && <Image 
+              src={`https://upload-r2-assets.somerville-museum1.workers.dev/${image_keys[0]}`} 
+              fill
+              alt="No image found"
+          />}
+      </div>
       <span className="item-name">{truncatedName}</span>
       <span className="item-id">ID #{id}</span>
       <button
