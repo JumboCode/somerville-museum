@@ -190,8 +190,7 @@ export default function EditPage({ unit, onClose }) {
         }
     };
 
-    const handleconditionOptionSelect = (selectedconditionOptions) => {
-        console.log("Selected conditionOptions:", selectedconditionOptions);
+    const handleConditionSelect = (selectedConditions) => {
     
         // Ensure selectedconditionOptions is always an array
         if (!Array.isArray(selectedconditionOptions)) {
@@ -240,7 +239,7 @@ export default function EditPage({ unit, onClose }) {
         setStatusType("neutral");
     
         try {
-            const response = await fetch(`/api/retrieveItem?id=${idText}`);
+            const response = await fetch(`/api/itemManagement?action=retrieve&id=${idText}`);
     
             // Custom error handling for no item found
             if (response.status === 428) {
@@ -340,7 +339,7 @@ export default function EditPage({ unit, onClose }) {
     
         const updateItem = async () => {
             try {
-                const response = await fetch(`../../api/updateItem`, {
+                const response = await fetch(`../../api/inventoryQueries?action=updateItem`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

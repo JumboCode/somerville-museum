@@ -51,7 +51,7 @@ export default function PopupGfg() {
         if (!itemData) return;
     
         try {
-            const response = await fetch(`../../api/updateTags`, { 
+            const response = await fetch(`../../api/inventoryQueries?action=updateTags`, { 
                 method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json' // Specify the content type

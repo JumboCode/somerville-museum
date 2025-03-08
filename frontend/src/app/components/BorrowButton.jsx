@@ -13,7 +13,7 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
   async function handleValidity() {
 
     try {
-      const response = await fetch('../../api/borrowValidity', {
+      const response = await fetch('../../api/borrowManagement?action=borrowValidity', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +58,6 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
 
   }
 
-  
   return (
     <div>
       <StylishButton
