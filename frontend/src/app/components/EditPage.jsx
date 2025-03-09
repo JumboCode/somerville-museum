@@ -29,7 +29,6 @@ export default function EditPage({ unit, onClose }) {
 
     // Extract the unit details
     const { id, name, age_group, gender, color, season, garment_type, size, time_period, condition, cost, notes} = unit; 
-    console.log("printing Id:" + id);
 
     // Right column state variables
     const [idText, setIDText] = useState(id);
@@ -240,6 +239,7 @@ export default function EditPage({ unit, onClose }) {
     
         try {
             const response = await fetch(`/api/itemManagement?action=retrieve&id=${idText}`);
+            console.log("idtext: " + idText);
     
             // Custom error handling for no item found
             if (response.status === 428) {
@@ -339,7 +339,7 @@ export default function EditPage({ unit, onClose }) {
     
         const updateItem = async () => {
             try {
-                const response = await fetch(`../../api/inventoryQueries?action=updateItem`, {
+                const response = await fetch(`../../api/itemManagement?action=updateItem`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

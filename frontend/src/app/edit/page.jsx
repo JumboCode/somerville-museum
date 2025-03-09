@@ -16,8 +16,18 @@ const Edit = () => {
 
     useEffect(() => {
         async function loadItem() {
+            console.log(unitId);
             try {
-                const response = await fetch(`/api/retrieveItem?id=${unitId}`);
+                const response = await fetch(`../../../api/db`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: 'SELECT * from dummy_data WHERE id=$1',
+                        params: [unitId],
+                    }),
+                });
                 
                 if (!response.ok) {
                     if (response.status === 428) {
@@ -27,7 +37,8 @@ const Edit = () => {
                 }
                 
                 const itemData = await response.json();
-                setUnit(itemData);
+                const [firstUnit] = itemData;
+                setUnit(firstUnit);
                 setError(null);
             } catch (error) {
                 setError(error.message);
