@@ -38,32 +38,35 @@ export default function Inventory({
     const [sortType, setSortType] = useState('id'); // Track last sorted property
     const [isSorted, setIsSorted] = useState(false); // Track if already sorted
 
-    const sortBy = (property) => {
-        if (sortType === property && isSorted) {
-            // Reset to ID sorting
-            setSortType('id');
-            setIsSorted(false);
-            setUnits(sortingFunctions.id()); // Always sorts by ID when reset
-        } else {
-            // Sort based on the selected property
-            setSortType(property);
-            setIsSorted(true);
+    // const sortBy = (property) => {
+    //     if (sortType === property && isSorted) {
+    //         // Reset to ID sorting
+    //         setSortType('id');
+    //         setIsSorted(false);
+    //         setUnits(sortingFunctions.id()); // Always sorts by ID when reset
+    //     } else {
+    //         // Sort based on the selected property
+    //         setSortType(property);
+    //         setIsSorted(true);
 
-            if (sortingFunctions[property]) {
-                setUnits(sortingFunctions[property]()); // Dynamically call the function
-            }
-        }
-    };
+    //         if (sortingFunctions[property]) {
+    //             setUnits(sortingFunctions[property]()); // Dynamically call the function
+    //         }
+    //     }
+    // };
 
-// const sortingFunctions = {
-//     id: () => sortByID(),
-//     con: () => sortByCon(),
-//     avail: () => sortByAvail(),
-//     name: () => sortByName()
-// };
+    // const sortingFunctions = {
+    //     id: () => sortByID(),
+    //     con: () => sortByCon(),
+    //     avail: () => sortByAvail(),
+    //     name: () => sortByName()
+    // };
 
     // Called any time new filters/search results are applied to update displayed units
     useEffect(() => {
+        console.log("printing filterResults and searchResults")
+        console.log(filterResults.length)
+        console.log(searchResults.length)
         if (filterResults.length === 0 && searchResults.length === 0) return;
         // Takes intersection of search results and filter results to get correct ones.
         const filteredAndSearchResults = () => {
@@ -83,7 +86,6 @@ export default function Inventory({
     }, [selectedItems]);
 
     async function fetchData() {
-
         try {
             const response = await fetch(`../../api/db`, { 
                 method: 'POST',
@@ -97,7 +99,8 @@ export default function Inventory({
 
             if (response.ok) {
                 const data = await response.json();
-                console.log("in fetch data: " + data);
+                console.log("in fetch data: ");
+                console.log(data);
                 const currentDate = new Date();
                 const updatedData = data.map((item) => {
                     if (item.status === "Borrowed" && item.dueDate && new Date(item.dueDate) < currentDate) {
@@ -108,6 +111,8 @@ export default function Inventory({
 
                 setUnits(updatedData);
                 setFilterResults(updatedData);
+                console.log("printings stored units ");
+                console.log(updatedData);
 
                 setTotalPages(Math.ceil(updatedData.length / unitsPerPage));
             } else {
