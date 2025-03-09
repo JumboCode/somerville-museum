@@ -1,4 +1,12 @@
-'use client'; // Ensure this is a Client Component
+"use client"
+/**
+ * @fileoverview Contains dummy page for /settings
+ * 
+ * @file settings/page.jsx
+ * @date 16 February, 2025
+ * @authors Arietta Goshtasby & Shayne Sidman
+ *  
+ */
 
 import { useClerk } from '@clerk/nextjs';
 import React, { useState } from 'react';

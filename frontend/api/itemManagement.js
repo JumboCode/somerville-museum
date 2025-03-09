@@ -127,8 +127,8 @@ export async function updateIDHandler(req, res) {
 export async function searchHandler(req, res) {
     const searchQuery = req.body.searchQuery;
     let databaseQuery = isNaN(parseInt(searchQuery)) ? 
-        `SELECT dummy_data.* FROM dummy_data FULL OUTER JOIN borrowers ON dummy_data.current_borrower = borrowers.id WHERE dummy_data.name ILIKE '%'||$1||'%' OR dummy_data.notes ILIKE '%'||$1||'%' OR borrowers.name ILIKE '%'||$1||'%'` : 
-        `SELECT * FROM dummy_data WHERE name ILIKE '%'||$1||'%' OR notes ILIKE '%'||$1||'%' OR id = ${parseInt(searchQuery)}`;
+        `SELECT dummy_data.* FROM dummy_data FULL OUTER JOIN borrowers ON dummy_data.current_borrower = borrowers.id WHERE dummy_data.name ILIKE '%'||$1||'%' OR dummy_data.notes ILIKE '%'||$1||'%' OR borrowers.name ILIKE '%'||$1||'%' ORDER BY id` : 
+        `SELECT * FROM dummy_data WHERE name ILIKE '%'||$1||'%' OR notes ILIKE '%'||$1||'%' OR id = ${parseInt(searchQuery)} ORDER BY id`;
     
     try {
         // Select all entries where searchQuery is a substring of name, notes, id, or borrower name
@@ -196,7 +196,6 @@ export async function updateItemHandler(req, res) {
             condition = [],
             color = [],
             status,
-            authenticity_level,
             location,
             date_added,
             current_borrower,
@@ -232,25 +231,24 @@ export async function updateItemHandler(req, res) {
                     time_period = $10,
                     condition = $11,
                     cost = $12,
-                    authenticity_level = $13,
-                    location = $14,
-                    date_added = $15,
-                    current_borrower = $16,
-                    borrow_history = $17,
-                    notes = $18
+                    location = $13,
+                    date_added = $14,
+                    current_borrower = $15,
+                    borrow_history = $16,
+                    notes = $17
                 WHERE id = $1
                 RETURNING *`,
-                [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, current_borrower, borrow_history, notes]
+                [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, borrow_history, notes]
             );
             return res.status(200).json({ message: "Item successfully updated", item: result.rows[0] });
         } else {
             // If the ID does not exist, insert a new entry
             result = await query(
                 `INSERT INTO dummy_data 
-                (id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, current_borrower, borrow_history, notes)
+                (id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, borrow_history, notes)
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
                 RETURNING *`,
-                [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, current_borrower, borrow_history, notes]
+                [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, borrow_history, notes]
             );
             return res.status(201).json({ message: "Item successfully added", item: result.rows[0] });
         }

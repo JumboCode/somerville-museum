@@ -22,24 +22,27 @@ import StylishButton from './StylishButton';
 import Link from 'next/link';
 
 
-export default function EditPage() {
+export default function EditPage({ unit, onClose }) {
     // Left column state variables
     const [dragOver, setDragOver] = useState(false);
     const [preview, setPreview] = useState(null);
 
+    // Extract the unit details
+    const { id, name, age_group, gender, color, season, garment_type, size, time_period, condition, cost, notes} = unit; 
+
     // Right column state variables
-    const [idText, setIDText] = useState("");
-    const [itemText, setItemText] = useState("");
-    const [priceText, setPriceText] = useState("");
-    const [notesText, setNotesText] = useState("");
-    const [selectedGarment, setSelectedGarment] = useState("");
-    const [selectedTimePeriod, setSelectedTimePeriod] = useState([]);
-    const [ageSelection, setAgeSelection] = useState([]);
-    const [genderSelection, setGenderSelection] = useState([]);
-    const [selectedSize, setSelectedSize] = useState([]);
-    const [selectedSeason, setSelectedSeason] = useState([]);
-    const [condition, setCondition] = useState([]);
-    const [selectedColors, setSelectedColors] = useState([]);
+    const [idText, setIDText] = useState(id);
+    const [itemText, setItemText] = useState(name);
+    const [priceText, setPriceText] = useState(cost);
+    const [notesText, setNotesText] = useState(notes);
+    const [selectedGarment, setSelectedGarment] = useState(garment_type);
+    const [selectedTimePeriod, setSelectedTimePeriod] = useState(time_period);
+    const [ageSelection, setAgeSelection] = useState(age_group);
+    const [genderSelection, setGenderSelection] = useState(gender);
+    const [selectedSize, setSelectedSize] = useState(size);
+    const [selectedSeason, setSelectedSeason] = useState(season);
+    const [conditionOption, setconditionOption] = useState(condition);
+    const [selectedColors, setSelectedColors] = useState(color);
 
     // "Overall" state variables
     const [selectedChoice ] = useState([]);
@@ -85,12 +88,13 @@ export default function EditPage() {
         { label: "Spring", value: "Spring" },
         { label: "Summer", value: "Summer" }
     ];
-    const conditions = [
+    const conditionOptions = [
         { name: "Needs repair" },
         { name: "Needs dry cleaning" },
         { name: "Needs washing" },
         { name: "Not usable" },
         { name: "Great" },
+        { name: "Good"}
     ]
     const colors = [
         { name: "Red", hex: "#FF3B30" },
@@ -187,17 +191,17 @@ export default function EditPage() {
 
     const handleConditionSelect = (selectedConditions) => {
     
-        // Ensure selectedConditions is always an array
-        if (!Array.isArray(selectedConditions)) {
-            setCondition([]);
+        // Ensure selectedconditionOptions is always an array
+        if (!Array.isArray(selectedconditionOptions)) {
+            setconditionOption([]);
             return;
         }
     
         // Extract only names, handling undefined values safely
-        const selectedNames = selectedConditions.map(item => item?.name || "").filter(name => name !== "");
+        const selectedNames = selectedconditionOptions.map(item => item?.name || "").filter(name => name !== "");
     
         // Update state
-        setCondition(selectedNames);
+        setconditionOption(selectedNames);
     };
 
     const handleTimePeriodSelect = (selectedTimePeriods) => {    
@@ -235,6 +239,7 @@ export default function EditPage() {
     
         try {
             const response = await fetch(`/api/itemManagement?action=retrieve&id=${idText}`);
+            console.log("idtext: " + idText);
     
             // Custom error handling for no item found
             if (response.status === 428) {
@@ -263,7 +268,7 @@ export default function EditPage() {
             setSelectedColors(data.color || []);
             setSelectedSeason(data.season || []);
             setSelectedSize(data.size || []);
-            setCondition(data.condition || []);
+            setconditionOption(data.condition || []);
     
         } catch (error) {
             console.error('Error fetching item data:', error);
@@ -300,7 +305,7 @@ export default function EditPage() {
             gender: genderSelection || null,
             size: selectedSize.length > 0 ? selectedSize : null,
             season: selectedSeason.length > 0 ? selectedSeason : null,
-            condition: condition.length > 0 ? condition : null,
+            condition: conditionOption.length > 0 ? conditionOption : null,
             color: selectedColors.length > 0 ? selectedColors : null,
             status: "Available",
             location: null,
@@ -334,7 +339,7 @@ export default function EditPage() {
     
         const updateItem = async () => {
             try {
-                const response = await fetch(`../../api/inventoryQueries?action=updateItem`, {
+                const response = await fetch(`../../api/itemManagement?action=updateItem`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -385,7 +390,7 @@ export default function EditPage() {
         setGenderSelection(null);
         setSelectedSize([]);
         setSelectedSeason([]);
-        setCondition([]);
+        setconditionOption([]);
         setSelectedColors([]);
     };
 
@@ -602,18 +607,18 @@ export default function EditPage() {
                         ))}
                     </div>
 
-                    {/* Condition Dropdown */}
-                    <div className="condition-component">
+                    {/* conditionOption Dropdown */}
+                    <div className="conditionOption-component">
                         <div className="dropdown-component">
                             <h3 className={errors.condition ? "error-text" : ""}>Condition*<span style={{fontWeight: "400"}}> (Max of 2)</span></h3> 
                             <MultiSelect
-                                value={conditions.filter(cond => condition.includes(cond.name))} // Sync selected values
-                                options={conditions}
-                                onChange={(e) => handleConditionSelect(e.value || [])} // Ensure `e.value` is never undefined
+                                value={conditionOptions.filter(cond => conditionOption.includes(cond.name))} // Sync selected values
+                                options={conditionOptions}
+                                onChange={(e) => handleconditionOptionSelect(e.value || [])} // Ensure `e.value` is never undefined
                                 optionLabel="name" 
                                 display="chip" 
                                 maxSelectedLabels={2}
-                                placeholder="Select Condition"
+                                placeholder="Select condition"
                                 className="dropdown"
                                 showSelectAll={false}
                             />

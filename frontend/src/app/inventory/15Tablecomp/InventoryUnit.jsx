@@ -20,11 +20,12 @@ export default function InventoryUnit({ unit, onChange, checked }) {
 
     const handleClick = () => {
         setIsPrePopupVisible(true);
+        console.log("prepopupvisible" + isPrePopupVisible)
         if (buttonRef.current) {
             const rect = buttonRef.current.getBoundingClientRect();
             setPopupPosition({
-                top: rect.bottom + window.scrollY - 2, // Position below button
-                left: rect.left + window.scrollX - 100, // Align left with button
+                top: rect.bottom + window.scrollY - 5, // Position below button
+                right: rect.right + window.scrollX - 1413, // Align right with button
             });
         }
     }
@@ -42,21 +43,43 @@ export default function InventoryUnit({ unit, onChange, checked }) {
             event.target.closest('.sidebar') === null &&
             event.target.closest('.unit') === null
         ) {
-            setIsPopupVisible(false);
-        }
-    }
+            setTimeout(() => setIsPrePopupVisible(false), 100); // Delay to allow re-opening
+        } 
+    };
 
     //CALL BACK FOR PREPOPUP
     const handlePopupOption = (option) => {
         if (option === "expand") {
-            console.log("Navigating to expanded view..."); 
-
-            setIsPrePopupVisible(false); 
+            console.log("in expand " + isPopupVisible)
             setIsPopupVisible(true);
-        } else {
-            console.log("Edit option selected...");
-        }
+        } else if (option === "Missing" || option === "Available") {
+            setAsMissingFound(option);
+        } 
+        setIsPrePopupVisible(false);
     }
+
+    const setAsMissingFound = async (option) => {
+        try {
+            const response = await fetch(`../../../api/db`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: 'UPDATE dummy_data SET status=$1 WHERE id=$2',
+                    params: [option, id],
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Fetch error: ${response.status} - ${response.statusText}`);
+            }
+            window.location.reload();
+        } catch (error){
+            alert("An error occurred. Please try again.");
+            return;
+        }
+    };
 
     useEffect(() => {
         if (isPopupVisible || isPrePopupVisible) {
@@ -95,6 +118,7 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                             fill
                             alt="No image found"
                         />}
+                        <img src={null} alt="Profile" />
                     </div>
                 </div>
             </div>
@@ -125,12 +149,14 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                 { isPrePopupVisible && (
                     <PrePopup onClose={handleClosePrePopup} 
                         onOptionSelect={handlePopupOption}
-                        position = {popupPosition}/>
-                )}       
+                        position = {popupPosition}
+                        status = {status}
+                        unit={unit}/>
+                )}   
 
                 { isPopupVisible && (
-                    <Popup unit={unit} onClose={handleClosePopup} />
-                )}
+                <Popup unit={unit} onClose={handleClosePopup} />
+                )}    
             </div>
         </div>
     );
