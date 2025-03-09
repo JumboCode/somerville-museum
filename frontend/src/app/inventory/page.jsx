@@ -204,12 +204,15 @@ export default function Inventory({
                             <div className='buttons'> 
                                 <AddButton className='addBtn'> </AddButton>
                                 <BorrowButton className='brwBtn'
-                                    selectedItems={selectedItems}
-                                    onSuccess={handleBorrowSuccess}>Borrow
+                                    selectedItems={(selectedItems)}
+                                    onSuccess={handleBorrowSuccess}>
+                                    Borrow
                                 </BorrowButton>
-                                <ReturnButton className='rtnBtn'
+                                <ReturnButton 
+                                    className='rtnBtn'
                                     selectedItems={selectedItems}
-                                    onSuccess={handleReturnSuccess}>Return
+                                    onSuccess={handleReturnSuccess}>
+                                    Return
                                 </ReturnButton>
                                 <DeleteItemButton
                                     classname = 'delBtn'

@@ -182,7 +182,7 @@ export async function borrowValidityHandler(req, res) {
     for (const itemId of selectedItems) {
       // Query the status of each item
       const statusResult = await query(
-        'SELECT id, name, status FROM dummy_data WHERE id = $1',
+        'SELECT * FROM dummy_data WHERE id = $1',
         [itemId]
       );
 
@@ -236,7 +236,7 @@ export async function returnValidityHandler(req, res) {
     for (const itemId of selectedItems) {
       // Query the status of each item
       const statusResult = await query(
-        'SELECT id, name, status FROM dummy_data WHERE id = $1',
+        'SELECT * FROM dummy_data WHERE id = $1',
         [itemId]
       );
 
