@@ -16,7 +16,7 @@ import Image from "next/image"
 import '../app.css'
 import 'dotenv/config'
 
-export default function reset_password () {
+export default function Reset_password () {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');

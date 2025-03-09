@@ -22,7 +22,7 @@ Inventory.propTypes = {
 
 export default function Inventory({ 
     isFilterVisible = false, 
-    toggleFilterVisibility = () => {} 
+    toggleFilterVisibility = () => {console.log("scuffed")} 
   }) {
     const { selectedFilters, triggerFilteredFetch } = useFilterContext();
     const [units, setUnits] = useState([]);

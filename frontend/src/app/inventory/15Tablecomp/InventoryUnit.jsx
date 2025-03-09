@@ -7,10 +7,6 @@ import Image from "next/image"
 import "./InventoryUnit.css";
 
 export default function InventoryUnit({ unit, onChange, checked }) {
-    // Add a condition to make sure `unit` is defined
-    if (!unit) {
-        return null; // Don't render anything if `unit` is undefined
-    }
 
     const { id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, borrow_history, notes, image_keys} = unit; 
     const [isPopupVisible, setIsPopupVisible] = useState(false);
@@ -69,6 +65,11 @@ export default function InventoryUnit({ unit, onChange, checked }) {
             document.removeEventListener('click', handleClickOutside)
         }
     }, [isPopupVisible]);
+
+        // Add a condition to make sure `unit` is defined
+        if (!unit) {
+            return null; // Don't render anything if `unit` is undefined
+        }
 
     if(checked) {
         console.log("Items Checked?", checked);
