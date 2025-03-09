@@ -47,7 +47,7 @@ const DeletePopup = ({ onConfirm, onCancel, selectedItems }) => {
                     {itemDetails}
                 </p>
 
-                <p>You can't undo this action.</p>
+                <p>You can&apos;t undo this action.</p>
 
                 <div className="buttons">
                     <button onClick={handleCancel} className="cancel-button confirmCancel">Cancel</button>

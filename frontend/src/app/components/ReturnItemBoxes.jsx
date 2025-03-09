@@ -53,13 +53,17 @@ export default function ItemBoxes({ unit, onNotesChange, itemId, onClose }) {
     return (  
         <div className="returnItem">
             <div className="itemID">
-                <div className="return-image">
-                    {unit.image_keys.length > 0 && <Image 
+            <div className="return-image">
+                {Array.isArray(unit.image_keys) && unit.image_keys.length > 0 ? (
+                    <Image 
                         src={`https://upload-r2-assets.somerville-museum1.workers.dev/${unit.image_keys[0]}`} 
                         fill
                         alt="No image found"
-                    />}
-                </div>
+                    />
+                ) : (
+                    <p>No image found</p>
+                )}
+            </div>
                 <div className="itemInfo">
                     <p>{unit.name}</p>
                     <p>ID #{unit.id}</p>

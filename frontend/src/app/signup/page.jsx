@@ -309,7 +309,7 @@ export default function SignUp() {
         <div className={'passwordInfo'}>
             <p className={'passwordInfoP'}>Password must contain the following:</p>
             <p className={'passwordInfoP'}>- 1 Uppercase character</p>
-            <p className={'passwordInfoP'}>- 1 Special character - !"$%@#</p>
+            <p className={'passwordInfoP'}>- 1 Special character - !&quot;$%@#</p>
             <p className={'passwordInfoP'}>- Must be longer than 8 characters</p>
           </div>
           <div className={'inputContainer'}>

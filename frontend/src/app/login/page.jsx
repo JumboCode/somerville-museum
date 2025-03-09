@@ -176,7 +176,7 @@ export default function Signin() {
           <input className="inputButton" type="button" onClick={signInWithEmail} value="Login" />
         </div>
         <div className="create-account">
-          <div>Don't have an account?</div>
+          <div>Don&apos;t have an account?</div>
           <button className="textButton" onClick={() => router.push("/signup")}>
             <strong>Create an account</strong>
           </button>
@@ -184,4 +184,4 @@ export default function Signin() {
       </div>
     </div>
   );
-};
+}

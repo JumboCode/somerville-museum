@@ -54,7 +54,7 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
       } else {
         alert('Some items are invalid. Please try again.');
       }
-    };
+    }
 
   }
 

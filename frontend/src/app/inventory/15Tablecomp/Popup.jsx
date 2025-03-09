@@ -22,11 +22,7 @@ export default function Popup( { unit, onClose } ) {
     const [borrowers, setBorrowers] = useState([]);
     const [isClosing, setIsClosing] = useState(false);
     const [selectedImage, setSelectedImage] = useState(0);
-
-    // Case for no unit selected
-    if (!unit){
-        return null;
-    }
+    
 
     // Extract the unit details
     const { id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, borrow_history, notes, image_keys} = unit; 
@@ -114,6 +110,15 @@ export default function Popup( { unit, onClose } ) {
           console.log("borrowers:", borrowers[0].name);
         }
       }, [borrowers]);
+
+
+    useEffect(() => {
+        if (!unit) return;
+    }, [unit]);
+    
+    if (!unit) {
+        return null;
+    }
       
     return (
         <div className={`expandedContainer ${isClosing ? 'fade-out' : 'fade-in'}`} onClick={handleContainerClick}>
@@ -239,10 +244,9 @@ export default function Popup( { unit, onClose } ) {
                 {/* Big Notes Box */}
                 <div className="noteSection"> 
                     <p><strong>Notes</strong></p>
-                    <textarea readOnly className="noteBox">
-                        {notes}
-                    </textarea>
+                    <textarea readOnly className="noteBox" value={notes || ""} />
                 </div>
+
 
                 {/* Horizontal diver */}
                 <div id = "divider"></div>
@@ -287,10 +291,9 @@ export default function Popup( { unit, onClose } ) {
                     {/* Borrow's Notes */}
                     <div className="noteSection"> 
                         <p><strong>Notes</strong></p>
-                        <textarea readOnly className="noteBox">
-                            {borrowers.length > 0 ? borrowers[0].notes : ""}
-                        </textarea>
+                        <textarea readOnly className="noteBox" value={borrowers.length > 0 ? borrowers[0].notes : ""} />
                     </div>
+
                 </div>
 
                 {/* Borrow History Table */}
