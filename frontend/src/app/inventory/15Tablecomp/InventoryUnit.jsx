@@ -27,8 +27,8 @@ export default function InventoryUnit({ unit, onChange, checked }) {
         if (buttonRef.current) {
             const rect = buttonRef.current.getBoundingClientRect();
             setPopupPosition({
-                top: rect.bottom + window.scrollY - 10, // Position below button
-                right: rect.right + window.scrollX - 1455, // Align right with button
+                top: rect.bottom + window.scrollY - 5, // Position below button
+                right: rect.right + window.scrollX - 1413, // Align right with button
             });
         }
     }
