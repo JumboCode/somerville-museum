@@ -1,7 +1,4 @@
-import * as mobiscroll from '@mobiscroll/javascript';
-
-export default {
-  // eslint-disable-next-line es5/no-shorthand-properties
+const multiSelectConfig = {
   init() {
     mobiscroll.setOptions({
       // locale,
@@ -12,7 +9,6 @@ export default {
       inputElement: document.getElementById('demo-multiple-select-input'),
     });
   },
-  // eslint-disable-next-line es5/no-template-literals
   markup: `
 <label>
     Multi-select
@@ -30,3 +26,5 @@ export default {
 </select>
   `,
 };
+
+export default multiSelectConfig;

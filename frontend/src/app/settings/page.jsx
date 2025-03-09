@@ -9,7 +9,6 @@
 "use client";
 import { useClerk } from "@clerk/nextjs"
 
-"use client";
 import React, { useState, useEffect } from 'react';
 import './settings.css';
 import { useGlobalContext } from '../components/contexts/ToggleContext';

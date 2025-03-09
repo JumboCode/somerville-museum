@@ -20,11 +20,15 @@ const BorrowUnit = ({ item, onDelete }) => {
   return (
     <div className="borrowed-item-box">
       <div className="borrow-image">
-          {image_keys.length > 0 && <Image 
-              src={`https://upload-r2-assets.somerville-museum1.workers.dev/${image_keys[0]}`} 
-              fill
-              alt="No image found"
-          />}
+        {Array.isArray(image_keys) && image_keys.length > 0 ? (
+            <Image 
+                src={`https://upload-r2-assets.somerville-museum1.workers.dev/${image_keys[0]}`} 
+                fill
+                alt="No image found"
+            />
+        ) : (
+            <p>No image found</p>
+        )}
       </div>
       <span className="item-name">{truncatedName}</span>
       <span className="item-id">ID #{id}</span>
