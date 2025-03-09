@@ -27,8 +27,11 @@ export async function addHandler(req, res) {
             // authenticity_level,
             date_added,
             current_borrower,
-            borrow_history = {}
+            borrow_history = {},
+            image_keys = []
         } = req.body;
+
+        console.log(image_keys);
 
         // Check if an item with the given id already exists
         const existingItem = await query(`SELECT id FROM dummy_data WHERE id = $1`, [id]);
@@ -46,10 +49,10 @@ export async function addHandler(req, res) {
             // RETURNING *`,
             // [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, current_borrower, borrow_history, notes]
             `INSERT INTO dummy_data 
-            (id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, borrow_history, notes)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
+            (id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, borrow_history, notes, image_keys)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
             RETURNING *`,
-            [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, borrow_history, notes]
+            [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, borrow_history, notes, image_keys]
         );
 
 
