@@ -72,7 +72,7 @@ export default function InventoryUnit({ unit, onChange, checked }) {
         }
 
     if(checked) {
-        console.log("Items Checked?", checked);
+        // console.log("Items Checked?", checked);
     }
 
     //not pulling tags

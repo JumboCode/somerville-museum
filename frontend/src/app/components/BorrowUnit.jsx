@@ -13,7 +13,14 @@ import "./BorrowPopup.css";
 
 const BorrowUnit = ({ item, onDelete }) => {
   if (!item) return null;
-  const { id, name, image_keys } = item;
+  const { id, name } = item;
+  const image_keys = item.image_keys;
+  if(Array.isArray(image_keys)) {
+    console.log("keys!!!");
+  } else {
+    // console.log("WTF"); 
+    // console.log(image_keys);
+  }
   //truncate the name to at most 12 characters with additional ellipsis if needed
   const truncatedName = name.length > 12 ? name.substring(0, 12) + "..." : name;
 
