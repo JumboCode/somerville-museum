@@ -8,7 +8,7 @@ import BorrowPopup from './BorrowPopup.jsx';
 const BorrowButton = ({ selectedItems = [], onSuccess }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [availableSelectedItems, setAvailableSelectedItems] = useState(selectedItems);
-
+  // console.log(selectedItems);
   // This function checks the validity of the selected items
   async function handleValidity() {
 
@@ -32,6 +32,7 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
           alert(result.message);  
       }
 
+      console.log("RESULT", result);
       //reset available items after check
       setAvailableSelectedItems(result.availableItems);   
 
