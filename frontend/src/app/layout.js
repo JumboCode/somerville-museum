@@ -1,3 +1,4 @@
+'use client'
 /**
  * @fileoverview Page that shows inventory overview and general statistics.
  * 
@@ -6,7 +7,6 @@
  * @authors Entire Somerville Museum Team
  *  
  */
-'use client'
 import localFont from "next/font/local";
 import './components/Popup.css';
 import "./globals.css"
