@@ -1,15 +1,15 @@
-"use client"
 /**
  * @fileoverview Contains dummy page for /settings
  * 
  * @file settings/page.jsx
  * @date 16 February, 2025
- * @authors Arietta Goshtasby & Shayne Sidman
+ * @authors Ari Goshtasby & Shayne Sidman
  *  
  */
+"use client";
+import { useClerk } from "@clerk/nextjs"
 
-import { useClerk } from '@clerk/nextjs';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './settings.css';
 import { useGlobalContext } from '../components/contexts/ToggleContext';
 
@@ -37,23 +37,22 @@ const Settings = () => {
 
   return (
     <div className="container">
-      <div className="wrapper">
-        <label className="toggleWrapper">
-          <input
-            type="checkbox"
-            checked={isToggleEnabled}
-            onChange={handleToggle}
-            className="toggleInput"
-          />
-          <span className="toggleSlider"></span>
-        </label>
-        <span className={`toggleLabel ${fading ? 'fading' : ''}`}>
-          {displayText}
-        </span>
-        <div onClick={() => signOut({ redirectUrl: '/' })}>Sign Out</div>
-      </div>
+        <div className="wrapper">
+            <label className="toggleWrapper">
+            <input 
+                type="checkbox"
+                checked={isToggleEnabled}
+                onChange={handleToggle}
+                className="toggleInput"
+            />
+            <span className="toggleSlider"></span>
+            </label>
+            <span className={`toggleLabel ${fading ? 'fading' : ''}`}>
+              {displayText}
+            </span>
+            <div onClick={signOut({ redirectUrl: '/' })}>Hello</div>
+        </div>
     </div>
   );
 };
 
-export default Settings; // Ensure this is exported as default
