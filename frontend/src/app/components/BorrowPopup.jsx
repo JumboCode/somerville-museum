@@ -17,7 +17,7 @@ import BorrowUnit from './BorrowUnit';
 import './BorrowPopup.css';
 import { useGlobalContext } from './contexts/ToggleContext';
 
-const BorrowPopup = ({ selectedItems = [], onClose, onSuccess, image_key, balls }) => {
+const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
   const { isToggleEnabled } = useGlobalContext(); // TOGGLE FUNCTIONALITY
 
   const [borrowerFirstName, setBorrowerFirstName] = useState('');
@@ -45,11 +45,11 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess, image_key, balls 
     return `${month}/${day}/${year}`; 
   }
 
+  // Update dateBorrowed when component mounts 
   useEffect(() => {
-    console.log("ITEM", selectedItems, image_key, balls);
     const today = new Date(); 
     setDateBorrowed(formatDate(today)); 
-}, [selectedItems, image_key, balls]);
+  }, []); 
 
   // Update dueDate when returnWeeks changes 
   useEffect(() => {
