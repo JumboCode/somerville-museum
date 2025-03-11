@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import EditPage from "../components/EditPage";
 import "../components/EditPage.css"
 import { useSearchParams } from 'next/navigation';
 
-const Edit = () => {
-    /* use serachParams to fetch for id */
+const EditContent = () => {
+    /* useSearchParams to fetch for id */
     const searchParams = useSearchParams();
     const unitId = searchParams.get("id");
 
@@ -42,7 +42,7 @@ const Edit = () => {
                 setError(null);
             } catch (error) {
                 setError(error.message);
-                setItem(null);
+                setUnit(null);
             } finally {
                 setLoading(false);
             }
@@ -55,11 +55,18 @@ const Edit = () => {
     if (error) return <div>Error: {error}</div>;
     if (!unit) return <div>No item found</div>;
 
-
     return (
         <div className="edit-page">
-        <EditPage unit={unit}/>
+            <EditPage unit={unit} />
         </div>
+    );
+};
+
+const Edit = () => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <EditContent />
+        </Suspense>
     );
 };
 
