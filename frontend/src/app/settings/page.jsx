@@ -1,3 +1,4 @@
+"use client";
 /**
  * @fileoverview Contains dummy page for /settings
  * 
@@ -6,7 +7,6 @@
  * @authors Ari Goshtasby & Shayne Sidman
  *  
  */
-"use client";
 import { useClerk } from "@clerk/nextjs"
 
 import React, { useState, useEffect } from 'react';
@@ -50,9 +50,10 @@ const Settings = () => {
             <span className={`toggleLabel ${fading ? 'fading' : ''}`}>
               {displayText}
             </span>
-            <div onClick={signOut({ redirectUrl: '/' })}>Hello</div>
+            <div onClick={()=> {signOut({ redirectUrl: '/' })}}>Hello</div>
         </div>
     </div>
   );
 };
 
+export default Settings;
