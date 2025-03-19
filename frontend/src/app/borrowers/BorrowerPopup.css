@@ -1,0 +1,60 @@
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: flex-end;
+    align-items: stretch;
+    z-index: 1000;
+  }
+  
+  .popup {
+    position: relative;
+    background: #fff;
+    width: 300px;
+    padding: 20px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s forwards;
+    overflow-y: auto;
+  }
+  
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+  }
+  
+  #currentBorrower {
+    width: 100%;
+    table-layout: fixed;
+    text-align: left;
+    margin-top: 5px;
+  }
+  
+  #borrowerHistory {
+    width: 100%;
+    border-collapse: separate; 
+    border-spacing: 0;
+    border: 1px solid #9B525F;
+    border-radius: 5px;
+    overflow: hidden; 
+    text-align: left;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+    margin-top: 10px;
+}
