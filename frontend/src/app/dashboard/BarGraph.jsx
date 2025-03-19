@@ -91,7 +91,7 @@ const BarGraph = ({ data }) => {
     //     .attr("y1", 0) // Top of the graph
     //     .attr("y2", 0) // Stays at the top
     //     .style("stroke", "gray")
-    //     .style("stroke-width", 1)
+    //     .style("strokeWidth", 1)
     //     .style("stroke-dasharray", "2,2") // Dotted effect
     //     .style("opacity", 0.4); // Slightly visible
 
@@ -108,7 +108,7 @@ const BarGraph = ({ data }) => {
         .attr("y1", yScale(yMax))
         .attr("y2", height)
         .style("stroke", "gray")
-        .style("stroke-width", 1)
+        .style("strokeWidth", 1)
         .style("stroke-dasharray", "2,2") // Dotted effect
         .style("opacity", 0.4);
 
@@ -123,7 +123,7 @@ const BarGraph = ({ data }) => {
         .attr("y1", d => yScale(d))
         .attr("y2", d => yScale(d))
         .style("stroke", "gray")
-        .style("stroke-width", 1)
+        .style("strokeWidth", 1)
         .style("stroke-dasharray", "2,2") // Dotted effect
         .style("opacity", 0.4); // Slightly transparent
 
@@ -138,7 +138,7 @@ const BarGraph = ({ data }) => {
         .attr("y1", 0)
         .attr("y2", height)
         .style("stroke", "gray")
-        .style("stroke-width", 1)
+        .style("strokeWidth", 1)
         .style("stroke-dasharray", "2,2") // Dotted effect
         .style("opacity", 0.4);
 
@@ -150,7 +150,7 @@ const BarGraph = ({ data }) => {
         .attr("y1", 0)
         .attr("y2", height)
         .style("stroke", "gray")
-        .style("stroke-width", 1)
+        .style("strokeWidth", 1)
         .style("stroke-dasharray", "2,2") // Dotted effect
         .style("opacity", 0.4);
     
@@ -160,7 +160,7 @@ const BarGraph = ({ data }) => {
         .attr("y1", height)
         .attr("y2", height)
         .style("stroke", "gray")
-        .style("stroke-width", 1)
+        .style("strokeWidth", 1)
         .style("stroke-dasharray", "2,2") // Dotted effect
         .style("opacity", 0.4);
 
