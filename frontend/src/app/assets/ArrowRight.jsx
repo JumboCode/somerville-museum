@@ -20,7 +20,7 @@ const ArrowRight = ({ onClick, ariaLabel = "Next" }) => {
         justifyContent: 'center'
       }}
     >
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="main-grid-item-icon" fill="none" stroke="#9B525F" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="main-grid-item-icon" fill="none" stroke="#9B525F" stroke-linecap="round" stroke-linejoin="round" strokeWidth="2">
         <polyline points="9 18 15 12 9 6" />
     </svg>
     </button>

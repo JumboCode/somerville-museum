@@ -7,8 +7,9 @@
  * @authors Ari Goshtasby & Shayne Sidman
  *  
  */
-import { useClerk } from "@clerk/nextjs"
-
+import { useClerk } from "@clerk/nextjs";
+import SettingsPage from "../components/SettingsPage";
+import "../components/SettingsPage.css"
 import React, { useState, useEffect } from 'react';
 import './settings.css';
 import { useGlobalContext } from '../components/contexts/ToggleContext';
@@ -50,10 +51,14 @@ const Settings = () => {
             <span className={`toggleLabel ${fading ? 'fading' : ''}`}>
               {displayText}
             </span>
-            <div onClick={()=> {signOut({ redirectUrl: '/' })}}>Hello</div>
+            <div onClick={()=> {signOut({ redirectUrl: '/' })}}></div>
+        </div>
+        <div className="settings-page">
+          <SettingsPage />
         </div>
     </div>
   );
 };
 
 export default Settings;
+
