@@ -121,6 +121,11 @@ export default function AddPage() {
             const reader = new FileReader();
             reader.onload = (e) => setPreview(e.target.result);
             reader.readAsDataURL(file);
+            
+            // Clear any image upload error if it exists
+            if (errors.image) {
+                setErrors({...errors, image: false});
+            }
         } else {
             alert("Please upload a valid image file.");
         }
@@ -247,7 +252,8 @@ export default function AddPage() {
             // authenticity_level: null,
             date_added: isToggleEnabled ? manualDateText : placeholderDate, 
             current_borrower: null,
-            borrow_history: null
+            borrow_history: null,
+            image: preview
         };
 
         let newErrors = {};
@@ -267,6 +273,7 @@ export default function AddPage() {
             if (!newItem.id) newErrors.id = true;
         }
         if (!newItem.name) newErrors.name = true;
+        if (!preview) newErrors.image = true;
 
         // If any errors exist, update state and show alert
         if (Object.keys(newErrors).length > 0) {
@@ -344,6 +351,7 @@ export default function AddPage() {
         setSelectedSeason([]);
         setCondition([]);
         setSelectedColors([]);
+        setPreview(null);
     };
 
     // TOGGLE FUNCTIONALITY
@@ -387,7 +395,7 @@ export default function AddPage() {
                     <div className="image-upload">
                         <div
                             id="drop-zone"
-                            className={`drop-zone ${dragOver ? "dragover" : ""}`}
+                            className={`drop-zone ${dragOver ? "dragover" : ""} ${errors.image ? "error-border" : ""}`}
                             onClick={() => document.getElementById("file-input").click()}
                             onDragOver={(event) => {
                                 event.preventDefault();
@@ -399,8 +407,13 @@ export default function AddPage() {
                             <div className="upload-icon-and-text">
                             <img src="/icons/upload.svg" className="upload-icon" />
                                 <p style={{color: "#9B525F"}}>
-                                    Upload image
+                                    Upload image*
                                 </p>
+                                {errors.image && (
+                                    <p className="error-text" style={{marginTop: "5px"}}>
+                                        Image is required
+                                    </p>
+                                )}
                             </div>
                             <input
                                 type="file"
