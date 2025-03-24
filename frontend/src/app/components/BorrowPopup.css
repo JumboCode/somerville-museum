@@ -6,20 +6,57 @@
 //     This file contains all the styling for the BorrowPopup and 
 //     BorrowUnit components */
 
+.custom-popup-large {
+  position: absolute;
+  display: flex;
+  z-index: 1000;
+  justify-content: space-between;
+  left:0;
+  top:0;
+  height: 100vh;
+  width: 100%;
+  background: #F8F5F5;
+  flex-direction: row;
+  align-items: stretch;
+
+  box-sizing: border-box;
+  
+}
+
 .container {
+    position: absolute;
     display: flex;
+    z-index: 1000;
+    justify-content: space-between;
+    left:0;
+    top:0;
+    height: 100%;
+    width: 100%;
+    background: #F8F5F5;
     flex-direction: row;
     align-items: stretch;
-    background-color: #fff;
-    width: 60rem;
-    height: 50rem;
-    margin: auto;
+
     box-sizing: border-box;
   }
   
-.borrowItemsHeader,
+.borrowItemsHeader {
+  flex: 2; /* more space */
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  color: #000;
+  min-width: 0; /* allows shrinking */
+}
+
 .info-form {
-  height: 100%;
+   flex: 1; /* less space */
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 2rem;
+  overflow-y: auto;
+  box-sizing: border-box;
+  min-width: 0;
 }
   
 .info-header {
