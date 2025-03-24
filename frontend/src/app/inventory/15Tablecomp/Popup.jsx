@@ -119,14 +119,14 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
     // Set the status missing/found status statement based on the status
     const statusStatement = status === "Missing" ? (
         <button 
-            style={{ color: "red", textDecoration: "underline"}}
+            style={{ border: "none", background: "none", color: "red", textDecoration: "underline"}}
             onClick={() => onOptionSelect("Available")}>
-            Mark Item as <strong style={{ color: "red", textDecoration: "underline"}}>Found</strong>
-        </button>
+            <p style={{fontSize: "1.1em"}}>Mark Item as <span style={{ color: "red", fontWeight: "bold", fontSize: "1em"}}>Found</span></p>
+            </button>
     ) : (
-        <button style={{ color: "red", textDecoration: "underline" }}
+        <button style={{ border: "none", background: "none", color: "red", textDecoration: "underline"}}
             onClick={() => onOptionSelect("Missing")}>
-            Mark Item as <strong style={{ color: "red", textDecoration: "underline"}}>Missing</strong>
+            <p style={{fontSize: "1.1em"}}>Mark Item as <span style={{ color: "red", fontWeight: "bold", fontSize: "1em"}}>Missing</span></p>
         </button>
     );
 
@@ -199,15 +199,30 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                 </div>
 
 <div className="imageSelection">
+    {/* Left arrow button */}
+    <StylishButton
+        styleType={"style4"}
+        onClick={() => setSelectedImage((selectedImage - 1 + image_keys.length) % image_keys.length)}
+    >
+            <img src="/icons/arrow-left.svg" className="arrowIcon" alt="Next" />
+    </StylishButton>
   {image_keys &&
     image_keys.map((key, index) => (
       <StylishButton
         key={index}
-        styleType="style1"
+        styleType={selectedImage === index ? 'style5' : 'style4'}
         onClick={() => setSelectedImage(index)}
         label={`${index + 1}`}
       />
     ))}
+
+    {/* Right arrow button */}
+    <StylishButton
+        styleType={"style4"}
+        onClick={() => setSelectedImage((selectedImage + 1) % image_keys.length)}
+    >
+        <img src="/icons/arrow-right.svg" className="arrowIcon" alt="Next" />
+    </StylishButton>
 </div>
 
 
