@@ -11,6 +11,7 @@ import React, { useState, useEffect } from 'react';
 import './Dashboard.css';
 import BarGraph from "./BarGraph";
 import PieChart from './PieChart';
+import Link from 'next/link';
 
 const Dashboard = () => {
   const [stats, setStats] = useState([
@@ -95,17 +96,32 @@ const Dashboard = () => {
     fetchStats();
   }, []);
 
+  const filterLinks = {
+    "Total Items": null, 
+    "Currently Borrowed": "Borrowed", 
+    "Overdue Items": "Overdue",
+    "Missing Items": "Missing"
+  }; 
+
   return (
     <div className="dashboard-container">
       <h1 className="dashboard-title">Dashboard Overview</h1>
       
+      
       <div className="stats-grid">
-        {stats.map((stat) => (
-          <div key={stat.label} className="stat-card">
-            <div className="stat-value">{stat.value}</div>
-            <div className="stat-label">{stat.label}</div>
-          </div>
-        ))}
+      {stats.map((stat) => {
+          const filterParam = filterLinks[stat.label];
+          const href = filterParam ? `/inventory?filter=${filterParam}` : '/inventory';
+
+          return (
+            <Link href={href} key={stat.label} passHref>
+              <div className="stat-card clickable">
+                <div className="stat-value">{stat.value}</div>
+                <div className="stat-label">{stat.label}</div>
+              </div>
+            </Link>
+          );
+        })}
       </div>
 
       <div className="charts-grid">

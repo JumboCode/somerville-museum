@@ -12,6 +12,7 @@ import StylishButton from '../components/StylishButton.jsx';
 import Filter from '../components/Filter/Filter';
 import SearchBar from '../components/SearchBar';
 import './inventory.css'
+import { useSearchParams } from 'next/navigation.js';
 
 import PropTypes from 'prop-types';
 
@@ -85,6 +86,10 @@ export default function Inventory({
         fetchData();
     }, [selectedItems]);
 
+
+    const searchParams = useSearchParams();
+    const filter = searchParams.get('filter');
+
     async function fetchData() {
         try {
             const response = await fetch(`../../api/db`, { 
@@ -109,12 +114,30 @@ export default function Inventory({
                     return item;
                 });
 
-                setUnits(updatedData);
-                setFilterResults(updatedData);
+
+                let filtered = updatedData;
+            
+                switch (filter) {
+                    case 'Borrowed':
+                      filtered = updatedData.filter(item => item.status === 'Borrowed');
+                      break;
+                    case 'Overdue':
+                      filtered = updatedData.filter(item => item.status === 'Overdue');
+                      break;
+                    case 'Missing':
+                      filtered = updatedData.filter(item => item.status === 'Missing');
+                      break;
+                    default:
+                      filtered = updatedData; // total items or no filter
+                  }
+                  
+
+                setUnits(filtered);
+                setFilterResults(filtered);
                 console.log("printings stored units ");
                 console.log(updatedData);
 
-                setTotalPages(Math.ceil(updatedData.length / unitsPerPage));
+                setTotalPages(Math.ceil(filtered.length / unitsPerPage));
             } else {
                 console.error("failed to fetch data");
             }
@@ -247,6 +270,8 @@ export default function Inventory({
 
     // an array of buttons for page selection
     const buttons = Array.from({ length: totalPages }, (_, index) => index + 1);
+
+
 
     return (
         <>
