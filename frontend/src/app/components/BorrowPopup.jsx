@@ -12,7 +12,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import Popup from 'reactjs-popup';
+// import Popup from 'reactjs-popup';
 import BorrowUnit from './BorrowUnit';
 import './BorrowPopup.css';
 import { useGlobalContext } from './contexts/ToggleContext';
@@ -374,7 +374,7 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
         </div>
       </form>
       {isSuccessPopupVisible && (
-        <Popup open={true} onClose={() => setIsSuccessPopupVisible(false)}>
+        <div className='success-popup' open={true} onClose={() => setIsSuccessPopupVisible(false)}>
           <div>
             <h2>Borrow Success</h2>
             <p>
@@ -384,7 +384,7 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
             <p>Thank you!</p>
             <button onClick={onClose}>Return to Inventory</button>
           </div>
-        </Popup>
+        </div>
       )}
     </div>
   );
