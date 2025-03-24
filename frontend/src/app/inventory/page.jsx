@@ -309,11 +309,14 @@ export default function Inventory({
                 <div className="ItemBarHolder">
                     {units
                         .slice(startIndex, startIndex + unitsPerPage)
-                        .map((unit) => {
+                        .map((unit, index) => {
+                            const actualIndex = startIndex + index; 
                         
                             return (<InventoryUnit
                                 key={unit.id}
                                 unit={unit}
+                                index={actualIndex}
+                                unitList={units}
                                 onChange={handleCheckboxChange}
                                 checked={selectedItems.some((item) => item?.id && unit?.id && item.id === unit.id)}
                             />)
