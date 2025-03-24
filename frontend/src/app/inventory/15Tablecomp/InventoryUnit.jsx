@@ -6,7 +6,7 @@ import PrePopup from "./PrePopup";
 import Image from "next/image"
 import "./InventoryUnit.css";
 
-export default function InventoryUnit({ unit, onChange, checked }) {
+export default function InventoryUnit({ unit, onChange, checked, unitList, index }) {
 
     const { id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, borrow_history, notes, image_keys} = unit; 
     const [isPopupVisible, setIsPopupVisible] = useState(false);
@@ -16,6 +16,7 @@ export default function InventoryUnit({ unit, onChange, checked }) {
 
     const handleDoubleClick = () => {
         setIsPopupVisible(true);
+        setIsPrePopupVisible(false);
     }
 
     const handleClick = () => {
@@ -155,7 +156,11 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                 )}   
 
                 { isPopupVisible && (
-                <Popup unit={unit} onClose={handleClosePopup} />
+                <Popup 
+                    onClose={handleClosePopup} 
+                    onOptionSelect={handlePopupOption}
+                    unitIndex={index}
+                    unitList={unitList}/>
                 )}    
             </div>
         </div>

@@ -18,10 +18,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export default function Popup( { unit, onClose } ) {
+export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } ) {
     const [borrowers, setBorrowers] = useState([]);
     const [isClosing, setIsClosing] = useState(false);
     const [selectedImage, setSelectedImage] = useState(0);
+    const [unit, setUnit] = useState(unitList[unitIndex]);
+    const [currIndex, setCurrIndex] = useState(unitIndex);
     
 
     // Extract the unit details
@@ -39,6 +41,20 @@ export default function Popup( { unit, onClose } ) {
         setTimeout(() => {
             onClose();
         }, 200);
+    }
+
+    const handleLeftArrow = () => {
+        if (currIndex > 0) {
+            setCurrIndex(currIndex - 1);
+            setUnit(unitList[currIndex - 1]);
+        }
+    }
+
+    const handleRightArrow = () => {
+        if (currIndex < unitList.length - 1) {
+            setCurrIndex(currIndex + 1);
+            setUnit(unitList[currIndex + 1]);
+        }
     }
 
     // Add event listener for Escape key
@@ -102,9 +118,16 @@ export default function Popup( { unit, onClose } ) {
 
     // Set the status missing/found status statement based on the status
     const statusStatement = status === "Missing" ? (
-        <span style={{ color: "red", textDecoration: "underline"}}>Mark Item as <strong style={{ color: "red", textDecoration: "underline"}}>Found</strong></span>
+        <button 
+            style={{ color: "red", textDecoration: "underline"}}
+            onClick={() => onOptionSelect("Available")}>
+            Mark Item as <strong style={{ color: "red", textDecoration: "underline"}}>Found</strong>
+        </button>
     ) : (
-        <span style={{ color: "red", textDecoration: "underline" }}>Mark Item as <strong style={{ color: "red", textDecoration: "underline"}}>Missing</strong></span>
+        <button style={{ color: "red", textDecoration: "underline" }}
+            onClick={() => onOptionSelect("Missing")}>
+            Mark Item as <strong style={{ color: "red", textDecoration: "underline"}}>Missing</strong>
+        </button>
     );
 
     useEffect(() => {
@@ -133,13 +156,16 @@ export default function Popup( { unit, onClose } ) {
                             <div className="buttons">
                                 {/* Left arrow button */}
                                 <StylishButton
-                                    styleType={"style7"}>
+                                    styleType={"style7"}
+                                    onClick={handleLeftArrow}
+                                >
                                         <img src="/icons/arrow-left.svg" className="arrowIcon" alt="Next" />
                                 </StylishButton>
                                 
                                 {/* Right arrow button */}
                                 <StylishButton
                                     styleType={"style7"}
+                                    onClick={handleRightArrow}
                                 >
                                     <img src="/icons/arrow-right.svg" className="arrowIcon" alt="Next" />
                                 </StylishButton>
