@@ -42,13 +42,11 @@
 
 .stat-card.clickable {
     transition: transform 0.2s;
-
 }
 
 .stat-card:hover {
     transform: scale(1.03);
     box-shadow: 0 0.2vh 0.3vh rgba(0, 0, 0, 0.1);
-
 }
 
 .stat-value {
