@@ -165,10 +165,11 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
 
       const result = await response.json();
       setIsSuccessPopupVisible(true);
+      console.log("successful borrow"); 
 
-      if (onSuccess) {
-        onSuccess();
-      }
+      // if (onSuccess) {
+      //   onSuccess();
+      // }
     } catch (error) {
       console.error("Error submitting data:", error);
     }
@@ -374,18 +375,19 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
         </div>
       </form>
       {isSuccessPopupVisible && (
-        <div className='success-popup' open={true} onClose={() => setIsSuccessPopupVisible(false)}>
-          <div>
+        <div className="success-popup-overlay">
+          <div className="success-popup">
             <h2>Borrow Success</h2>
             <p>
               The following items have been successfully borrowed:{" "}
               {borrowItems.map(item => item.id).join(", ")}
             </p>
             <p>Thank you!</p>
-            <button onClick={onClose}>Return to Inventory</button>
+            <button onClick={onSuccess}>Return to Inventory</button>
           </div>
         </div>
       )}
+
     </div>
   );
 };
