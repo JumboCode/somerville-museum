@@ -5,18 +5,19 @@ const FilterContext = createContext();
 
 // Provider Component
 export const FilterProvider = ({ children }) => {
-    const [selectedFilters, setSelectedFilters] = useState(
-    {
-        status: "NOT NULL",
-        season: "NOT NULL",
-        return_date: "NOT NULL",
-        condition: "NOT NULL",
-        gender: "NOT NULL",
-        color: "NOT NULL",
-        type: "NOT NULL",
-        size: "NOT NULL",
-        time_period: "NOT NULL",
+    
+    const [selectedFilters, setSelectedFilters] = useState({
+        status: [],
+        season: [],
+        return_date: { start: null, end: null },
+        condition: [],
+        gender: [],
+        color: [],
+        type: [],
+        size: [],
+        time_period: [],
     });
+
     const [triggerFilteredFetch, setTriggerFilteredFetch] = useState(false);
     useEffect(() => {
         setTriggerFilteredFetch(!triggerFilteredFetch);
