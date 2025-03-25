@@ -209,7 +209,7 @@ export default function Inventory({
         // Literally just to call the useeffect with the request. kinda scuffed but whatever
         // setRefreshTable(prev => !prev);
 
-        setFilterResults([]); 
+        // setFilterResults([]); 
         setSearchResults([]); 
         setSelectedItems([]); 
         fetchData(); 
