@@ -101,7 +101,7 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
     const handleOptionSelect = (label, option) => {
         const formattedLabel = label.toLowerCase().replaceAll(" ", "_");
         setSelectedOptions(prev => {
-            const currentValues = prev[formattedLabel];
+            const currentValues = prev[formattedLabel] || []; // Ensure it's an array
             const valueExists = currentValues.includes(option);
             
             return {
@@ -112,11 +112,10 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
             };
         });
     };
-
-    // now enables multiple checkboxes to be selected
+    
     const updateCheckboxes = (field, value) => (e) => {
         setSelectedOptions((current) => {
-            const currentValues = current[field];
+            const currentValues = current[field] || []; // Ensure it's an array
             if (e.target.checked) {
                 return {
                     ...current,
