@@ -51,18 +51,41 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
     const [openDropdowns, setOpenDropdowns] = useState({});
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const [dateRange, setDateRange] = useState({ start: null, end: null });
-    const [selectedOptions, setSelectedOptions] = useState(baseOptions);
+    const [selectedOptions, setSelectedOptions] = useState(selectedFilters);
     const dropdownRefs = useRef({});
     const checkboxRefs = useRef({});
     const calendarRef = useRef(null);
-    const handleReset = () => {
-        setSelectedOptions(baseOptions);
-        setDateRange({ start: null, end: null });
+    
+    // Keep selectedOptions in sync with selectedFilters
+    useEffect(() => {
+        if (JSON.stringify(selectedOptions) !== JSON.stringify(selectedFilters)) {
+            setSelectedOptions(selectedFilters);
+            if (selectedFilters.return_date) {
+                setDateRange({
+                    start: selectedFilters.return_date.start,
+                    end: selectedFilters.return_date.end
+                });
+            }
+        }
+    }, [selectedFilters, selectedOptions]);
+
+    // Handle updates to selectedOptions
+    const updateFilters = (newOptions) => {
+        // Only update if there's an actual change
+        if (JSON.stringify(newOptions) !== JSON.stringify(selectedFilters)) {
+            setSelectedOptions(newOptions);
+            setSelectedFilters(newOptions);
+        }
     };
 
-    useEffect(() => {
-        setSelectedFilters(selectedOptions);
-    }, [selectedOptions]);
+    const handleReset = () => {
+        const resetOptions = {
+            ...baseOptions,
+            return_date: { start: null, end: null }
+        };
+        updateFilters(resetOptions);
+        setDateRange({ start: null, end: null });
+    };
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -91,42 +114,33 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
     // Updated to handle date range selection
     const handleDateRangeSelect = (startDate, endDate) => {
         setDateRange({ start: startDate, end: endDate });
-        setSelectedOptions((curr) => ({
-            ...curr, 
+        updateFilters({
+            ...selectedOptions,
             return_date: { start: startDate, end: endDate }
-        }));
+        });
     };
 
     // Now enables multiple options to be selected
     const handleOptionSelect = (label, option) => {
         const formattedLabel = label.toLowerCase().replaceAll(" ", "_");
-        setSelectedOptions(prev => {
-            const currentValues = prev[formattedLabel] || []; // Ensure it's an array
-            const valueExists = currentValues.includes(option);
-            
-            return {
-                ...prev,
-                [formattedLabel]: valueExists 
-                    ? currentValues.filter(item => item !== option)  // Remove if exists
-                    : [...currentValues, option]  // Add if doesn't exist
-            };
+        const currentValues = selectedOptions[formattedLabel] || [];
+        const valueExists = currentValues.includes(option);
+        
+        updateFilters({
+            ...selectedOptions,
+            [formattedLabel]: valueExists 
+                ? currentValues.filter(item => item !== option)
+                : [...currentValues, option]
         });
     };
     
     const updateCheckboxes = (field, value) => (e) => {
-        setSelectedOptions((current) => {
-            const currentValues = current[field] || []; // Ensure it's an array
-            if (e.target.checked) {
-                return {
-                    ...current,
-                    [field]: [...currentValues, value]
-                };
-            } else {
-                return {
-                    ...current,
-                    [field]: currentValues.filter(item => item !== value)
-                };
-            }
+        const currentValues = selectedOptions[field] || [];
+        updateFilters({
+            ...selectedOptions,
+            [field]: e.target.checked
+                ? [...currentValues, value]
+                : currentValues.filter(item => item !== value)
         });
     };
 
