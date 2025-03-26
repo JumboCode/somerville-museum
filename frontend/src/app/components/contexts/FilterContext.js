@@ -5,7 +5,6 @@ const FilterContext = createContext();
 
 // Provider Component
 export const FilterProvider = ({ children }) => {
-    
     const [selectedFilters, setSelectedFilters] = useState({
         status: [],
         season: [],
@@ -13,15 +12,17 @@ export const FilterProvider = ({ children }) => {
         condition: [],
         gender: [],
         color: [],
-        type: [],
+        garment_type: [],
         size: [],
         time_period: [],
     });
 
     const [triggerFilteredFetch, setTriggerFilteredFetch] = useState(false);
+
     useEffect(() => {
         setTriggerFilteredFetch(!triggerFilteredFetch);
     }, [selectedFilters]);
+
     return (
         <FilterContext.Provider value={{ selectedFilters, setSelectedFilters, triggerFilteredFetch, setTriggerFilteredFetch }}>
             {children}
@@ -30,4 +31,10 @@ export const FilterProvider = ({ children }) => {
 };
 
 // Custom Hook for easy access
-export const useFilterContext = () => useContext(FilterContext);
+export const useFilterContext = () => {
+    const context = useContext(FilterContext);
+    if (!context) {
+        throw new Error('useFilterContext must be used within a FilterProvider');
+    }
+    return context;
+};
