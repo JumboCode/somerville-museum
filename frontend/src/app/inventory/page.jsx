@@ -23,7 +23,7 @@ export default function Inventory({
     isFilterVisible = false, 
     toggleFilterVisibility = () => {console.log("scuffed")} 
 }) {
-    const { selectedFilters, triggerFilteredFetch } = useFilterContext();
+    const { selectedFilters, setSelectedFilters } = useFilterContext();
     const [units, setUnits] = useState([]);
     const [originalUnits, setOriginalUnits] = useState([]);
     
@@ -38,16 +38,20 @@ export default function Inventory({
 
 
     const applyFilters = (data) => {
-        console.log("Applying filters:", selectedFilters);
+        console.log("Starting filter application with data:", data);
+        console.log("Current selectedFilters:", selectedFilters);
         
         let filteredData = [...data];
     
         // Filter by Status
         if (selectedFilters.status && selectedFilters.status.length > 0) {
+            console.log("Before status filter:", filteredData.length);
             console.log("Filtering by status:", selectedFilters.status);
-            filteredData = filteredData.filter(item => 
-                selectedFilters.status.includes(item.status)
-            );
+            filteredData = filteredData.filter(item => {
+                console.log("Item status:", item.status);
+                return selectedFilters.status.includes(item.status);
+            });
+            console.log("After status filter:", filteredData.length);
         }
     
         // Filter by Condition
@@ -129,7 +133,7 @@ export default function Inventory({
             });
         }
     
-        console.log("Filtered results:", filteredData);
+        console.log("Final filtered results:", filteredData);
         return filteredData;
     };
 
@@ -138,15 +142,16 @@ export default function Inventory({
             const response = await fetch(`../../api/db`, { 
                 method: 'POST',
                 headers: {
-                'Content-Type': 'application/json' 
+                  'Content-Type': 'application/json' 
                 },
                 body: JSON.stringify({
-                text: 'SELECT * from dummy_data ORDER BY id'
+                  text: 'SELECT * from dummy_data ORDER BY id'
                 })
             });
 
             if (response.ok) {
                 const data = await response.json();
+                console.log("Fetched data:", data);
                 const currentDate = new Date();
                 const updatedData = data.map((item) => {
                     if (item.status === "Borrowed" && item.dueDate && new Date(item.dueDate) < currentDate) {
@@ -154,26 +159,29 @@ export default function Inventory({
                     }
                     return item;
                 });
+                console.log("Processed data:", updatedData);
 
-                let filtered = updatedData;
-            
-                switch (filter) {
-                    case 'Borrowed':
-                    filtered = updatedData.filter(item => item.status === 'Borrowed');
-                    break;
-                    case 'Overdue':
-                    filtered = updatedData.filter(item => item.status === 'Overdue');
-                    break;
-                    case 'Missing':
-                    filtered = updatedData.filter(item => item.status === 'Missing');
-                    break;
-                    default:
-                    filtered = updatedData; // total items or no filter
+                setOriginalUnits(updatedData);
+                setUnits(updatedData);
+                setTotalPages(Math.ceil(updatedData.length / unitsPerPage));
+
+                if (selectedFilters.status?.length > 0 || 
+                    selectedFilters.condition?.length > 0 ||
+                    selectedFilters.gender?.length > 0 ||
+                    selectedFilters.color?.length > 0 ||
+                    selectedFilters.garment_type?.length > 0 ||
+                    selectedFilters.size?.length > 0 ||
+                    selectedFilters.season?.length > 0 ||
+                    selectedFilters.time_period?.length > 0 ||
+                    (selectedFilters.return_date?.start && selectedFilters.return_date?.end)) {
+                    const filteredData = applyFilters(updatedData);
+                    setUnits(filteredData);
+                    setTotalPages(Math.ceil(filteredData.length / unitsPerPage));
+                } else {
+                    setUnits(updatedData);
+                    setTotalPages(Math.ceil(updatedData.length / unitsPerPage));
                 }
 
-                setOriginalUnits(filtered);
-                setUnits(filtered);
-                setTotalPages(Math.ceil(filtered.length / unitsPerPage));
             } else {
                 console.error("failed to fetch data");
             }
@@ -187,22 +195,60 @@ export default function Inventory({
         fetchData();
     }, []);
 
+    // manage filters if someone is navigating here from clicking one of the links
+    // in the dashboard
+    useEffect(() => {
+        if (filter) {
+            console.log("Setting filter from URL:", filter);
+            const newFilters = {
+                condition: [],
+                gender: [],
+                color: [],
+                garment_type: [],
+                size: [],
+                time_period: [],
+                status: [filter],
+                season: [],
+                return_date: { start: null, end: null }
+            };
+            setSelectedFilters(newFilters);
+            
+            // If we already have data, apply the filter immediately
+            if (originalUnits.length > 0) {
+                const filteredData = applyFilters(originalUnits);
+                setUnits(filteredData);
+                setTotalPages(Math.ceil(filteredData.length / unitsPerPage));
+            }
+        }
+    }, [filter, setSelectedFilters, originalUnits]);
+
     // Filter effect
     useEffect(() => {
+        console.log("Filter effect triggered");
+        console.log("Current originalUnits:", originalUnits);
+        console.log("Current selectedFilters:", selectedFilters);
+        
+        // Only proceed if we have data
+        if (originalUnits.length === 0) {
+            console.log("No data available yet, waiting for data fetch");
+            return;
+        }
+        
         if (Object.values(selectedFilters).every(val => 
             Array.isArray(val) ? val.length === 0 : !val
         )) {
+            console.log("No filters active, showing all units");
             setUnits(originalUnits);
             return;
         }
 
         const filteredUnits = applyFilters(originalUnits);
+        console.log("After applying filters:", filteredUnits);
         
-        console.log("Filtered units:", filteredUnits);
         setUnits(filteredUnits);
         setCurrentPage(1);
         setTotalPages(Math.ceil(filteredUnits.length / unitsPerPage));
-    }, [selectedFilters]);
+    }, [selectedFilters, originalUnits]);
 
 
     const handleBorrowSuccess = () => {
