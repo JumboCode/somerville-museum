@@ -137,9 +137,20 @@ export default function Signin() {
           <div className="clothing-database">CLOTHING DATABASE</div>
         </div>
         <div className="inputContainer">
-          <label className="errorLabel" style={{ backgroundColor: errorBG }}>
-            {error}
-          </label>
+        <label
+          className="errorLabel"
+          style={{
+            backgroundColor: error ? "rgba(255, 44, 44, 0.2)" : "#FFFFFF",
+            minHeight: "24px",
+            color: error ? "red" : "#FFFFFF",
+            padding: "4px 8px",
+            display: "block",
+            transition: "all 0.2s ease",
+          }}
+        >
+          {error || ""}
+        </label>
+
           <input
             value={email}
             name="email"
