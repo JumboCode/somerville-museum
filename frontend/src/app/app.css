@@ -150,6 +150,10 @@
   transform: translate(-50%, -50%);
 }
 
+.eyecon:hover {
+  cursor: pointer;
+}
+
 .inputBox::placeholder {
   color: #592A33;
   opacity: 1;

@@ -12,10 +12,9 @@
 import { useState } from 'react'
 import { useSignUp, useAuth } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
-import { Icon } from 'react-icons-kit';
-import { eyeOff } from 'react-icons-kit/feather/eyeOff';
-import { eye } from 'react-icons-kit/feather/eye';
 import Image from "next/image";
+import Eyecon from "../components/Eyecon";
+import EyeconOff from "../components/EyeconOff";
 import "../app.css"
 
 export default function SignUp() {
@@ -25,9 +24,7 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passType, setPassType] = useState('password');
-  const [confirmPassType, setConfirmPassType] = useState('password');
-  const [passIcon, setPassIcon] = useState(eyeOff);
-  const [confirmPassIcon, setConfirmPassIcon] = useState(eyeOff);
+  const [eyeColor, setEyeColor] = useState('#9B525F');
   const [error, setError] = useState('');
   const [errorBG, setErrorBG] = useState('#FFFFFF');
   const [errorBorder, setErrorBorder] = useState('#9B525F');
@@ -53,6 +50,7 @@ export default function SignUp() {
   const handleCreateError = () => {  // Make everything red when sign up error
     setErrorBG(errorBG === '#FFFFFF' ? 'rgba(255, 44, 44, 0.2)' : '#FFFFFF');
     setErrorBorder(errorBorder === '#9B525F' ? 'red' : '#9B525F');
+    setEyeColor(eyeColor === '#9B525F' ? 'red' : '#9B525F');
   };
 
   function containsUppercaseAndSymbol(str) {  // Validate password
@@ -62,23 +60,7 @@ export default function SignUp() {
   }
 
   const handlePassToggle = () => {  // Toggle between showing passwords
-    if (passType === 'password') {
-      setPassIcon(eye);
-      setPassType('text');
-    } else {
-      setPassIcon(eyeOff);
-      setPassType('password');
-    }
-  };
-
-  const handleConfirmPassToggle = () => {  // Toggle between showing passwords
-    if (confirmPassType === 'password') {
-      setConfirmPassIcon(eye);
-      setConfirmPassType('text');
-    } else {
-      setConfirmPassIcon(eyeOff);
-      setConfirmPassType('password');
-    }
+      setPassType((prev) => (prev === 'password' ? 'text' : 'password'));
   };
 
   // Handle validation of names, email, and password
@@ -288,13 +270,14 @@ export default function SignUp() {
             style={{ borderColor: errorBorder }}
           />
           <span className={'eyecon'} onClick={handlePassToggle}>
-            <Icon icon={passIcon} size={20} />
+            {passType === 'password' ? <Eyecon color={eyeColor} /> : <EyeconOff color={eyeColor} />}
           </span>
+
         </div>
         <div className="inputContainer password">
           <input
             id="Confirm Password"
-            type={confirmPassType}
+            type="password"
             name="Confirm Password"
             placeholder="Confirm Password"
             value={confirmPassword}
@@ -302,9 +285,6 @@ export default function SignUp() {
             onChange={(e) => setConfirmPassword(e.target.value)}
             style={{ borderColor: errorBorder }}
           />
-          <span className={'eyecon'} onClick={handleConfirmPassToggle}>
-            <Icon icon={confirmPassIcon} size={20} />
-          </span>
         </div>
         <div className={'passwordInfo'}>
             <p className={'passwordInfoP'}>Password must contain the following:</p>
