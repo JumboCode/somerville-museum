@@ -110,7 +110,7 @@ export default function AddPage() {
         { name: "Green", hex: "#34C759" },
         { name: "Blue", hex: "#5856D6" },
         { name: "Purple", hex: "#AF52DE" },
-        { name: "Pink", hex: "#FF2D55" },
+        { name: "Pink", hex: "#FF93B7" },
         { name: "Brown", hex: "#A2845E" },
         { name: "White", hex: "#FFFFFF", border: "#c9c9c9" },
         { name: "Gray", hex: "#8E8E93" },
