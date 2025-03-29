@@ -201,6 +201,22 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
     }
   };
 
+  const handlePhoneInput = (value) => {
+    // Remove all non-numeric characters
+    const numericValue = value.replace(/\D/g, "");
+  
+    // Format the input as ###-###-####
+    if (numericValue.length <= 3) {
+      setPhoneNumber(numericValue);
+    } else if (numericValue.length <= 6) {
+      setPhoneNumber(`${numericValue.slice(0, 3)}-${numericValue.slice(3)}`);
+    } else {
+      setPhoneNumber(
+        `${numericValue.slice(0, 3)}-${numericValue.slice(3, 6)}-${numericValue.slice(6, 10)}`
+      );
+    }
+  };
+
   return (
     <div className="container">
       <div className="borrowItemsHeader">
@@ -282,8 +298,11 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
             <input
               required
               value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-            />
+              onChange={(e) => handlePhoneInput(e.target.value)}
+              style={{
+                borderColor: isPhoneValid || !phoneNumber ? "#9b525f" : "red",
+              }}
+              />
           </div>
         </div>
         <div className="form-row full-width">
