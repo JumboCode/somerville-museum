@@ -55,6 +55,7 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
     const dropdownRefs = useRef({});
     const checkboxRefs = useRef({});
     const calendarRef = useRef(null);
+    const calendarPickerContainerRef = useRef(null);
     
     // Keep selectedOptions in sync with selectedFilters
     useEffect(() => {
@@ -85,24 +86,37 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
         };
         updateFilters(resetOptions);
         setDateRange({ start: null, end: null });
+        
+        // Use the calendar ref to reset the calendar UI state
+        if (calendarRef.current && calendarRef.current.resetCalendar) {
+            calendarRef.current.resetCalendar();
+        }
     };
 
     useEffect(() => {
         const handleClickOutside = (event) => {
+            // Handle dropdown clicks
             Object.keys(dropdownRefs.current).forEach(key => {
                 if (dropdownRefs.current[key] && !dropdownRefs.current[key].contains(event.target)) {
                     setOpenDropdowns(prev => ({...prev, [key]: false}));
                 }
             });
 
-            if (calendarRef.current && !calendarRef.current.contains(event.target)) {
+            // Handle calendar clicks - make sure we're not clicking on the calendar icon or within the calendar
+            const isClickInCalendarButton = event.target.closest('.calendar-icon') || 
+                event.target.closest('.select-box');
+            
+            const isClickInCalendarPicker = calendarPickerContainerRef.current && 
+                calendarPickerContainerRef.current.contains(event.target);
+                
+            if (!isClickInCalendarButton && !isClickInCalendarPicker && isCalendarOpen) {
                 setIsCalendarOpen(false);
             }
         };
     
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
+    }, [isCalendarOpen]);
     
     const toggleDropdown = (label) => {
         setOpenDropdowns(prev => ({
@@ -111,12 +125,20 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
         }));
     };
 
-    // Updated to handle date range selection
+    // Updated to handle date range selection with proper formatting
     const handleDateRangeSelect = (startDate, endDate) => {
+        // Convert date strings to standardized format for consistent backend processing
+        // If null values are passed, keep them as null
+        const formattedStartDate = startDate || null;
+        const formattedEndDate = endDate || null;
+        
         setDateRange({ start: startDate, end: endDate });
         updateFilters({
             ...selectedOptions,
-            return_date: { start: startDate, end: endDate }
+            return_date: { 
+                start: formattedStartDate, 
+                end: formattedEndDate 
+            }
         });
     };
 
@@ -230,7 +252,7 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
 
                 <div className="filter-section">
                     <h2>Return Date Range</h2>
-                    <div className="date-select-container">
+                    <div className="date-select-container" ref={calendarPickerContainerRef}>
                         <div className="custom-select">
                             <div 
                                 className="select-box"
@@ -239,12 +261,14 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
                                 <span>{getDateRangeText()}</span>
                                 <Calendar className="calendar-icon" />
                             </div>
-                            <CalendarPicker 
-                                isOpen={isCalendarOpen}
-                                onClose={() => setIsCalendarOpen(false)}
-                                onDateSelect={handleDateRangeSelect}
-                                ref={calendarRef}
-                            />
+                            {isCalendarOpen && (
+                                <CalendarPicker 
+                                    isOpen={isCalendarOpen}
+                                    onClose={() => setIsCalendarOpen(false)}
+                                    onDateSelect={handleDateRangeSelect}
+                                    ref={calendarRef}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>
