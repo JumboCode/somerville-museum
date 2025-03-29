@@ -139,7 +139,15 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                 <div className="gender">{unit.gender}</div>
                 <div className="season">{unit.season}</div>
                 <div className="size">{unit.size}</div>
-                <div className="time">{unit.time_period}</div>
+                <div className="time">
+                    {Array.isArray(unit.time_period) && unit.time_period.length > 0 ? (
+                        unit.time_period.map((period, index) => (
+                            <span key={index}>{period}{index < unit.time_period.length - 1 ? ', ' : ''}</span>
+                        ))
+                    ) : (
+                        'No time periods available'
+                    )}
+                </div>
             </div>
             <div className="drop-down">
                 <button className="drop-downBtn" 
