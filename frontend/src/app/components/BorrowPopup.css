@@ -7,15 +7,18 @@
 //     BorrowUnit components */
 
 .container {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    background-color: #fff;
-    width: 60rem;
-    height: 50rem;
-    margin: auto;
-    box-sizing: border-box;
-  }
+  position: absolute;
+  display: flex;
+  z-index: 1000;
+  justify-content: space-between;
+  flex-direction: column;
+  left:0;
+  top:0;
+  height: 100vh;
+  padding: 5vh;
+  width: 100%;
+  background: #F8F5F5;
+}
   
 .borrowItemsHeader,
 .info-form {
@@ -135,13 +138,11 @@
     appearance: none;
   }
   
-  
-  .pagination-container {
+  /* .pagination-container {
     margin-top: auto;
     padding-top: 1rem;
   }
   
-
   .pagination {
     display: flex;
     justify-content: center;
@@ -172,28 +173,24 @@
   .pagination button:disabled {
     color: #d3d3d3;
     cursor: not-allowed;
-  }
-  
+  } */
   
   .form-row {
     display: flex;
     gap: 1rem;
-    align-items: center;
+    /* align-items: center; */
   }
-  
   
   .form-row.full-width {
     flex-direction: column;
   }
-  
   
   .form-group {
     flex: 1;
     display: flex;
     flex-direction: column;
   }
-  
-  
+
   .form-group.full-width {
     width: 100%;
   }
@@ -212,7 +209,8 @@
     border: 1px solid #9b525f;
     border-radius: 4px;
     font-size: 1rem;
-    font-family: Arial, sans-serif;
+    /* font-family: Arial, sans-serif; */
+    font-weight: 400;
     box-sizing: border-box;
     width: 100%;
   }
@@ -221,9 +219,6 @@
     border: 0.5px solid transparent !important;
   }
   
-  
-
-  
   .form-group textarea {
     background-color: #fff;
     color: #000;
@@ -231,7 +226,7 @@
     border: 1px solid #9b525f;
     border-radius: 4px;
     font-size: 1rem;
-    font-family: Arial, sans-serif;
+    font-weight: 400;
     box-sizing: border-box;
     width: 100%;
   }
@@ -247,7 +242,6 @@
     box-sizing: border-box;
   }
   
-  
   .return-date-box {
     background-color: #fff;
     border: 1px solid #9b525f;
@@ -259,7 +253,6 @@
     box-sizing: border-box;
   }
   
-  
   .selected-return {
     background-color: #9b525f;
     color: white;
@@ -270,7 +263,6 @@
     align-items: center;
   }
   
-  
   .remove-return {
     background: transparent;
     border: none;
@@ -279,7 +271,6 @@
     margin-left: 0.5rem;
     cursor: pointer;
   }
-  
   
   .return-select {
     background-color: transparent;
@@ -293,12 +284,10 @@
     appearance: none;
   }
   
-  
   .form-group textarea {
     resize: vertical;
     min-height: 150px;
   }
-  
   
   .form-actions {
     display: flex;
@@ -307,7 +296,6 @@
     margin-top: auto;
     padding-top: 0.5rem;
   }
-  
   
   .form-actions button {
     padding: 0.625rem 1.25rem;
@@ -318,16 +306,15 @@
     cursor: pointer;
   }
   
-  
   .form-actions button[type="submit"] {
-    background-color: #FFFFFF;
-    border: 1px solid #9B525F;
-    color: #000000;
+    background-color: #007781;
+    color: #ffffff;
   }
   
   .form-actions button[type="button"] {
-    background-color: #007781;
-    color: #ffffff;
+    background-color: #FFFFFF;
+    color: #000000;
+    border: 1px solid #9B525F;
   }
   
   .reactjs-popup-content {
@@ -338,7 +325,6 @@
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
   }
   
-
   .dividerNew {
     width: 2px;
     background-color: #9b525f;
@@ -359,11 +345,9 @@
     font-weight: 200;
   }
   
-
   .reactjs-popup-content button {
     background: #4caf50;
     color: white;
     padding: 0.625rem 1.25rem;
     border-radius: 0.3125rem;
   }
-  

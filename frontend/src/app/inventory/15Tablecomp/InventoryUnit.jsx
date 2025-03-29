@@ -81,6 +81,9 @@ export default function InventoryUnit({ unit, onChange, checked }) {
         }
     };
 
+    const checkboxRef = useRef(null);
+
+
     useEffect(() => {
         if (isPopupVisible || isPrePopupVisible) {
             document.addEventListener('click', handleClickOutside);
