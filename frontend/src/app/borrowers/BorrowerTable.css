@@ -1,88 +1,92 @@
 .tableContainer {
     position: relative;
-    top: 0;
-    left: 0;
-    width: 100%;
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: stretch;
-    z-index: 1;
+    min-height: 100vh;
+    width: 100%;
     overflow-y: auto;
-}
-
-@media (max-width: 819px) {
+    z-index: 1;
+    padding-bottom: 4rem;
+  }
+  
+  @media (max-width: 819px) {
     .tableContainer {
-        overflow: hidden;
-        width: 100%;
-        white-space: nowrap;
+      overflow: hidden;
+      width: 100%;
+      white-space: nowrap;
     }
-}
-
-.tableContent {
+  }
+  
+  .tableContent {
     width: 100%;
     margin-top: 2vh;
-}
-
-#borrowerInfo {
+  }
+  
+  #borrowerInfo {
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
-}
-
-#borrowerInfo tbody {
-    border: 1px solid #9B525F; 
+  }
+  
+  #borrowerInfo tbody {
+    border: 1px solid #9B525F;
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
-}
-
-#borrowerInfo tbody tr {
+  }
+  
+  #borrowerInfo tbody tr {
     border-bottom: 0.99px solid #D9D9D9;
-}
-
-#borrowerInfo td, #borrowerInfo th {
+  }
+  
+  #borrowerInfo td,
+  #borrowerInfo th {
     text-align: left;
     padding: 8px 12px;
-    border: none; 
+    border: none;
     font-weight: 400;
-}
-
-#borrowerInfo td {
+  }
+  
+  #borrowerInfo td {
     font-size: 1rem;
-}
-
-#borrowerInfo th {
+  }
+  
+  #borrowerInfo th {
     font-size: 0.75rem;
-}
-
-#borrowerInfo thead tr {
+  }
+  
+  #borrowerInfo thead tr {
     border-bottom: none;
-}
-
-#borrowerInfo tbody tr:hover {
+  }
+  
+  #borrowerInfo tbody tr:hover {
     background-color: #F3E4E4;
-}
-
-.pagination-controls {
-    margin-top: 1rem;
+  }
+  
+  .flex-spacer {
+    flex-grow: 1;
+  }
+  
+  .pagination-controls {
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
-}
-
-.num-items {
+    padding: 1rem 0 2rem 0;
+    background-color: white;
+    border-top: 1px solid #ccc;
+  }
+  
+  .num-items {
     position: absolute;
-    left: 0;
+    left: 1rem;
     display: flex;
-    justify-content: flex-start;
     align-items: center;
-}
-
-.page-selection {
+  }
+  
+  .page-selection {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
-}
+  }
+  

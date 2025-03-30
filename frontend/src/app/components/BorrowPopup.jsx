@@ -16,10 +16,12 @@ import Popup from 'reactjs-popup';
 import BorrowUnit from './BorrowUnit';
 import './BorrowPopup.css';
 import { useGlobalContext } from './contexts/ToggleContext';
+import { useUser } from '@clerk/nextjs'; // Import the Clerk hook
+
 
 const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
   const { isToggleEnabled } = useGlobalContext(); // TOGGLE FUNCTIONALITY
-
+  const { user } = useUser(); // Get the current user
   const [borrowerFirstName, setBorrowerFirstName] = useState('');
   const [borrowItems, setBorrowItems] = useState(selectedItems);
   const [borrowerLastName, setBorrowerLastName] = useState('');
@@ -44,6 +46,17 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
     const year = date.getFullYear().toString().slice(-2);
     return `${month}/${day}/${year}`; 
   }
+
+  useEffect(() => {
+    if (user) {
+      const name =
+        user.firstName && user.lastName
+        //THIS WILL BE FIXED AUTOMATICALLY once signup gives First and Last name
+          ? `${user.firstName} ${user.lastName}`
+          : user.fullName || "Mary Jane";
+      setApprover(name);
+    }
+  }, [user]);
 
   // Update dateBorrowed when component mounts 
   useEffect(() => {
@@ -75,6 +88,8 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
   const isEmailValid = emailRegex.test(borrowerEmail);
   const isPhoneValid = phoneRegex.test(phoneNumber);
   const isDateValid = dateRegex.test(returnDate);
+
+  
 
   const handleSubmit = async (e) => {
         e.preventDefault();

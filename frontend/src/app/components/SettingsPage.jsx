@@ -72,8 +72,13 @@ export default function SettingsPage() {
         window.location.href = "/reset_password"; // Redirects user to reset password page
     };
 
-    console.log("Admin status:", isAdmin);
-    console.log("Current approvals state:", approvals);
+    // console.log("Admin status:", isAdmin);
+    // console.log("Current approvals state:", approvals);
+    // console.log("user:", user);
+    console.log("firstName:", user?.firstName);
+    console.log("lastName:", user?.lastName);
+    console.log("email address:", user?.emailAddresses[0]?.emailAddress);
+
 
     return (
         <>
