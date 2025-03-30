@@ -113,10 +113,14 @@ export default function Popup( { unit, onClose } ) {
         }
       }, [borrowers]);
 
+      console.log("tags log", unit.color); 
+      console.log("tags log", unit.condition); 
+
 
     useEffect(() => {
         if (!unit) return;
     }, [unit]);
+
     
     if (!unit) {
         return null;
@@ -216,14 +220,27 @@ export default function Popup( { unit, onClose } ) {
                             <td><strong>Season: </strong>{season}</td>
                         </tr>
                         <tr>
-                            <td>
-                                <strong>Condition: </strong>
-                                <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
-                                    <div className={`circle2 ${unit.condition}`}></div>
-                                    {condition}
+                        <td>
+                            <strong>Condition: </strong>
+                            <span style={{ display: "inline-flex", gap: "10px", flexWrap: "wrap" }}>
+                                {(Array.isArray(condition) ? condition : [condition]).map((cond, i) => (
+                                <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                                    <div className={`circle2 ${cond}`}></div>
+                                    <span>{cond}</span>
                                 </span>
+                                ))}
+                            </span>
                             </td>
-                            <td><strong>Color: </strong>{color}</td>
+
+                            <td>
+                                <strong>Color: </strong>
+                                <span style={{ display: "inline-flex", gap: "8px", flexWrap: "wrap" }}>
+                                    {Array.isArray(color)? color.map((c, i) => (
+                                        <span key={i}> {c} </span>
+                                     )) : color}
+                                </span>
+                                                                
+                                </td>
                         </tr>
                         <tr>
                             <td>
