@@ -3,7 +3,6 @@ import "./ReturnButton.css";
 import { useState, useEffect } from "react";
 import StylishButton from "./StylishButton.jsx";
 import ItemBoxes from "./ReturnItemBoxes.jsx";
-import { setSelectionRange } from "@testing-library/user-event/dist/utils";
 
 const ReturnPopup = ({ units = [], onSuccess, onClose }) => {
     // 🔹 Ensuring Hooks are Always Called
