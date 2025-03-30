@@ -61,11 +61,11 @@ export default function EditNoteButton() {
             const response = await fetch(`../../api/db`, { 
                 method: 'PUT',
                 headers: {
-                  'Content-Type': 'application/json' // Specify the content type
+                  'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                  text: 'UPDATE dummy_data SET note = $1 WHERE id = $2', // SQL query
-                  params: [noteValue, itemInfo.id] // Parameters for the query
+                  text: 'UPDATE dummy_data SET note = $1 WHERE id = $2',
+                  params: [noteValue, itemInfo.id]
                 }),
               });
 
@@ -74,7 +74,9 @@ export default function EditNoteButton() {
             }
 
             alert('Note updated successfully!'); // Notify the user of success
-            handleTogglePopup(); // Close the popup after successful update
+
+            // Close the popup after successful update
+            handleTogglePopup();
         } catch (error) {
             setError(error.message);
         }
