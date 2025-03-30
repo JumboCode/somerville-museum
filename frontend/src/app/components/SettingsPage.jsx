@@ -17,6 +17,7 @@ import "./SettingsPage.css";
 import UserVerificationCard from "./userVerificationCard.jsx";
 import React, { useState, useEffect } from "react";
 import { useClerk, useUser } from "@clerk/nextjs";
+import ExportDataBtn from "./ExportDataBtn.jsx"; // Import the ExportDataBtn component
 
 export default function SettingsPage() {
     const [lightMode, setLightMode] = useState(false);
@@ -119,7 +120,7 @@ export default function SettingsPage() {
                                     <span className="slider round"></span>
                                 </label>
                                 <label>Normal Data Entry</label>
-                                <button className="export-btn">⬆ Export Data</button>
+                                <ExportDataBtn></ExportDataBtn>
                             </div>
                             <div className="toggle">
                                 <label className="switch">
