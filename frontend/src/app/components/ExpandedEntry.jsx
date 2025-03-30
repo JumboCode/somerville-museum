@@ -29,8 +29,10 @@ function ExpandedEntry({ itemData, onClose }) {
             setNewID(itemData.id); 
             setKeywords(itemData.tags || []);
             setNewStatus(itemData.status || '');
-        }
+        }        
     }, [itemData]);
+
+
 
     const onEdit = () => {
         setIsEditing(true);
@@ -193,6 +195,7 @@ function ExpandedEntry({ itemData, onClose }) {
         handleUpdateTags();
         handleUpdateID();
     };
+
 
 
     return (
