@@ -127,7 +127,12 @@ export default function SignUp() {
       await signUp.create({
         emailAddress: email,
         password: password,
+        userAttributes: {
+          firstName: firstName,
+          lastName: lastName,
+        },
       })
+      
 
       await signUp.prepareEmailAddressVerification({
         strategy: "email_code",
@@ -139,21 +144,26 @@ export default function SignUp() {
   }
 
   const handleVerify = async (e) => {
-    e.preventDefault()
-    if (!isLoaded) return
-
+    e.preventDefault();
+    if (!isLoaded) return;
+    
     try {
       const signUpAttempt = await signUp.attemptEmailAddressVerification({ code });
       if (signUpAttempt.status === 'complete') {
-        await setActive({ session: signUpAttempt.createdSessionId })
-        router.push('/signup_confirmed')
+        await setActive({ session: signUpAttempt.createdSessionId });
+        router.push('/signup_confirmed');
       } else {
-        alert("Invalid verification code. Try again.")
+        alert("Invalid verification code. Try again.");
       }
     } catch (err) {
-      alert("Invalid verification code. Try again.")
+      alert("Invalid verification code. Try again.");
     }
   }
+  
+  
+  
+  
+  
 
   if (verifying) {
     return (
