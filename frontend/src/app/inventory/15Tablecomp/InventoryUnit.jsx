@@ -20,7 +20,6 @@ export default function InventoryUnit({ unit, onChange, checked }) {
 
     const handleClick = () => {
         setIsPrePopupVisible(true);
-        console.log("prepopupvisible" + isPrePopupVisible)
         if (buttonRef.current) {
             const rect = buttonRef.current.getBoundingClientRect();
             setPopupPosition({
