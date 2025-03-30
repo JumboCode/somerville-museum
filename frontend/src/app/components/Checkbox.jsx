@@ -1,24 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import "./Checkbox.css";
 
-const Checkbox = (props) => { /* Props has element label with the label for dropdown name */
-
-    const [color, setColor] = useState("#FFFFFF");
-    const [checked, setChecked] = useState("#FFFFFF")
-
-    const handleClick = () => {
-        setColor(color === "#FFFFFF" ? "#9B525F" : "#FFFFFF");
-        setChecked(color === "##FFFFFF" ? "#ffffff" : "#FFFFFF")
-    }
-
-    return (
-        <div className="checkbox">
-            <button className="checkbox-button" onClick={handleClick} style={{backgroundColor: color, color: checked}}> ✓ </button>
-            <p className="check-text">{props.label}</p>
-        </div>
-    );
+const Checkbox = ({ label, checked, onChange }) => {
+  return (
+    <div className="checkbox" onClick={onChange} style={{ cursor: "pointer" }}>
+      <button
+        className="checkbox-button"
+        style={{
+          backgroundColor: checked ? "#9B525F" : "#FFFFFF",
+          color: checked ? "#FFFFFF" : "#9B525F",
+        }}
+      >
+        {checked ? "✓" : ""}
+      </button>
+      <p className="check-text">{label}</p>
+    </div>
+  );
 };
 
 export default Checkbox;
