@@ -16,6 +16,7 @@ import Popup from 'reactjs-popup';
 import BorrowUnit from './BorrowUnit';
 import './BorrowPopup.css';
 import { useGlobalContext } from './contexts/ToggleContext';
+import StylishButton from './StylishButton';
 
 const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
   const { isToggleEnabled } = useGlobalContext(); // TOGGLE FUNCTIONALITY
@@ -386,10 +387,8 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
           </div>
         </div>
         <div className="form-actions">
-          <button type="button" onClick={onClose}>
-            Cancel
-          </button>
-          <button type="submit">Borrow</button>
+          <StylishButton label="Cancel" styleType= "style1" onClick={onClose}/>
+          <StylishButton label="Borrow" styleType= "style3"/>
         </div>
       </form>
       {isSuccessPopupVisible && (
