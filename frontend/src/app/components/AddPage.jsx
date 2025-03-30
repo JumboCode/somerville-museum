@@ -38,7 +38,6 @@ export default function AddPage() {
     const [manualIdText, setManualIdText] = useState("");
     const [manualDateText, setManualDateText] = useState("");
 
-
     const [itemText, setItemText] = useState("");
     const [locationText, setLocationText] = useState("");
     const [priceText, setPriceText] = useState("");
@@ -211,11 +210,11 @@ export default function AddPage() {
             return;
         }
     
-        // Extract only names
-        const selectedNames = selectedTimePeriods.map(item => item?.name || ""); // Avoid undefined errors
+        // Extract only names to avoid undefined values
+        const selectedNames = selectedTimePeriods.map(item => item?.name || "");
     
-        // Update state
-        setSelectedTimePeriod(selectedNames.filter(name => name !== "")); // Remove any empty values
+        // Update state, removing any empty values
+        setSelectedTimePeriod(selectedNames.filter(name => name !== ""));
     };
 
     const handleSeasonSelect = (season) => {
