@@ -236,32 +236,35 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
                 ))}
                 </div>
                 <div className="pagination-container">
-                <div className="pagination">
-                    <button
-                    type="button"
-                    disabled={currentPage === 1}
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    >
-                    {"<"}
-                    </button>
-                    {Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                        key={index + 1}
+                  <div className="pagination">
+                      <StylishButton
                         type="button"
-                        className={currentPage === index + 1 ? "active" : ""}
-                        onClick={() => handlePageChange(index + 1)}
-                    >
-                        {index + 1}
-                    </button>
-                    ))}
-                    <button
-                    type="button"
-                    disabled={currentPage === totalPages}
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    >
-                    {">"}
-                    </button>
-                </div>
+                        disabled={currentPage === 1}
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        styleType='style4'
+                        >
+                        {"<"}
+                      </StylishButton>
+                      {Array.from({ length: totalPages }, (_, index) => (
+                      <StylishButton
+                            key={index + 1}
+                            type="button"
+                            className={currentPage === index + 1 ? "active" : ""}
+                            onClick={() => handlePageChange(index + 1)}
+                            styleType={currentPage === index + 1 ? 'style5' : 'style4'}
+                        >
+                            {index + 1}
+                      </StylishButton>
+                      ))}
+                      <StylishButton
+                        type="button"
+                        disabled={currentPage === totalPages}
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        styleType='style4'
+                        >
+                      {">"}
+                      </StylishButton>
+                  </div>
                 </div>
             </>
             ) : (
