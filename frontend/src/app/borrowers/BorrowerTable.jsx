@@ -7,19 +7,16 @@ import StylishButton from "../components/StylishButton";
 export default function BorrowerTable({ searchResults, onSelectBorrower }) {
   const borrowers = searchResults || [];
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10); // Default items per page
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  // Compute total pages from the borrowers length.
   const totalPages = Math.ceil(borrowers.length / itemsPerPage);
 
-  // Ensure current page doesn't exceed total pages when borrowers or itemsPerPage change.
   useEffect(() => {
     if (currentPage > totalPages) {
       setCurrentPage(1);
     }
   }, [borrowers, itemsPerPage, totalPages]);
 
-  // Get the borrowers to display on the current page.
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentBorrowers = borrowers.slice(startIndex, startIndex + itemsPerPage);
 
@@ -49,7 +46,7 @@ export default function BorrowerTable({ searchResults, onSelectBorrower }) {
               <th>Email</th>
               <th>Phone Number</th>
               <th>Borrow History</th>
-              <th>{/* Column for the three dots */}</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -84,6 +81,8 @@ export default function BorrowerTable({ searchResults, onSelectBorrower }) {
           </tbody>
         </table>
       </div>
+
+      <div className="flex-spacer" />
 
       <div className="pagination-controls">
         <div className="num-items">
