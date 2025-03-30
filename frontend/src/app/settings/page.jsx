@@ -4,7 +4,7 @@
  * 
  * @file settings/page.jsx
  * @date 16 February, 2025
- * @authors Ari Goshtasby & Shayne Sidman
+ * @authors Arietta M. Goshtasby & Shayne Sidman
  *  
  */
 import { useClerk } from "@clerk/nextjs";
@@ -38,7 +38,7 @@ const Settings = () => {
 
   return (
     <div className="container">
-        <div className="wrapper">
+        {/* <div className="wrapper">
             <label className="toggleWrapper">
             <input 
                 type="checkbox"
@@ -52,7 +52,7 @@ const Settings = () => {
               {displayText}
             </span>
             <div onClick={()=> {signOut({ redirectUrl: '/' })}}></div>
-        </div>
+        </div> */}
         <div className="settings-page">
           <SettingsPage />
         </div>
