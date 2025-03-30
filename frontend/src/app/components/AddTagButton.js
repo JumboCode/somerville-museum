@@ -1,4 +1,4 @@
-"use client"; // This file is client-side
+"use client";
 
 import { useState } from 'react';
 
@@ -61,4 +61,4 @@ function AddTagButton() {
   );
 }
 
-export default AddTagButton; // Export the component so it can be imported and used in other files
+export default AddTagButton;
