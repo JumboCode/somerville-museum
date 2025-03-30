@@ -153,7 +153,6 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
 
         // Read response as text (to catch non-JSON errors)
         const responseText = await emailResponse.text();
-        console.log("Email API Response:", responseText);
 
         if (!emailResponse.ok) {
             throw new Error(`Email sending failed: ${emailResponse.status} ${responseText}`);

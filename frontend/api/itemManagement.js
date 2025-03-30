@@ -31,8 +31,6 @@ export async function addHandler(req, res) {
             image_keys = []
         } = req.body;
 
-        console.log(image_keys);
-
         // Check if an item with the given id already exists
         const existingItem = await query(`SELECT id FROM dummy_data WHERE id = $1`, [id]);
 
