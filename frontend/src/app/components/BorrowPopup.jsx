@@ -219,10 +219,14 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
 
   return (
     <div className="container">
+      
+      {/* Top header */}
       <div className="borrowItemsHeader">
         <div className="borrow-header">
             <h1>Borrow Item(s)</h1>
         </div>
+
+        {/* Left column of items to borrow */}
         <div className="borrowItemsContent">
             {borrowItems.length > 0 ? (
             <>
@@ -275,6 +279,7 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
 
       <div className="dividerNew"></div>
 
+      {/* Right column with borrower input fields */}
       <form onSubmit={handleSubmit} className="info-form">
         <div className="info-header">Information</div>
         <div className="form-row">
