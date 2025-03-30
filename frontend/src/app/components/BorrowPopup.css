@@ -382,8 +382,8 @@
   
   
   .form-actions button {
-    padding: 0.625rem 1.25rem;
-    font-size: 1rem;
+    padding: 0.725rem 1.35rem;
+    font-size: 1.25rem;
     font-weight: bold;
     border-radius: 4px;
     border: none;
@@ -391,15 +391,26 @@
   }
   
   
-  .form-actions button[type="submit"] {
+  .form-actions button[type="cancel"] {
     background-color: #FFFFFF;
     border: 1px solid #9B525F;
     color: #000000;
+    transition: 0.3s;
+  }
+
+  .form-actions button[type="cancel"]:hover  {
+    background-color: #e0e0e0;
   }
   
-  .form-actions button[type="button"] {
+  .form-actions button[type="submit"] {
     background-color: #007781;
     color: #ffffff;
+    transition: 0.3s;
+  }
+
+  .form-actions button[type="submit"]:hover {
+    background-color: #02545c;
+   
   }
   
   .reactjs-popup-content {
@@ -466,19 +477,51 @@
   
   .success-popup h2 {
     font-size: 1.75rem;
-    color: #4caf50;
     margin-bottom: 1rem;
+
+    color: #000;
+    text-align: center;
+    font-family: Akatab;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  .success-popup p {
+    font-family: Akatab;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+
   }
   
   .success-popup button {
-    margin-top: 1rem;
+    margin-top: 2rem;
     padding: 0.625rem 1.5rem;
-    font-size: 1rem;
-    background-color: #007781;
-    color: white;
-    border: none;
-    border-radius: 6px;
+
     cursor: pointer;
+
+    border-radius: 5px;
+    border: 1px solid #9B525F;
+    background: #FFF;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
+
+
+    color: #000;
+    text-align: center;
+    font-family: Akatab;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    transition: 0.3s;
+  }
+
+  .success-popup button:hover {
+    background-color: #9B525F; 
+    color: #FFFFFF;
   }
   
   

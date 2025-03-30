@@ -368,7 +368,7 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
           </div>
         </div>
         <div className="form-actions">
-          <button type="button" onClick={onClose}>
+          <button type="cancel" onClick={onClose}>
             Cancel
           </button>
           <button type="submit">Borrow</button>
@@ -379,8 +379,9 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
           <div className="success-popup">
             <h2>Borrow Success</h2>
             <p>
-              The following items have been successfully borrowed:{" "}
-              {borrowItems.map(item => item.id).join(", ")}
+              The following items have been borrowed:{" "}
+              <h2>      {borrowItems.map(item => item.id).join(", ")} </h2>
+         
             </p>
             <p>Thank you!</p>
             <button onClick={onSuccess}>Return to Inventory</button>
