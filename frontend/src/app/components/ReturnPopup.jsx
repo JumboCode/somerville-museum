@@ -5,7 +5,6 @@ import StylishButton from "./StylishButton.jsx";
 import ItemBoxes from "./ReturnItemBoxes.jsx";
 
 const ReturnPopup = ({ units = [], onSuccess, onClose }) => {
-    // 🔹 Ensuring Hooks are Always Called
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = Math.ceil(units.length / 6);
     const buttons = Array.from({ length: totalPages }, (_, index) => index + 1); 
