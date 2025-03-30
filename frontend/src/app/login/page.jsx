@@ -9,12 +9,11 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSignIn, useAuth } from "@clerk/nextjs";
-import { Icon } from "react-icons-kit";
-import { eyeOff } from "react-icons-kit/feather/eyeOff.js";
-import { eye } from "react-icons-kit/feather/eye.js";
+import Eyecon from "../components/Eyecon";
+import EyeconOff from "../components/EyeconOff";
 import Checkbox from "../components/Checkbox";
 import Image from "next/image";
 import "../app.css";
@@ -23,23 +22,36 @@ export default function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [type, setType] = useState("password");
-  const [icon, setIcon] = useState(eyeOff);
+  const [eyeColor, setEyeColor] = useState("#9B525F");
   const [error, setError] = useState("");
   const [errorBG, setErrorBG] = useState("#FFFFFF");
   const [errorBorder, setErrorBorder] = useState("#9B525F");
   const [loginAttempts, setLoginAttempts] = useState(0);
+  const [rememberMe, setRememberMe] = useState(false);
 
-  const {isLoaded, signIn, setActive} = useSignIn();
+  const { isLoaded, signIn, setActive } = useSignIn();
   const { isSignedIn } = useAuth();
   const router = useRouter();
 
-  if (isSignedIn) {
-    router.push('/dashboard');
-  }
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("rememberedEmail");
+    const savedPassword = localStorage.getItem("rememberedPassword");
 
-  const handleToggle = () => {
-    setType(type === "password" ? "text" : "password");
-    setIcon(type === "password" ? eye : eyeOff);
+    if (savedEmail && savedPassword) {
+      setEmail(savedEmail);
+      setPassword(savedPassword);
+      setRememberMe(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isSignedIn) {
+      router.push('/dashboard');
+    }
+  }, [isSignedIn, router]);
+
+  const handlePassToggle = () => {
+    setType((prev) => (prev === "password" ? "text" : "password"));
   };
 
   const resetFields = () => {
@@ -47,35 +59,36 @@ export default function Signin() {
     setPassword("");
   };
 
-  const handleLoginError = () => {  // Turn it all red when error occurs
+  const handleLoginError = () => {
     setErrorBG("rgba(255, 44, 44, 0.2)");
     setErrorBorder("red");
+    setEyeColor(eyeColor === "#9B525F" ? "red" : "#9B525F");
   };
 
-  const typeEmail = (e) => {  // Remove error once typing starts again
+  const typeEmail = (e) => {
     setEmail(e.target.value);
     setErrorBG("#FFFFFF");
     setErrorBorder("#9B525F");
     setError("");
+    setEyeColor("#9B525F");
   };
 
-  const typePassword = (e) => {  // Remove error once typing starts again
+  const typePassword = (e) => {
     setPassword(e.target.value);
     setErrorBG("#FFFFFF");
     setErrorBorder("#9B525F");
     setError("");
-  }
+    setEyeColor("#9B525F");
+  };
 
-  const onButtonClick = () => {  // Handler for trying to log in.
+  const onButtonClick = () => {
     setLoginAttempts(loginAttempts + 1);
-
     setError("");
 
-    if (loginAttempts >= 5) {  // Too many attempts == booted back to main page
-      router.push("/"); 
+    if (loginAttempts >= 5) {
+      router.push("/");
     }
 
-    // All email and password validation
     if (!email) {
       setError("Please enter your email.");
       handleLoginError();
@@ -83,7 +96,7 @@ export default function Signin() {
       return false;
     }
 
-    if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+    if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
       setError("Please enter a valid email.");
       handleLoginError();
       resetFields();
@@ -101,31 +114,42 @@ export default function Signin() {
   };
 
   const signInWithEmail = async () => {
-    if (!onButtonClick()) {  // Validate email and password
-      return;
-    }
-
-    if (!isLoaded) {
-      return;
-    }
-
+    if (!onButtonClick()) return;
+  
+    console.log("Attempting sign in with:", email, password);
+    console.log("Remember Me checked:", rememberMe);
+  
     try {
       const result = await signIn.create({
         identifier: email,
         password,
       });
+      
       if (result.status === "complete") {
-        await setActive({session: result.createdSessionId});
-        router.push("/dashboard");
+        console.log("Login successful. Storing to localStorage...");
+  
+        if (rememberMe) {
+          localStorage.setItem("rememberedEmail", email);
+          localStorage.setItem("rememberedPassword", password);
+          console.log("✅ Saved email and password to localStorage.");
+        } else {
+          localStorage.removeItem("rememberedEmail");
+          localStorage.removeItem("rememberedPassword");
+          console.log("🧹 Cleared localStorage.");
+        }
+  
+        await setActive({ session: result.createdSessionId });
+        router.push("/login_confirmed");
       } else {
-        console.log(result);
+        console.log("Sign in not complete yet:", result);
       }
     } catch (err) {
-      setError('Something went wrong. Please try again.');
+      setError("Something went wrong. Please try again.");
       handleLoginError();
       resetFields();
     }
   };
+  
 
   return (
     <div className="login-bg">
@@ -137,19 +161,19 @@ export default function Signin() {
           <div className="clothing-database">CLOTHING DATABASE</div>
         </div>
         <div className="inputContainer">
-        <label
-          className="errorLabel"
-          style={{
-            backgroundColor: error ? "rgba(255, 44, 44, 0.2)" : "#FFFFFF",
-            minHeight: "24px",
-            color: error ? "red" : "#FFFFFF",
-            padding: "4px 8px",
-            display: "block",
-            transition: "all 0.2s ease",
-          }}
-        >
-          {error || ""}
-        </label>
+          <label
+            className="errorLabel"
+            style={{
+              backgroundColor: error ? "rgba(255, 44, 44, 0.2)" : "#FFFFFF",
+              minHeight: "24px",
+              color: error ? "red" : "#FFFFFF",
+              padding: "4px 8px",
+              display: "block",
+              transition: "all 0.2s ease",
+            }}
+          >
+            {error || ""}
+          </label>
 
           <input
             value={email}
@@ -171,24 +195,44 @@ export default function Signin() {
             style={{ borderColor: errorBorder }}
             autoComplete="current-password"
           />
-          {/* <span className="eyecon" onClick={handleToggle}>
-            <Icon icon={icon} size={20} />
-          </span> */}
+          <span className={"eyecon"} onClick={handlePassToggle}>
+            {type === "password" ? (
+              <EyeconOff color={eyeColor} />
+            ) : (
+              <Eyecon color={eyeColor} />
+            )}
+          </span>
         </div>
         <div className="remember-pwd">
-          <Checkbox className="check" label="Remember me" />
-          <button className="textButton" onClick={() => router.push("/reset_password")}>
+          <Checkbox
+            className="check"
+            label="Remember me"
+            checked={rememberMe}
+            onChange={() => setRememberMe((prev) => !prev)}
+          />
+          <button
+            className="textButton"
+            onClick={() => router.push("/reset_password")}
+          >
             <strong>
               <p className="tiny">Forgot password?</p>
             </strong>
           </button>
         </div>
         <div className="inputContainer login-button">
-          <input className="inputButton" type="button" onClick={signInWithEmail} value="Login" />
+          <input
+            className="inputButton"
+            type="button"
+            onClick={signInWithEmail}
+            value="Login"
+          />
         </div>
         <div className="create-account">
           <div>Don&apos;t have an account?</div>
-          <button className="textButton" onClick={() => router.push("/signup")}>
+          <button
+            className="textButton"
+            onClick={() => router.push("/signup")}
+          >
             <strong>Create an account</strong>
           </button>
         </div>

@@ -24,15 +24,13 @@ export default function ConfirmSignup() {
         <div className={'bodyConfirmContainer'}>
           Somerville Museum will verify your account. You will receive an email when verified.
         </div>
-        <br />
-        <div className={'buttonContainer'}>
-          <input
-            className={'returnButton'}
-            type="button"
-            onClick={() => {router.push("/login")}}
-            value={'Back to Login'}
-          />
-        </div>
+        <input
+          className={'returnButton'}
+          style={{ marginTop: "5vh" }}
+          type="button"
+          onClick={() => {router.push("/login")}}
+          value={'Back to Login'}
+        />
       </div>
     </div>
   );

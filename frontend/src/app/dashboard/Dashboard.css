@@ -6,7 +6,7 @@
 */
 
 .dashboard-container {
-    padding: 3vh 4vw;
+    padding: 3vh 4vw 3vh 8.25vw;
     min-height: 100vh;
     box-sizing: border-box;
     overflow: hidden;

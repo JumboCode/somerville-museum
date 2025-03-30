@@ -1,15 +1,6 @@
-/**
- * @fileoverview Contains layout and logic for the signup page with a custom clerk flow.
- * 
- * @file signup/page.jsx
- * @date 16 February, 2025
- * @authors Ari Goshtasby & Shayne Sidman
- *  
- */
-
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSignUp, useAuth } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
 import Image from "next/image";
@@ -31,13 +22,19 @@ export default function SignUp() {
   const [verifying, setVerifying] = useState(false)
   const [code, setCode] = useState('')
 
+  const [hasUppercase, setHasUppercase] = useState(false);
+  const [hasSpecialChar, setHasSpecialChar] = useState(false);
+  const [isLongEnough, setIsLongEnough] = useState(false);
+
   const { isLoaded, signUp, setActive } = useSignUp()
   const { isSignedIn } = useAuth();
   const router = useRouter()
 
-  if (isSignedIn) {
-    router.push('/dashboard')
-  }
+  useEffect(() => {
+    if (isSignedIn) {
+      router.push('/dashboard');
+    }
+  }, []);
 
   const resetFields = () => {
     setFirstName('');
@@ -47,87 +44,72 @@ export default function SignUp() {
     setConfirmPassword('');
   }
 
-  const handleCreateError = () => {  // Make everything red when sign up error
+  const handleCreateError = () => {
     setErrorBG(errorBG === '#FFFFFF' ? 'rgba(255, 44, 44, 0.2)' : '#FFFFFF');
     setErrorBorder(errorBorder === '#9B525F' ? 'red' : '#9B525F');
     setEyeColor(eyeColor === '#9B525F' ? 'red' : '#9B525F');
   };
 
-  function containsUppercaseAndSymbol(str) {  // Validate password
-    const hasUppercase = /[A-Z]/.test(str); // Check for uppercase letters
-    const hasSymbol = /[^a-zA-Z0-9]/.test(str); // Check for symbols (non-alphanumeric characters)
-    return hasUppercase && hasSymbol;
-  }
-
-  const handlePassToggle = () => {  // Toggle between showing passwords
-      setPassType((prev) => (prev === 'password' ? 'text' : 'password'));
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    setPassword(value);
+    setHasUppercase(/[A-Z]/.test(value));
+    setHasSpecialChar(/[^a-zA-Z0-9]/.test(value));
+    setIsLongEnough(value.length > 8);
   };
 
-  // Handle validation of names, email, and password
+  const handlePassToggle = () => {
+    setPassType((prev) => (prev === 'password' ? 'text' : 'password'));
+  };
+
   const onButtonClick = () => {
-    // Set initial error values to empty
     setError('');
 
-    // Check if the user has entered fields correctly
     if ('' === firstName || '' === lastName) {
       setError('Please enter your name.');
-      if (errorBG === '#FFFFFF') {
-        handleCreateError();
-      }
+      if (errorBG === '#FFFFFF') handleCreateError();
       resetFields();
       return false;
     }
 
     if ('' === email) {
       setError('Please enter your email.');
-      if (errorBG === '#FFFFFF') {
-        handleCreateError();
-      }
+      if (errorBG === '#FFFFFF') handleCreateError();
       resetFields();
       return false;
     }
 
     if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
       setError('Please enter a valid email.');
-      if (errorBG === '#FFFFFF') {
-        handleCreateError();
-      }
+      if (errorBG === '#FFFFFF') handleCreateError();
       resetFields();
       return false;
     }
 
     if ('' === password) {
       setError('Please enter a password.');
-      if (errorBG === '#FFFFFF') {
-        handleCreateError();
-      }
+      if (errorBG === '#FFFFFF') handleCreateError();
       resetFields();
       return false;
     }
 
-    if (password.length < 9 || !containsUppercaseAndSymbol(password)) {
+    if (!isLongEnough || !hasUppercase || !hasSpecialChar) {
       setError('Invalid password.');
-      if (errorBG === '#FFFFFF') {
-        handleCreateError();
-      }
+      if (errorBG === '#FFFFFF') handleCreateError();
       resetFields();
       return false;
     }
 
     if ('' === confirmPassword) {
       setError('Please confirm your password.');
-      if (errorBG === '#FFFFFF') {
-        handleCreateError();
-      }
+      if (errorBG === '#FFFFFF') handleCreateError();
       resetFields();
       return false;
     }
 
     if (password !== confirmPassword) {
-      setError('Passwords don\'t match.');
-      if (errorBG === '#FFFFFF') {
-        handleCreateError();
-      }
+      setError("Passwords don't match.");
+      if (errorBG === '#FFFFFF') handleCreateError();
       resetFields();
       return false;
     }
@@ -135,24 +117,18 @@ export default function SignUp() {
     return true;
   };
 
-  // Handle submission of the sign-up form
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!onButtonClick()) {
-      return;
-    }
-
+    if (!onButtonClick()) return;
     if (!isLoaded) return;
 
-    // Start the sign-up process using the email and password provided
     try {
       await signUp.create({
         emailAddress: email,
         password: password,
       })
 
-      // Send the user an email with the verification code
       await signUp.prepareEmailAddressVerification({
         strategy: "email_code",
       })
@@ -162,22 +138,15 @@ export default function SignUp() {
     }
   }
 
-  // Handle the submission of the verification form
   const handleVerify = async (e) => {
     e.preventDefault()
-
     if (!isLoaded) return
 
     try {
-      // Use the code the user provided to attempt verification
-      const signUpAttempt = await signUp.attemptEmailAddressVerification({
-        code,
-      })
-
-      // If verification was completed, set the session to active and redirect the user
+      const signUpAttempt = await signUp.attemptEmailAddressVerification({ code });
       if (signUpAttempt.status === 'complete') {
         await setActive({ session: signUpAttempt.createdSessionId })
-        router.push('/dashboard')
+        router.push('/signup_confirmed')
       } else {
         alert("Invalid verification code. Try again.")
       }
@@ -214,7 +183,6 @@ export default function SignUp() {
     )
   }
 
-  // Sign-up form to capture email, password, name, etc.
   return (
     <div className="login-bg">
       <div className="mainContainer">
@@ -227,7 +195,19 @@ export default function SignUp() {
         </div>
         <div className={'namesContainer'}>
           <div className={'inputContainer'}>
-            <label className="errorLabel" style={{ backgroundColor: errorBG }}>{error}</label>
+            <label
+              className="errorLabel"
+              style={{
+                backgroundColor: error ? "rgba(255, 44, 44, 0.2)" : "#FFFFFF",
+                minHeight: "24px",
+                color: error ? "red" : "#FFFFFF",
+                padding: "4px 8px",
+                display: "block",
+                transition: "all 0.2s ease",
+              }}
+            >
+              {error || "‎"}
+            </label>
             <input
               value={firstName}
               placeholder="First Name"
@@ -266,13 +246,12 @@ export default function SignUp() {
             placeholder="Password"
             value={password}
             className="inputBox"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handlePasswordChange}
             style={{ borderColor: errorBorder }}
           />
           <span className={'eyecon'} onClick={handlePassToggle}>
-            {passType === 'password' ? <Eyecon color={eyeColor} /> : <EyeconOff color={eyeColor} />}
+            {passType === 'password' ? <EyeconOff color={eyeColor} /> : <Eyecon color={eyeColor} />}
           </span>
-
         </div>
         <div className="inputContainer password">
           <input
@@ -287,14 +266,14 @@ export default function SignUp() {
           />
         </div>
         <div className={'passwordInfo'}>
-            <p className={'passwordInfoP'}>Password must contain the following:</p>
-            <p className={'passwordInfoP'}>- 1 Uppercase character</p>
-            <p className={'passwordInfoP'}>- 1 Special character - !&quot;$%@#</p>
-            <p className={'passwordInfoP'}>- Must be longer than 8 characters</p>
-          </div>
-          <div className={'inputContainer'}>
-            <input className={'inputButton'} type="button" onClick={handleSubmit} value={'Sign Up'} />
-          </div>
+          <p className={'passwordInfoP'}>Password must contain the following:</p>
+          <p className={'passwordInfoP'} style={{ color: hasUppercase ? 'green' : 'black' }}>- 1 Uppercase character</p>
+          <p className={'passwordInfoP'} style={{ color: hasSpecialChar ? 'green' : 'black' }}>- 1 Special character - !"$%@#</p>
+          <p className={'passwordInfoP'} style={{ color: isLongEnough ? 'green' : 'black' }}>- Must be longer than 8 characters</p>
+        </div>
+        <div className={'inputContainer'}>
+          <input className={'inputButton'} type="button" onClick={handleSubmit} value={'Sign Up'} />
+        </div>
       </div>
     </div>
   )
