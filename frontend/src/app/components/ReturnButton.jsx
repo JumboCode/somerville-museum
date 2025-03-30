@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from "react";
 import "./ReturnButton.css"
 import ReturnPopup from "./ReturnPopup.jsx"
-import StylishButton from './StylishButton.jsx'; //import css file
+import StylishButton from './StylishButton.jsx';
 
-const ReturnButton = ( {selectedItems = [], onSuccess } ) => {  //takes in selected items as a parameter
+const ReturnButton = ( {selectedItems = [], onSuccess } ) => {
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [borrowedSelectedItems, setBorrowedSelectedItems] = useState(selectedItems); 
 
@@ -15,7 +15,8 @@ const ReturnButton = ( {selectedItems = [], onSuccess } ) => {  //takes in selec
         } else {
             const isValid = await handleValidity();
             if (isValid) {
-                setIsPopupVisible(true);  // Open the popup only if validity is true
+                // Open the popup only if validity is true
+                setIsPopupVisible(true);  
             } else {
                 alert('Some items are invalid. Please try again.');
             }
@@ -44,18 +45,18 @@ const ReturnButton = ( {selectedItems = [], onSuccess } ) => {  //takes in selec
               alert(result.message);  
           }
     
-          //reset available items after check
+          // Reset available items after check
           setBorrowedSelectedItems(result.availableItems); 
 
-          //return false if nothing in array
+          // Return false if nothing in array
           if (result.availableItems.length == 0) {
             return false;
           }
-    
-          return true; // Return true if the validity check passes
+          // Return true if the validity check passes
+          return true; 
         } catch (error) {
           console.error('Error during validity check:', error);
-          return false; // Return false if there's an error
+          return false;
         }
       }
 
@@ -70,9 +71,7 @@ const ReturnButton = ( {selectedItems = [], onSuccess } ) => {  //takes in selec
             { isPopupVisible && (
                 <ReturnPopup onClose={handleClosePopup}
                              units = {borrowedSelectedItems}/>
-            )
-
-            }
+            )}
         </div>
     );
 }
