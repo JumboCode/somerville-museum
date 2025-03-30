@@ -71,17 +71,6 @@ export async function borrowHandler(req, res) {
         [borrowerId, itemId, dateBorrowed, dueDate, dateReturned, approver, note]
       );
 
-      let borrowId = borrowsResult.rows[0].id; 
-
-      const borrowerObject = {
-        borrowerName, 
-        borrowerEmail,
-        phoneNumber,
-        borrowHistory
-      };
-
-      // await query("UPDATE dummy_data SET status = 'Available' WHERE id = $1", itemId)
-      //update each item's current_borrower, borrow_history, and borrower
       await query(
         `UPDATE dummy_data
         SET borrow_history = ARRAY_APPEND(
@@ -90,9 +79,7 @@ export async function borrowHandler(req, res) {
         ), status = $2, current_borrower = $1
         WHERE id = $3 `,
         [borrowerId, 'Borrowed', itemId]
-      
       );
-      
     }
 
     message = 'Borrowing process completed. ';
@@ -111,9 +98,7 @@ export async function returnHandler(req, res) {
   const { notes_id } = req.body;
   const { notes_content } = req.body;
 
-
   try {
-
     //arrays to keep track of items 
     const invalidItems = [];
     const validItems = []; 
@@ -149,7 +134,6 @@ export async function returnHandler(req, res) {
 
       //add item to available items 
       validItems.push(itemId);
-
     }
     
     let message = 'Returning process completed. ';
@@ -160,7 +144,6 @@ export async function returnHandler(req, res) {
     if (invalidItems.length > 0) {
       message += `The following items were unable to be returned: ${invalidItems.join(', ')}. `
     }
-
 
     res.status(200).json({message}); // Send the result back to the frontend
   } catch (error) {
@@ -306,77 +289,78 @@ export async function borrowByDateRangeHandler(req, res) {
 
 
 export async function fetchBorrowerEmailHandler(req, res) {
-    const { id } = req.query;  // Get borrower ID from query params
+  const { id } = req.query;  // Get borrower ID from query params
 
-    if (!id) {
-        return res.status(400).json({ error: "Missing borrower ID" });
-    }
+  if (!id) {
+      return res.status(400).json({ error: "Missing borrower ID" });
+  }
 
-    try {
-        // Fetch the borrower email using the ID
-        const result = await query(`
-            SELECT email FROM borrowers WHERE id = $1
-        `, [id]);
+  try {
+      // Fetch the borrower email using the ID
+      const result = await query(`
+          SELECT email FROM borrowers WHERE id = $1
+      `, [id]);
 
-        if (result.rows.length === 0) {
-            return res.status(404).json({ error: "Borrower not found" });
-        }
+      if (result.rows.length === 0) {
+          return res.status(404).json({ error: "Borrower not found" });
+      }
 
-        res.status(200).json({ borrower_email: result.rows[0].email });
-    } catch (error) {
-        console.error("Error fetching borrower email:", error);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
+      res.status(200).json({ borrower_email: result.rows[0].email });
+  } catch (error) {
+      console.error("Error fetching borrower email:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+  }
 }
 
-  export async function overdueHandler(req, res) {
-    if (req.method !== 'GET') {
-      return res.status(405).json({ message: 'Method Not Allowed' });
-    }
-  
-    try {
-      // Get the current date
-      const currentDate = new Date().toISOString();
-  
-      // SQL query to find all items with a return date passed
-      const overdueQuery = `
-        UPDATE borrow
-        SET status = 'Overdue'
-        WHERE return_date < $1 AND status != 'Overdue'
-      `;
-  
-      // Execute the query, passing the current date
-      const result = await query(overdueQuery, [currentDate]);
-  
-      // Send response with the number of updated records
-      res.status(200).json({ message: `${result.rowCount} items updated to overdue` });
-    } catch (error) {
-      console.error('Error updating overdue items:', error);
-      res.status(500).json({ error: 'Failed to update overdue items' });
-    }
+
+export async function overdueHandler(req, res) {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ message: 'Method Not Allowed' });
   }
-  
+
+  try {
+    // Get the current date
+    const currentDate = new Date().toISOString();
+
+    // SQL query to find all items with a return date passed
+    const overdueQuery = `
+      UPDATE borrow
+      SET status = 'Overdue'
+      WHERE return_date < $1 AND status != 'Overdue'
+    `;
+
+    // Execute the query, passing the current date
+    const result = await query(overdueQuery, [currentDate]);
+
+    // Send response with the number of updated records
+    res.status(200).json({ message: `${result.rowCount} items updated to overdue` });
+  } catch (error) {
+    console.error('Error updating overdue items:', error);
+    res.status(500).json({ error: 'Failed to update overdue items' });
+  }
+}
+
 
 export default async function handler(req, res) {
-    const { action } = req.query;
-    
-    switch(action) {
-        case 'borrow':
-            return borrowHandler(req, res);
-        case 'return':
-            return returnHandler(req, res);
-        case 'borrowValidity':
-            return borrowValidityHandler(req, res);
-        case 'returnValidity':
-            return returnValidityHandler(req, res);
-        case 'borrowByDateRange':
-            return borrowByDateRangeHandler(req, res);
-        case 'fetchBorrowerEmail':
-            return fetchBorrowerEmailHandler(req, res);
-        case 'overdue':
-            return overdueHandler(req, res);
-    
-        default:
-            return res.status(400).json({ error: 'Invalid action' });
-    }
+  const { action } = req.query;
+  
+  switch(action) {
+      case 'borrow':
+          return borrowHandler(req, res);
+      case 'return':
+          return returnHandler(req, res);
+      case 'borrowValidity':
+          return borrowValidityHandler(req, res);
+      case 'returnValidity':
+          return returnValidityHandler(req, res);
+      case 'borrowByDateRange':
+          return borrowByDateRangeHandler(req, res);
+      case 'fetchBorrowerEmail':
+          return fetchBorrowerEmailHandler(req, res);
+      case 'overdue':
+          return overdueHandler(req, res);
+  
+      default:
+          return res.status(400).json({ error: 'Invalid action' });
+  }
 }
