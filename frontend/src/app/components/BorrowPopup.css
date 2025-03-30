@@ -168,3 +168,26 @@
     gap: 1rem;
     margin-top: 1rem;
   }
+
+  .pagination-container {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    bottom: 0;
+    background: #F8F5F5;
+    padding: 0.5%;
+    padding-bottom: 5%;
+    text-align: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 7%;
+    flex-shrink: 0;
+}
+
+.pagination {
+  display: flex;
+  padding-right: 5%;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
