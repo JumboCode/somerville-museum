@@ -117,8 +117,6 @@ export default function Signin() {
       if (result.status === "complete") {
         await setActive({session: result.createdSessionId});
         router.push("/dashboard");
-      } else {
-        console.log(result);
       }
     } catch (err) {
       setError('Something went wrong. Please try again.');
