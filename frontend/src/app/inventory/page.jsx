@@ -64,9 +64,6 @@ export default function Inventory({
 
     // Called any time new filters/search results are applied to update displayed units
     useEffect(() => {
-        console.log("printing filterResults and searchResults")
-        console.log(filterResults.length)
-        console.log(searchResults.length)
         if (filterResults.length === 0 && searchResults.length === 0) return;
         // Takes intersection of search results and filter results to get correct ones.
         const filteredAndSearchResults = () => {

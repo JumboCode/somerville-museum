@@ -75,16 +75,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 35vh;
+  height: 40vh;
   width: 40%;
   padding: 0 5vw 0 5vw;
   border-radius: 8px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.19)
 }
 
+.confirmTopText {
+  margin-top: 10%;
+  font-size: large;
+}
+
 .bodyConfirmContainer {
   font-weight: normal;
   max-width: 70%;
+  text-align: center;
 }
 
 .resultContainer,
@@ -145,7 +151,7 @@
 
 .eyecon {
   position: absolute;
-  top: 50%;
+  top: 53%;
   left: 93%;
   transform: translate(-50%, -50%);
 }
@@ -168,6 +174,11 @@
   border-radius: 5px;
   cursor: pointer;
   width: 30vw;
+  transition: transform 0.2s ease-in-out;
+}
+
+.inputButton:hover {
+  transform: scale(1.05);
 }
 
 .returnButton {
@@ -178,7 +189,12 @@
   font-size: 1.5rem;
   border-radius: 5px;
   cursor: pointer;
-  width: 17vw;
+  width: 30vw;
+  transition: transform 0.2s ease-in-out;
+}
+
+.returnButton:hover {
+  transform: scale(1.05);
 }
 
 .errorLabel {
