@@ -2,7 +2,7 @@
 
 import Popup from 'reactjs-popup';
 import React, { useState, useEffect } from "react";
-import StylishButton from './StylishButton.jsx'; //import css file
+import StylishButton from './StylishButton.jsx';
 import BorrowPopup from './BorrowPopup.jsx';
 
 const BorrowButton = ({ selectedItems = [], onSuccess }) => {
@@ -55,7 +55,6 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
         alert('Some items are invalid. Please try again.');
       }
     }
-
   }
 
   return (
@@ -70,7 +69,8 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
         className='popup-wrapper'
         open={isOpen}
         modal
-        onClose={() => setIsOpen(false)} // Close the popup when it's closed
+        // Close the popup when it's closed
+        onClose={() => setIsOpen(false)} 
       >
         {(close) => (
           <BorrowPopup
@@ -79,7 +79,8 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
           onSuccess={() => {
             // Call the parent's onSuccess if provided
             if (onSuccess) {
-              onSuccess(); // Reset data in parent component
+               // Reset data in parent component
+              onSuccess();
             }
           }}
         />)}
