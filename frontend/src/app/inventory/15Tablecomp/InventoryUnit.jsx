@@ -99,6 +99,20 @@ export default function InventoryUnit({ unit, onChange, checked, unitList, index
         console.log("Items Checked?", checked);
     }
 
+    const getHighestCondition = (conditions) => 
+        conditions.reduce((best, c) =>
+            order.indexOf(c) < order.indexOf(best) ? c : best, conditions[0]
+        );
+    
+    const order = [
+        "Great",
+        "Good",
+        "Needs washing",
+        "Needs repair",
+        "Needs dry cleaning",
+        "Not usable"
+    ];
+
     //not pulling tags
     return (  
         <div className="unit" onDoubleClick={handleDoubleClick}> 
@@ -131,8 +145,8 @@ export default function InventoryUnit({ unit, onChange, checked, unitList, index
                     {unit.status}
                 </div>
                 <div className="condition">
-                    <div className={`circle2 ${Array.isArray(unit.condition) ? unit.condition[0] : unit.condition}`} ></div>
-                        {Array.isArray(unit.condition) ? unit.condition[0] : unit.condition}
+                    <div className={`circle2 ${getHighestCondition(Array.isArray(unit.condition) ? unit.condition : [unit.condition])}`} ></div>
+                        {getHighestCondition(Array.isArray(unit.condition) ? unit.condition : [unit.condition])}
                 </div>
 
             </div>
