@@ -37,8 +37,9 @@ const Settings = () => {
   };
 
   return (
+
     <div className="container">
-        <div className="wrapper">
+        {/* <div className="wrapper">
             <label className="toggleWrapper">
             <input 
                 type="checkbox"
@@ -52,6 +53,9 @@ const Settings = () => {
               {displayText}
             </span>
             <div onClick={()=> {signOut({ redirectUrl: '/' })}}></div>
+        </div> */}
+        <div className = "Settings-Title">
+          Settings
         </div>
         <div className="settings-page">
           <SettingsPage />

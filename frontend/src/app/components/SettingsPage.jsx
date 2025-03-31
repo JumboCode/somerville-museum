@@ -11,6 +11,7 @@
  **************************************************************/
 
 "use client";
+import { io } from "socket.io-client";
 
 import "../globals.css";
 import "./SettingsPage.css";
@@ -50,6 +51,29 @@ export default function SettingsPage() {
         localStorage.setItem("approvals", JSON.stringify(approvals));
     }, [approvals]);
 
+    useEffect(() => {
+        // Connect to WebSocket server
+        const socket = io("https://9bc9-130-64-64-37.ngrok-free.app");
+    
+        // Listen for new user events from backend
+        socket.on("new_user", (newUser) => {
+            console.log("New user received:", newUser);
+            console.log("✅ New user received from WebSocket:", newUser);
+            setApprovals((prev) => [
+                ...prev,
+                {
+                    id: newUser.id,
+                    name: newUser.name,
+                    email: newUser.email,
+                },
+            ]);
+        });
+    
+        return () => {
+            socket.disconnect();
+        };
+    }, []);
+
     const addVerificationBox = () => {
         console.log("Adding new verification box...");
         setApprovals((prev) => [
@@ -58,14 +82,40 @@ export default function SettingsPage() {
         ]);
     };
 
-    const approveVerification = (id) => {
+    const approveVerification = async (id) => {
         console.log(`User with ID ${id} approved.`);
-        setApprovals((prev) => prev.filter((approval) => approval.id !== id));
+    
+        // API call to Clerk to approve the user
+        const response = await fetch("/api/approveUser", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId: id }),
+        });
+    
+        if (response.ok) {
+            console.log("User approved successfully.");
+            setApprovals((prev) => prev.filter((approval) => approval.id !== id));
+        } else {
+            console.error("Failed to approve user.");
+        }
     };
 
-    const denyVerification = (id) => {
+    const denyVerification = async (id) => {
         console.log(`User with ID ${id} denied.`);
-        setApprovals((prev) => prev.filter((approval) => approval.id !== id));
+    
+        // API call to delete or block the user in Clerk
+        const response = await fetch("/api/denyUser", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId: id }),
+        });
+    
+        if (response.ok) {
+            console.log("User denied successfully.");
+            setApprovals((prev) => prev.filter((approval) => approval.id !== id));
+        } else {
+            console.error("Failed to deny user.");
+        }
     };
 
     const handleForgotPassword = () => {
@@ -77,7 +127,6 @@ export default function SettingsPage() {
 
     return (
         <>
-            <h1>Settings</h1>
             <div className="body">
                 <div className="settings-container">
                     <div className="cardHolders">
@@ -118,7 +167,7 @@ export default function SettingsPage() {
                                     />
                                     <span className="slider round"></span>
                                 </label>
-                                <label>Normal Data Entry</label>
+                                <label className="normal-data-entry">Normal Data Entry</label>
                                 <button className="export-btn">⬆ Export Data</button>
                             </div>
                             <div className="toggle">
@@ -130,7 +179,7 @@ export default function SettingsPage() {
                                     />
                                     <span className="slider round"></span>
                                 </label>
-                                <label>Light Mode</label>
+                                <label className="light-mode">Light Mode</label>
                                 <a href="#" className="logout" onClick={() => signOut()}>Logout ↪</a>
                             </div>
 

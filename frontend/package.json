@@ -36,6 +36,8 @@
     "react-scripts": "^5.0.1",
     "react-transition-group": "^4.4.5",
     "reactjs-popup": "^2.0.6",
+    "socket.io-client": "^4.8.1",
+    "svix": "^1.62.0",
     "uuid": "^10.0.0",
     "vercel": "^37.14.0",
     "web-vitals": "^2.1.4"
