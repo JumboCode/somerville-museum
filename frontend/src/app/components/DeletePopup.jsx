@@ -1,4 +1,3 @@
-
 /**************************************************************
  *
  *                     DeletePopup.jsx
@@ -14,7 +13,7 @@
 
 import React from "react";
 import "./DeletePopup.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const DeletePopup = ({ onConfirm, onCancel, selectedItems }) => {
     const [isClosing, setIsClosing] = useState(false);
@@ -32,6 +31,22 @@ const DeletePopup = ({ onConfirm, onCancel, selectedItems }) => {
             onConfirm();
         }, 200);
     };
+
+    // Add Escape key listener
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === "Escape") {
+                handleCancel();
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+
+        // Cleanup event listener on component unmount
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, []);
 
     // Create list of ID, separated by commas
     const itemDetails = selectedItems.map(item => `${item.id}: ${item.name}`).join(", ");

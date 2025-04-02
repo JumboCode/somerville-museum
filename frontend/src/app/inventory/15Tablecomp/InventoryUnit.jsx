@@ -21,7 +21,6 @@ export default function InventoryUnit({ unit, onChange, checked, unitList, index
 
     const handleClick = () => {
         setIsPrePopupVisible(true);
-        console.log("prepopupvisible" + isPrePopupVisible)
         if (buttonRef.current) {
             const rect = buttonRef.current.getBoundingClientRect();
             setPopupPosition({
@@ -81,6 +80,9 @@ export default function InventoryUnit({ unit, onChange, checked, unitList, index
             return;
         }
     };
+
+    const checkboxRef = useRef(null);
+
 
     useEffect(() => {
         if (isPopupVisible || isPrePopupVisible) {

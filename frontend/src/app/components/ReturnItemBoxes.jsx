@@ -1,10 +1,7 @@
-// InventoryUnit.jsx
 "use client";
-import { useState, useEffect, useRef, forwardRef} from "react";
+import { useState } from "react";
 import "./ReturnButton.css";
 import Image from "next/image";
-import StylishButton from "./StylishButton";
-import { Dropdown } from 'primereact/dropdown';
 import { MultiSelect } from 'primereact/multiselect';
 
 export default function ItemBoxes({ unit, onNotesChange, itemId, onClose }) {
@@ -13,12 +10,9 @@ export default function ItemBoxes({ unit, onNotesChange, itemId, onClose }) {
 
     const [errors, setErrors] = useState({});
 
-    // Add a condition to make sure `unit` is defined
     if (!unit) {
-        return null; // Don't render anything if `unit` is undefined
+        return null;
     }
-
-    // const { id, tags, name, condition} = unit; 
 
     const conditions = [
         { name: "Needs repair" },
@@ -38,7 +32,8 @@ export default function ItemBoxes({ unit, onNotesChange, itemId, onClose }) {
     
         // Ensure selectedConditions is always an array
         if (!Array.isArray(selectedConditions)) {
-            setCondition([]); // Set to empty array if selection is cleared
+            // Set to empty array if selection is cleared
+            setCondition([]); 
             return;
         }
     
@@ -88,7 +83,8 @@ export default function ItemBoxes({ unit, onNotesChange, itemId, onClose }) {
                 <div className="dropdown-component">
                     <h3 className={errors.condition ? "error-text" : ""}>Condition*</h3>
                     <MultiSelect
-                        value={conditions.filter(cond => condition.includes(cond.name))} // Sync selected values
+                        // Sync selected values
+                        value={conditions.filter(cond => condition.includes(cond.name))} 
                         options={conditions}
                         onChange={(e) => handleConditionSelect(e.value || [])}
                         optionLabel="name" 
@@ -100,7 +96,6 @@ export default function ItemBoxes({ unit, onNotesChange, itemId, onClose }) {
                     />
                 </div>
             </div>
-
         </div>
     );
 }

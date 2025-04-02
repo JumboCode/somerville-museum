@@ -1,3 +1,14 @@
+/**************************************************************
+ *
+ *                     add.js
+ *
+ *        Authors: Dan Glorioso & Shayne Sidmnan
+ *           Date: 03/07/2025
+ *
+ *     Summary: An API route to upload images to Cloudflare using R2 storage.
+ * 
+ **************************************************************/
+
 export default async function handler(req, res) {
     if (req.method !== "POST") {
         return res.status(405).json({ message: "Method Not Allowed" });
