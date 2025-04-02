@@ -54,7 +54,6 @@ export default function SearchBar({ updateSearchResults }) {
                     }
                 }}
             />
-
         </div>
     );
 }

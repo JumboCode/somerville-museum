@@ -12,7 +12,6 @@ const pool = new Pool({
 
 // Utility function to query the database using the pool
 export async function query(text, params) {
-
   const client = await pool.connect();
   const result = client.query("SELECT * from dummy_data");
 
@@ -24,16 +23,15 @@ export async function query(text, params) {
   }
 }
 
-
 export default async function handler(req, res) {
-    const text = req.body.text;
-    const params = req.body.params;
+  const text = req.body.text;
+  const params = req.body.params;
 
-    try {
-      const result = await query(text, params);
-      res.status(200).json(result.rows);
-    } catch(error) {
-      console.error('database query error: ', error);
-      res.status(500).json({error: 'Internal Server Error'});
-    }
+  try {
+    const result = await query(text, params);
+    res.status(200).json(result.rows);
+  } catch(error) {
+    console.error('database query error: ', error);
+    res.status(500).json({error: 'Internal Server Error'});
+  }
 }

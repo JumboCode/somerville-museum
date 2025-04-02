@@ -1,6 +1,4 @@
 'use client'
-import Link from "next/link";
-
 
 const Pie = () => {
     return (

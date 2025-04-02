@@ -47,7 +47,8 @@ export default function BorrowerSearchBar({ updateSearchResults }) {
                 }
 
                 const data = await response.json();
-                updateSearchResults(data);  // Update results on inventory page
+                // Update results on inventory page
+                updateSearchResults(data);  
             } catch (error) {
                 console.log(error);
             }
@@ -67,7 +68,6 @@ export default function BorrowerSearchBar({ updateSearchResults }) {
                     }
                 }}
             />
-
         </div>
     );
 }

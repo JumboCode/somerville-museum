@@ -2,7 +2,6 @@ import { query } from './db.js';
 
 // Handler for adding a new item (previously add.js)
 export async function addHandler(req, res) {
-    
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
@@ -30,8 +29,6 @@ export async function addHandler(req, res) {
             borrow_history = {},
             image_keys = []
         } = req.body;
-
-        console.log(image_keys);
 
         // Check if an item with the given id already exists
         const existingItem = await query(`SELECT id FROM dummy_data WHERE id = $1`, [id]);
@@ -89,6 +86,7 @@ export async function retrieveItemHandler(req, res) {
     }
 }
 
+
 // Handler for updating item IDs (previously updateID.js)
 export async function updateIDHandler(req, res) {
     const { id, newId, data } = req.body;
@@ -122,6 +120,7 @@ export async function updateIDHandler(req, res) {
       return res.status(500).send('Internal Server Error');
     }
   }
+
 
 // Handler for searching items (previously search.js)
 export async function searchHandler(req, res) {

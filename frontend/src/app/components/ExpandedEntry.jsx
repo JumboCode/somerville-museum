@@ -1,4 +1,3 @@
-
 //!IMPORTANT
 //Use the SelectItem button component created by Dan and Elisa, to select an item based on a particular id.
 //IMPORTANT
@@ -73,8 +72,8 @@ function ExpandedEntry({ itemData, onClose }) {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  text: "UPDATE dummy_data SET note = $1 WHERE id = $2", // SQL query for updating the note
-                  params: [newNote, itemData.id], // Parameters for the query
+                  text: "UPDATE dummy_data SET note = $1 WHERE id = $2",
+                  params: [newNote, itemData.id],
                 }),
               });
             if (!response.ok) {
@@ -93,8 +92,8 @@ function ExpandedEntry({ itemData, onClose }) {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  text: "UPDATE dummy_data SET name = $1 WHERE id = $2", // SQL query for updating the name
-                  params: [newName, itemData.id], // Parameters for the query
+                  text: "UPDATE dummy_data SET name = $1 WHERE id = $2",
+                  params: [newName, itemData.id],
                 }),
               });
             if (!response.ok) {
@@ -113,8 +112,8 @@ function ExpandedEntry({ itemData, onClose }) {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  text: "UPDATE dummy_data SET status = $1 WHERE id = $2", // SQL query for updating the status
-                  params: [newStatus, itemData.id], // Parameters for the query
+                  text: "UPDATE dummy_data SET status = $1 WHERE id = $2",
+                  params: [newStatus, itemData.id],
                 }),
               });
             if (!response.ok) {
