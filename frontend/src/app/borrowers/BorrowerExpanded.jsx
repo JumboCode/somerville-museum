@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { useState } from 'react';
 import "./BorrowerExpanded.css";
 import CloseButton from "../assets/CloseButton";
 import ArrowLeft from "../assets/ArrowLeft";
@@ -7,7 +8,15 @@ import ArrowRight from "../assets/ArrowRight";
 import { useEffect } from "react";
 
 export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) {
+  const [isClosing, setIsClosing] = useState(false);
   if (!borrower) return null;
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      onClose(); // parent will unmount this component
+    }, 300); // match animation time
+  };
 
   const borrowHistoryEntries = borrower.borrow_history
     ? Object.entries(borrower.borrow_history)
@@ -30,9 +39,14 @@ export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) 
   }, [onClose]);
 
   return (
-    <div className="popup-overlay" onClick={onClose}>
-      <div className="popup" onClick={(e) => e.stopPropagation()}>
-          <CloseButton onClick={onClose} />
+    <div className="popup-overlay" onClick={handleClose}>
+      <div className={`popup-anim-wrapper ${isClosing ? 'slide-out' : 'slide-in'}`}> 
+            <div className="popup" onClick={(e) => e.stopPropagation()}>
+
+      
+
+          <CloseButton className="close-btn" onClick={onClose} /> 
+
         <br />
         <h2>{borrower.name}</h2>
         <br />
@@ -70,13 +84,11 @@ export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) 
         </div>
 
         <div className="navigation-arrows">
-          <button className="nav-arrow left-arrow" onClick={onPrev}>
-            <ArrowLeft />
-          </button>
-          <button className="nav-arrow right-arrow" onClick={onNext}>
-            <ArrowRight />
-          </button>
+            <ArrowLeft className="nav-arrow left-arrow" onClick={onPrev} />
+            <ArrowRight className="nav-arrow right-arrow" onClick={onNext}/>
         </div>
+      </div>
+
       </div>
     </div>
   );
