@@ -51,35 +51,72 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
     const [openDropdowns, setOpenDropdowns] = useState({});
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const [dateRange, setDateRange] = useState({ start: null, end: null });
-    const [selectedOptions, setSelectedOptions] = useState(baseOptions);
+    const [selectedOptions, setSelectedOptions] = useState(selectedFilters);
     const dropdownRefs = useRef({});
     const checkboxRefs = useRef({});
     const calendarRef = useRef(null);
+    const calendarPickerContainerRef = useRef(null);
+    
+    // Keep selectedOptions in sync with selectedFilters
+    useEffect(() => {
+        if (JSON.stringify(selectedOptions) !== JSON.stringify(selectedFilters)) {
+            setSelectedOptions(selectedFilters);
+            if (selectedFilters.return_date) {
+                setDateRange({
+                    start: selectedFilters.return_date.start,
+                    end: selectedFilters.return_date.end
+                });
+            }
+        }
+    }, [selectedFilters, selectedOptions]);
+
+    // Handle updates to selectedOptions
+    const updateFilters = (newOptions) => {
+        // Only update if there's an actual change
+        if (JSON.stringify(newOptions) !== JSON.stringify(selectedFilters)) {
+            setSelectedOptions(newOptions);
+            setSelectedFilters(newOptions);
+        }
+    };
+
     const handleReset = () => {
-        setSelectedOptions(baseOptions);
+        const resetOptions = {
+            ...baseOptions,
+            return_date: { start: null, end: null }
+        };
+        updateFilters(resetOptions);
         setDateRange({ start: null, end: null });
+        
+        // Use the calendar ref to reset the calendar UI state
+        if (calendarRef.current && calendarRef.current.resetCalendar) {
+            calendarRef.current.resetCalendar();
+        }
     };
 
     useEffect(() => {
-        setSelectedFilters(selectedOptions);
-    }, [selectedOptions]);
-
-    useEffect(() => {
         const handleClickOutside = (event) => {
+            // Handle dropdown clicks
             Object.keys(dropdownRefs.current).forEach(key => {
                 if (dropdownRefs.current[key] && !dropdownRefs.current[key].contains(event.target)) {
                     setOpenDropdowns(prev => ({...prev, [key]: false}));
                 }
             });
 
-            if (calendarRef.current && !calendarRef.current.contains(event.target)) {
+            // Handle calendar clicks - make sure we're not clicking on the calendar icon or within the calendar
+            const isClickInCalendarButton = event.target.closest('.calendar-icon') || 
+                event.target.closest('.select-box');
+            
+            const isClickInCalendarPicker = calendarPickerContainerRef.current && 
+                calendarPickerContainerRef.current.contains(event.target);
+                
+            if (!isClickInCalendarButton && !isClickInCalendarPicker && isCalendarOpen) {
                 setIsCalendarOpen(false);
             }
         };
     
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
+    }, [isCalendarOpen]);
     
     const toggleDropdown = (label) => {
         setOpenDropdowns(prev => ({
@@ -88,46 +125,44 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
         }));
     };
 
-    // Updated to handle date range selection
+    // Updated to handle date range selection with proper formatting
     const handleDateRangeSelect = (startDate, endDate) => {
+        // Convert date strings to standardized format for consistent backend processing
+        // If null values are passed, keep them as null
+        const formattedStartDate = startDate || null;
+        const formattedEndDate = endDate || null;
+        
         setDateRange({ start: startDate, end: endDate });
-        setSelectedOptions((curr) => ({
-            ...curr, 
-            return_date: { start: startDate, end: endDate }
-        }));
+        updateFilters({
+            ...selectedOptions,
+            return_date: { 
+                start: formattedStartDate, 
+                end: formattedEndDate 
+            }
+        });
     };
 
     // Now enables multiple options to be selected
     const handleOptionSelect = (label, option) => {
         const formattedLabel = label.toLowerCase().replaceAll(" ", "_");
-        setSelectedOptions(prev => {
-            const currentValues = prev[formattedLabel];
-            const valueExists = currentValues.includes(option);
-            
-            return {
-                ...prev,
-                [formattedLabel]: valueExists 
-                    ? currentValues.filter(item => item !== option)  // Remove if exists
-                    : [...currentValues, option]  // Add if doesn't exist
-            };
+        const currentValues = selectedOptions[formattedLabel] || [];
+        const valueExists = currentValues.includes(option);
+        
+        updateFilters({
+            ...selectedOptions,
+            [formattedLabel]: valueExists 
+                ? currentValues.filter(item => item !== option)
+                : [...currentValues, option]
         });
     };
-
-    // now enables multiple checkboxes to be selected
+    
     const updateCheckboxes = (field, value) => (e) => {
-        setSelectedOptions((current) => {
-            const currentValues = current[field];
-            if (e.target.checked) {
-                return {
-                    ...current,
-                    [field]: [...currentValues, value]
-                };
-            } else {
-                return {
-                    ...current,
-                    [field]: currentValues.filter(item => item !== value)
-                };
-            }
+        const currentValues = selectedOptions[field] || [];
+        updateFilters({
+            ...selectedOptions,
+            [field]: e.target.checked
+                ? [...currentValues, value]
+                : currentValues.filter(item => item !== value)
         });
     };
 
@@ -217,7 +252,7 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
 
                 <div className="filter-section">
                     <h2>Return Date Range</h2>
-                    <div className="date-select-container">
+                    <div className="date-select-container" ref={calendarPickerContainerRef}>
                         <div className="custom-select">
                             <div 
                                 className="select-box"
@@ -226,12 +261,14 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
                                 <span>{getDateRangeText()}</span>
                                 <Calendar className="calendar-icon" />
                             </div>
-                            <CalendarPicker 
-                                isOpen={isCalendarOpen}
-                                onClose={() => setIsCalendarOpen(false)}
-                                onDateSelect={handleDateRangeSelect}
-                                ref={calendarRef}
-                            />
+                            {isCalendarOpen && (
+                                <CalendarPicker 
+                                    isOpen={isCalendarOpen}
+                                    onClose={() => setIsCalendarOpen(false)}
+                                    onDateSelect={handleDateRangeSelect}
+                                    ref={calendarRef}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>

@@ -10,7 +10,40 @@
   align-items: flex-start;
   z-index: 10000;
   overflow-y: auto;
+
 }
+
+.popup-anim-wrapper {
+  animation-duration: 0.3s;
+  animation-fill-mode: forwards;
+}
+
+.popup-anim-wrapper.slide-in {
+  animation-name: slideIn;
+}
+
+.popup-anim-wrapper.slide-out {
+  animation-name: slideOut;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
 
 .popup {
   background-color: white;
@@ -23,16 +56,19 @@
   min-width: 450px;
   padding: 1rem 1.5rem;
   overflow-wrap: break-word;
+  /* animation: slideIn 0.3s ease-out forwards; */
+
 }
 
-@keyframes slideIn {
+/* @keyframes slideIn {
   from {
     transform: translateX(100%);
   }
   to {
     transform: translateX(0);
   }
-}
+} */
+
 
 .close-btn {
   background: none;

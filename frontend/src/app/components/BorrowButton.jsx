@@ -1,6 +1,6 @@
 'use client'
 
-import Popup from 'reactjs-popup';
+// import Popup from 'reactjs-popup';
 import React, { useState, useEffect } from "react";
 import StylishButton from './StylishButton.jsx';
 import BorrowPopup from './BorrowPopup.jsx';
@@ -65,27 +65,21 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
         onClick={handleButtonClick}
       />
 
-      <Popup
-        className='popup-wrapper'
-        open={isOpen}
-        modal
-        // Close the popup when it's closed
-        onClose={() => setIsOpen(false)} 
-      >
-        {(close) => (
-          <BorrowPopup
-          selectedItems={availableSelectedItems}
-          onClose={close}
-          onSuccess={() => {
-            // Call the parent's onSuccess if provided
-            if (onSuccess) {
-               // Reset data in parent component
-              onSuccess();
-            }
-          }}
-        />)}
+    {isOpen && (
 
-      </Popup>
+        <div className="custom-popup-large">
+          <BorrowPopup
+            selectedItems={availableSelectedItems}
+            onClose={() => setIsOpen(false)}
+            onSuccess={() => {
+              if (onSuccess) onSuccess();
+              setIsOpen(false); // Close the popup
+            }}
+          />
+        </div>
+
+    )}
+
     </div>
   );
 };

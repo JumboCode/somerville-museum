@@ -130,7 +130,7 @@ export default function InventoryUnit({ unit, onChange, checked, unitList, index
                 </div>
                 <div className="picture">
                     <div className="image-container">
-                        {image_keys.length > 0 && <Image 
+                        {image_keys && image_keys.length > 0 && <Image 
                             src={`https://upload-r2-assets.somerville-museum1.workers.dev/${image_keys[0]}`} 
                             fill
                             alt="No image found"
@@ -156,7 +156,15 @@ export default function InventoryUnit({ unit, onChange, checked, unitList, index
                 <div className="gender">{unit.gender}</div>
                 <div className="season">{unit.season}</div>
                 <div className="size">{unit.size}</div>
-                <div className="time">{unit.time_period}</div>
+                <div className="time">
+                    {Array.isArray(unit.time_period) && unit.time_period.length > 0 ? (
+                        unit.time_period.map((period, index) => (
+                            <span key={index}>{period}{index < unit.time_period.length - 1 ? ', ' : ''}</span>
+                        ))
+                    ) : (
+                        'No time periods available'
+                    )}
+                </div>
             </div>
             <div className="drop-down">
                 <button className="drop-downBtn" 
