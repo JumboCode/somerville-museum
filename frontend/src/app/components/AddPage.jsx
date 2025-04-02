@@ -22,14 +22,12 @@ import { MultiSelect } from 'primereact/multiselect';
 import StylishButton from './StylishButton.jsx';
 import Link from 'next/link';
 import { useGlobalContext } from './contexts/ToggleContext';
-import { v4 as uuidv4 } from 'uuid';
 
 export default function AddPage() {
 
     // Left column state variables
     const [dragOver, setDragOver] = useState(false);
-    const [preview, setPreview] = useState([]);
-    const [imageID, setImageID] = useState([]); // For image UUIDs
+    const [preview, setPreview] = useState(null);
 
     // Right column state variables
     const { isToggleEnabled } = useGlobalContext(); // TOGGLE FUNCTIONALITY
@@ -119,16 +117,9 @@ export default function AddPage() {
     // Function to handle and update file selection
     const handleFileSelect = (file) => {
         if (file && file.type.startsWith("image/")) {
-            if (preview.length < 2) {
-                const reader = new FileReader();
-                reader.onload = (e) => setPreview([...preview, e.target.result]);
-                reader.readAsDataURL(file);
-
-                // Generate UUID for uploaded image
-                setImageID([...imageID, uuidv4()]);
-            } else {
-                alert("You can only upload 2 images per item.");
-            }
+            const reader = new FileReader();
+            reader.onload = (e) => setPreview(e.target.result);
+            reader.readAsDataURL(file);
         } else {
             alert("Please upload a valid image file.");
         }
@@ -234,9 +225,9 @@ export default function AddPage() {
     const handleSubmit = () => {
         
             setStatusMessage("Submitting...");
-            setStatusType("neutral");        
+            setStatusType("neutral");
 
-        // Declaring fields
+
         const newItem = {
             id: isToggleEnabled ? manualIdText : idText,
             name: itemText,
@@ -252,11 +243,10 @@ export default function AddPage() {
             condition: condition.length > 0 ? condition : null,
             color: selectedColors.length > 0 ? selectedColors : null,
             status: "Available", // Default status
-            location: null,
-            date_added: placeholderDate, 
+            // authenticity_level: null,
+            date_added: isToggleEnabled ? manualDateText : placeholderDate, 
             current_borrower: null,
-            borrow_history: null,
-            image_keys: imageID
+            borrow_history: null
         };
 
         let newErrors = {};
@@ -276,14 +266,6 @@ export default function AddPage() {
             if (!newItem.id) newErrors.id = true;
         }
         if (!newItem.name) newErrors.name = true;
-        if (!newItem.garment_type) newErrors.garment_type = true;
-        if (!newItem.time_period) newErrors.time_period = true;
-        if (!newItem.age_group) newErrors.age_group = true;
-        if (!newItem.gender) newErrors.gender = true;
-        if (!newItem.size) newErrors.size = true;
-        if (!newItem.season) newErrors.season = true;
-        if (!newItem.condition) newErrors.condition = true;
-        if (!newItem.color) newErrors.color = true;
 
         // If any errors exist, update state and show alert
         if (Object.keys(newErrors).length > 0) {
@@ -305,35 +287,6 @@ export default function AddPage() {
                 return;
             }
         }
-        // Upload image and corresponding id to upload endpoint 
-        const uploadImages = async () => {    
-            try {
-                const response = await fetch(`/api/upload`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ fileNames: imageID, fileContents: preview }),
-                });
-        
-                const data = await response.json();
-
-                if (!response.ok) {
-                    setStatusMessage("An error uploading image occurred. Please try again.");
-                    setStatusType("error");
-                    return;
-                }
-                
-            } catch (error) {
-                setStatusMessage("An error uploading image occurred. Please try again.");
-                setStatusType("error");
-                return;
-            }
-        };
-
-        // Call the serverless route
-        uploadImages();
-
-        // Convert newItem params to JSON object
-        const body = JSON.stringify(newItem);
 
         // Send a POST request to the add API with body data
         const addItemDB = async (newItem) => {
@@ -341,10 +294,8 @@ export default function AddPage() {
             try {
                 const response = await fetch(`/api/itemManagement?action=add`, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(newItem)
                 });
 
                 if (!response.ok) {
@@ -392,8 +343,6 @@ export default function AddPage() {
         setSelectedSeason([]);
         setCondition([]);
         setSelectedColors([]);
-        setPreview([]);
-        setImageID([]);
     };
 
     // TOGGLE FUNCTIONALITY
@@ -446,11 +395,12 @@ export default function AddPage() {
                             onDragLeave={() => setDragOver(false)}
                             onDrop={handleDrop}
                             >
-                            {preview.length === 0 && 
-                                <div className="upload-icon-and-text">
-                                    <img src="/icons/upload.svg" className="upload-icon" />
-                                    <p style={{color: "#9B525F"}}>Upload image*</p>
-                                </div>}
+                            <div className="upload-icon-and-text">
+                            <img src="/icons/upload.svg" className="upload-icon" />
+                                <p style={{color: "#9B525F"}}>
+                                    Upload image
+                                </p>
+                            </div>
                             <input
                                 type="file"
                                 id="file-input"
@@ -458,11 +408,13 @@ export default function AddPage() {
                                 style={{ display: "none" }}
                                 onChange={handleFileInputChange}
                             />
-                            {preview.length > 0 && preview.map((image, key) => (
-                                <div key={key} className="image">
-                                    <img src={image} alt="Preview" className="preview"/>
-                                </div>
-                            ))}
+                            {preview && (
+                                <img
+                                src={preview}
+                                alt="Preview"
+                                className="preview"
+                                />
+                            )}
                         </div>
 
                         <div className="textBoxRow">
