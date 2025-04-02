@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import './CalendarPicker.css';
 
-const CalendarPicker = ({ onDateSelect, isOpen, onClose }) => {
+const CalendarPicker = forwardRef(({ onDateSelect, isOpen, onClose }, ref) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
@@ -13,6 +13,14 @@ const CalendarPicker = ({ onDateSelect, isOpen, onClose }) => {
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
   ];
+
+  // Expose resetCalendar method via ref
+  useImperativeHandle(ref, () => ({
+    resetCalendar: () => {
+      resetSelection();
+      onDateSelect(null, null); // Clear the date filters in parent component
+    }
+  }));
 
   const handleDateClick = (day) => {
     const clickedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
@@ -30,14 +38,16 @@ const CalendarPicker = ({ onDateSelect, isOpen, onClose }) => {
         setSelectedEndDate(clickedDate);
       }
       
-      // Format dates for the query
-      const formattedStartDate = selectedStartDate ? 
-        `${selectedStartDate.getMonth() + 1}/${selectedStartDate.getDate()}/${selectedStartDate.getFullYear()}` :
-        null;
+      // Format dates in ISO format for consistent handling
+      const startDate = selectedStartDate || clickedDate;
+      const endDate = selectedStartDate && clickedDate > selectedStartDate ? clickedDate : selectedStartDate;
       
-      const formattedEndDate = clickedDate ?
-        `${clickedDate.getMonth() + 1}/${clickedDate.getDate()}/${clickedDate.getFullYear()}` : 
-        null;
+      // Format for display (MM/DD/YYYY)
+      const formattedStartDate = startDate ? 
+        `${startDate.getMonth() + 1}/${startDate.getDate()}/${startDate.getFullYear()}` : null;
+      
+      const formattedEndDate = endDate ?
+        `${endDate.getMonth() + 1}/${endDate.getDate()}/${endDate.getFullYear()}` : null;
       
       // Only call onDateSelect when both dates are selected
       if (formattedStartDate && formattedEndDate) {
@@ -158,7 +168,15 @@ const CalendarPicker = ({ onDateSelect, isOpen, onClose }) => {
           </div>
         )}
         {(selectedStartDate || selectedEndDate) && (
-          <button className="reset-button" onClick={resetSelection}>Reset</button>
+          <button 
+            className="reset-button" 
+            onClick={() => {
+              resetSelection();
+              onDateSelect(null, null); // Clear the date filters in parent component
+            }}
+          >
+            Reset
+          </button>
         )}
       </div>
       
@@ -194,6 +212,6 @@ const CalendarPicker = ({ onDateSelect, isOpen, onClose }) => {
       </div>
     </div>
   );
-};
+});
 
 export default CalendarPicker;

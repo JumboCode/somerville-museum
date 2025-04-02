@@ -11,8 +11,12 @@ import React, { useState, useEffect } from 'react';
 import './Dashboard.css';
 import BarGraph from "./BarGraph";
 import PieChart from './PieChart';
+import { useRouter } from 'next/navigation';
+import { useFilterContext } from '../components/contexts/FilterContext.js';
 
 const Dashboard = () => {
+  const router = useRouter();
+  const { setSelectedFilters } = useFilterContext();
   const [stats, setStats] = useState([
     { label: 'Total Items', value: 0 },
     { label: 'Currently Borrowed', value: 0 },
@@ -35,7 +39,6 @@ const Dashboard = () => {
     { name: 'Needs dry cleaning', value: 0 },
     { name: 'Needs repair', value: 0 }
   ]);
- 
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -51,11 +54,10 @@ const Dashboard = () => {
           { label: 'Missing Items', value: data.missingItems }
         ]);
 
-        // Calculate available items (total - (borrowed + overdue + missing))
+        // Calculate available items
         const availableItems = data.totalItems - 
           (data.borrowedItems + data.overdueItems + data.missingItems);
 
-        // Update bar graph data
         setBarGraphData([
           { name: "Available", value: availableItems },
           { name: "Borrowed", value: data.borrowedItems },
@@ -67,45 +69,69 @@ const Dashboard = () => {
         console.error('Error fetching stats:', error);
       }
 
+      try {
+        const pieResponse = await fetch('/api/inventoryQueries?action=getCondition');
+        const PieData = await pieResponse.json();
 
-
-     try {
-      const pieResponse = await fetch('/api/inventoryQueries?action=getCondition');
-      const PieData = await pieResponse.json();
-
-
-      setPieChartData([
-        { name: 'Great', value: PieData.great },
-        { name: 'Good', value: PieData.good },
-        { name: 'Not usable', value: PieData.notUsable },
-        { name: 'Needs washing', value: PieData.needsWashing },
-        { name: 'Needs Dry Cleaning', value: PieData.needsDryCleaning },
-        { name: 'Needs repair', value: PieData.needsRepair }
-      ]);
-
-
-    } catch (error) {
-      console.error('Error retrieving conditions:', error);
-    }
-
-      
+        setPieChartData([
+          { name: 'Great', value: PieData.great },
+          { name: 'Good', value: PieData.good },
+          { name: 'Not usable', value: PieData.notUsable },
+          { name: 'Needs washing', value: PieData.needsWashing },
+          { name: 'Needs Dry Cleaning', value: PieData.needsDryCleaning },
+          { name: 'Needs repair', value: PieData.needsRepair }
+        ]);
+      } catch (error) {
+        console.error('Error retrieving conditions:', error);
+      }
     };
-
 
     fetchStats();
   }, []);
+
+  const handleStatClick = (status) => {
+    // If clicking "Total Items", don't set any filter
+    if (status) {
+      setSelectedFilters({
+        condition: [],
+        gender: [],
+        color: [],
+        garment_type: [],
+        size: [],
+        time_period: [],
+        status: [status],
+        season: [],
+        return_date: { start: null, end: null }
+      });
+    }
+    router.push('/inventory');
+  };
 
   return (
     <div className="dashboard-container">
       <h1 className="dashboard-title">Dashboard Overview</h1>
       
       <div className="stats-grid">
-        {stats.map((stat) => (
-          <div key={stat.label} className="stat-card">
-            <div className="stat-value">{stat.value}</div>
-            <div className="stat-label">{stat.label}</div>
-          </div>
-        ))}
+        {stats.map((stat) => {
+          // Map stat labels to filter values
+          const filterStatus = {
+            'Total Items': null,
+            'Currently Borrowed': 'Borrowed',
+            'Overdue Items': 'Overdue',
+            'Missing Items': 'Missing'
+          }[stat.label];
+
+          return (
+            <div 
+              key={stat.label} 
+              className="stat-card clickable"
+              onClick={() => handleStatClick(filterStatus)}
+            >
+              <div className="stat-value">{stat.value}</div>
+              <div className="stat-label">{stat.label}</div>
+            </div>
+          );
+        })}
       </div>
 
       <div className="charts-grid">
