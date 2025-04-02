@@ -18,10 +18,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export default function Popup( { unit, onClose } ) {
-    const [borrowers, setBorrowers] = useState([]);
+export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } ) {
     const [isClosing, setIsClosing] = useState(false);
     const [selectedImage, setSelectedImage] = useState(0);
+    const [unit, setUnit] = useState(unitList[unitIndex]);
+    const [currIndex, setCurrIndex] = useState(unitIndex);
+    const [currBorrower, setCurrBorrower] = useState(null);
+    const [borrowerHistory, setBorrowerHistory] = useState([]);
     
 
     // Extract the unit details
@@ -41,6 +44,178 @@ export default function Popup( { unit, onClose } ) {
         }, 200);
     }
 
+    const fetchBorrowers = async () => {
+        try {
+            console.log("testing populating borrower data");
+            console.log(id);
+            const response = await fetch(`../../../../api/db`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: 'SELECT current_borrower, borrow_history FROM dummy_data WHERE id = $1',
+                    params: [id]
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                const currBorrower = data[0].current_borrower;
+                const borrowHistory = data[0].borrow_history;
+                if (currBorrower !== null) {
+                    fetchCurrBorrower(currBorrower);
+                } else {
+                    setCurrBorrower(null);
+                }
+                if (borrowHistory !== null) {
+                    fetchBorrowHistory(borrowHistory);
+                } else {
+                    setBorrowerHistory([]);
+                }
+                console.log(data);
+                console.log(currBorrower);
+                console.log(borrowHistory);
+            } else {
+                console.error("Failed to fetch borrower data");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const fetchBorrowHistory = async (borrowHistory) => {
+        // Fetching from borrows table
+        try {
+            console.log("testing populating borrower history data");
+            console.log(borrowHistory);
+            const response = await fetch(`../../../../api/db`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: 'SELECT date_borrowed, date_returned, approver, notes FROM borrows WHERE borrower_id = ANY($1) AND item_id = $2',
+                    params: [borrowHistory, id]
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log("borrower history data: ");
+                console.log(data);
+
+                const borrowData = data.map((borrow) => {
+                    return {
+                        dateBorrowed: borrow.date_borrowed,
+                        dateReturned: borrow.date_returned,
+                        approver: borrow.approver,
+                        notes: borrow.notes,
+                    };
+                });
+                setBorrowerHistory(borrowData);
+                console.log("borrowHistoryData: ");
+                console.log(borrowData);
+                
+            } else {
+                console.error("Failed to fetch borrower data");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    
+    const fetchCurrBorrower = async (currBorrower) => {
+        // Fetching from borrower table
+        let borrowData = null;
+        try {
+            console.log("testing populating borrower data");
+            console.log(id);
+            const response = await fetch(`../../../../api/db`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: 'SELECT * FROM borrowers WHERE id = $1',
+                    params: [currBorrower]
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                borrowData = {
+                    name: data[0].name,
+                    email: data[0].email,
+                    phone_number: data[0].phone_number,
+                };
+
+                setCurrBorrower(borrowData);
+                console.log("borrowData: ");
+                console.log(borrowData);
+                
+            } else {
+                console.error("Failed to fetch borrower data");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+
+        // Fetching from borrows table
+        try {
+            const response = await fetch(`../../../../api/db`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: 'SELECT date_borrowed, return_date, approver, notes FROM borrows WHERE borrower_id = $1 AND item_id = $2',
+                    params: [currBorrower, id]
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                borrowData = {
+                    ...borrowData,
+                    date_borrowed: data[0].date_borrowed,
+                    return_date: data[0].return_date,
+                    approved_by: data[0].approver,
+                    notes: data[0].notes,
+                };
+
+                setCurrBorrower(borrowData);
+                console.log("borrowData: ");
+                console.log(borrowData);
+                
+            } else {
+                console.error("Failed to fetch borrower data");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleLeftArrow = () => {
+        if (currIndex > 0) {
+            setCurrIndex(currIndex - 1);
+            setUnit(unitList[currIndex - 1]);
+            fetchBorrowers();
+
+        }
+    }
+
+    const handleRightArrow = () => {
+        if (currIndex < unitList.length - 1) {
+            setCurrIndex(currIndex + 1);
+            setUnit(unitList[currIndex + 1]);
+            fetchBorrowers();
+        }
+    }
+
     // Add event listener for Escape key
     useEffect(() => {
         const handleKeyDown = (e) => {
@@ -58,60 +233,25 @@ export default function Popup( { unit, onClose } ) {
             document.removeEventListener("keydown", handleKeyDown);
         };
     }, []);
-    
+
     // Fetch borrower information
     useEffect(() => {
-        const fetchBorrowers = async () => {
-            try {
-                const response = await fetch(`../../../../api/db`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        text: 'SELECT * FROM borrowers WHERE id = $1',
-                        params: [id]
-                    })
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-
-                    const borrowData = data.map((borrower) => {
-                        return {
-                            name: borrower.name,
-                            email: borrower.email,
-                            phone_number: borrower.phone_number,
-                            borrow_history: borrower.borrow_history,
-                            id_borrows_borrower_id: borrower.id_borrows_borrower_id,
-                        };
-                    });
-
-                    setBorrowers(borrowData);
-                    console.log(borrowData);
-                } else {
-                    console.error("Failed to fetch borrower data");
-                }
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
         fetchBorrowers();
     }, [id]);
 
     // Set the status missing/found status statement based on the status
     const statusStatement = status === "Missing" ? (
-        <span style={{ color: "red", textDecoration: "underline"}}>Mark Item as <strong style={{ color: "red", textDecoration: "underline"}}>Found</strong></span>
+        <button 
+            style={{ border: "none", background: "none", color: "red", textDecoration: "underline"}}
+            onClick={() => onOptionSelect("Available")}>
+            <p style={{fontSize: "1.1em"}}>Mark Item as <span style={{ color: "red", fontWeight: "bold", fontSize: "1em"}}>Found</span></p>
+            </button>
     ) : (
-        <span style={{ color: "red", textDecoration: "underline" }}>Mark Item as <strong style={{ color: "red", textDecoration: "underline"}}>Missing</strong></span>
+        <button style={{ border: "none", background: "none", color: "red", textDecoration: "underline"}}
+            onClick={() => onOptionSelect("Missing")}>
+            <p style={{fontSize: "1.1em"}}>Mark Item as <span style={{ color: "red", fontWeight: "bold", fontSize: "1em"}}>Missing</span></p>
+        </button>
     );
-
-    useEffect(() => {
-        if (borrowers && borrowers.length > 0) {
-          console.log("borrowers:", borrowers[0].name);
-        }
-      }, [borrowers]);
 
 
     useEffect(() => {
@@ -133,13 +273,16 @@ export default function Popup( { unit, onClose } ) {
                             <div className="buttons">
                                 {/* Left arrow button */}
                                 <StylishButton
-                                    styleType={"style7"}>
+                                    styleType={"style7"}
+                                    onClick={handleLeftArrow}
+                                >
                                         <img src="/icons/arrow-left.svg" className="arrowIcon" alt="Next" />
                                 </StylishButton>
                                 
                                 {/* Right arrow button */}
                                 <StylishButton
                                     styleType={"style7"}
+                                    onClick={handleRightArrow}
                                 >
                                     <img src="/icons/arrow-right.svg" className="arrowIcon" alt="Next" />
                                 </StylishButton>
@@ -173,15 +316,30 @@ export default function Popup( { unit, onClose } ) {
                 </div>
 
 <div className="imageSelection">
+    {/* Left arrow button */}
+    <StylishButton
+        styleType={"style4"}
+        onClick={() => setSelectedImage((selectedImage - 1 + image_keys.length) % image_keys.length)}
+    >
+            <img src="/icons/arrow-left.svg" className="arrowIcon" alt="Next" />
+    </StylishButton>
   {image_keys &&
     image_keys.map((key, index) => (
       <StylishButton
         key={index}
-        styleType="style1"
+        styleType={selectedImage === index ? 'style5' : 'style4'}
         onClick={() => setSelectedImage(index)}
         label={`${index + 1}`}
       />
     ))}
+
+    {/* Right arrow button */}
+    <StylishButton
+        styleType={"style4"}
+        onClick={() => setSelectedImage((selectedImage + 1) % image_keys.length)}
+    >
+        <img src="/icons/arrow-right.svg" className="arrowIcon" alt="Next" />
+    </StylishButton>
 </div>
 
 
@@ -276,16 +434,16 @@ export default function Popup( { unit, onClose } ) {
                         </thead>
                         <tbody>
                             <tr>
-                            <td><strong>Name: </strong>{borrowers.length > 0 ? borrowers[0].name : "N/A"}</td>
-                            <td><strong>Date Borrowed: </strong>{borrowers.length > 0 ? borrowers[0].date_borrowed : "N/A"}</td>
+                            <td><strong>Name: </strong>{currBorrower !== null ? currBorrower.name : "N/A"}</td>
+                            <td><strong>Date Borrowed: </strong>{currBorrower !== null ? currBorrower.date_borrowed : "N/A"}</td>
                             </tr>
                             <tr>
-                            <td><strong>Email: </strong>{borrowers.length > 0 ? borrowers[0].email : "N/A"}</td>
-                            <td><strong>Return Date: </strong>{borrowers.length > 0 ? borrowers[0].return_date : "N/A"}</td>
+                            <td><strong>Email: </strong>{currBorrower !== null ? currBorrower.email : "N/A"}</td>
+                            <td><strong>Return Date: </strong>{currBorrower !== null ? currBorrower.return_date : "N/A"}</td>
                             </tr>
                             <tr>
-                            <td><strong>Cell: </strong>{borrowers.length > 0 ? borrowers[0].phone_number : "N/A"}</td>
-                            <td><strong>Approved By: </strong>{borrowers.length > 0 ? borrowers[0].approved_by : "N/A"}</td>
+                            <td><strong>Cell: </strong>{currBorrower !== null ? currBorrower.phone_number : "N/A"}</td>
+                            <td><strong>Approved By: </strong>{currBorrower !== null ? currBorrower.approved_by : "N/A"}</td>
                             </tr>
                         </tbody>
                         </table>
@@ -293,7 +451,7 @@ export default function Popup( { unit, onClose } ) {
                     {/* Borrow's Notes */}
                     <div className="noteSection"> 
                         <p><strong>Notes</strong></p>
-                        <textarea readOnly className="noteBox" value={borrowers.length > 0 ? borrowers[0].notes : ""} />
+                        <textarea readOnly className="noteBox" value={currBorrower !== null ? currBorrower.notes : ""} />
                     </div>
 
                 </div>
@@ -303,14 +461,12 @@ export default function Popup( { unit, onClose } ) {
                     <p id="borrowerHistorytitle">Borrower History</p> 
                     <table id="borrowerHistory">
                         <tbody>
-                            {borrowers.map((borrower, index) => (
-                                Object.entries(borrower.borrow_history || {}).map(([itemId, history]) => (
-                                    <tr key={`${index}-${itemId}`}>
-                                        <td>{history.dateBorrowed || "N/A"} - {history.dateReturned || "N/A"}</td>
-                                        <td>{history.approver || "N/A"}</td>
-                                        <td>{history.note || "N/A"}</td>
-                                    </tr>
-                                ))
+                            {borrowerHistory.map((borrower, index) => (
+                                <tr key={index + 1}>
+                                    <td>{borrower.dateBorrowed || "N/A"} - {borrower.dateReturned || "N/A"}</td>
+                                    <td>{borrower.approver || "N/A"}</td>
+                                    <td>{borrower.notes || "N/A"}</td>
+                                </tr>
                             ))}
                         </tbody>
                     </table>

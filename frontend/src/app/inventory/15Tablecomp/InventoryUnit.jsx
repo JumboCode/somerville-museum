@@ -6,7 +6,7 @@ import PrePopup from "./PrePopup";
 import Image from "next/image"
 import "./InventoryUnit.css";
 
-export default function InventoryUnit({ unit, onChange, checked }) {
+export default function InventoryUnit({ unit, onChange, checked, unitList, index }) {
 
     const { id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, borrow_history, notes, image_keys} = unit; 
     const [isPopupVisible, setIsPopupVisible] = useState(false);
@@ -16,6 +16,7 @@ export default function InventoryUnit({ unit, onChange, checked }) {
 
     const handleDoubleClick = () => {
         setIsPopupVisible(true);
+        setIsPrePopupVisible(false);
     }
 
     const handleClick = () => {
@@ -98,6 +99,20 @@ export default function InventoryUnit({ unit, onChange, checked }) {
         console.log("Items Checked?", checked);
     }
 
+    const getHighestCondition = (conditions) => 
+        conditions.reduce((best, c) =>
+            order.indexOf(c) < order.indexOf(best) ? c : best, conditions[0]
+        );
+    
+    const order = [
+        "Great",
+        "Good",
+        "Needs washing",
+        "Needs repair",
+        "Needs dry cleaning",
+        "Not usable"
+    ];
+
     //not pulling tags
     return (  
         <div className="unit" onDoubleClick={handleDoubleClick}> 
@@ -130,8 +145,8 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                     {unit.status}
                 </div>
                 <div className="condition">
-                    <div className={`circle2 ${Array.isArray(unit.condition) ? unit.condition[0] : unit.condition}`} ></div>
-                        {Array.isArray(unit.condition) ? unit.condition[0] : unit.condition}
+                    <div className={`circle2 ${getHighestCondition(Array.isArray(unit.condition) ? unit.condition : [unit.condition])}`} ></div>
+                        {getHighestCondition(Array.isArray(unit.condition) ? unit.condition : [unit.condition])}
                 </div>
 
             </div>
@@ -155,7 +170,11 @@ export default function InventoryUnit({ unit, onChange, checked }) {
                 )}   
 
                 { isPopupVisible && (
-                <Popup unit={unit} onClose={handleClosePopup} />
+                <Popup 
+                    onClose={handleClosePopup} 
+                    onOptionSelect={handlePopupOption}
+                    unitIndex={index}
+                    unitList={unitList}/>
                 )}    
             </div>
         </div>
