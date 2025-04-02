@@ -4,6 +4,7 @@ import "./BorrowerExpanded.css";
 import CloseButton from "../assets/CloseButton";
 import ArrowLeft from "../assets/ArrowLeft";
 import ArrowRight from "../assets/ArrowRight";
+import { useEffect } from "react";
 
 export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) {
   if (!borrower) return null;
@@ -12,12 +13,26 @@ export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) 
     ? Object.entries(borrower.borrow_history)
     : [];
 
+  // Add Escape key listener
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    // Cleanup event listener
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onClose]);
+
   return (
     <div className="popup-overlay" onClick={onClose}>
       <div className="popup" onClick={(e) => e.stopPropagation()}>
-        <button className="close-btn" onClick={onClose}>
-          <CloseButton />
-        </button>
+          <CloseButton onClick={onClose} />
         <br />
         <h2>{borrower.name}</h2>
         <br />

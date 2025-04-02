@@ -24,6 +24,7 @@ export async function selectCountsHandler(req, res) {
     }
   }
 
+
   export async function fetchInventoryByTagHandler(req, res) {
     try {
       const filters = req.body;

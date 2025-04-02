@@ -18,6 +18,7 @@ import './BorrowPopup.css';
 import { useGlobalContext } from './contexts/ToggleContext';
 import { useUser } from '@clerk/nextjs'; // Import the Clerk hook
 
+import StylishButton from './StylishButton';
 
 const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
   const { isToggleEnabled } = useGlobalContext(); // TOGGLE FUNCTIONALITY
@@ -167,7 +168,6 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
 
         // Read response as text (to catch non-JSON errors)
         const responseText = await emailResponse.text();
-        console.log("Email API Response:", responseText);
 
         if (!emailResponse.ok) {
             throw new Error(`Email sending failed: ${emailResponse.status} ${responseText}`);
@@ -216,12 +216,32 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
     }
   };
 
+  const handlePhoneInput = (value) => {
+    // Remove all non-numeric characters
+    const numericValue = value.replace(/\D/g, "");
+  
+    // Format the input as ###-###-####
+    if (numericValue.length <= 3) {
+      setPhoneNumber(numericValue);
+    } else if (numericValue.length <= 6) {
+      setPhoneNumber(`${numericValue.slice(0, 3)}-${numericValue.slice(3)}`);
+    } else {
+      setPhoneNumber(
+        `${numericValue.slice(0, 3)}-${numericValue.slice(3, 6)}-${numericValue.slice(6, 10)}`
+      );
+    }
+  };
+
   return (
     <div className="container">
+      
+      {/* Top header */}
       <div className="borrowItemsHeader">
         <div className="borrow-header">
             <h1>Borrow Item(s)</h1>
         </div>
+
+        {/* Left column of items to borrow */}
         <div className="borrowItemsContent">
             {borrowItems.length > 0 ? (
             <>
@@ -235,32 +255,35 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
                 ))}
                 </div>
                 <div className="pagination-container">
-                <div className="pagination">
-                    <button
-                    type="button"
-                    disabled={currentPage === 1}
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    >
-                    {"<"}
-                    </button>
-                    {Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                        key={index + 1}
+                  <div className="pagination">
+                      <StylishButton
                         type="button"
-                        className={currentPage === index + 1 ? "active" : ""}
-                        onClick={() => handlePageChange(index + 1)}
-                    >
-                        {index + 1}
-                    </button>
-                    ))}
-                    <button
-                    type="button"
-                    disabled={currentPage === totalPages}
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    >
-                    {">"}
-                    </button>
-                </div>
+                        disabled={currentPage === 1}
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        styleType='style4'
+                        >
+                        {"<"}
+                      </StylishButton>
+                      {Array.from({ length: totalPages }, (_, index) => (
+                      <StylishButton
+                            key={index + 1}
+                            type="button"
+                            className={currentPage === index + 1 ? "active" : ""}
+                            onClick={() => handlePageChange(index + 1)}
+                            styleType={currentPage === index + 1 ? 'style5' : 'style4'}
+                        >
+                            {index + 1}
+                      </StylishButton>
+                      ))}
+                      <StylishButton
+                        type="button"
+                        disabled={currentPage === totalPages}
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        styleType='style4'
+                        >
+                      {">"}
+                      </StylishButton>
+                  </div>
                 </div>
             </>
             ) : (
@@ -271,6 +294,7 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
 
       <div className="dividerNew"></div>
 
+      {/* Right column with borrower input fields */}
       <form onSubmit={handleSubmit} className="info-form">
         <div className="info-header">Information</div>
         <div className="form-row">
@@ -297,8 +321,11 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
             <input
               required
               value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-            />
+              onChange={(e) => handlePhoneInput(e.target.value)}
+              style={{
+                borderColor: isPhoneValid || !phoneNumber ? "#9b525f" : "red",
+              }}
+              />
           </div>
         </div>
         <div className="form-row full-width">
@@ -382,10 +409,8 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
           </div>
         </div>
         <div className="form-actions">
-          <button type="button" onClick={onClose}>
-            Cancel
-          </button>
-          <button type="submit">Borrow</button>
+          <StylishButton label="Cancel" styleType= "style1" onClick={onClose}/>
+          <StylishButton label="Borrow" styleType= "style3"/>
         </div>
       </form>
       {isSuccessPopupVisible && (
