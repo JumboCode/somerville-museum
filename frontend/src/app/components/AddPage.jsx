@@ -38,7 +38,6 @@ export default function AddPage() {
     const [manualIdText, setManualIdText] = useState("");
     const [manualDateText, setManualDateText] = useState("");
 
-
     const [itemText, setItemText] = useState("");
     const [locationText, setLocationText] = useState("");
     const [priceText, setPriceText] = useState("");
@@ -110,7 +109,7 @@ export default function AddPage() {
         { name: "Green", hex: "#34C759" },
         { name: "Blue", hex: "#5856D6" },
         { name: "Purple", hex: "#AF52DE" },
-        { name: "Pink", hex: "#FF2D55" },
+        { name: "Pink", hex: "#FF93B7" },
         { name: "Brown", hex: "#A2845E" },
         { name: "White", hex: "#FFFFFF", border: "#c9c9c9" },
         { name: "Gray", hex: "#8E8E93" },
@@ -211,11 +210,11 @@ export default function AddPage() {
             return;
         }
     
-        // Extract only names
-        const selectedNames = selectedTimePeriods.map(item => item?.name || ""); // Avoid undefined errors
+        // Extract only names to avoid undefined values
+        const selectedNames = selectedTimePeriods.map(item => item?.name || "");
     
-        // Update state
-        setSelectedTimePeriod(selectedNames.filter(name => name !== "")); // Remove any empty values
+        // Update state, removing any empty values
+        setSelectedTimePeriod(selectedNames.filter(name => name !== ""));
     };
 
     const handleSeasonSelect = (season) => {
