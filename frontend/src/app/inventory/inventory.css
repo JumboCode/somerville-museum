@@ -65,9 +65,19 @@ box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
     color: #333;
 }
 
+.IDOnClick {
+    padding-left: 6.2vw;
+    color: #9B525F;
+}
+
 .ItemLabel {
     padding-left: 8.5%;
     color: #333;
+}
+
+.ItemOnClick {
+    padding-left: 8.5%;
+    color: #9B525F;
 }
 
 .AvaiLabel {
@@ -75,9 +85,19 @@ box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
     color: #333;
 }
 
+.AvailOnClick {
+    padding-left: 6vw;
+    color: #9B525F;
+}
+
 .ConLabel {
     padding-left: 4vw;
     color: #333;
+}
+
+.ConOnClick {
+    padding-left: 4vw;
+    color: #9B525F;
 }
 
 .TagsLabel {
@@ -90,22 +110,15 @@ box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
     cursor: pointer;
     background: none; 
     border: none;
-    color: #000000;
     box-shadow: none;
     font: 3rem;
 }
 
-#SortTag:hover {
-    transition: all 0.5s ease;
-    color: #1c1c1c;
-    font-weight: 500;
-}
-
-#SortTag:focus {
+/* #SortTag:focus {
     transition: all 0.5s ease;
     color: #9B525F;
     font-weight: 1000;
-}
+} */
 
 #SelectAll {
     color: #007BFF;  
