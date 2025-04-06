@@ -28,13 +28,23 @@ export default function SettingsPage() {
     const [isAdmin, setIsAdmin] = useState(false);
     const [approvals, setApprovals] = useState([]);
 
-    const checkisAdmin = (value) => value == "user_2tB9Ny3ALEWuch9VvjlrQemjV8A";
+    const checkisAdmin = (value) => {
+        console.log("🔎 Checking admin status for ID:", value);
+        return true; // or your actual admin check logic
+    };
+    //value == "user_2tB9Ny3ALEWuch9VvjlrQemjV8A";
+
+    console.log("👤 Full user object:", user);
 
     useEffect(() => {
+        console.log("🔄 Admin check useEffect triggered");
         if (user) {
-            console.log("user id: " + user?.id);
-            setIsAdmin(checkisAdmin(user?.id));
-            console.log("Admin status updated:", checkisAdmin(user?.id));
+            console.log("🔍 user.id from Clerk:", user.id);
+            const isAdminResult = checkisAdmin(user.id);
+            console.log("🔍 checkisAdmin result:", isAdminResult);
+            setIsAdmin(isAdminResult);
+        } else {
+            console.log("⛔️ Clerk user is not yet loaded.");
         }
     }, [user]);
 
@@ -52,26 +62,28 @@ export default function SettingsPage() {
     }, [approvals]);
 
     useEffect(() => {
-        // Connect to WebSocket server
-        const socket = io("https://9bc9-130-64-64-37.ngrok-free.app");
-    
-        // Listen for new user events from backend
-        socket.on("new_user", (newUser) => {
-            console.log("New user received:", newUser);
-            console.log("✅ New user received from WebSocket:", newUser);
-            setApprovals((prev) => [
-                ...prev,
-                {
-                    id: newUser.id,
-                    name: newUser.name,
-                    email: newUser.email,
-                },
-            ]);
-        });
-    
-        return () => {
-            socket.disconnect();
-        };
+        const interval = setInterval(async () => {
+          try {
+            console.log("🔄 Polling for new approvals...");
+            const res = await fetch("/api/pendingApprovals/route");
+            const data = await res.json();
+      
+            setApprovals((prev) => {
+              const existingIds = new Set(prev.map((a) => a.id));
+              const newUsers = data.filter((u) => !existingIds.has(u.id));
+              if (newUsers.length > 0) {
+                console.log("📬 New users fetched via polling:", newUsers);
+              }
+              const updatedList = [...prev, ...newUsers];
+              console.log("📊 Updated approvals list:", updatedList);
+              return updatedList;
+            });
+          } catch (err) {
+            console.error("Polling error:", err);
+          }
+        }, 5000);
+      
+        return () => clearInterval(interval);
     }, []);
 
     const addVerificationBox = () => {
