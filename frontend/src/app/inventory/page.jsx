@@ -485,7 +485,9 @@ export default function Inventory({
                                 <AddButton className='addBtn'> </AddButton>
                                 <BorrowButton className='brwBtn'
                                     selectedItems={selectedItems}
+                                    isValid={selectedItems?.some(item => item.status === "Available")}
                                     onSuccess={handleBorrowSuccess}>Borrow
+                                    
                                 </BorrowButton>
                                 <ReturnButton className='rtnBtn'
                                     selectedItems={selectedItems}
