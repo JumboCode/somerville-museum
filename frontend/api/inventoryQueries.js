@@ -183,14 +183,42 @@ export async function getConditionHandler(req, res) {
 
 
 export async function getNextAvailableIdHandler(req, res) {
-  try {
-      const result = await query('SELECT MAX(id) AS maxId FROM dummy_data');
-      const nextId = result.rows[0].maxid ? result.rows[0].maxid + 1 : 1; // Increment maxId or start from 1 if no IDs exist
+  if (req.method !== 'GET') {
+      return res.status(405).json({ error: 'Method Not Allowed' });
+  }
 
-      res.status(200).json({ nextId }); // Send the next available ID back to the frontend
+  try {
+      // smallest unused id
+      const gapResult = await query(`
+          SELECT d.id + 1 AS nextId
+          FROM dummy_data d
+          WHERE NOT EXISTS (
+              SELECT 1 FROM dummy_data WHERE id = d.id + 1
+          )
+          ORDER BY d.id
+          LIMIT 1;
+      `);
+
+      const maxResult = await query('SELECT COALESCE(MAX(id), 0) AS maxId FROM dummy_data');
+
+      let nextId;
+      // use max + 1 if no gaps
+      if (gapResult.rows.length > 0) {
+          nextId = gapResult.rows[0].nextid;
+      } 
+      else {
+          nextId = maxResult.rows[0].maxid + 1;
+      }
+
+      // empty table
+      if (maxResult.rows[0].maxid === null) {
+          nextId = 1;
+      }
+
+      res.status(200).json({ nextId });
   } catch (error) {
-      console.error("Database query error:", error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      console.error('Error finding next available ID:', error);
+      res.status(500).json({ error: 'Database error' });
   }
 }
 

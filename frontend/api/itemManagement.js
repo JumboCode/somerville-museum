@@ -258,7 +258,6 @@ export async function updateItemHandler(req, res) {
     }
 }
 
-
 // Main handler function that routes to the appropriate handler based on the request
 export default async function handler(req, res) {
     const { action } = req.query;
