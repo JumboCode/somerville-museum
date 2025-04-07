@@ -474,5 +474,20 @@
     background-color: #9B525F; 
     color: #FFFFFF;
   }
+
+  .pagination-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    position: absolute;  /* 👈 pins it to bottom */
+    bottom: 1rem;        /* spacing from bottom */
+    left: 0;
+  }
+  
+  .pagination {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
   
   
