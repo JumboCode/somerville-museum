@@ -29,7 +29,7 @@ export default function Inventory({
     const [selectAllChecked, setSelectAllChecked] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [unitsPerPage, setUnitsPerPage] = useState(15);
-    const [totalPages, setTotalPages] = useState();
+    const [totalPages, setTotalPages] = useState(0);
     const [selectedItems, setSelectedItems] = useState([]);
     const [searchResults, setSearchResults] = useState([]);
     const searchParams = useSearchParams();
@@ -37,26 +37,6 @@ export default function Inventory({
     const [filterResults, setFilterResults] = useState([]);
     
     const [refreshTable, setRefreshTable] = useState(false);
-    // const [sortType, setSortType] = useState('id'); // Track last sorted property
-    // const [isSorted, setIsSorted] = useState(false); // Track if already sorted
-
-    // const sortBy = (property) => {
-    //     console.log("calling sortBy")
-    //     // if (sortType === property && isSorted) {
-    //         // Reset to ID sorting
-    //         // setSortType('id');
-    //         // setIsSorted(false);
-    //         // sortingFunctions.id(); // Always sorts by ID when reset
-
-    //     // } else {
-    //     //     // Sort based on the selected property
-    //     //     // setSortType(property);
-    //     //     // setIsSorted(true);
-
-    //     //     sortingFunctions[property]();
-    //     //     console.log(sortingFunctions[property]);
-    //     // }
-    // };
 
     const sortingFunctions = {
         id: () => sortByID(),
@@ -76,13 +56,15 @@ export default function Inventory({
             return searchResults.length > 0 
             ? searchResults.filter(item => filteredUnitIds.has(item.id)) 
             : filterResults;
-        }});
+        }
+    }, [filterResults, searchResults]);
 
 
-    const applyFilters = (data) => {
+    const applyFilters = async (data) => {
         console.log("Starting filter application with data:", data);
         console.log("Current selectedFilters:", selectedFilters);
         
+        if (!Array.isArray(data)) return [];
         let filteredData = [...data];
     
         // Filter by Status
@@ -100,6 +82,7 @@ export default function Inventory({
         if (selectedFilters.condition && selectedFilters.condition.length > 0) {
             console.log("Filtering by condition:", selectedFilters.condition);
             filteredData = filteredData.filter(item => 
+                item.condition &&
                 selectedFilters.condition.some(condition => 
                     item.condition.includes(condition)
                 )
@@ -162,17 +145,39 @@ export default function Inventory({
                 )
             );
         }
-    
+
         // Filter by Return Date Range
-        if (selectedFilters.return_date && selectedFilters.return_date.start && selectedFilters.return_date.end) {
-            console.log("Filtering by return date range:", selectedFilters.return_date);
-            filteredData = filteredData.filter(item => {
-                if (!item.return_date) return false;
-                const returnDate = new Date(item.return_date);
-                const startDate = new Date(selectedFilters.return_date.start);
-                const endDate = new Date(selectedFilters.return_date.end);
-                return returnDate >= startDate && returnDate <= endDate;
-            });
+        if (selectedFilters.return_date?.start && selectedFilters.return_date?.end) {
+            try {
+                const response = await fetch(`/api/inventoryQueries?action=fetchByReturnDate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        startDate: selectedFilters.return_date.start,
+                        endDate: selectedFilters.return_date.end
+                    })
+                });
+                
+                if (response.ok) {
+                    const itemIds = await response.json();
+                    console.log("Items matching date range:", itemIds); // Add this logging
+                    
+                    // Ensure itemIds is an array before filtering
+                    if (Array.isArray(itemIds)) {
+                        filteredData = filteredData.filter(item => 
+                            itemIds.includes(item.id)
+                        );
+                    } else {
+                        console.error("Expected array of item IDs, got:", itemIds);
+                        filteredData = [];
+                    }
+                } else {
+                    console.error("Failed to fetch by return date:", await response.text());
+                }
+            } catch (error) {
+                console.error("Error filtering by return date:", error);
+                return [];
+            }
         }
     
         console.log("Final filtered results:", filteredData);
@@ -193,9 +198,10 @@ export default function Inventory({
 
             if (response.ok) {
                 const data = await response.json();
+                const inventoryData = Array.isArray(data) ? data : [];
                 console.log("Fetched data:", data);
                 const currentDate = new Date();
-                const updatedData = data.map((item) => {
+                const updatedData = inventoryData.map((item) => {
                     if (item.status === "Borrowed" && item.dueDate && new Date(item.dueDate) < currentDate) {
                         return { ...item, status: "Overdue" };
                     }
@@ -216,7 +222,8 @@ export default function Inventory({
                     selectedFilters.season?.length > 0 ||
                     selectedFilters.time_period?.length > 0 ||
                     (selectedFilters.return_date?.start && selectedFilters.return_date?.end)) {
-                    const filteredData = applyFilters(updatedData);
+                    // Use await here since applyFilters is async
+                    const filteredData = await applyFilters(updatedData);
                     setUnits(filteredData);
                     setTotalPages(Math.ceil(filteredData.length / unitsPerPage));
                 } else {
@@ -226,9 +233,13 @@ export default function Inventory({
 
             } else {
                 console.error("failed to fetch data");
+                setOriginalUnits([]);
+                setUnits([]);
             }
         } catch (error) {
             console.error(error);
+            setOriginalUnits([]);
+            setUnits([]);
         }
     }
 
@@ -240,68 +251,80 @@ export default function Inventory({
     // manage filters if someone is navigating here from clicking one of the links
     // in the dashboard
     useEffect(() => {
-        if (filter) {
-            console.log("Setting filter from URL:", filter);
-            const newFilters = {
-                condition: [],
-                gender: [],
-                color: [],
-                garment_type: [],
-                size: [],
-                time_period: [],
-                status: [filter],
-                season: [],
-                return_date: { start: null, end: null }
-            };
-            setSelectedFilters(newFilters);
-            
-            // If we already have data, apply the filter immediately
-            if (originalUnits.length > 0) {
-                const filteredData = applyFilters(originalUnits);
-                setUnits(filteredData);
-                setTotalPages(Math.ceil(filteredData.length / unitsPerPage));
+        const applyFilterFromUrl = async () => {
+            if (filter) {
+                console.log("Setting filter from URL:", filter);
+                const newFilters = {
+                    condition: [],
+                    gender: [],
+                    color: [],
+                    garment_type: [],
+                    size: [],
+                    time_period: [],
+                    status: [filter],
+                    season: [],
+                    return_date: { start: null, end: null }
+                };
+                setSelectedFilters(newFilters);
+                
+                // If we already have data, apply the filter immediately
+                if (originalUnits.length > 0) {
+                    // Use await here since applyFilters is async
+                    const filteredData = await applyFilters(originalUnits);
+                    setUnits(filteredData);
+                    setTotalPages(Math.ceil(filteredData.length / unitsPerPage));
+                }
             }
-        }
-    }, [filter, setSelectedFilters, originalUnits]);
+        };
+        
+        applyFilterFromUrl();
+    }, [filter, setSelectedFilters, originalUnits, unitsPerPage]);
 
     // Filter effect
     useEffect(() => {
-        console.log("Filter effect triggered");
-        console.log("Current originalUnits:", originalUnits);
-        console.log("Current selectedFilters:", selectedFilters);
-        
-        // Only proceed if we have data
-        if (originalUnits.length === 0) {
-            console.log("No data available yet, waiting for data fetch");
-            return;
-        }
-        
-        if (Object.values(selectedFilters).every(val => 
-            Array.isArray(val) ? val.length === 0 : !val
-        )) {
-            console.log("No filters active, showing all units");
-            setUnits(originalUnits);
-            return;
-        }
+        const updateFilteredUnits = async () => {
+            console.log("Filter effect triggered");
+            console.log("Current originalUnits:", originalUnits);
+            console.log("Current selectedFilters:", selectedFilters);
+            
+            // Only proceed if we have data
+            if (originalUnits.length === 0) {
+                console.log("No data available yet, waiting for data fetch");
+                return;
+            }
+            
+            const hasActiveFilters = Object.entries(selectedFilters).some(([key, value]) => {
+                if (key === 'return_date') {
+                    return value?.start && value?.end;
+                }
+                return Array.isArray(value) && value.length > 0;
+            });
+            
+            if (!hasActiveFilters) {
+                console.log("No filters active, showing all units");
+                setUnits(originalUnits);
+                setTotalPages(Math.ceil(originalUnits.length / unitsPerPage));
+                return;
+            }
 
-        const filteredUnits = applyFilters(originalUnits);
-        console.log("After applying filters:", filteredUnits);
+            // Use await here since applyFilters is async
+            const filteredUnits = await applyFilters(originalUnits);
+            console.log("After applying filters:", filteredUnits);
+            
+            setUnits(filteredUnits);
+            setCurrentPage(1);
+            setTotalPages(Math.ceil(filteredUnits.length / unitsPerPage));
+        };
         
-        setUnits(filteredUnits);
-        setCurrentPage(1);
-        setTotalPages(Math.ceil(filteredUnits.length / unitsPerPage));
-    }, [selectedFilters, originalUnits]);
+        updateFilteredUnits();
+    }, [selectedFilters, originalUnits, unitsPerPage]);
 
 
     const handleBorrowSuccess = () => {
-        // Literally just to call the useeffect with the request. kinda scuffed but whatever
-        // setRefreshTable(prev => !prev);
-
         setFilterResults([]); 
         setSearchResults([]); 
         setSelectedItems([]); 
         fetchData(); 
-
     };
   
 
@@ -309,6 +332,7 @@ export default function Inventory({
         console.log("Return operation successful, refreshing inventory...");
         setRefreshTable(prev => !prev); // Refresh table to show updated status
         setSelectedItems([]); // Clear selected items
+        fetchData();
     };
     
 
@@ -331,30 +355,33 @@ export default function Inventory({
         setSelectAllChecked(!selectAllChecked);
     };
 
+    // Make sure units is always an array before using slice
     const startIndex = (currentPage - 1) * unitsPerPage;
-    const currentUnits = units
-        .slice(startIndex, startIndex + unitsPerPage)
-        .map((unit) => {
-            return (<InventoryUnit
-                key={unit.id}
-                unit={unit}
-                onChange={handleCheckboxChange}
-                checked={selectedItems.some((item) => item?.id && unit?.id && item.id === unit.id)}
-            />)
-        });
+    const currentUnits = Array.isArray(units) 
+        ? units
+            .slice(startIndex, startIndex + unitsPerPage)
+            .map((unit) => {
+                return (<InventoryUnit
+                    key={unit.id}
+                    unit={unit}
+                    onChange={handleCheckboxChange}
+                    checked={selectedItems.some((item) => item?.id && unit?.id && item.id === unit.id)}
+                />)
+            })
+        : [];
 
     const sortByID = () => {
-        const filteredAndSortedEntries = [...units]
-            .sort((a, b) => a.id - b.id); // Sort by id
-
-        setUnits(filteredAndSortedEntries);
+        setUnits(prevUnits => {
+            if (!Array.isArray(prevUnits)) return [];
+            return [...prevUnits].sort((a, b) => a.id - b.id);
+        });
     };
 
     const sortByName = () => {
-        const filteredAndSortedEntries = [...units]
-            .sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
-
-        setUnits(filteredAndSortedEntries);
+        setUnits(prevUnits => {
+            if (!Array.isArray(prevUnits)) return [];
+            return [...prevUnits].sort((a, b) => a.name.localeCompare(b.name));
+        });
     };
 
     const sortByAvail = () => {
@@ -365,10 +392,10 @@ export default function Inventory({
             "Missing"
         ];
 
-        const filteredAndSortedEntries = [...units]
-            .sort((a, b) => availability.indexOf(a.status) - availability.indexOf(b.status)); // Sort by availability
-
-        setUnits(filteredAndSortedEntries);
+        setUnits(prevUnits => {
+            if (!Array.isArray(prevUnits)) return [];
+            return [...prevUnits].sort((a, b) => availability.indexOf(a.status) - availability.indexOf(b.status));
+        });
     };
 
     const sortByCon = () => {
@@ -381,24 +408,23 @@ export default function Inventory({
             "Not usable"
         ];
     
-        const filteredAndSortedEntries = [...units].sort((a, b) => {
-            // Function to get the highest-ranked condition for an item
-            const getHighestCondition = (conditions) => 
-                conditions.reduce((best, c) =>
-                    order.indexOf(c) < order.indexOf(best) ? c : best, conditions[0]
-                );
-    
-            const highestA = getHighestCondition(a.condition);
-            const highestB = getHighestCondition(b.condition);
-    
-            return order.indexOf(highestA) - order.indexOf(highestB);
+        setUnits(prevUnits => {
+            if (!Array.isArray(prevUnits)) return [];
+            return [...prevUnits].sort((a, b) => {
+                // Function to get the highest-ranked condition for an item
+                const getHighestCondition = (conditions) => 
+                    conditions.reduce((best, c) =>
+                        order.indexOf(c) < order.indexOf(best) ? c : best, conditions[0]
+                    );
+            
+                const highestA = getHighestCondition(a.condition);
+                const highestB = getHighestCondition(b.condition);
+            
+                return order.indexOf(highestA) - order.indexOf(highestB);
+            });
         });
-    
-        setUnits(filteredAndSortedEntries);
     };
 
-    //tesing piece of code
-    // const totalPages = Math.ceil(20 / unitsPerPage);
     const goToPreviousPage = () => {
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
     };
@@ -412,11 +438,11 @@ export default function Inventory({
     const handleUnitsPerPageChange = (event) => {
         setUnitsPerPage(Number(event.target.value));
         setCurrentPage(1);
-        setTotalPages(Math.ceil(units.length / Number(event.target.value)));//by default set the current page to 1
+        setTotalPages(Math.ceil(units.length / Number(event.target.value)));
     };
 
     // an array of buttons for page selection
-    const buttons = Array.from({ length: totalPages }, (_, index) => index + 1);
+    const buttons = Array.from({ length: totalPages || 1 }, (_, index) => index + 1);
 
 
 
