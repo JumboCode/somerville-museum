@@ -7,6 +7,8 @@ import BorrowPopup from './BorrowPopup.jsx';
 
 const BorrowButton = ({ selectedItems = [], onSuccess, isValid }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState(""); 
   const [availableSelectedItems, setAvailableSelectedItems] = useState(selectedItems);
 
   // This function checks the validity of the selected items
@@ -29,7 +31,8 @@ const BorrowButton = ({ selectedItems = [], onSuccess, isValid }) => {
 
       const result = await response.json(); 
       if (result.message) {
-          alert(result.message);  
+          setAlertMessage(result.message);  
+          setIsAlertOpen(true); 
       }
 
       //reset available items after check
@@ -47,10 +50,11 @@ const BorrowButton = ({ selectedItems = [], onSuccess, isValid }) => {
     if(selectedItems == 0) {
       alert('No Items selected.'); 
     } else {
-        // Check the validity before opening the popup
+    // Check the validity before opening the popup
     const isValid = await handleValidity();
       if (isValid) {
-        setIsOpen(true);  // Open the popup only if validity is true
+
+        // setIsOpen(true);  // Open the popup only if validity is true
       } else {
         alert('Some items are invalid. Please try again.');
       }
@@ -65,9 +69,21 @@ const BorrowButton = ({ selectedItems = [], onSuccess, isValid }) => {
         onClick={handleButtonClick}
         disabled={!isValid}
       />
+      {isAlertOpen && (
+        <div className="alert-container">
+          <div className="alert-box">
+            <p>{alertMessage}</p>
+            <button onClick={() => {
+              setIsAlertOpen(false); 
+              setIsOpen(true); 
+            }}>Continue</button> 
+            <button onClick={() => setIsAlertOpen(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
+
 
     {isOpen && (
-
         <div className="custom-popup-large">
           <BorrowPopup
             selectedItems={availableSelectedItems}
