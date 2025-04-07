@@ -24,7 +24,6 @@ export async function selectCountsHandler(req, res) {
     }
   }
 
-
   export async function fetchInventoryByTagHandler(req, res) {
     try {
       const filters = req.body;
@@ -72,7 +71,6 @@ export async function selectCountsHandler(req, res) {
       });
     }
   }
-
 
 
 export async function fetchTagsHandler(req, res) {
@@ -223,6 +221,38 @@ export async function getNextAvailableIdHandler(req, res) {
 }
 
 
+export async function fetchByReturnDateHandler(req, res) {
+  try {
+      const { startDate, endDate } = req.body;
+      
+      if (!startDate || !endDate) {
+          return res.status(400).json({ error: 'Both start and end dates are required' });
+      }
+
+      // Convert UI dates (MM/DD/YYYY) to consistent format for comparison
+      // -- Handle both 2-digit and 4-digit years
+      const result = await query(`
+        SELECT d.id
+        FROM dummy_data d
+        JOIN borrows b ON b.item_id = d.id
+        WHERE 
+            CASE 
+                WHEN b.return_date LIKE '__/__/__' THEN
+                    TO_DATE(b.return_date, 'MM/DD/YY') 
+                ELSE
+                    TO_DATE(b.return_date, 'MM/DD/YYYY')
+            END BETWEEN 
+                TO_DATE($1, 'MM/DD/YYYY') AND 
+                TO_DATE($2, 'MM/DD/YYYY');
+      `, [startDate, endDate]);
+
+      res.status(200).json(result.rows.map(row => row.id));
+  } catch (error) {
+      console.error("Database query error:", error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
 export default async function handler(req, res) {
   const { action } = req.query;
   
@@ -241,6 +271,8 @@ export default async function handler(req, res) {
           return getConditionHandler(req, res);
       case 'getNextAvailableId':
           return getNextAvailableIdHandler(req, res);
+      case 'fetchByReturnDate':
+          return fetchByReturnDateHandler(req, res);
       default:
           return res.status(400).json({ error: 'Invalid action' });
   }

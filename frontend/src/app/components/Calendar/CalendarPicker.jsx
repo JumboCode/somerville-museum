@@ -1,7 +1,13 @@
 import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import './CalendarPicker.css';
 
-const CalendarPicker = forwardRef(({ onDateSelect, isOpen, onClose }, ref) => {
+const CalendarPicker = forwardRef(({ 
+  onDateSelect, 
+  isOpen, 
+  onClose, 
+  initialStartDate, 
+  initialEndDate 
+}, ref) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
@@ -14,6 +20,17 @@ const CalendarPicker = forwardRef(({ onDateSelect, isOpen, onClose }, ref) => {
     "July", "August", "September", "October", "November", "December"
   ];
 
+  useEffect(() => {
+    if (initialStartDate) {
+        const [month, day, year] = initialStartDate.split('/');
+        setSelectedStartDate(new Date(year, month - 1, day));
+    }
+    if (initialEndDate) {
+        const [month, day, year] = initialEndDate.split('/');
+        setSelectedEndDate(new Date(year, month - 1, day));
+    }
+  }, [initialStartDate, initialEndDate]);
+
   // Expose resetCalendar method via ref
   useImperativeHandle(ref, () => ({
     resetCalendar: () => {
@@ -23,7 +40,15 @@ const CalendarPicker = forwardRef(({ onDateSelect, isOpen, onClose }, ref) => {
   }));
 
   const handleDateClick = (day) => {
+
     const clickedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    // Prevent selecting dates in the past
+    if (clickedDate < today) {
+        return;
+    }
     
     if (selectionMode === 'start') {
       setSelectedStartDate(clickedDate);
@@ -192,18 +217,24 @@ const CalendarPicker = forwardRef(({ onDateSelect, isOpen, onClose }, ref) => {
             <div key={`prev-${day}`} className="day disabled">{day}</div>
           ))}
           
-          {days.map(day => (
-            <div
-              key={`current-${day}`}
-              className={`day 
-                ${isSelected(day) ? 'selected' : ''} 
-                ${isInRange(day) ? 'in-range' : ''}
-                ${isToday(day) ? 'today' : ''}`}
-              onClick={() => handleDateClick(day)}
-            >
-              {day}
-            </div>
-          ))}
+          {days.map(day => {
+            const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+            const isPastDate = date < today && !isToday(day); // Allow today's date!
+            
+            return (
+                <div
+                    key={`current-${day}`}
+                    className={`day 
+                        ${isSelected(day) ? 'selected' : ''} 
+                        ${isInRange(day) ? 'in-range' : ''}
+                        ${isToday(day) ? 'today' : ''}
+                        ${isPastDate ? 'disabled' : ''}`}
+                    onClick={() => !isPastDate && handleDateClick(day)}
+                >
+                    {day}
+                </div>
+            );
+        })}
           
           {leadingDays.map(day => (
             <div key={`next-${day}`} className="day disabled">{day}</div>
