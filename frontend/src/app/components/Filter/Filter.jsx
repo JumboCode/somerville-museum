@@ -267,6 +267,8 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
                                     onClose={() => setIsCalendarOpen(false)}
                                     onDateSelect={handleDateRangeSelect}
                                     ref={calendarRef}
+                                    initialStartDate={dateRange.start}
+                                    initialEndDate={dateRange.end}
                                 />
                             )}
                         </div>
