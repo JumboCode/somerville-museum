@@ -389,35 +389,35 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
         
       </form>
       <div className="pagination-container">
-                  <div className="pagination">
-                      <StylishButton
-                        type="button"
-                        disabled={currentPage === 1}
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        styleType='style4'
-                        >
-                        {"<"}
-                      </StylishButton>
-                      {Array.from({ length: totalPages }, (_, index) => (
-                      <StylishButton
-                            key={index + 1}
-                            type="button"
-                            className={currentPage === index + 1 ? "active" : ""}
-                            onClick={() => handlePageChange(index + 1)}
-                            styleType={currentPage === index + 1 ? 'style5' : 'style4'}
-                        >
-                            {index + 1}
-                      </StylishButton>
-                      ))}
-                      <StylishButton
-                        type="button"
-                        disabled={currentPage === totalPages}
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        styleType='style4'
-                        >
-                      {">"}
-                      </StylishButton>
-                  </div>
+          <div className="pagination">
+              <StylishButton
+                type="button"
+                disabled={currentPage === 1}
+                onClick={() => handlePageChange(currentPage - 1)}
+                styleType='style4'
+                >
+                {"<"}
+              </StylishButton>
+              {Array.from({ length: totalPages }, (_, index) => (
+              <StylishButton
+                    key={index + 1}
+                    type="button"
+                    className={currentPage === index + 1 ? "active" : ""}
+                    onClick={() => handlePageChange(index + 1)}
+                    styleType={currentPage === index + 1 ? 'style5' : 'style4'}
+                >
+                    {index + 1}
+              </StylishButton>
+              ))}
+              <StylishButton
+                type="button"
+                disabled={currentPage === totalPages}
+                onClick={() => handlePageChange(currentPage + 1)}
+                styleType='style4'
+                >
+              {">"}
+              </StylishButton>
+          </div>
                 </div>
       {isSuccessPopupVisible && (
         <div className="success-popup-overlay">
