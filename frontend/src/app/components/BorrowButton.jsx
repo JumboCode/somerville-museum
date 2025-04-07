@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 import StylishButton from './StylishButton.jsx';
 import BorrowPopup from './BorrowPopup.jsx';
 
-const BorrowButton = ({ selectedItems = [], onSuccess }) => {
+const BorrowButton = ({ selectedItems = [], onSuccess, isValid }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [availableSelectedItems, setAvailableSelectedItems] = useState(selectedItems);
 
@@ -61,8 +61,9 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
     <div>
       <StylishButton
         label="Borrow"
-        styleType="style1"
+        styleType={isValid ? "style1" : "style6"}
         onClick={handleButtonClick}
+        disabled={!isValid}
       />
 
     {isOpen && (
