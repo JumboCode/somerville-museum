@@ -52,20 +52,9 @@ const BorrowButton = ({ selectedItems = [], onSuccess, isValid }) => {
     if(selectedItems == 0) {
       alert('No Items selected.'); 
     } else {
-     
             // Check the validity before opening the popup
-      const isValid = await handleValidity();
-
-      if (isValid) {
-
-        // setIsOpen(true);  // Open the popup only if validity is true
-      } else {
-        alert('Some items are invalid. Please try again.');
-      }
+      handleValidity();
     }
-
-      
-
   }
 
   return (
