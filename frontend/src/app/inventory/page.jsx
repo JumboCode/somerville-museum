@@ -491,6 +491,7 @@ export default function Inventory({
                                 </BorrowButton>
                                 <ReturnButton className='rtnBtn'
                                     selectedItems={selectedItems}
+                                    isValid={selectedItems?.some(item => item.status === "Borrowed" || item.status === "Missing")}
                                     onSuccess={handleReturnSuccess}>Return
                                 </ReturnButton>
                                 <DeleteItemButton

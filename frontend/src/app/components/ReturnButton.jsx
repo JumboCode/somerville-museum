@@ -5,21 +5,17 @@ import "./ReturnButton.css"
 import ReturnPopup from "./ReturnPopup.jsx"
 import StylishButton from './StylishButton.jsx';
 
-const ReturnButton = ( {selectedItems = [], onSuccess } ) => {
+const ReturnButton = ( {selectedItems = [], onSuccess, isValid } ) => {
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [borrowedSelectedItems, setBorrowedSelectedItems] = useState(selectedItems); 
+    const [isAlertOpen, setIsAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState(""); 
 
     const handleSubmit = async (e) => {
         if(selectedItems == 0) {
             alert('No Items selected.'); 
         } else {
-            const isValid = await handleValidity();
-            if (isValid) {
-                // Open the popup only if validity is true
-                setIsPopupVisible(true);  
-            } else {
-                alert('Some items are invalid. Please try again.');
-            }
+            handleValidity();
         }
     }
 
@@ -42,7 +38,11 @@ const ReturnButton = ( {selectedItems = [], onSuccess } ) => {
     
           const result = await response.json(); 
           if (result.message) {
-              alert(result.message);  
+              setAlertMessage(result.message); 
+              setIsAlertOpen(true); 
+          } else {
+            setIsPopupVisible(true); 
+
           }
     
           // Reset available items after check
@@ -62,17 +62,49 @@ const ReturnButton = ( {selectedItems = [], onSuccess } ) => {
 
     const handleClosePopup = () => {
         setIsPopupVisible(false);
+
     }
 
     return (
         <div>
-            <StylishButton label="Return" styleType="style1" 
-                           onClick={handleSubmit}/>
+            <StylishButton 
+              label="Return" 
+              styleType={isValid ? "style1" : "style6"}
+              onClick={handleSubmit}
+              disabled={!isValid}
+              />
+
+          {isAlertOpen && (
+            <div className="alert-container">
+              <div className="alert-box">
+                <p> The following item(s) are not able to be returned: </p>
+                <h2>{alertMessage}</h2>
+                <div className="alert-row"> 
+                  <StylishButton styleType="style1" onClick={() => setIsAlertOpen(false)}>Cancel</StylishButton>
+                  <StylishButton styleType="style3" onClick={() => {
+                    setIsAlertOpen(false); 
+                    setIsPopupVisible(true);
+                  }}>Continue</StylishButton> 
+                </div> 
+              
+              </div>
+            </div>
+          )}
+
             { isPopupVisible && (
                 <ReturnPopup onClose={handleClosePopup}
+                onSuccess={() => {
+                  if (onSuccess) onSuccess();
+                  setIsPopupVisible(false); // Close the popup
+                }}
+
                              units = {borrowedSelectedItems}/>
             )}
+
+
         </div>
+
+        
     );
 }
 
