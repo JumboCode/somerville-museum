@@ -244,7 +244,7 @@ export async function returnValidityHandler(req, res) {
     // Build the response message
     let message = '';
     if (unavailableItems.length > 0) {
-      message += `The following item(s) are not able to be returned: ${unavailableItems
+      message += `${unavailableItems
         .map((item) => `${item.id}`)
         .join(', ')}. `;
     }
