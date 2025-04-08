@@ -52,7 +52,7 @@ const BorrowButton = ({ selectedItems = [], onSuccess, isValid }) => {
     if(selectedItems == 0) {
       alert('No Items selected.'); 
     } else {
-            // Check the validity before opening the popup
+       // Check the validity 
       handleValidity();
     }
   }
@@ -68,12 +68,16 @@ const BorrowButton = ({ selectedItems = [], onSuccess, isValid }) => {
       {isAlertOpen && (
         <div className="alert-container">
           <div className="alert-box">
-            <p>{alertMessage}</p>
-            <button onClick={() => {
-              setIsAlertOpen(false); 
-              setIsOpen(true);
-            }}>Continue</button> 
-            <button onClick={() => setIsAlertOpen(false)}>Cancel</button>
+            <p> The following item(s) are not available:</p>
+            <h2>{alertMessage}</h2>
+            <div className="alert-row"> 
+              <StylishButton styleType="style1" onClick={() => setIsAlertOpen(false)}>Cancel</StylishButton>
+              <StylishButton styleType="style3" onClick={() => {
+                setIsAlertOpen(false); 
+                setIsOpen(true);
+              }}>Continue</StylishButton> 
+            </div> 
+          
           </div>
         </div>
       )}

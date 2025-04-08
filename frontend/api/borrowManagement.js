@@ -190,9 +190,9 @@ export async function borrowValidityHandler(req, res) {
     // Build the response message
     let message = '';
     if (unavailableItems.length > 0) {
-      message += `The following item(s) are not available: ${unavailableItems
+      message += `${unavailableItems
         .map((item) => `${item.id}`)
-        .join(', ')}. `;
+        .join(', ')} `;
     }
 
     // Send the response
