@@ -33,6 +33,8 @@ const BorrowButton = ({ selectedItems = [], onSuccess, isValid }) => {
       if (result.message) {
           setAlertMessage(result.message);  
           setIsAlertOpen(true); 
+      } else {
+        setIsOpen(true)
       }
 
       //reset available items after check
@@ -50,8 +52,10 @@ const BorrowButton = ({ selectedItems = [], onSuccess, isValid }) => {
     if(selectedItems == 0) {
       alert('No Items selected.'); 
     } else {
-    // Check the validity before opening the popup
-    const isValid = await handleValidity();
+     
+            // Check the validity before opening the popup
+      const isValid = await handleValidity();
+
       if (isValid) {
 
         // setIsOpen(true);  // Open the popup only if validity is true
@@ -59,6 +63,9 @@ const BorrowButton = ({ selectedItems = [], onSuccess, isValid }) => {
         alert('Some items are invalid. Please try again.');
       }
     }
+
+      
+
   }
 
   return (
@@ -75,7 +82,7 @@ const BorrowButton = ({ selectedItems = [], onSuccess, isValid }) => {
             <p>{alertMessage}</p>
             <button onClick={() => {
               setIsAlertOpen(false); 
-              setIsOpen(true); 
+              setIsOpen(true);
             }}>Continue</button> 
             <button onClick={() => setIsAlertOpen(false)}>Cancel</button>
           </div>
