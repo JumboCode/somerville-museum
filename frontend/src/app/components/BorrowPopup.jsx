@@ -29,7 +29,6 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
   const [borrowerEmail, setBorrowerEmail] = useState('');
   const [dateBorrowed, setDateBorrowed] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-
   const [returnWeeks, setReturnWeeks] = useState(''); // no selection initially
   const [returnDate, setReturnDate] = useState(""); // New state for return date
 
@@ -180,7 +179,6 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
 
       const result = await response.json();
       setIsSuccessPopupVisible(true);
-      console.log("successful borrow"); 
 
       // if (onSuccess) {
       //   onSuccess();
