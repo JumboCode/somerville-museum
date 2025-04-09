@@ -17,6 +17,8 @@ import BorrowUnit from './BorrowUnit';
 import './BorrowPopup.css';
 import { useGlobalContext } from './contexts/ToggleContext';
 import { useUser } from '@clerk/nextjs'; // Import the Clerk hook
+import './SearchBar.css'
+import BorrowPopupSearchBar from './BorrowPopupSearchBar.jsx'
 
 import StylishButton from './StylishButton';
 
@@ -409,6 +411,19 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
             />
           </div>
         </div>
+        <div className="form-row full-width">
+        <div className="form-group full-width">
+          <BorrowPopupSearchBar
+            placeholder="Search by name or email"
+            onSelect={(borrower) => {
+              setBorrowerFirstName(borrower.firstName);
+              setBorrowerLastName(borrower.lastName);
+              setBorrowerEmail(borrower.email);
+              setPhoneNumber(borrower.phoneNumber);
+            }}
+          />
+        </div>
+      </div>
         <div className="form-actions">
           <button type="cancel" onClick={onClose}>
             Cancel
