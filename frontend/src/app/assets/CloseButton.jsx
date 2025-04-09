@@ -14,6 +14,7 @@ function CloseButton({ onClick, ariaLabel = "Close" }) {
         borderRadius: '4px',
         cursor: 'pointer',
         background: 'transparent', // Transparent background
+        paddingLeft: '5px'
       }}
     >
       <span

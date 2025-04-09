@@ -15,4 +15,5 @@ body, html {
     align-items: flex-start;
     padding: 0 1vw;
     padding-top: 3vh;
+    padding-left: 0.5rem;
 }
