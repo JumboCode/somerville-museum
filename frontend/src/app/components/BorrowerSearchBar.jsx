@@ -56,7 +56,7 @@ export default function BorrowerSearchBar({ updateSearchResults }) {
         fetchData();
     }, [query]);
     return (
-        <div className="Searchbar">
+        <div className="SearchbarTwo">
             <input 
                 type="text" 
                 placeholder="Search..."
