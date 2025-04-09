@@ -127,10 +127,8 @@ export default function SignUp() {
       await signUp.create({
         emailAddress: email,
         password: password,
-        userAttributes: {
-          firstName: firstName,
-          lastName: lastName,
-        },
+        firstName: firstName,
+        lastName: lastName,
       })
       
 
