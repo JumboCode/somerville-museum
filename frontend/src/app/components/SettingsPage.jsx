@@ -38,13 +38,21 @@ export default function SettingsPage() {
         }
     }, [user]);
 
-    // Load approvals from localStorage on page load
     useEffect(() => {
-        const savedApprovals = localStorage.getItem("approvals");
-        if (savedApprovals) {
-            setApprovals(JSON.parse(savedApprovals));
-        }
-    }, []);
+        const fetchUnapprovedUsers = async () => {
+            if (!isAdmin) return;
+    
+            try {
+                const response = await fetch("/api/get-unapproved-users"); // Your serverless API
+                const data = await response.json();
+                setApprovals(data.users); // expected shape: [{ id, email, firstName, lastName }]
+            } catch (error) {
+                console.error("Error fetching unapproved users:", error);
+            }
+        };
+    
+        fetchUnapprovedUsers();
+    }, [isAdmin]);
 
     // Save approvals to localStorage whenever they change
     useEffect(() => {
@@ -59,10 +67,27 @@ export default function SettingsPage() {
         ]);
     };
 
-    const approveVerification = (id) => {
-        console.log(`User with ID ${id} approved.`);
-        setApprovals((prev) => prev.filter((approval) => approval.id !== id));
+    const approveVerification = async (id) => {
+        try {
+            const res = await fetch("/api/approve-user", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ userId: id }),
+            });
+    
+            if (!res.ok) {
+                throw new Error("Approval failed");
+            }
+    
+            console.log(`User with ID ${id} approved.`);
+            setApprovals(prev => prev.filter(user => user.id !== id));
+        } catch (err) {
+            console.error("Approval error:", err);
+        }
     };
+    
 
     const denyVerification = (id) => {
         console.log(`User with ID ${id} denied.`);
@@ -140,14 +165,12 @@ export default function SettingsPage() {
                                 <a href="#" className="logout" onClick={() => signOut()}>Logout ↪</a>
                             </div>
 
-                            <button className="addv" onClick={addVerificationBox}>
-                                Temp Add Verify
-                            </button>
+                            
                         </div>
                     </div>
                 </div>
 
-                {isAdmin && approvals.length > 0 && (
+                {isAdmin && Array.isArray(approvals) && approvals.length > 0 && (
                     <div className="adminapprovals">
                         <p className="subheading">New Account Approvals</p>
                         <div className="approvalscontainer">

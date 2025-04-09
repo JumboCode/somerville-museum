@@ -12,6 +12,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSignIn, useAuth } from "@clerk/nextjs";
+import { useClerk } from "@clerk/nextjs";
 import Eyecon from "../components/Eyecon";
 import EyeconOff from "../components/EyeconOff";
 import Checkbox from "../components/Checkbox";
@@ -31,6 +32,7 @@ export default function Signin() {
 
   const { isLoaded, signIn, setActive } = useSignIn();
   const { isSignedIn } = useAuth();
+  const { signOut } = useClerk();
   const router = useRouter();
 
   useEffect(() => {
@@ -126,18 +128,23 @@ export default function Signin() {
       });
       
       if (result.status === "complete") {
+        //LOGIC FOR SIGNING IN APPROVAL CHECK HERE
+          
+        
+        //LOGIC FOR SIGNING IN APPROVAL CHECK HERE
+      
         console.log("Login successful. Storing to localStorage...");
   
         if (rememberMe) {
           localStorage.setItem("rememberedEmail", email);
           localStorage.setItem("rememberedPassword", password);
-          console.log("✅ Saved email and password to localStorage.");
+          console.log("Saved email and password to localStorage.");
         } else {
           localStorage.removeItem("rememberedEmail");
           localStorage.removeItem("rememberedPassword");
-          console.log("🧹 Cleared localStorage.");
+          console.log("Cleared localStorage.");
         }
-  
+      
         await setActive({ session: result.createdSessionId });
         router.push("/login_confirmed");
       } else {
