@@ -426,7 +426,11 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
           </svg>
             <h2>Borrow Success</h2>
             <p>The following items have been borrowed:</p>
-            <h2>{borrowItems.map(item => item.id).join(", ")}</h2>
+            <h2>
+              {Array.isArray(borrowItems) && borrowItems.every(item => typeof item.id === "string" || typeof item.id === "number")
+                ? borrowItems.map(item => item.id).join(", ")
+                : "Invalid items"}
+            </h2>
 
             <p>Thank you!</p>
             <button onClick={onSuccess}>Return to Inventory</button>

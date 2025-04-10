@@ -214,4 +214,6 @@ const CalendarPicker = forwardRef(({ onDateSelect, isOpen, onClose }, ref) => {
   );
 });
 
+CalendarPicker.displayName = 'CalendarPicker'; 
+
 export default CalendarPicker;
