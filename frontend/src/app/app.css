@@ -6,6 +6,13 @@
  * @authors Ari Goshtasby & Shayne Sidman
  *  
  */
+:root {
+  --sm_font: 'Akatab';
+}
+
+* {
+  font-family: var(--sm_font);
+}
 
 .login-bg {
     background-color: #F8F5F5;

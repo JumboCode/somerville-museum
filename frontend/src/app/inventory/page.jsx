@@ -37,33 +37,33 @@ export default function Inventory({
     const [filterResults, setFilterResults] = useState([]);
     
     const [refreshTable, setRefreshTable] = useState(false);
-    // const [sortType, setSortType] = useState('id'); // Track last sorted property
-    // const [isSorted, setIsSorted] = useState(false); // Track if already sorted
+    const [sortType, setSortType] = useState('id'); // Track last sorted property
+    const [isSorted, setIsSorted] = useState(false); // Track if already sorted
 
     // const sortBy = (property) => {
     //     console.log("calling sortBy")
-    //     // if (sortType === property && isSorted) {
+    //     if (sortType === property && isSorted) {
     //         // Reset to ID sorting
-    //         // setSortType('id');
-    //         // setIsSorted(false);
-    //         // sortingFunctions.id(); // Always sorts by ID when reset
+    //         setSortType('id');
+    //         setIsSorted(false);
+    //         sortingFunctions.id(); // Always sorts by ID when reset
 
-    //     // } else {
-    //     //     // Sort based on the selected property
-    //     //     // setSortType(property);
-    //     //     // setIsSorted(true);
+    //     } else {
+    //         // Sort based on the selected property
+    //         setSortType(property);
+    //         setIsSorted(true);
 
-    //     //     sortingFunctions[property]();
-    //     //     console.log(sortingFunctions[property]);
-    //     // }
+    //         sortingFunctions[property]();
+    //         console.log(sortingFunctions[property]);
+    //     }
     // };
 
-    const sortingFunctions = {
-        id: () => sortByID(),
-        con: () => sortByCon(),
-        avail: () => sortByAvail(),
-        name: () => sortByName()
-    };
+    // const sortingFunctions = {
+    //     id: () => sortByID(),
+    //     con: () => sortByCon(),
+    //     avail: () => sortByAvail(),
+    //     name: () => sortByName()
+    // };
 
     // Called any time new filters/search results are applied to update displayed units
     useEffect(() => {
@@ -344,17 +344,35 @@ export default function Inventory({
         });
 
     const sortByID = () => {
-        const filteredAndSortedEntries = [...units]
-            .sort((a, b) => a.id - b.id); // Sort by id
+        if(!isSorted) {
+            const filteredAndSortedEntries = [...units]
+                .sort((a, b) => a.id - b.id); // Sort by id
 
-        setUnits(filteredAndSortedEntries);
+            setIsSorted(true);
+            setUnits(filteredAndSortedEntries);
+        } else {
+            const filteredAndSortedEntries = [...units]
+                .sort((b, a) => a.id - b.id); // Sort by id
+
+            setIsSorted(false);
+            setUnits(filteredAndSortedEntries);
+        }
     };
 
     const sortByName = () => {
-        const filteredAndSortedEntries = [...units]
-            .sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
+        if(!isSorted) {
+            const filteredAndSortedEntries = [...units]
+                .sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
 
-        setUnits(filteredAndSortedEntries);
+            setIsSorted(true);
+            setUnits(filteredAndSortedEntries);
+        } else {
+            const filteredAndSortedEntries = [...units]
+                .sort((b, a) => a.name.localeCompare(b.name)); // Sort alphabetically
+
+            setIsSorted(false);
+            setUnits(filteredAndSortedEntries);
+        }
     };
 
     const sortByAvail = () => {
@@ -365,10 +383,19 @@ export default function Inventory({
             "Missing"
         ];
 
-        const filteredAndSortedEntries = [...units]
-            .sort((a, b) => availability.indexOf(a.status) - availability.indexOf(b.status)); // Sort by availability
+        if(!isSorted) {
+            const filteredAndSortedEntries = [...units]
+                .sort((a, b) => availability.indexOf(a.status) - availability.indexOf(b.status)); // Sort by availability
 
-        setUnits(filteredAndSortedEntries);
+            setIsSorted(true);
+            setUnits(filteredAndSortedEntries);
+        } else {
+            const filteredAndSortedEntries = [...units]
+                .sort((b, a) => availability.indexOf(a.status) - availability.indexOf(b.status)); // Sort by availability
+
+            setIsSorted(false);
+            setUnits(filteredAndSortedEntries);
+        }
     };
 
     const sortByCon = () => {
@@ -381,20 +408,39 @@ export default function Inventory({
             "Not usable"
         ];
     
-        const filteredAndSortedEntries = [...units].sort((a, b) => {
-            // Function to get the highest-ranked condition for an item
-            const getHighestCondition = (conditions) => 
-                conditions.reduce((best, c) =>
-                    order.indexOf(c) < order.indexOf(best) ? c : best, conditions[0]
-                );
-    
-            const highestA = getHighestCondition(a.condition);
-            const highestB = getHighestCondition(b.condition);
-    
-            return order.indexOf(highestA) - order.indexOf(highestB);
-        });
-    
-        setUnits(filteredAndSortedEntries);
+        if(!isSorted) {
+            const filteredAndSortedEntries = [...units].sort((a, b) => {
+                // Function to get the highest-ranked condition for an item
+                const getHighestCondition = (conditions) => 
+                    conditions.reduce((best, c) =>
+                        order.indexOf(c) < order.indexOf(best) ? c : best, conditions[0]
+                    );
+        
+                const highestA = getHighestCondition(a.condition);
+                const highestB = getHighestCondition(b.condition);
+        
+                return order.indexOf(highestA) - order.indexOf(highestB);
+            });
+        
+            setIsSorted(true);
+            setUnits(filteredAndSortedEntries);
+        } else {
+            const filteredAndSortedEntries = [...units].sort((a, b) => {
+                // Function to get the highest-ranked condition for an item
+                const getHighestCondition = (conditions) => 
+                    conditions.reduce((best, c) =>
+                        order.indexOf(c) < order.indexOf(best) ? c : best, conditions[0]
+                    );
+        
+                const highestA = getHighestCondition(a.condition);
+                const highestB = getHighestCondition(b.condition);
+        
+                return order.indexOf(highestB) - order.indexOf(highestA);
+            });
+        
+            setIsSorted(false);
+            setUnits(filteredAndSortedEntries);
+        }
     };
 
     //tesing piece of code

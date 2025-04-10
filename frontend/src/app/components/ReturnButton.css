@@ -83,7 +83,7 @@
     border: none;
     color: #000000;
     box-shadow: none;
-    padding-right: 0.6vw; 
+    cursor: pointer;
 }
 /* note: image will need white border styling and sizing */
 
@@ -102,7 +102,7 @@
 
 .dropdown-component {
     display: flex;
-    width: 50%;
+    width: 70%;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
