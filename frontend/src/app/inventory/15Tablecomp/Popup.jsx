@@ -253,14 +253,14 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
         </button>
     );
 
-    useEffect(() => {
-        if (borrowers && borrowers.length > 0) {
-          console.log("borrowers:", borrowers[0].name);
-        }
-      }, [borrowers]);
+    // useEffect(() => {
+    //     if (borrowers && borrowers.length > 0) {
+    //       console.log("borrowers:", borrowers[0].name);
+    //     }
+    //   }, [borrowers]);
 
-      console.log("tags log", unit.color); 
-      console.log("tags log", unit.condition); 
+    //   console.log("tags log", unit.color); 
+    //   console.log("tags log", unit.condition); 
 
 
     useEffect(() => {

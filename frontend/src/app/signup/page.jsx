@@ -278,7 +278,7 @@ export default function SignUp() {
         <div className={'passwordInfo'}>
           <p className={'passwordInfoP'}>Password must contain the following:</p>
           <p className={'passwordInfoP'} style={{ color: hasUppercase ? 'green' : 'black' }}>- 1 Uppercase character</p>
-          <p className={'passwordInfoP'} style={{ color: hasSpecialChar ? 'green' : 'black' }}>- 1 Special character - !"$%@#</p>
+          <p className={'passwordInfoP'} style={{ color: hasSpecialChar ? 'green' : 'black' }}>- 1 Special character - !&quot;$%@#</p>
           <p className={'passwordInfoP'} style={{ color: isLongEnough ? 'green' : 'black' }}>- Must be longer than 8 characters</p>
         </div>
         <div className={'inputContainer'}>
