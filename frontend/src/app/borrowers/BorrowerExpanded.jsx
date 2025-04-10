@@ -9,7 +9,6 @@ import { useEffect } from "react";
 
 export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) {
   const [isClosing, setIsClosing] = useState(false);
-  if (!borrower) return null;
 
   const handleClose = () => {
     setIsClosing(true);
@@ -38,6 +37,9 @@ export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) 
     };
   }, [onClose]);
 
+  if (!borrower) return null;
+
+  
   return (
     <div className="popup-overlay" onClick={handleClose}>
       <div className={`popup-anim-wrapper ${isClosing ? 'slide-out' : 'slide-in'}`}> 
