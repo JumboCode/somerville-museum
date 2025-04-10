@@ -323,11 +323,12 @@ export default function Inventory({
     };
 
     const handleSelectAllChange = () => {
-        if (selectAllChecked) {
-            setSelectedItems([]);
-        } else {
-            setSelectedItems([...units]);
-        }
+        setSelectedItems([...units]);
+        setSelectAllChecked(!selectAllChecked);
+    };
+
+    const handleDeselectAllChange = () => {
+        setSelectedItems([]);
         setSelectAllChecked(!selectAllChecked);
     };
 
@@ -497,6 +498,8 @@ export default function Inventory({
                     </div>
                     <div className="TableLabels">
                         <div className="SelectAll" id='SelectAll' onClick={handleSelectAllChange}>Select All
+                        </div>
+                        <div className="SelectAll" id='SelectAll' onClick={handleDeselectAllChange}>Deselect All
                         </div>
                         <button className="IDLabel" onClick={sortByID} id='SortTag'>ID 
                             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="16" viewBox="0 0 15 16" fill="none">
