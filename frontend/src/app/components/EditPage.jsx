@@ -239,7 +239,7 @@ export default function EditPage({ unit, onClose }) {
     
         try {
             const response = await fetch(`/api/itemManagement?action=retrieve&id=${idText}`);
-            console.log("idtext: " + idText);
+            // console.log("idtext: " + idText);
     
             // Custom error handling for no item found
             if (response.status === 428) {
