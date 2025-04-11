@@ -67,8 +67,8 @@ export default function Inventory({
 
     // Called any time new filters/search results are applied to update displayed units
     useEffect(() => {
-        console.log(filterResults.length)
-        console.log(searchResults.length)
+        // console.log(filterResults.length)
+        // console.log(searchResults.length)
         if (filterResults.length === 0 && searchResults.length === 0) return;
         // Takes intersection of search results and filter results to get correct ones.
         const filteredAndSearchResults = () => {
@@ -80,25 +80,25 @@ export default function Inventory({
 
 
     const applyFilters = (data) => {
-        console.log("Starting filter application with data:", data);
-        console.log("Current selectedFilters:", selectedFilters);
+        // console.log("Starting filter application with data:", data);
+        // console.log("Current selectedFilters:", selectedFilters);
         
         let filteredData = [...data];
     
         // Filter by Status
         if (selectedFilters.status && selectedFilters.status.length > 0) {
-            console.log("Before status filter:", filteredData.length);
-            console.log("Filtering by status:", selectedFilters.status);
+            // console.log("Before status filter:", filteredData.length);
+            // console.log("Filtering by status:", selectedFilters.status);
             filteredData = filteredData.filter(item => {
-                console.log("Item status:", item.status);
+                // console.log("Item status:", item.status);
                 return selectedFilters.status.includes(item.status);
             });
-            console.log("After status filter:", filteredData.length);
+            // console.log("After status filter:", filteredData.length);
         }
     
         // Filter by Condition
         if (selectedFilters.condition && selectedFilters.condition.length > 0) {
-            console.log("Filtering by condition:", selectedFilters.condition);
+            // console.log("Filtering by condition:", selectedFilters.condition);
             filteredData = filteredData.filter(item => 
                 selectedFilters.condition.some(condition => 
                     item.condition.includes(condition)
@@ -108,7 +108,7 @@ export default function Inventory({
     
         // Filter by Gender
         if (selectedFilters.gender && selectedFilters.gender.length > 0) {
-            console.log("Filtering by gender:", selectedFilters.gender);
+            // console.log("Filtering by gender:", selectedFilters.gender);
             filteredData = filteredData.filter(item => 
                 selectedFilters.gender.includes(item.gender)
             );
@@ -116,7 +116,7 @@ export default function Inventory({
     
         // Filter by Color
         if (selectedFilters.color && selectedFilters.color.length > 0) {
-            console.log("Filtering by color:", selectedFilters.color);
+            // console.log("Filtering by color:", selectedFilters.color);
             filteredData = filteredData.filter(item => 
                 // Check if any of the selected colors exist in the item's color array
                 selectedFilters.color.some(color => 
@@ -127,7 +127,7 @@ export default function Inventory({
     
         // Filter by Garment Type
         if (selectedFilters.garment_type && selectedFilters.garment_type.length > 0) {
-            console.log("Filtering by garment type:", selectedFilters.garment_type);
+            // console.log("Filtering by garment type:", selectedFilters.garment_type);
             filteredData = filteredData.filter(item => 
                 selectedFilters.garment_type.includes(item.garment_type)
             );
@@ -135,7 +135,7 @@ export default function Inventory({
     
         // Filter by Size
         if (selectedFilters.size && selectedFilters.size.length > 0) {
-            console.log("Filtering by size:", selectedFilters.size);
+            // console.log("Filtering by size:", selectedFilters.size);
             filteredData = filteredData.filter(item => 
                 selectedFilters.size.includes(item.size)
             );
@@ -143,7 +143,7 @@ export default function Inventory({
     
         // Filter by Season
         if (selectedFilters.season && selectedFilters.season.length > 0) {
-            console.log("Filtering by season:", selectedFilters.season);
+            // console.log("Filtering by season:", selectedFilters.season);
             filteredData = filteredData.filter(item => 
                 // Check if any of the selected seasons exist in the item's season array
                 selectedFilters.season.some(season => 
@@ -154,7 +154,7 @@ export default function Inventory({
     
         // Filter by Time Period
         if (selectedFilters.time_period && selectedFilters.time_period.length > 0) {
-            console.log("Filtering by time period:", selectedFilters.time_period);
+            // console.log("Filtering by time period:", selectedFilters.time_period);
             filteredData = filteredData.filter(item => 
                 // Check if any of the selected time periods exist in the item's time_period array
                 selectedFilters.time_period.some(period => 
@@ -165,7 +165,7 @@ export default function Inventory({
     
         // Filter by Return Date Range
         if (selectedFilters.return_date && selectedFilters.return_date.start && selectedFilters.return_date.end) {
-            console.log("Filtering by return date range:", selectedFilters.return_date);
+            // console.log("Filtering by return date range:", selectedFilters.return_date);
             filteredData = filteredData.filter(item => {
                 if (!item.return_date) return false;
                 const returnDate = new Date(item.return_date);
@@ -175,7 +175,7 @@ export default function Inventory({
             });
         }
     
-        console.log("Final filtered results:", filteredData);
+        // console.log("Final filtered results:", filteredData);
         return filteredData;
     };
 
@@ -193,7 +193,7 @@ export default function Inventory({
 
             if (response.ok) {
                 const data = await response.json();
-                console.log("Fetched data:", data);
+                // console.log("Fetched data:", data);
                 const currentDate = new Date();
                 const updatedData = data.map((item) => {
                     if (item.status === "Borrowed" && item.dueDate && new Date(item.dueDate) < currentDate) {
@@ -201,7 +201,7 @@ export default function Inventory({
                     }
                     return item;
                 });
-                console.log("Processed data:", updatedData);
+                // console.log("Processed data:", updatedData);
 
                 setOriginalUnits(updatedData);
                 setUnits(updatedData);
@@ -241,7 +241,7 @@ export default function Inventory({
     // in the dashboard
     useEffect(() => {
         if (filter) {
-            console.log("Setting filter from URL:", filter);
+            // console.log("Setting filter from URL:", filter);
             const newFilters = {
                 condition: [],
                 gender: [],
@@ -266,26 +266,26 @@ export default function Inventory({
 
     // Filter effect
     useEffect(() => {
-        console.log("Filter effect triggered");
-        console.log("Current originalUnits:", originalUnits);
-        console.log("Current selectedFilters:", selectedFilters);
+        // console.log("Filter effect triggered");
+        // console.log("Current originalUnits:", originalUnits);
+        // console.log("Current selectedFilters:", selectedFilters);
         
         // Only proceed if we have data
         if (originalUnits.length === 0) {
-            console.log("No data available yet, waiting for data fetch");
+            // console.log("No data available yet, waiting for data fetch");
             return;
         }
         
         if (Object.values(selectedFilters).every(val => 
             Array.isArray(val) ? val.length === 0 : !val
         )) {
-            console.log("No filters active, showing all units");
+            // console.log("No filters active, showing all units");
             setUnits(originalUnits);
             return;
         }
 
         const filteredUnits = applyFilters(originalUnits);
-        console.log("After applying filters:", filteredUnits);
+        // console.log("After applying filters:", filteredUnits);
         
         setUnits(filteredUnits);
         setCurrentPage(1);
@@ -306,7 +306,7 @@ export default function Inventory({
   
 
     const handleReturnSuccess = () => {
-        console.log("Return operation successful, refreshing inventory...");
+        // console.log("Return operation sucwcessful, refreshing inventory...");
         setRefreshTable(prev => !prev); // Refresh table to show updated status
         setSelectedItems([]); // Clear selected items
     };
