@@ -116,8 +116,8 @@ export default function Signin() {
   const signInWithEmail = async () => {
     if (!onButtonClick()) return;
   
-    console.log("Attempting sign in with:", email, password);
-    console.log("Remember Me checked:", rememberMe);
+    // console.log("Attempting sign in with:", email, password);
+    // console.log("Remember Me checked:", rememberMe);
   
     try {
       const result = await signIn.create({
@@ -126,22 +126,21 @@ export default function Signin() {
       });
       
       if (result.status === "complete") {
-        console.log("Login successful. Storing to localStorage...");
+        // console.log("Login successful. Storing to localStorage...");
   
         if (rememberMe) {
           localStorage.setItem("rememberedEmail", email);
           localStorage.setItem("rememberedPassword", password);
-          console.log("✅ Saved email and password to localStorage.");
         } else {
           localStorage.removeItem("rememberedEmail");
           localStorage.removeItem("rememberedPassword");
-          console.log("🧹 Cleared localStorage.");
+          // console.log("🧹 Cleared localStorage.");
         }
   
         await setActive({ session: result.createdSessionId });
         router.push("/login_confirmed");
       } else {
-        console.log("Sign in not complete yet:", result);
+        // console.log("Sign in not complete yet:", result);
       }
     } catch (err) {
       setError("Something went wrong. Please try again.");

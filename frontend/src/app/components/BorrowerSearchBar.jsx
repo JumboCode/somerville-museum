@@ -22,7 +22,7 @@ export default function BorrowerSearchBar({ updateSearchResults }) {
 
     // Fetch relevant search results when search query is changed
     useEffect(() => { 
-        console.log(query)
+        // console.log(query)
         const fetchData = async () => {
             try {
                 const response = await fetch(`../../../../api/db`, {

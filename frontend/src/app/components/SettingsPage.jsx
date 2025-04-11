@@ -17,7 +17,7 @@ import "./SettingsPage.css";
 import UserVerificationCard from "./userVerificationCard.jsx";
 import React, { useState, useEffect } from "react";
 import { useClerk, useUser } from "@clerk/nextjs";
-import ExportDataBtn from "./ExportDataBtn.jsx"; // Import the ExportDataBtn component
+import ExportDataBtn from "./ExportDataBtn.jsx";
 
 export default function SettingsPage() {
     const [lightMode, setLightMode] = useState(false);
@@ -32,9 +32,9 @@ export default function SettingsPage() {
 
     useEffect(() => {
         if (user) {
-            console.log("user id: " + user?.id);
+            // console.log("user id: " + user?.id);
             setIsAdmin(checkisAdmin(user?.id));
-            console.log("Admin status updated:", checkisAdmin(user?.id));
+            // console.log("Admin status updated:", checkisAdmin(user?.id));
         }
     }, [user]);
 
@@ -52,7 +52,7 @@ export default function SettingsPage() {
     }, [approvals]);
 
     const addVerificationBox = () => {
-        console.log("Adding new verification box...");
+        // console.log("Adding new verification box...");
         setApprovals((prev) => [
             ...prev,
             { id: Date.now(), name: `User ${prev.length + 1}`, email: `user${prev.length + 1}@example.com` }
@@ -60,12 +60,12 @@ export default function SettingsPage() {
     };
 
     const approveVerification = (id) => {
-        console.log(`User with ID ${id} approved.`);
+        // console.log(`User with ID ${id} approved.`);
         setApprovals((prev) => prev.filter((approval) => approval.id !== id));
     };
 
     const denyVerification = (id) => {
-        console.log(`User with ID ${id} denied.`);
+        // console.log(`User with ID ${id} denied.`);
         setApprovals((prev) => prev.filter((approval) => approval.id !== id));
     };
 
@@ -76,74 +76,72 @@ export default function SettingsPage() {
     // console.log("Admin status:", isAdmin);
     // console.log("Current approvals state:", approvals);
     // console.log("user:", user);
-    console.log("firstName:", user?.firstName);
-    console.log("lastName:", user?.lastName);
-    console.log("email address:", user?.emailAddresses[0]?.emailAddress);
+    // console.log("firstName:", user?.firstName);
+    // console.log("lastName:", user?.lastName);
+    // console.log("email address:", user?.emailAddresses[0]?.emailAddress);
 
 
-    return (
-        <>
+// Inside SettingsPage.jsx
+
+return (
+    <>
             <h1>Settings</h1>
             <div className="body">
-                <div className="settings-container">
-                    <div className="cardHolders">
-                        <p className="subheading">Account Information & Options</p>
+                <div className="left-column">
+                    <div className="profile-card">
+                        <h2>Profile</h2>
+                        <div className="nameText">
+                            <label htmlFor="first-name">First Name</label>
+                            <label htmlFor="last-name">Last Name</label>
+                        </div>
+                        <div className="name">
+                            <input type="text" id="first-name" value={user?.firstName || "Holden"} disabled />
+                            <input type="text" id="last-name" value={user?.lastName || "Kittleburger"} disabled />
+                        </div>
+                        <form>
+                            <label htmlFor="email">Email</label>
+                            <input type="email" id="email" value={user?.emailAddresses?.[0]?.emailAddress || "holdenlovesburgers@hotmail.com"} disabled />
 
-                        <div className="profile-card">
-                            <h2>Profile</h2>
-                            <div className="nameText">
-                                <label htmlFor="first-name">First Name</label>
-                                <label htmlFor="last-name">Last Name</label>
+                            <label htmlFor="password">Password</label>
+                            <input type="password" id="password" value="************" disabled />
+
+                            <div className="change-password-container">
+                                <a href="#" className="change-password" onClick={handleForgotPassword}>
+                                    Change Password
+                                </a>
                             </div>
-                            <div className="name">
-                                <input type="text" id="first-name" value={user?.firstName || "Holden"} disabled />
-                                <input type="text" id="last-name" value={user?.lastName || "Kittleburger"} disabled />
-                            </div>
-                            <form>
-                                <label htmlFor="email">Email</label>
-                                <input type="email" id="email" value={user?.emailAddresses?.[0]?.emailAddress || "holdenlovesburgers@hotmail.com"} disabled />
+                        </form>
+                    </div>
 
-                                <label htmlFor="password">Password</label>
-                                <input type="password" id="password" value="************" disabled />
-
-                                <div className="change-password-container">
-                                    <a href="#" className="change-password" onClick={handleForgotPassword}>
-                                        Change Password
-                                    </a>
-                                </div>
-                            </form>
+                    <div className="options-card">
+                        <div className="toggle">
+                            <label className="switch">
+                                <input
+                                    type="checkbox"
+                                    checked={normalDataEntry}
+                                    onChange={() => setNormalDataEntry(!normalDataEntry)}
+                                />
+                                <span className="slider round"></span>
+                            </label>
+                            <label>Normal Data Entry</label>
+                            <ExportDataBtn />
+                        </div>
+                        <div className="toggle">
+                            <label className="switch">
+                                <input
+                                    type="checkbox"
+                                    checked={lightMode}
+                                    onChange={() => setLightMode(!lightMode)}
+                                />
+                                <span className="slider round"></span>
+                            </label>
+                            <label>Light Mode</label>
+                            <a href="#" className="logout" onClick={() => signOut()}>Logout ↪</a>
                         </div>
 
-                        <div className="options-card">
-                            <div className="toggle">
-                                <label className="switch">
-                                    <input
-                                        type="checkbox"
-                                        checked={normalDataEntry}
-                                        onChange={() => setNormalDataEntry(!normalDataEntry)}
-                                    />
-                                    <span className="slider round"></span>
-                                </label>
-                                <label>Normal Data Entry</label>
-                                <ExportDataBtn></ExportDataBtn>
-                            </div>
-                            <div className="toggle">
-                                <label className="switch">
-                                    <input
-                                        type="checkbox"
-                                        checked={lightMode}
-                                        onChange={() => setLightMode(!lightMode)}
-                                    />
-                                    <span className="slider round"></span>
-                                </label>
-                                <label>Light Mode</label>
-                                <a href="#" className="logout" onClick={() => signOut()}>Logout ↪</a>
-                            </div>
-
-                            <button className="addv" onClick={addVerificationBox}>
-                                Temp Add Verify
-                            </button>
-                        </div>
+                        <button className="addv" onClick={addVerificationBox}>
+                            Temp Add Verify
+                        </button>
                     </div>
                 </div>
 

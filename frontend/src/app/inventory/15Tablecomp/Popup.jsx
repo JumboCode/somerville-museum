@@ -46,8 +46,8 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
 
     const fetchBorrowers = async () => {
         try {
-            console.log("testing populating borrower data");
-            console.log(id);
+            // console.log("testing populating borrower data");
+            // console.log(id);
             const response = await fetch(`../../../../api/db`, {
                 method: 'POST',
                 headers: {
@@ -74,9 +74,9 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                 } else {
                     setBorrowerHistory([]);
                 }
-                console.log(data);
-                console.log(currBorrower);
-                console.log(borrowHistory);
+                // console.log(data);
+                // console.log(currBorrower);
+                // console.log(borrowHistory);
             } else {
                 console.error("Failed to fetch borrower data");
             }
@@ -88,8 +88,8 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
     const fetchBorrowHistory = async (borrowHistory) => {
         // Fetching from borrows table
         try {
-            console.log("testing populating borrower history data");
-            console.log(borrowHistory);
+            // console.log("testing populating borrower history data");
+            // console.log(borrowHistory);
             const response = await fetch(`../../../../api/db`, {
                 method: 'POST',
                 headers: {
@@ -103,8 +103,8 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
 
             if (response.ok) {
                 const data = await response.json();
-                console.log("borrower history data: ");
-                console.log(data);
+                // console.log("borrower history data: ");
+                // console.log(data);
 
                 const borrowData = data.map((borrow) => {
                     return {
@@ -115,8 +115,8 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                     };
                 });
                 setBorrowerHistory(borrowData);
-                console.log("borrowHistoryData: ");
-                console.log(borrowData);
+                // console.log("borrowHistoryData: ");
+                // console.log(borrowData);
                 
             } else {
                 console.error("Failed to fetch borrower data");
@@ -130,8 +130,8 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
         // Fetching from borrower table
         let borrowData = null;
         try {
-            console.log("testing populating borrower data");
-            console.log(id);
+            // console.log("testing populating borrower data");
+            // console.log(id);
             const response = await fetch(`../../../../api/db`, {
                 method: 'POST',
                 headers: {
@@ -153,8 +153,8 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                 };
 
                 setCurrBorrower(borrowData);
-                console.log("borrowData: ");
-                console.log(borrowData);
+                // console.log("borrowData: ");
+                // console.log(borrowData);
                 
             } else {
                 console.error("Failed to fetch borrower data");
@@ -188,8 +188,8 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                 };
 
                 setCurrBorrower(borrowData);
-                console.log("borrowData: ");
-                console.log(borrowData);
+                // console.log("borrowData: ");
+                // console.log(borrowData);
                 
             } else {
                 console.error("Failed to fetch borrower data");
@@ -224,7 +224,7 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
             }
         };
 
-        console.log("pop up is open")
+        // console.log("pop up is open")
 
         document.addEventListener("keydown", handleKeyDown);
 
@@ -255,12 +255,12 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
 
     useEffect(() => {
         if (borrowers && borrowers.length > 0) {
-          console.log("borrowers:", borrowers[0].name);
+        //   console.log("borrowers:", borrowers[0].name);
         }
       }, [borrowers]);
 
-      console.log("tags log", unit.color); 
-      console.log("tags log", unit.condition); 
+    //   console.log("tags log", unit.color); 
+    //   console.log("tags log", unit.condition); 
 
 
     useEffect(() => {
