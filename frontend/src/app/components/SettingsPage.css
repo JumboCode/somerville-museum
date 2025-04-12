@@ -2,141 +2,171 @@
  *
  *                     SettingsPage.css
  *
- *        Authors: Massimo Bottari, Elias Swartz
- *           Date: 03/07/2025 (Updated by Peter Morganelli)
+ *        Authors: Massimo Bottari, Elias Swartz (Updated by Peter Morganelli)
  *
  **************************************************************/
 
- .body {
+ .settings-header {
+    margin-left: 40px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .settings-title {
+    font-size: 36px;
+    font-weight: bold;
+    color: black;
+    margin: 0;
+  }
+  
+  .account-subheading {
+    font-size: 18px;
+    font-weight: normal;
+    color: black;
+    margin-top: 6px;
+  }
+  
+  .profile-card-title {
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 25px;
+  }
+  
+  .body {
     font-family: Arial, sans-serif;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+    align-items: flex-start;
+    gap: 60px;
+    margin: 0 40px;
     flex-direction: row;
-}
-
-.body p {
+  }
+  
+  
+  .body p {
     color: #000000;
     font-size: 1.2em;
-}
-
-.settings-container {
+  }
+  
+  .settings-container {
     text-align: center;
-}
-
-h1 {
-    font-size: 24px;
-    margin-bottom: 5px;
-}
-
-.subheading {
+  }
+  
+  .subheading {
     font-size: 14px;
     color: #666;
     margin-bottom: 20px;
-}
-
-.profile-card,
-.options-card {
+  }
+  
+  .profile-card,
+  .options-card {
     background: white;
-    padding: 20px;
+    padding: 30px;
     border-radius: 10px;
     box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
-    width: 350px;
+    width: 450px;
     margin-bottom: 15px;
-}
-
-h2 {
-    font-size: 20px;
-    margin-bottom: 15px;
-}
-
-form {
+    font-weight: bold;
+  }
+  
+  form {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-label {
+  }
+  
+  label {
     align-self: flex-start;
     font-size: 14px;
     font-weight: bold;
     margin-top: 10px;
-}
-
-input {
+  }
+  
+  input {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
     border-radius: 5px;
     border: 1px solid #ccc;
     box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
-}
-
-input:disabled {
+  }
+  
+  input:disabled {
     background: #e9e9e9;
     color: #666;
     cursor: not-allowed;
-}
-
-.change-password {
+  }
+  
+  .change-password {
     display: block;
     color: #0077cc;
     text-decoration: underline;
     margin-top: 10px;
     font-size: 14px;
     align-items: left;
-}
-
-.change-password-container {
+  }
+  
+  .change-password-container {
     width: 100%;
     text-align: left;
-}
-
-.options-card {
+  }
+  
+  .options-card {
     display: flex;
     flex-direction: column;
     padding: 15px;
-    gap: 20px;
-}
-
-/* Fixes Spacing Between Label and Switch */
-.toggle {
+  }
+  
+  .toggle {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 5px;
     width: 100%;
     margin: 5px 0;
-}
-
-.toggle-label {
+  }
+  
+  .toggle-label {
     flex: 1;
     font-size: 14px;
     margin-right: 10px;
-}
-
-.logout {
+  }
+  
+  .logout {
     color: black;
     text-decoration: underline;
-    margin-top: 10px;
+    background: none;
+    border: none;
     font-size: 14px;
-}
-
-.adminapprovals {
+    cursor: pointer;
+    padding: 0;
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .logout-btn-content {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .logout-icon {
+    stroke: black;
+  }
+  
+  .adminapprovals {
     text-align: left;
     height: 48vh;
-    margin-left: 5vw;
     width: 25vw;
-}
-
-.approvalscontainer {
+  }
+  
+  .approvalscontainer {
     width: 90%;
     margin: 20px auto;
-}
-
-.newaccountapprovalbutton {
+  }
+  
+  .newaccountapprovalbutton {
     background: white;
     width: 100%;
     display: flex;
@@ -146,79 +176,78 @@ input:disabled {
     border-radius: 10px;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 10px;
-}
-
-.info h2 {
+  }
+  
+  .info h2 {
     font-size: 16px;
     margin: 0;
     font-weight: bold;
-}
-
-.info p {
+  }
+  
+  .info p {
     font-size: 14px;
     color: #666;
     margin: 5px 0 0;
-}
-
-.buttons {
+  }
+  
+  .buttons {
     display: flex;
     gap: 8px;
-}
-
-.buttons button {
+  }
+  
+  .buttons button {
     padding: 6px 12px;
     border: none;
     border-radius: 5px;
     font-size: 14px;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
-}
-
-.buttons button:first-child {
+  }
+  
+  .buttons button:first-child {
     background-color: #ffffff;
     color: #000000;
     border: #000000;
-}
-
-.buttons button:first-child:hover {
+  }
+  
+  .buttons button:first-child:hover {
     background-color: #6d6d6d;
-}
-
-.buttons button:last-child {
+  }
+  
+  .buttons button:last-child {
     background-color: #804a4a;
     color: rgb(255, 255, 255);
-}
-
-.buttons button:last-child:hover {
+  }
+  
+  .buttons button:last-child:hover {
     background-color: #663a3a;
-}
-
-.name {
+  }
+  
+  .name {
     display: flex;
     gap: 15px;
-}
-
-.nameText {
+  }
+  
+  .nameText {
     display: flex;
-    gap: 96px;
-}
-
-/* Toggle Switch Styling */
-.switch {
+    gap: 140px;
+  }
+  
+  .switch {
     position: relative;
     display: inline-block;
     width: 36px;
     height: 18px;
     margin-right: auto;
-}
-
-.switch input {
+  }
+  
+  .switch input {
     opacity: 0;
     width: 0;
     height: 0;
-}
-
-.slider {
+  }
+  
+  .slider {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -229,44 +258,44 @@ input:disabled {
     border: 1px solid #9A525F;
     transition: 0.4s;
     border-radius: 20px;
-}
-
-.slider.round {
+  }
+  
+  .slider.round {
     border-radius: 34px;
-}
-
-.slider:before {
+  }
+  
+  .slider:before {
     position: absolute;
     content: "";
     height: 14px;
     width: 14px;
     left: 1px;
-    bottom: 1.2px;
+    bottom: 1px;
     background-color: #9A525F;
     transition: 0.4s;
     border-radius: 50%;
-}
-
-input:checked + .slider {
+  }
+  
+  input:checked + .slider {
     background-color: #9A525F;
     border-color: #9A525F;
-}
-
-input:checked + .slider:before {
+  }
+  
+  input:checked + .slider:before {
     transform: translateX(18px);
     background-color: #ffffff;
-}
-
-/* Target toggle spacing specifically */
-.toggle:nth-of-type(2) label {
-    margin-right: 8rem;
-}
-
-.toggle:nth-of-type(1) label {
-    margin-right: 1rem;
-}
-
-.toggle:nth-of-type(2) .switch,
-.toggle:nth-of-type(1) .switch {
+  }
+  
+  .toggle:nth-of-type(2) label {
+    margin-right: 11rem;
+  }
+  
+  .toggle:nth-of-type(1) label {
+    margin-right: 6rem;
+  }
+  
+  .toggle:nth-of-type(2) .switch,
+  .toggle:nth-of-type(1) .switch {
     margin-right: 0px;
-}
+  }
+  
