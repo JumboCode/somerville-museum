@@ -69,11 +69,14 @@ export default function SettingsPage() {
 
   return (
     <>
-      <div className="settings-header">
-        <h1 className="settings-title">Settings</h1>
-        <h2 className="account-subheading">Account Information & Options</h2>
-      </div>
-
+        <div className="settings-header">
+            <div>
+                <h1 className="settings-title">Settings</h1>
+            </div>
+        </div>
+        <div className="account-header">
+            <h2 className="account-subheading">Account Information & Options</h2>
+        </div>
       <div className="body">
         <div className="left-column">
           <div className="profile-card">
