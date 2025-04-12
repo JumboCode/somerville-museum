@@ -139,9 +139,9 @@ return (
                             <a href="#" className="logout" onClick={() => signOut()}>Logout ↪</a>
                         </div>
 
-                        <button className="addv" onClick={addVerificationBox}>
+                        {/* <button className="addv" onClick={addVerificationBox}>
                             Temp Add Verify
-                        </button>
+                        </button> */}
                     </div>
                 </div>
 
