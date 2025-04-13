@@ -14,7 +14,7 @@ export default async function handler(req, res) {
         },
         body: JSON.stringify({
             publicMetadata: {
-                // New users do not have approved permission
+                // Set Clerk metadata to approved
                 approved: true,
             },
         }),
