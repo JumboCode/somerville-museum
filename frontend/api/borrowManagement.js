@@ -1,7 +1,6 @@
 import { query } from './db.js';
 
 export async function borrowHandler(req, res) {
-
   let message; 
 
   const { dateBorrowed, borrowerName, borrowerEmail, phoneNumber, dueDate, 
@@ -10,18 +9,18 @@ export async function borrowHandler(req, res) {
   if (selectedItems == 0) {
     message = "No items selected."
     res.status(200).json({message}); 
+    return;
   }
         
   try {
-
-    //check for existing borrower
+    // Check for existing borrower
     const existingBorrowerResult = await query(
       `SELECT * FROM borrowers where email = $1`, [borrowerEmail]
     );
 
     let borrowerId; 
  
-    //if borrower doesn't exist, create new borrower
+    // If borrower doesn't exist, create new borrower
     if (existingBorrowerResult.rows.length > 0) {
       borrowerId = existingBorrowerResult.rows[0].id; 
     } else {
@@ -33,57 +32,34 @@ export async function borrowHandler(req, res) {
     }
     
     for (const itemId of selectedItems) {
-      let dateReturned = null; 
- 
-      const borrowObject = {
-        borrowerId, 
-        itemId,
-        dateBorrowed,
-        dueDate, 
-        dateReturned, 
-        approver,
-        note
-      }; 
-
-      //updating borrowers with correct information
-      const historyUpdateResult = await query(
-        `
-        UPDATE borrowers
-        SET borrow_history = COALESCE(
-          jsonb_set(
-            borrow_history::jsonb,  -- Explicit cast to JSONB
-            ARRAY[$1::text],        -- Ensure itemId is treated as text
-            COALESCE(borrow_history->$1::text, '{}'::jsonb) || $2::jsonb
-          ),
-          jsonb_build_object($1::text, $2::jsonb)
-        )
-        WHERE id = $3 RETURNING borrow_history
-        `,
-        [itemId.toString(), JSON.stringify(borrowObject), borrowerId]
+      // Check if there's an existing active borrow for this item
+      const existingBorrowResult = await query(
+        'SELECT id FROM borrows WHERE item_id = $1 AND date_returned IS NULL',
+        [itemId]
       );
       
-      
-      let borrowHistory = historyUpdateResult.rows[0].borrow_history; 
-    
-      //now updating the borrows table with correct information
-      const borrowsResult = await query(
-        'INSERT INTO borrows (borrower_id, item_id, date_borrowed, return_date, date_returned, approver, notes) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id', 
-        [borrowerId, itemId, dateBorrowed, dueDate, dateReturned, approver, note]
-      );
+      if (existingBorrowResult.rows.length > 0) {
+        const borrowId = existingBorrowResult.rows[0].id;
+        await query(
+          'UPDATE borrows SET borrower_id = $1, date_borrowed = $2, return_date = $3, approver = $4, notes = $5 WHERE id = $6',
+          [borrowerId, dateBorrowed, dueDate, approver, note, borrowId]
+        );
+      } else {
 
+        await query(
+          'INSERT INTO borrows (borrower_id, item_id, date_borrowed, return_date, date_returned, approver, notes) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+          [borrowerId, itemId, dateBorrowed, dueDate, null, approver, note]
+        );
+      }
+      
+      // Update dummy_data
       await query(
-        `UPDATE dummy_data
-        SET borrow_history = ARRAY_APPEND(
-          COALESCE(borrow_history, '{}'), 
-          $1::integer
-        ), status = $2, current_borrower = $1
-        WHERE id = $3 `,
-        [borrowerId, 'Borrowed', itemId]
+        `UPDATE dummy_data SET status = $1, current_borrower = $2 WHERE id = $3`,
+        ['Borrowed', borrowerId, itemId]
       );
     }
 
     message = 'Borrowing process completed. ';
-
     res.status(200).json({ message });
 
   } catch (error) {
@@ -92,67 +68,75 @@ export async function borrowHandler(req, res) {
   }
 }
 
-
 export async function returnHandler(req, res) {
   const { selectedItems } = req.body;
   const { notes_id } = req.body;
   const { notes_content } = req.body;
 
   try {
-    //arrays to keep track of items 
+    // Arrays to keep track of items 
     const invalidItems = [];
     const validItems = []; 
 
-    //update notes when it changes
+    // Update notes when it changes
     for (let i = 0; i < notes_content.length; i++) {
-
-      //checks status of each item 
+      // Check status of each item 
       const statusResult = await query(
         'SELECT current_borrower FROM dummy_data WHERE id = $1', [notes_id[i]] 
       ); 
       const curr_borrower = statusResult.rows[0].current_borrower;
-      //update notes in borrows table 
+      
+      // Update notes in borrows table 
       await query(
-        "UPDATE borrows SET notes = $1 FROM dummy_data WHERE borrows.borrower_id = $2 AND borrows.item_id = $3",
+        "UPDATE borrows SET notes = $1 WHERE borrower_id = $2 AND item_id = $3 AND date_returned IS NULL",
         [notes_content[i], curr_borrower, notes_id[i]]
-       )
+      );
     }
 
     for (const itemId of selectedItems) {
-      //update date_returned in borrows table 
+      // Get current borrower from dummy_data for this item
+      const borrowerResult = await query(
+        'SELECT current_borrower FROM dummy_data WHERE id = $1',
+        [itemId]
+      );
+      
+      if (borrowerResult.rows.length === 0 || !borrowerResult.rows[0].current_borrower) {
+        invalidItems.push(itemId);
+        continue;
+      }
+      
+      const currentBorrower = borrowerResult.rows[0].current_borrower;
+      
+      // Update date_returned in borrows table
       await query(
-        "UPDATE borrows SET date_returned = $1 FROM dummy_data WHERE borrows.borrower_id = dummy_data.current_borrower AND borrows.item_id = $2",
-        [Intl.DateTimeFormat("en-US").format(new Date()), itemId]
-       )
+        "UPDATE borrows SET date_returned = $1 WHERE borrower_id = $2 AND item_id = $3 AND date_returned IS NULL",
+        [Intl.DateTimeFormat("en-US").format(new Date()), currentBorrower, itemId]
+      );
 
-        // Using array_append with COALESCE to borrower_history, sending all other data
-        await query(
-        'UPDATE dummy_data SET status = $1, borrow_history = array_append(borrow_history, current_borrower),\
-        current_borrower = NULL WHERE id = $2', 
+      // Update dummy_data - set status to Available and current_borrower to NULL
+      await query(
+        'UPDATE dummy_data SET status = $1, current_borrower = NULL WHERE id = $2', 
         ['Available', itemId]
       );
 
-      //add item to available items 
       validItems.push(itemId);
     }
     
     let message = 'Returning process completed. ';
 
     if (validItems.length > 0) {
-      message += `Sucessfully returned items ${validItems.join(', ')}. `
+      message += `Successfully returned items ${validItems.join(', ')}. `;
     }
     if (invalidItems.length > 0) {
-      message += `The following items were unable to be returned: ${invalidItems.join(', ')}. `
+      message += `The following items were unable to be returned: ${invalidItems.join(', ')}. `;
     }
 
-    res.status(200).json({message}); // Send the result back to the frontend
+    res.status(200).json({message});
   } catch (error) {
     console.error("Database query error:", error);
-    console.error("in catch error");
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
-
 
 export async function borrowValidityHandler(req, res) {
   const { selectedItems } = req.body;
@@ -207,7 +191,6 @@ export async function borrowValidityHandler(req, res) {
   }
 }
 
-
 export async function returnValidityHandler(req, res) {
   const { selectedItems } = req.body;
 
@@ -231,7 +214,7 @@ export async function returnValidityHandler(req, res) {
         continue;
       }
 
-      // If the item is not available, add to unavailable items
+      // If the item is not borrowed, add to unavailable items
       if (itemDetails.status !== 'Borrowed') {
         unavailableItems.push(itemDetails);
         continue; // Skip to the next item
@@ -261,7 +244,6 @@ export async function returnValidityHandler(req, res) {
   }
 }
 
-
 export async function borrowByDateRangeHandler(req, res) {
   const { startDate, endDate } = req.body;
   
@@ -276,7 +258,10 @@ export async function borrowByDateRangeHandler(req, res) {
     
     // Query items with return dates within the specified range
     const result = await query(
-      'SELECT * FROM borrows WHERE TO_DATE(return_date, \'MM/DD/YYYY\') BETWEEN TO_DATE($1, \'YYYY-MM-DD\') AND TO_DATE($2, \'YYYY-MM-DD\')',
+      'SELECT b.*, d.name as item_name, br.name as borrower_name FROM borrows b ' +
+      'JOIN dummy_data d ON b.item_id = d.id ' +
+      'JOIN borrowers br ON b.borrower_id = br.id ' +
+      'WHERE TO_DATE(b.return_date, \'MM/DD/YYYY\') BETWEEN TO_DATE($1, \'YYYY-MM-DD\') AND TO_DATE($2, \'YYYY-MM-DD\')',
       [formattedStartDate, formattedEndDate]
     );
     
@@ -286,7 +271,6 @@ export async function borrowByDateRangeHandler(req, res) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
-
 
 export async function fetchBorrowerEmailHandler(req, res) {
   const { id } = req.query;  // Get borrower ID from query params
@@ -324,13 +308,17 @@ export async function overdueHandler(req, res) {
 
     // SQL query to find all items with a return date passed
     const overdueQuery = `
-      UPDATE borrow
+      UPDATE dummy_data d
       SET status = 'Overdue'
-      WHERE return_date < $1 AND status != 'Overdue'
+      FROM borrows b
+      WHERE b.item_id = d.id
+      AND d.status = 'Borrowed'
+      AND TO_DATE(b.return_date, 'MM/DD/YYYY') < CURRENT_DATE
+      AND b.date_returned IS NULL
     `;
 
-    // Execute the query, passing the current date
-    const result = await query(overdueQuery, [currentDate]);
+    // Execute the query
+    const result = await query(overdueQuery);
 
     // Send response with the number of updated records
     res.status(200).json({ message: `${result.rowCount} items updated to overdue` });
@@ -340,6 +328,53 @@ export async function overdueHandler(req, res) {
   }
 }
 
+// New method to get borrowing history for an item
+export async function getItemBorrowHistoryHandler(req, res) {
+  const { id } = req.query; // Item ID
+  
+  if (!id) {
+    return res.status(400).json({ error: "Missing item ID" });
+  }
+  
+  try {
+    const result = await query(`
+      SELECT b.*, br.name as borrower_name, br.email as borrower_email
+      FROM borrows b
+      JOIN borrowers br ON b.borrower_id = br.id
+      WHERE b.item_id = $1
+      ORDER BY b.id DESC
+    `, [id]);
+    
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error("Error fetching item borrow history:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+// New method to get borrowing history for a borrower
+export async function getBorrowerHistoryHandler(req, res) {
+  const { id } = req.query; // Borrower ID
+  
+  if (!id) {
+    return res.status(400).json({ error: "Missing borrower ID" });
+  }
+  
+  try {
+    const result = await query(`
+      SELECT b.*, d.name as item_name, d.id as item_id
+      FROM borrows b
+      JOIN dummy_data d ON b.item_id = d.id
+      WHERE b.borrower_id = $1
+      ORDER BY b.id DESC
+    `, [id]);
+    
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error("Error fetching borrower history:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
 
 export default async function handler(req, res) {
   const { action } = req.query;
@@ -359,7 +394,10 @@ export default async function handler(req, res) {
           return fetchBorrowerEmailHandler(req, res);
       case 'overdue':
           return overdueHandler(req, res);
-  
+      case 'itemBorrowHistory':
+          return getItemBorrowHistoryHandler(req, res);
+      case 'borrowerHistory':
+          return getBorrowerHistoryHandler(req, res);
       default:
           return res.status(400).json({ error: 'Invalid action' });
   }
