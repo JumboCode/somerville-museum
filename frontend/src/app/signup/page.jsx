@@ -130,9 +130,11 @@ export default function SignUp() {
         userAttributes: {
           firstName: firstName,
           lastName: lastName,
+          publicMetadata: {
+            approved: false,
+          },
         },
       })
-      
 
       await signUp.prepareEmailAddressVerification({
         strategy: "email_code",
