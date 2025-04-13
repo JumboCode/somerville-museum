@@ -222,32 +222,32 @@
     gap: 8px;
   }
   
-  .buttons button {
+  .settings-page .buttons button {
     padding: 6px 12px;
     border: none;
     border-radius: 5px;
     font-size: 14px;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
-  }
+}
   
-  .buttons button:first-child {
-    background-color: #ffffff;
-    color: #000000;
-    border: #000000;
-  }
+.settings-page .buttons button:first-child {
+  background-color: #ffffff;
+  color: #000000;
+  border: #000000;
+}
   
   .buttons button:first-child:hover {
     background-color: #6d6d6d;
   }
-  
-  .buttons button:last-child {
+
+  .settings-page .buttons button:last-child {
     background-color: #804a4a;
     color: rgb(255, 255, 255);
   }
   
-  .buttons button:last-child:hover {
-    background-color: #663a3a;
+  .settings-page .buttons button:last-child:hover {
+    background-color: #3a4e66;
   }
   
   .name {
