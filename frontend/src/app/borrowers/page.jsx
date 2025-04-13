@@ -21,7 +21,7 @@ export default function BorrowerPage() {
 
   return (
     <>
-      <div className="Items">
+      <div className="items">
         <BorrowerSearchBar updateSearchResults={setSearchResults} />
         <BorrowerTable 
           searchResults={searchResults} 
