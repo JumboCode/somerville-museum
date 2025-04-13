@@ -1,9 +1,8 @@
 export default async function handler(req, res) {
     try {
-        console.log("Clerk secret key:", process.env.CLERK_SECRET_KEY);
         const response = await fetch("https://api.clerk.dev/v1/users", {
             headers: {
-                Authorization: `Bearer sk_test_wGcUTzeo4CJJ2iVUObnFRmkbaPT6pzAXcnonlv8q8w`,
+                Authorization: `Bearer ` + process.env.CLERK_SECRET_KEY,
             },
         });
 
