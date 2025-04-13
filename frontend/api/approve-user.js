@@ -6,16 +6,19 @@ export default async function handler(req, res) {
 
     const { userId } = req.body;
 
+    console.log("Approving user with ID:", userId);
+
     const response = await fetch(`https://api.clerk.dev/v1/users/${userId}`, {
         method: "PATCH",
         headers: {
-            Authorization: `Bearer ` + process.env.CLERK_SECRET_KEY,
+            Authorization: `Bearer sk_test_wGcUTzeo4CJJ2iVUObnFRmkbaPT6pzAXcnonlv8q8w`,
             "Content-Type": "application/json",
         },
+        
         body: JSON.stringify({
-            publicMetadata: {
+            public_metadata: {
                 // Set Clerk metadata to approved
-                approved: true,
+                approved: true
             },
         }),
     });

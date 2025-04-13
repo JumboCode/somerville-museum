@@ -17,7 +17,7 @@ import "./SettingsPage.css";
 import UserVerificationCard from "./userVerificationCard.jsx";
 import React, { useState, useEffect } from "react";
 import { useClerk, useUser } from "@clerk/nextjs";
-import ExportDataBtn from "./ExportDataBtn.jsx"; // Import the ExportDataBtn component
+import ExportDataBtn from "./ExportDataBtn.jsx";
 
 export default function SettingsPage() {
     const [lightMode, setLightMode] = useState(false);
@@ -100,7 +100,6 @@ export default function SettingsPage() {
 
     return (
         <>
-            <h1>Settings</h1>
             <div className="body">
                 <div className="settings-container">
                     <div className="cardHolders">

@@ -1,9 +1,9 @@
 .container {
     justify-content: center;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     height: 100vh;
+    background-color: #F8F5F5;
 }
 
 .wrapper {
@@ -75,4 +75,17 @@
   
 .fading {
     opacity: 0;
+}
+
+.Settings-Title {
+    position: absolute;
+    color: #000;
+    font-family: Akatab;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    top: 0; /* Stick to the top */
+    left: 0; /* Stick to the left */
+    margin-left: 8rem; /* Optional: Add margin for spacing */
 }

@@ -130,10 +130,6 @@ export default function SignUp() {
         userAttributes: {
           firstName: firstName,
           lastName: lastName,
-          publicMetadata: {
-            // New users are not approved by default
-            approved: false,
-          },
         },
       })
 
@@ -162,11 +158,6 @@ export default function SignUp() {
       alert("Invalid verification code. Try again.");
     }
   }
-  
-  
-  
-  
-  
 
   if (verifying) {
     return (
