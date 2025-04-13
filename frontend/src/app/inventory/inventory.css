@@ -32,6 +32,7 @@ body, html {
 .Items {
     display: flex;
     align-items: center;
+    flex-direction: row;
     justify-content: space-between;
     width: 100%;
     padding: 1px;

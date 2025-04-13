@@ -41,14 +41,11 @@ export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) 
   return (
     <div className="popup-overlay" onClick={handleClose}>
       <div className={`popup-anim-wrapper ${isClosing ? 'slide-out' : 'slide-in'}`}> 
-            <div className="popup" onClick={(e) => e.stopPropagation()}>
-
-      
-
-          <CloseButton className="close-btn" onClick={onClose} /> 
-
-        <br />
-        <h2>{borrower.name}</h2>
+        <div className="popup" onClick={(e) => e.stopPropagation()}>
+          <div className="name-and-button"> 
+            <h2>{borrower.name}</h2>
+            <CloseButton className="close-btn" onClick={onClose} />
+          </div>
         <br />
         <p><strong>Email:</strong> {borrower.email}</p>
         <br />
