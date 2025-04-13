@@ -146,12 +146,24 @@ export default function Signin() {
         }
       
         await setActive({ session: result.createdSessionId });
+
+        // Add a delay to check the session is set before redirecting
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
         router.push("/login_confirmed");
       } else {
         console.log("Sign in not complete yet:", result);
       }
     } catch (err) {
-      setError("Something went wrong. Please try again.");
+      console.error("Sign-in error:", err);
+      
+      // If Clerk returned an API error
+      if (err.errors && err.errors.length > 0) {
+        setError(err.errors[0].message || "Something went wrong.");
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
+    
       handleLoginError();
       resetFields();
     }

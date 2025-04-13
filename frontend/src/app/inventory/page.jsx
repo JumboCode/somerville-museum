@@ -13,6 +13,7 @@ import SearchBar from '../components/SearchBar';
 import './inventory.css'
 import { useSearchParams } from 'next/navigation.js';
 import PropTypes from 'prop-types';
+import { useUser } from '@clerk/nextjs';
 
 Inventory.propTypes = {
     isFilterVisible: PropTypes.bool.isRequired,
@@ -35,6 +36,16 @@ export default function Inventory({
     const searchParams = useSearchParams();
     const filter = searchParams.get('filter');
     const [filterResults, setFilterResults] = useState([]);
+    const { isLoaded, user } = useUser();
+    const [isApproved, setIsApproved] = useState(null);
+
+    // Check if permissions to view page
+    useEffect(() => {
+    if (isLoaded && user) {
+        const approved = user.publicMetadata?.approved === true;
+        setIsApproved(approved);
+    }
+    }, [isLoaded, user]);
     
     const [refreshTable, setRefreshTable] = useState(false);
     // const [sortType, setSortType] = useState('id'); // Track last sorted property
@@ -417,6 +428,18 @@ export default function Inventory({
 
     // an array of buttons for page selection
     const buttons = Array.from({ length: totalPages }, (_, index) => index + 1);
+
+      // Conditional rendering based on user approval
+    if (!isLoaded || isApproved === null) return null;
+
+    // If user is not approved, show an error message
+    if (!isApproved) {
+        return (
+        <div className="dashboard-container">
+            <p>You are not allowed to see this section. Please wait for approval from an administrator.</p>
+        </div>
+        );
+    }
 
 
 

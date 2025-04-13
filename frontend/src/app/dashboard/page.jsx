@@ -1,10 +1,3 @@
-/*
- * Authors: Angie and Will
- * Sprint: Dashboard #44
- * Component: Dashboard
- * Purpose: This component displays the dashboard overview page.
-*/
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -13,10 +6,14 @@ import BarGraph from "./BarGraph";
 import PieChart from './PieChart';
 import { useRouter } from 'next/navigation';
 import { useFilterContext } from '../components/contexts/FilterContext.js';
+import { useUser } from '@clerk/nextjs';
 
 const Dashboard = () => {
   const router = useRouter();
   const { setSelectedFilters } = useFilterContext();
+  const { isLoaded, user } = useUser();
+  const [isApproved, setIsApproved] = useState(null);
+
   const [stats, setStats] = useState([
     { label: 'Total Items', value: 0 },
     { label: 'Currently Borrowed', value: 0 },
@@ -40,13 +37,20 @@ const Dashboard = () => {
     { name: 'Needs repair', value: 0 }
   ]);
 
+  // Check if permissions to view page
+  useEffect(() => {
+    if (isLoaded && user) {
+      const approved = user.publicMetadata?.approved === true;
+      setIsApproved(approved);
+    }
+  }, [isLoaded, user]);
+
   useEffect(() => {
     const fetchStats = async () => {
       try {
         const response = await fetch('/api/dashboard');
         const data = await response.json();
         
-        // Update stats cards
         setStats([
           { label: 'Total Items', value: data.totalItems },
           { label: 'Currently Borrowed', value: data.borrowedItems },
@@ -54,7 +58,6 @@ const Dashboard = () => {
           { label: 'Missing Items', value: data.missingItems }
         ]);
 
-        // Calculate available items
         const availableItems = data.totalItems - 
           (data.borrowedItems + data.overdueItems + data.missingItems);
 
@@ -64,7 +67,6 @@ const Dashboard = () => {
           { name: "Overdue", value: data.overdueItems },
           { name: "Missing", value: data.missingItems }
         ]);
-
       } catch (error) {
         console.error('Error fetching stats:', error);
       }
@@ -90,7 +92,6 @@ const Dashboard = () => {
   }, []);
 
   const handleStatClick = (status) => {
-    // If clicking "Total Items", don't set any filter
     if (status) {
       setSelectedFilters({
         condition: [],
@@ -107,13 +108,24 @@ const Dashboard = () => {
     router.push('/inventory');
   };
 
+  // Conditional rendering based on user approval
+  if (!isLoaded || isApproved === null) return null;
+
+  // If user is not approved, show an error message
+  if (!isApproved) {
+    return (
+      <div className="dashboard-container">
+        <p>You are not allowed to see this section. Please wait for approval from an administrator.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="dashboard-container">
       <h1 className="dashboard-title">Dashboard Overview</h1>
       
       <div className="stats-grid">
         {stats.map((stat) => {
-          // Map stat labels to filter values
           const filterStatus = {
             'Total Items': null,
             'Currently Borrowed': 'Borrowed',
