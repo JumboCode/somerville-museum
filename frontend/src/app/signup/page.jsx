@@ -131,6 +131,7 @@ export default function SignUp() {
           firstName: firstName,
           lastName: lastName,
           publicMetadata: {
+            // New users are not approved by default
             approved: false,
           },
         },
