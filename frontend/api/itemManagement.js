@@ -1,6 +1,6 @@
 import { query } from './db.js';
 
-// Handler for adding a new item (previously add.js)
+// Handler for adding a new item
 export async function addHandler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
@@ -23,10 +23,8 @@ export async function addHandler(req, res) {
             condition = [],
             color = [],
             status,
-            // authenticity_level,
             date_added,
             current_borrower,
-            borrow_history = {},
             image_keys = []
         } = req.body;
 
@@ -40,18 +38,12 @@ export async function addHandler(req, res) {
 
         // Insert into the database
         const result = await query(
-            // `INSERT INTO dummy_data 
-            // (id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, current_borrower, borrow_history, notes)
-            // VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
-            // RETURNING *`,
-            // [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, current_borrower, borrow_history, notes]
             `INSERT INTO dummy_data 
-            (id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, borrow_history, notes, image_keys)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
+            (id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, notes, image_keys)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
             RETURNING *`,
-            [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, borrow_history, notes, image_keys]
+            [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, notes, image_keys]
         );
-
 
         res.status(201).json({ success: true, data: result.rows[0] });
 
@@ -61,7 +53,7 @@ export async function addHandler(req, res) {
     }
 }
 
-// Handler for retrieving item details (previously retrieveItem.js)
+// Handler for retrieving item details
 export async function retrieveItemHandler(req, res) {
     const { id } = req.query; // Get the ID from request parameters
 
@@ -78,14 +70,28 @@ export async function retrieveItemHandler(req, res) {
             return res.status(428).json({ message: 'Item ID does not exist' });
         }
 
+        // Get borrow history for the item from borrows table
+        const borrowHistory = await query(`
+            SELECT b.*, br.name as borrower_name 
+            FROM borrows b
+            JOIN borrowers br ON b.borrower_id = br.id
+            WHERE b.item_id = $1
+            ORDER BY b.id DESC
+        `, [id]);
+
+        // Combine item details with borrow history
+        const itemWithHistory = {
+            ...result.rows[0],
+            borrow_history: borrowHistory.rows
+        };
+
         // Return the entry as JSON
-        res.status(200).json(result.rows[0]);
+        res.status(200).json(itemWithHistory);
     } catch (error) {
         console.error('Error fetching entry:', error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 }
-
 
 // Handler for updating item IDs (previously updateID.js)
 export async function updateIDHandler(req, res) {
@@ -112,6 +118,10 @@ export async function updateIDHandler(req, res) {
       else {
         // Case 3: New ID does not exist and it needs to be created
         const insertResult = await query("INSERT INTO dummy_data (id, name, tags, note) VALUES ($1, $2, $3, $4)", [newId, data.name, data.tags, data.note]);
+        
+        // Also update any references in the borrows table
+        await query("UPDATE borrows SET item_id = $1 WHERE item_id = $2", [newId, id]);
+        
         const deleteOld = await query("DELETE FROM dummy_data WHERE id = $1", [id]);
         return res.status(201).json({ message: 'New record created and old record deleted.' });
       }  
@@ -120,7 +130,6 @@ export async function updateIDHandler(req, res) {
       return res.status(500).send('Internal Server Error');
     }
   }
-
 
 // Handler for searching items (previously search.js)
 export async function searchHandler(req, res) {
@@ -142,7 +151,6 @@ export async function searchHandler(req, res) {
     }
 }
 
-
 export async function updateTagsHandler(req, res) {
   const { id, tags } = req.body;
 
@@ -162,25 +170,13 @@ export async function updateTagsHandler(req, res) {
   }
 }
 
-/**************************************************************
- *
- *                     updateItem.js
- *
- *        Authors: Dan Glorioso & Massimo Bottari
- *           Date: 02/01/2025
- *
- *     Summary: An API route to edit an existing item to the database using the
- *              change input from the fields in EditPage component.
- * 
- **************************************************************/
-
 export async function updateItemHandler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
     try {
-        // Desctructure the request body
+        // Destructure the request body
         const {
             id,
             name,
@@ -198,7 +194,6 @@ export async function updateItemHandler(req, res) {
             location,
             date_added,
             current_borrower,
-            borrow_history = {}
         } = req.body;
 
         if (!id) {
@@ -233,21 +228,20 @@ export async function updateItemHandler(req, res) {
                     location = $13,
                     date_added = $14,
                     current_borrower = $15,
-                    borrow_history = $16,
-                    notes = $17
+                    notes = $16
                 WHERE id = $1
                 RETURNING *`,
-                [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, borrow_history, notes]
+                [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, notes]
             );
             return res.status(200).json({ message: "Item successfully updated", item: result.rows[0] });
         } else {
             // If the ID does not exist, insert a new entry
             result = await query(
                 `INSERT INTO dummy_data 
-                (id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, borrow_history, notes)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
+                (id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, notes)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
                 RETURNING *`,
-                [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, borrow_history, notes]
+                [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, notes]
             );
             return res.status(201).json({ message: "Item successfully added", item: result.rows[0] });
         }
