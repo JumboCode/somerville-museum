@@ -59,14 +59,6 @@ export default function SettingsPage() {
         localStorage.setItem("approvals", JSON.stringify(approvals));
     }, [approvals]);
 
-    const addVerificationBox = () => {
-        console.log("Adding new verification box...");
-        setApprovals((prev) => [
-            ...prev,
-            { id: Date.now(), name: `User ${prev.length + 1}`, email: `user${prev.length + 1}@example.com` }
-        ]);
-    };
-
     const approveVerification = async (id) => {
         try {
             const res = await fetch("/api/approve-user", {
