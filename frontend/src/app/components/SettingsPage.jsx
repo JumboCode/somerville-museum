@@ -69,127 +69,127 @@ export default function SettingsPage() {
 
   return (
     <>
-        <div className="settings-header">
-            <div>
-                <h1 className="settings-title">Settings</h1>
-            </div>
-        </div>
+      <div className="settings-header">
+          <h1 className="settings-title">Settings</h1>
+      </div>
+      <div className="settings-page">
         <div className="account-header">
             <h2 className="account-subheading">Account Information & Options</h2>
         </div>
-      <div className="body">
-        <div className="left-column">
-          <div className="profile-card">
-            <h2 className="profile-card-title">Profile</h2>
-            <div className="nameText">
-              <label htmlFor="first-name">First Name</label>
-              <label htmlFor="last-name">Last Name</label>
-            </div>
-            <div className="name">
-              <input
-                type="text"
-                id="first-name"
-                value={user?.firstName || "Holden"}
-                disabled
-              />
-              <input
-                type="text"
-                id="last-name"
-                value={user?.lastName || "Kittleburger"}
-                disabled
-              />
-            </div>
-            <form>
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                id="email"
-                value={
-                  user?.emailAddresses?.[0]?.emailAddress ||
-                  "holdenlovesburgers@hotmail.com"
-                }
-                disabled
-              />
-
-              <label htmlFor="password">Password</label>
-              <input type="password" id="password" value="************" disabled />
-
-              <div className="change-password-container">
-                <a
-                  href="#"
-                  className="change-password"
-                  onClick={handleForgotPassword}
-                >
-                  Change Password
-                </a>
+        <div className="body">
+          <div className="left-column">
+            <div className="profile-card">
+              <h2 className="profile-card-title">Profile</h2>
+              <div className="nameText">
+                <label htmlFor="first-name">First Name</label>
+                <label htmlFor="last-name">Last Name</label>
               </div>
-            </form>
-          </div>
+              <div className="name">
+                <input
+                  type="text"
+                  id="first-name"
+                  value={user?.firstName || "Holden"}
+                  disabled
+                />
+                <input
+                  type="text"
+                  id="last-name"
+                  value={user?.lastName || "Kittleburger"}
+                  disabled
+                />
+              </div>
+              <form>
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  value={
+                    user?.emailAddresses?.[0]?.emailAddress ||
+                    "holdenlovesburgers@hotmail.com"
+                  }
+                  disabled
+                />
 
-          <div className="options-card">
-            <div className="toggle">
-              <label className="switch">
-                <input
-                  type="checkbox"
-                  checked={normalDataEntry}
-                  onChange={() => setNormalDataEntry(!normalDataEntry)}
-                />
-                <span className="slider round"></span>
-              </label>
-              <label>Normal Data Entry</label>
-              <ExportDataBtn />
-            </div>
-            <div className="toggle">
-              <label className="switch">
-                <input
-                  type="checkbox"
-                  checked={lightMode}
-                  onChange={() => setLightMode(!lightMode)}
-                />
-                <span className="slider round"></span>
-              </label>
-              <label>Light Mode</label>
-              <button className="logout" onClick={() => signOut()}>
-                <span className="logout-btn-content">
-                  Logout
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    width="18"
-                    height="18"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    className="logout-icon"
+                <label htmlFor="password">Password</label>
+                <input type="password" id="password" value="************" disabled />
+
+                <div className="change-password-container">
+                  <a
+                    href="#"
+                    className="change-password"
+                    onClick={handleForgotPassword}
                   >
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                    <polyline points="16 17 21 12 16 7" />
-                    <line x1="21" x2="9" y1="12" y2="12" />
-                  </svg>
-                </span>
-              </button>
+                    Change Password
+                  </a>
+                </div>
+              </form>
             </div>
-          </div>
-        </div>
 
-        {isAdmin && approvals.length > 0 && (
-          <div className="adminapprovals">
-            <p className="subheading">New Account Approvals</p>
-            <div className="approvalscontainer">
-              {approvals.map((approval) => (
-                <UserVerificationCard
-                  key={approval.id}
-                  name={approval.name}
-                  email={approval.email}
-                  onApprove={() => approveVerification(approval.id)}
-                  onDeny={() => denyVerification(approval.id)}
-                />
-              ))}
+            <div className="options-card">
+              <div className="toggle">
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={normalDataEntry}
+                    onChange={() => setNormalDataEntry(!normalDataEntry)}
+                  />
+                  <span className="slider round"></span>
+                </label>
+                <label>Normal Data Entry</label>
+                <ExportDataBtn />
+              </div>
+              <div className="toggle">
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={lightMode}
+                    onChange={() => setLightMode(!lightMode)}
+                  />
+                  <span className="slider round"></span>
+                </label>
+                <label>Light Mode</label>
+                <button className="logout" onClick={() => signOut()}>
+                  <span className="logout-btn-content">
+                    Logout
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      width="18"
+                      height="18"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      className="logout-icon"
+                    >
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                      <polyline points="16 17 21 12 16 7" />
+                      <line x1="21" x2="9" y1="12" y2="12" />
+                    </svg>
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
-        )}
+
+          {isAdmin && approvals.length > 0 && (
+            <div className="adminapprovals">
+              <p className="subheading">New Account Approvals</p>
+              <div className="approvalscontainer">
+                {approvals.map((approval) => (
+                  <UserVerificationCard
+                    key={approval.id}
+                    name={approval.name}
+                    email={approval.email}
+                    onApprove={() => approveVerification(approval.id)}
+                    onDeny={() => denyVerification(approval.id)}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );

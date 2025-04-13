@@ -13,6 +13,14 @@
     left: 140px;
     z-index: 100;
   }
+
+.settings-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1vh;
+}
   
   /* Big bold Settings title */
   .settings-title {
@@ -23,9 +31,7 @@
   }
   
   .account-header {
-    position: absolute;
-    top: 120px; /* Moved up from 160px */
-    left: 120px;
+    align-self: flex-start;
   }
   
   .account-subheading {
@@ -48,8 +54,6 @@
     font-family: Arial, sans-serif;
     display: flex;
     align-items: flex-start;
-    gap: 60px;
-    margin: 100px 40px 0 40px; /* leaves space at the top */
     flex-direction: row;
   }
   
