@@ -287,6 +287,71 @@ export async function borrowByDateRangeHandler(req, res) {
   }
 }
 
+export async function fetchBorrowerNameHandler(req, res) {
+  const { id } = req.query;  // Get borrower ID from query params
+
+  if (!id) {
+      return res.status(400).json({ error: "Missing borrower ID" });
+  }
+
+  try {
+      // Fetch the borrower email using the ID
+      const result = await query(`
+          SELECT name FROM borrowers WHERE id = $1
+      `, [id]);
+
+      if (result.rows.length === 0) {
+          return res.status(404).json({ error: "Borrower not found" });
+      }
+
+      res.status(200).json({ borrower_email: result.rows[0].email });
+  } catch (error) {
+      console.error("Error fetching borrower email:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+export async function groupReturnsByBorrowerHandler(req, res) {
+  const { returnedItems } = req.body; // List of item IDs being returned
+
+  if (!returnedItems || returnedItems.length === 0) {
+    return res.status(400).json({ error: "No items provided for return." });
+  }
+
+  try {
+    // Query to fetch borrower details and item information
+    const result = await query(
+      `SELECT b.name, b.email, 
+        d.id AS item_id, 
+        d.name AS item_name
+      FROM dummy_data d
+      JOIN borrowers b ON d.current_borrower = b.id
+      WHERE d.id = ANY($1::int[])`,
+      [returnedItems]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "No matching items or borrowers found." });
+    }
+
+    // Group items by borrower
+    const groupedReturns = result.rows.reduce((acc, row) => {
+      const borrowerKey = `${row.first_name} ${row.last_name} (${row.email})`;
+
+      if (!acc[borrowerKey]) {
+        acc[borrowerKey] = [];
+      }
+
+      acc[borrowerKey].push({ id: row.item_id, name: row.item_name });
+      return acc;
+    }, {});
+
+    res.status(200).json(groupedReturns);
+  } catch (error) {
+    console.error("Error grouping returns by borrower:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
 
 export async function fetchBorrowerEmailHandler(req, res) {
   const { id } = req.query;  // Get borrower ID from query params
@@ -357,9 +422,14 @@ export default async function handler(req, res) {
           return borrowByDateRangeHandler(req, res);
       case 'fetchBorrowerEmail':
           return fetchBorrowerEmailHandler(req, res);
+      case 'fetchBorrowerName':
+          return fetchBorrowerNameHandler(req, res);
+      case 'fetchBorrowerId':
+          return fetchBorrowerIdHandler(req, res);
       case 'overdue':
           return overdueHandler(req, res);
-  
+      case 'groupReturnsByBorrower':
+            return groupReturnsByBorrowerHandler(req, res);
       default:
           return res.status(400).json({ error: 'Invalid action' });
   }
