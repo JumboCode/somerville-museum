@@ -37,7 +37,7 @@ const Settings = () => {
   };
 
   return (
-    <div className="container">
+    <div className="settings-container">
         {/* <div className="wrapper">
             <label className="toggleWrapper">
             <input 
@@ -53,9 +53,7 @@ const Settings = () => {
             </span>
             <div onClick={()=> {signOut({ redirectUrl: '/' })}}></div>
         </div> */}
-        <div className="settings-page">
-          <SettingsPage />
-        </div>
+        <SettingsPage />
     </div>
   );
 };
