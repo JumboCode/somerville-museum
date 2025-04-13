@@ -431,23 +431,23 @@ export default function Inventory({
                 <div className="Header">
                     <div className="Items">
                         <SearchBar updateSearchResults={setSearchResults} />
-                            <div className='buttons'> 
-                                <AddButton className='addBtn'> </AddButton>
-                                <BorrowButton className='brwBtn'
-                                    selectedItems={selectedItems}
-                                    onSuccess={handleBorrowSuccess}>Borrow
-                                </BorrowButton>
-                                <ReturnButton className='rtnBtn'
-                                    selectedItems={selectedItems}
-                                    onSuccess={handleReturnSuccess}>Return
-                                </ReturnButton>
-                                <DeleteItemButton
-                                    classname = 'delBtn'
-                                    selectedItems={selectedItems}
-                                    isChecked={selectedItems.length > 0}
-                                    >
-                                </DeleteItemButton>
-                            </div>
+                        <div className='buttons'> 
+                            <AddButton className='addBtn'> </AddButton>
+                            <BorrowButton className='brwBtn'
+                                selectedItems={selectedItems}
+                                onSuccess={handleBorrowSuccess}>Borrow
+                            </BorrowButton>
+                            <ReturnButton className='rtnBtn'
+                                selectedItems={selectedItems}
+                                onSuccess={handleReturnSuccess}>Return
+                            </ReturnButton>
+                            <DeleteItemButton
+                                classname = 'delBtn'
+                                selectedItems={selectedItems}
+                                isChecked={selectedItems.length > 0}
+                                >
+                            </DeleteItemButton>
+                        </div>
                     </div>
                     <div className="TableLabels">
                         <div className="SelectAll" id='SelectAll' onClick={handleSelectAllChange}>Select All
