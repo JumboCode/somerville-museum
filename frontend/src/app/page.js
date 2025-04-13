@@ -11,12 +11,14 @@ const App = () => {
   return (
     <div className={'login-bg'}>
       <div className="mainContainer">
-      <div className="titleContainer">
-        <div className="SMLogo sm-logo-large">
-          <Image src="/SM_LOGO.svg" alt="No image found" fill />
+        
+        <div className="titleContainer">
+          <div className="SMLogo sm-logo-large">
+            <Image src="/SM_LOGO.svg" alt="No image found" fill />
+          </div>
+          <div className="clothing-database">CLOTHING DATABASE</div>
         </div>
-        <div className="clothing-database">CLOTHING DATABASE</div>
-      </div>
+
         <div className={'buttonContainer'}>
           <input
             className={'inputButton'}
