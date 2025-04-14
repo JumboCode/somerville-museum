@@ -1,9 +1,10 @@
-.container {
+.containerUpper {
     justify-content: center;
     display: flex;
     align-items: center;
     height: 100vh;
     background-color: #F8F5F5;
+    position: relative;
 }
 
 .wrapper {
@@ -16,6 +17,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
+    overflow: visible;
 }
 
 .toggleWrapper {
@@ -85,7 +87,47 @@
     font-style: normal;
     font-weight: 700;
     line-height: normal;
-    top: 0; /* Stick to the top */
-    left: 0; /* Stick to the left */
-    margin-left: 8rem; /* Optional: Add margin for spacing */
-}
+    margin-left: -8rem;
+  }
+
+  .content-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; 
+    width: 100%;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #F8F5F5;
+    position: relative; /* so Settings-Title is relative to this */
+  }
+  
+  .Settings-Title {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #000;
+    font-family: Akatab;
+    font-size: 40px;
+    font-weight: 700;
+  }
+  
+  .settings-content-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;  /* prevent width restriction */
+    height: 100%;
+  }
+
+  .global-settings-title {
+    position: fixed;  /* fixed instead of absolute */
+    top: 2rem;
+    left: 16rem;
+    z-index: 9999;  /* above everything */
+  }
