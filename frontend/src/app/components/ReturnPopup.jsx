@@ -25,24 +25,11 @@ const ReturnPopup = ({ units = [], onSuccess, onClose }) => {
     }, [units, currentPage]);
 
     const handleReturn = async () => {
-        try {
-            // const response = await fetch('/api/borrowManagement?action=return', {   
-            //     method: 'PUT',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify({ 
-            //         selectedItems: units.map(item => item.id),
-            //         notes_id: Object.keys(notes),
-            //         notes_content: Object.values(notes)
-            //     })
-            // });
-            
-            // if (!response.ok) {
-            //     throw new Error(`Fetch error: ${response.status} - ${response.statusText}`);
-            // }
+        //try {
 
         //EMAIL FOR RETURN ITEMS BELOW
 
-        const itemNames = units.map(item => item.name);
+        //const itemNames = units.map(item => item.name);
 
         // // Fetch the borrower's ID based on the first selected item
         // const borrowerID = await fetch (`/api/fetchBorrowerId?id=${units[0].id}`);
@@ -66,55 +53,93 @@ const ReturnPopup = ({ units = [], onSuccess, onClose }) => {
         // const { borrower_first_name: borrowerFirstName, borrower_last_name: borrowerLastName } = await borrowerNameResponse.json();
 
         // Step 2: Call the groupReturnsByBorrowerHandler API
-        const groupResponse = await fetch('/api/borrowManagement?action=groupReturnsByBorrower', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ returnedItems: units.map(item => item.id) })
-        });
 
-        if (!groupResponse.ok) {
-            throw new Error(`Group API error: ${groupResponse.status} - ${groupResponse.statusText}`);
-        }
+        ////////////////////////////////////////////////////
 
-        const groupedData = await groupResponse.json();
-
-        console.log("Grouped data:", groupedData);
-        const { borrower_email: borrowerEmail, borrower_name: borrowerName } = groupedData;
-
-        // Debugging: Log the request payload
-        console.log("Sending email request:", {
-            recipientEmail: borrowerEmail,
-            recipientName: `${borrowerName}`,
-            items: itemNames,
-        });
-
-        // Make the API call
-        // if (!isToggleEnabled) {
-            const emailResponse = await fetch('/api/email?emailType=sendReturnEmail', { 
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    borrower_name: borrowerEmail,
-                    borrower_email: `${borrowerName}`,
-                    returned_items: itemNames,
-                }),
-            });
-
-            // Read response as text (to catch non-JSON errors)
-            const responseText = await emailResponse.text();
-
-            if (!emailResponse.ok) {
-                throw new Error(`Email sending failed: ${emailResponse.status} ${responseText}`);
-            }
+        // try {
+        //     const response = await fetch('/api/borrowManagement?action=groupReturnsByBorrower', {
+        //       method: 'POST',
+        //       headers: { 'Content-Type': 'application/json' },
+        //       body: JSON.stringify({ returnedItems: units.map(item => item.id) }),
+        //     });
+        
+        //     if (!response.ok) {
+        //       throw new Error(`Group API error: ${response.status} - ${response.statusText}`);
+        //     }
+        
+        //     const result = await response.json();
+        //     console.log(result.message); // Should log: Emails sent to all borrowers.
+        
+        //     if (onSuccess) onSuccess();
+        
+        //     location.reload();
+        
+        // } catch (error) {
+        //     console.error("Error returning data:", error);
         // }
 
-        //EMAIL FOR RETURN ITEMS ABOVE
+        // try {
+        //     const response = await fetch('../../api/borrowManagement?action=return', {   
+        //         method: 'PUT',
+        //         headers: { 'Content-Type': 'application/json' },
+        //         body: JSON.stringify({ 
+        //             selectedItems: units.map(item => item.id),
+        //             notes_id: Object.keys(notes),
+        //             notes_content: Object.values(notes)
+        //         })
+        //     });
+            
+        //     if (!response.ok) {
+        //         throw new Error(`Fetch error: ${response.status} - ${response.statusText}`);
+        //     }
 
-            const result = await response.json(); 
-            if (result.message) alert(result.message);
-            if (onSuccess) onSuccess(); 
+        //     const result = await response.json(); 
+        //     if (result.message) alert(result.message);
+        //     if (onSuccess) onSuccess(); 
 
-            location.reload(); 
+        //     location.reload(); 
+        // } catch (error) {
+        //     console.error("Error returning data:", error);
+        // }
+
+        try {
+            // 1. Send Emails first
+            const emailResponse = await fetch('/api/borrowManagement?action=groupReturnsByBorrower', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ returnedItems: units.map(item => item.id) }),
+            });
+        
+            if (!emailResponse.ok) {
+              throw new Error(`Group API error: ${emailResponse.status} - ${emailResponse.statusText}`);
+            }
+        
+            const emailResult = await emailResponse.json();
+            console.log(emailResult.message);  // Should log: Emails sent to all borrowers.
+        
+        
+            // 2. THEN update DB
+            const returnResponse = await fetch('/api/borrowManagement?action=return', {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                selectedItems: units.map(item => item.id),
+                notes_id: Object.keys(notes),
+                notes_content: Object.values(notes),
+              }),
+            });
+        
+            if (!returnResponse.ok) {
+              throw new Error(`Fetch error: ${returnResponse.status} - ${returnResponse.statusText}`);
+            }
+        
+            const returnResult = await returnResponse.json();
+            if (returnResult.message) alert(returnResult.message);
+        
+            if (onSuccess) onSuccess();
+        
+            location.reload();
+        
         } catch (error) {
             console.error("Error returning data:", error);
         }
