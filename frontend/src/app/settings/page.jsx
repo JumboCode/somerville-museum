@@ -14,12 +14,15 @@ import './settings.css';
 const Settings = () => {
   return (
     <div className="container">
-        <div className = "Settings-Title">
-          Settings
-        </div>
-        <div className="settings-page">
-          <SettingsPage />
-        </div>
+      <div className="Settings-Title global-settings-title">
+        Settings
+      </div>
+
+      <div className="settings-content-wrapper">
+          <div className="settings-page">
+            <SettingsPage />
+          </div>
+      </div>
     </div>
   );
 };
