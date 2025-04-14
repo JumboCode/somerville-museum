@@ -125,9 +125,18 @@ export async function updateIDHandler(req, res) {
 // Handler for searching items (previously search.js)
 export async function searchHandler(req, res) {
     const searchQuery = req.body.searchQuery;
-    let databaseQuery = isNaN(parseInt(searchQuery)) ? 
-        `SELECT dummy_data.* FROM dummy_data FULL OUTER JOIN borrowers ON dummy_data.current_borrower = borrowers.id WHERE dummy_data.name ILIKE '%'||$1||'%' OR dummy_data.notes ILIKE '%'||$1||'%' OR borrowers.name ILIKE '%'||$1||'%' ORDER BY id` : 
-        `SELECT * FROM dummy_data WHERE name ILIKE '%'||$1||'%' OR notes ILIKE '%'||$1||'%' OR id = ${parseInt(searchQuery)} ORDER BY id`;
+    let databaseQuery = `
+    SELECT dummy_data.* 
+    FROM dummy_data 
+    LEFT JOIN borrowers 
+    ON dummy_data.current_borrower = borrowers.id 
+    WHERE dummy_data.name ILIKE '%' || $1 || '%' 
+       OR dummy_data.notes ILIKE '%' || $1 || '%' 
+       OR CAST(dummy_data.id AS TEXT) ILIKE '%' || $1 || '%' 
+       OR borrowers.name ILIKE '%' || $1 || '%' 
+    ORDER BY dummy_data.id;
+  `;
+  
     
     try {
         // Select all entries where searchQuery is a substring of name, notes, id, or borrower name

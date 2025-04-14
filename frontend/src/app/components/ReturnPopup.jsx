@@ -94,8 +94,8 @@ const ReturnPopup = ({ units = [], onSuccess, onClose }) => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    borrower_name: borrowerEmail,
-                    borrower_email: `${borrowerName}`,
+                    borrower_name: `${borrowerName}`,
+                    borrower_email: borrowerEmail,
                     returned_items: itemNames,
                 }),
             });
