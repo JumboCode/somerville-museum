@@ -71,19 +71,19 @@ body, html {
 }
 
 .IDLabel {
-    padding-left:7.25vw;
+    padding-left:5.5vw;
     color: #333;
     background-color: transparent;
     border: transparent;
 }
 
 .IDOnClick {
-    padding-left: 6.2vw;
+    padding-left: 5.5vw;
     color: #9B525F;
 }
 
 .ItemLabel {
-    padding-left: 7vw;
+    padding-left: 5vw;
     color: #333;
     background-color: transparent;
     border: transparent;
@@ -96,7 +96,7 @@ body, html {
 }
 
 .AvaiLabel {
-    padding-left: 8vw;
+    padding-left: 7.5vw;
     color: #333;
     background-color: transparent;
     border: transparent;
@@ -108,7 +108,7 @@ body, html {
 }
 
 .ConLabel {
-    padding-left: 6vw;
+    padding-left: 5.5vw;
     color: #333;
     background-color: transparent;
     border: transparent;
@@ -120,7 +120,7 @@ body, html {
 }
 
 .TagsLabel {
-    padding-left: 10vw;
+    padding-left: 7vw;
     color: #333;
     background-color: transparent;
     font-size: small;
