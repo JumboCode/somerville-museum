@@ -5,7 +5,7 @@ import 'dotenv/config';
 
 // We are using pooled connections because we are using serverless functions
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: 'postgresql://museumdb_owner:jnQBV3F8wyMg@ep-nameless-heart-a584rjwe-pooler.us-east-2.aws.neon.tech/museumdb?sslmode=require',
   max: 10, // maximum number of connections in the pool
   idleTimeoutMillis: 30000, // close idle connections after 30 seconds
 });
