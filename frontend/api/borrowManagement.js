@@ -2,69 +2,153 @@ import { query } from './db.js';
 
 export async function borrowHandler(req, res) {
   let message; 
+  console.log('Borrow handler started');
+  console.log('Request body:', req.body);
 
   const { dateBorrowed, borrowerName, borrowerEmail, phoneNumber, dueDate, 
           approver, note, selectedItems } = req.body;
    
-  if (selectedItems == 0) {
-    message = "No items selected."
-    res.status(200).json({message}); 
+  // Validate required fields
+  if (!selectedItems || selectedItems.length === 0) {
+    console.log('No items selected - early return');
+    res.status(400).json({message: "No items selected."}); 
+    return;
+  }
+
+  // Validate other required fields
+  if (!dateBorrowed || !borrowerName || !borrowerEmail || !dueDate) {
+    console.log('Missing required fields');
+    res.status(400).json({message: "Missing required fields."});
     return;
   }
         
   try {
+    console.log('Checking for existing borrower with email:', borrowerEmail);
     // Check for existing borrower
     const existingBorrowerResult = await query(
-      `SELECT * FROM borrowers where email = $1`, [borrowerEmail]
+      `SELECT * FROM borrowers WHERE email = $1`, [borrowerEmail]
     );
+    console.log('Existing borrower query result:', existingBorrowerResult.rows);
 
     let borrowerId; 
  
     // If borrower doesn't exist, create new borrower
     if (existingBorrowerResult.rows.length > 0) {
       borrowerId = existingBorrowerResult.rows[0].id; 
+      console.log('Using existing borrower with ID:', borrowerId);
     } else {
+      console.log('Creating new borrower');
       const newBorrowerResult = await query(
         `INSERT INTO borrowers (name, email, phone_number) VALUES ($1, $2, $3) RETURNING id`,
         [borrowerName, borrowerEmail, phoneNumber]
       );
-      borrowerId = newBorrowerResult.rows[0].id;
-    }
-    
-    for (const itemId of selectedItems) {
-      // Check if there's an existing active borrow for this item
-      const existingBorrowResult = await query(
-        'SELECT id FROM borrows WHERE item_id = $1 AND date_returned IS NULL',
-        [itemId]
-      );
       
-      if (existingBorrowResult.rows.length > 0) {
-        const borrowId = existingBorrowResult.rows[0].id;
-        await query(
-          'UPDATE borrows SET borrower_id = $1, date_borrowed = $2, return_date = $3, approver = $4, notes = $5 WHERE id = $6',
-          [borrowerId, dateBorrowed, dueDate, approver, note, borrowId]
-        );
-      } else {
-
-        await query(
-          'INSERT INTO borrows (borrower_id, item_id, date_borrowed, return_date, date_returned, approver, notes) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-          [borrowerId, itemId, dateBorrowed, dueDate, null, approver, note]
-        );
+      if (!newBorrowerResult.rows || newBorrowerResult.rows.length === 0) {
+        console.error('Failed to create new borrower - no ID returned');
+        res.status(500).json({ error: 'Failed to create borrower record' });
+        return;
       }
       
-      // Update dummy_data
-      await query(
-        `UPDATE dummy_data SET status = $1, current_borrower = $2 WHERE id = $3`,
-        ['Borrowed', borrowerId, itemId]
-      );
+      borrowerId = newBorrowerResult.rows[0].id;
+      console.log('New borrower created with ID:', borrowerId);
+    }
+    
+    // Track successfully processed items
+    const processedItems = [];
+    const failedItems = [];
+    
+    for (const itemId of selectedItems) {
+      console.log('Processing item ID:', itemId);
+      
+      try {
+        // Check if item is available
+        const itemStatusResult = await query(
+          'SELECT status FROM dummy_data WHERE id = $1',
+          [itemId]
+        );
+        
+        if (!itemStatusResult.rows || itemStatusResult.rows.length === 0) {
+          console.error(`Item ${itemId} not found in database`);
+          failedItems.push({ id: itemId, reason: 'Item not found' });
+          continue;
+        }
+        
+        const itemStatus = itemStatusResult.rows[0].status;
+        if (itemStatus !== 'Available') {
+          console.error(`Item ${itemId} is not available (current status: ${itemStatus})`);
+          failedItems.push({ id: itemId, reason: `Item is ${itemStatus}` });
+          continue;
+        }
+        
+        console.log('Creating new borrow record for item:', itemId);
+        const insertResult = await query(
+          'INSERT INTO borrows (borrower_id, item_id, date_borrowed, return_date, date_returned, approver, notes) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id',
+          [borrowerId, itemId, dateBorrowed, dueDate, null, approver, note]
+        );
+        
+        if (!insertResult.rows || insertResult.rows.length === 0) {
+          console.error(`Failed to create borrow record for item ${itemId}`);
+          failedItems.push({ id: itemId, reason: 'Database insert failed' });
+          continue;
+        }
+        
+        console.log('New borrow record created with ID:', insertResult.rows[0].id);
+        
+        // Update dummy_data
+        console.log('Updating dummy_data status for item ID:', itemId);
+        const updateResult = await query(
+          `UPDATE dummy_data SET status = $1, current_borrower = $2 WHERE id = $3 RETURNING id`,
+          ['Borrowed', borrowerId, itemId]
+        );
+        
+        if (!updateResult.rows || updateResult.rows.length === 0) {
+          console.error(`Failed to update item status for ${itemId}`);
+          failedItems.push({ id: itemId, reason: 'Status update failed' });
+          
+          // Attempt to rollback the borrow record since item status update failed
+          await query(
+            'DELETE FROM borrows WHERE id = $1',
+            [insertResult.rows[0].id]
+          );
+          continue;
+        }
+        
+        console.log('dummy_data update result:', updateResult.rows);
+        processedItems.push(itemId);
+      } catch (itemError) {
+        console.error(`Error processing item ${itemId}:`, itemError);
+        failedItems.push({ id: itemId, reason: 'Processing error' });
+      }
     }
 
-    message = 'Borrowing process completed. ';
-    res.status(200).json({ message });
+    // Build appropriate response message
+    if (processedItems.length > 0) {
+      message = `Successfully borrowed ${processedItems.length} item(s). `;
+      
+      if (failedItems.length > 0) {
+        message += `Failed to borrow ${failedItems.length} item(s).`;
+      }
+      
+      console.log('Borrowing process completed with status:', message);
+      res.status(200).json({ 
+        message, 
+        success: true, 
+        processedItems,
+        failedItems 
+      });
+    } else {
+      message = 'Failed to borrow any items.';
+      console.log('Borrowing process failed - no items processed');
+      res.status(400).json({ 
+        message, 
+        success: false,
+        failedItems 
+      });
+    }
 
   } catch (error) {
     console.error("Database query error:", error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'Internal Server Error', details: error.message });
   }
 }
 

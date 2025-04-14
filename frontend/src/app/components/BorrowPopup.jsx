@@ -122,7 +122,7 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
 
     try {
       const response = await fetch('/api/borrowManagement?action=borrow', {
-        method: 'PUT',
+        method: 'POST', // Changed from PUT to POST
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           dateBorrowed,
@@ -135,9 +135,10 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
           selectedItems: borrowItems.map(item => item.id),
         }),
       });
-
+    
       if (!response.ok) {
         const errorText = await response.text();
+        console.error(`API error: ${response.status} ${errorText}`);
         throw new Error(`Fetch failed: ${response.status} ${errorText}`);
       }
 
