@@ -79,24 +79,24 @@ const ReturnPopup = ({ units = [], onSuccess, onClose }) => {
         const groupedData = await groupResponse.json();
 
         console.log("Grouped data:", groupedData);
-        const { borrower_email: borrowerEmail, borrower_first_name: borrowerFirstName, borrower_last_name: borrowerLastName } = groupedData[0];
+        const { borrower_email: borrowerEmail, borrower_name: borrowerName } = groupedData;
 
         // Debugging: Log the request payload
         console.log("Sending email request:", {
             recipientEmail: borrowerEmail,
-            recipientName: `${borrowerFirstName} ${borrowerLastName}`,
+            recipientName: `${borrowerName}`,
             items: itemNames,
         });
 
         // Make the API call
-        if (!isToggleEnabled) {
+        // if (!isToggleEnabled) {
             const emailResponse = await fetch('/api/email?emailType=sendReturnEmail', { 
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    recipientEmail: borrowerEmail,
-                    recipientName: `${borrowerFirstName} ${borrowerLastName}`,
-                    items: itemNames,
+                    borrower_name: borrowerEmail,
+                    borrower_email: `${borrowerName}`,
+                    returned_items: itemNames,
                 }),
             });
 
@@ -106,7 +106,7 @@ const ReturnPopup = ({ units = [], onSuccess, onClose }) => {
             if (!emailResponse.ok) {
                 throw new Error(`Email sending failed: ${emailResponse.status} ${responseText}`);
             }
-        }
+        // }
 
         //EMAIL FOR RETURN ITEMS ABOVE
 
