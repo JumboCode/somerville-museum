@@ -1,7 +1,7 @@
 import Mailjet from "node-mailjet";
 import { query } from './db.js';
 
-const mailjet = Mailjet.apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE);
+const mailjet = Mailjet.apiConnect('00abc5ea2cb2dc82c1d4613a4794823f', 'b74f4b1d4834f8ceee7da28ad504e96d'); // Replace with your Mailjet API keys
 
 export async function handlefetchBorrowerEmail(req, res) {
     const { id } = req.query;  // Get borrower ID from query params

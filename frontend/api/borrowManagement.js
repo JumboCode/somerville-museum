@@ -312,46 +312,63 @@ export async function fetchBorrowerNameHandler(req, res) {
 }
 
 export async function groupReturnsByBorrowerHandler(req, res) {
-  const { returnedItems } = req.body; // List of item IDs being returned
+  const { returnedItems } = req.body;
 
   if (!returnedItems || returnedItems.length === 0) {
     return res.status(400).json({ error: "No items provided for return." });
   }
 
   try {
-    // Query to fetch borrower details and item information
-    const result = await query(
-      `SELECT b.name, b.email, 
-        d.id AS item_id, 
-        d.name AS item_name
+    const result = await query(`
+      SELECT b.name AS borrower_name, 
+             b.email AS borrower_email,
+             d.id AS item_id, 
+             d.name AS item_name
       FROM dummy_data d
       JOIN borrowers b ON d.current_borrower = b.id
-      WHERE d.id = ANY($1::int[])`,
-      [returnedItems]
-    );
+      WHERE d.id = ANY($1::int[])
+    `, [returnedItems]);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "No matching items or borrowers found." });
     }
 
-    // Group items by borrower
     const groupedReturns = result.rows.reduce((acc, row) => {
-      const borrowerKey = `${row.first_name} ${row.last_name} (${row.email})`;
-
-      if (!acc[borrowerKey]) {
-        acc[borrowerKey] = [];
-      }
-
-      acc[borrowerKey].push({ id: row.item_id, name: row.item_name });
+      const borrowerKey = `${row.borrower_name} (${row.borrower_email})`;
+      if (!acc[borrowerKey]) acc[borrowerKey] = [];
+      acc[borrowerKey].push(row.item_name);
       return acc;
     }, {});
 
-    res.status(200).json(groupedReturns);
+    console.log("Grouped returns:", groupedReturns);
+
+    // Send email to each borrower
+    for (const key of Object.keys(groupedReturns)) {
+      const matches = key.match(/^(.*) \((.*)\)$/);
+      const borrowerName = matches ? matches[1] : 'Unknown';
+      const borrowerEmail = matches ? matches[2] : 'Unknown';
+
+      await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/email?emailType=sendReturnEmail`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          borrower_name: borrowerName,
+          borrower_email: borrowerEmail,
+          returned_items: groupedReturns[key],
+        }),
+      });
+    }
+
+    res.status(200).json({ success: true, message: 'Emails sent to all borrowers.' });
+
   } catch (error) {
-    console.error("Error grouping returns by borrower:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error('Error grouping returns by borrower:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 }
+
+
+
 
 export async function fetchBorrowerEmailHandler(req, res) {
   const { id } = req.query;  // Get borrower ID from query params
