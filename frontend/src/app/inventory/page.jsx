@@ -303,7 +303,6 @@ export default function Inventory({
         setTotalPages(Math.ceil(filteredUnits.length / unitsPerPage));
     }, [selectedFilters, originalUnits]);
 
-
     const handleBorrowSuccess = () => {
         // Literally just to call the useeffect with the request. kinda scuffed but whatever
         // setRefreshTable(prev => !prev);
@@ -312,9 +311,7 @@ export default function Inventory({
         setSearchResults([]); 
         setSelectedItems([]); 
         fetchData(); 
-
     };
-  
 
     const handleReturnSuccess = () => {
         console.log("Return operation successful, refreshing inventory...");
@@ -345,14 +342,18 @@ export default function Inventory({
     const startIndex = (currentPage - 1) * unitsPerPage;
     const currentUnits = units
         .slice(startIndex, startIndex + unitsPerPage)
-        .map((unit) => {
-            return (<InventoryUnit
+        .map((unit, index) => {
+            return (
+              <InventoryUnit
                 key={unit.id}
                 unit={unit}
+                index={index}
+                unitList={units} // current page's units
                 onChange={handleCheckboxChange}
                 checked={selectedItems.some((item) => item?.id && unit?.id && item.id === unit.id)}
-            />)
-        });
+              />
+            );
+          });
 
     const sortByID = () => {
         const filteredAndSortedEntries = [...units]
@@ -440,8 +441,6 @@ export default function Inventory({
         </div>
         );
     }
-
-
 
     return (
         <>
