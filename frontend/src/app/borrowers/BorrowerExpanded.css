@@ -125,3 +125,32 @@
   color: #9B525F;
   cursor: pointer;
 }
+
+#borrowerHistory {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+}
+
+#borrowerHistory th {
+  text-align: left;
+  padding: 8px;
+  background-color: #f2f2f2;
+  border-bottom: 1px solid #ddd;
+}
+
+#borrowerHistory td {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.history-divider td {
+  font-size: 0.9em;
+  color: #555;
+}
+
+.loading-history {
+  font-style: italic;
+  color: #666;
+  padding: 10px 0;
+}
