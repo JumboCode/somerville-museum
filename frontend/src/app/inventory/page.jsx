@@ -78,17 +78,31 @@ export default function Inventory({
 
     // Called any time new filters/search results are applied to update displayed units
     useEffect(() => {
-        console.log(filterResults.length)
-        console.log(searchResults.length)
-        if (filterResults.length === 0 && searchResults.length === 0) return;
-        // Takes intersection of search results and filter results to get correct ones.
-        const filteredAndSearchResults = () => {
-            const filteredUnitIds = new Set(filterResults.map(unit => unit.id));
-            return searchResults.length > 0 
-            ? searchResults.filter(item => filteredUnitIds.has(item.id)) 
-            : filterResults;
-        }});
-
+        const isFilterActive = Object.values(selectedFilters).some(val =>
+            Array.isArray(val) ? val.length > 0 : val?.start && val?.end
+        );
+    
+        // Case: No filters, no search input -> show everything
+        if (!isFilterActive && searchResults.length === 0) {
+            setUnits(originalUnits);
+            setCurrentPage(1);
+            setTotalPages(Math.ceil(originalUnits.length / unitsPerPage));
+            return;
+        }
+    
+        // Find intersection of search results and filtered units
+        const filteredUnitIds = new Set((isFilterActive ? filterResults : originalUnits).map(u => u.id));
+        const intersection = searchResults.length > 0
+            ? searchResults.filter(item => filteredUnitIds.has(item.id))
+            : (isFilterActive ? filterResults : originalUnits);
+        
+        setUnits(intersection);
+        setCurrentPage(1);
+        setTotalPages(Math.ceil(intersection.length / unitsPerPage));
+    }, [filterResults, searchResults, unitsPerPage, originalUnits, selectedFilters]);
+    
+    
+    
 
     const applyFilters = (data) => {
         console.log("Starting filter application with data:", data);
@@ -176,7 +190,6 @@ export default function Inventory({
     
         // Filter by Return Date Range
         if (selectedFilters.return_date && selectedFilters.return_date.start && selectedFilters.return_date.end) {
-            console.log("Filtering by return date range:", selectedFilters.return_date);
             filteredData = filteredData.filter(item => {
                 if (!item.return_date) return false;
                 const returnDate = new Date(item.return_date);
@@ -186,7 +199,6 @@ export default function Inventory({
             });
         }
     
-        console.log("Final filtered results:", filteredData);
         return filteredData;
     };
 
@@ -204,7 +216,6 @@ export default function Inventory({
 
             if (response.ok) {
                 const data = await response.json();
-                console.log("Fetched data:", data);
                 const currentDate = new Date();
                 const updatedData = data.map((item) => {
                     if (item.status === "Borrowed" && item.dueDate && new Date(item.dueDate) < currentDate) {
@@ -212,7 +223,6 @@ export default function Inventory({
                     }
                     return item;
                 });
-                console.log("Processed data:", updatedData);
 
                 setOriginalUnits(updatedData);
                 setUnits(updatedData);
@@ -252,7 +262,6 @@ export default function Inventory({
     // in the dashboard
     useEffect(() => {
         if (filter) {
-            console.log("Setting filter from URL:", filter);
             const newFilters = {
                 condition: [],
                 gender: [],
