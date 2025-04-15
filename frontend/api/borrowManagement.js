@@ -3,7 +3,13 @@ import { query } from './db.js';
 export async function borrowHandler(req, res) {
   let message; 
   console.log('Borrow handler started');
+  console.log('Request method:', req.method);
   console.log('Request body:', req.body);
+  
+  // Check if request method is valid
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method Not Allowed' });
+  }
 
   const { dateBorrowed, borrowerName, borrowerEmail, phoneNumber, dueDate, 
           approver, note, selectedItems } = req.body;
@@ -11,15 +17,12 @@ export async function borrowHandler(req, res) {
   // Validate required fields
   if (!selectedItems || selectedItems.length === 0) {
     console.log('No items selected - early return');
-    res.status(400).json({message: "No items selected."}); 
-    return;
+    return res.status(400).json({message: "No items selected."}); 
   }
 
-  // Validate other required fields
   if (!dateBorrowed || !borrowerName || !borrowerEmail || !dueDate) {
     console.log('Missing required fields');
-    res.status(400).json({message: "Missing required fields."});
-    return;
+    return res.status(400).json({message: "Missing required fields."});
   }
         
   try {
@@ -45,8 +48,7 @@ export async function borrowHandler(req, res) {
       
       if (!newBorrowerResult.rows || newBorrowerResult.rows.length === 0) {
         console.error('Failed to create new borrower - no ID returned');
-        res.status(500).json({ error: 'Failed to create borrower record' });
-        return;
+        return res.status(500).json({ error: 'Failed to create borrower record' });
       }
       
       borrowerId = newBorrowerResult.rows[0].id;
@@ -80,6 +82,7 @@ export async function borrowHandler(req, res) {
           continue;
         }
         
+        // Always create a new borrow record for history purposes - let the database handle ID autoincrement
         console.log('Creating new borrow record for item:', itemId);
         const insertResult = await query(
           'INSERT INTO borrows (borrower_id, item_id, date_borrowed, return_date, date_returned, approver, notes) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id',
@@ -92,7 +95,8 @@ export async function borrowHandler(req, res) {
           continue;
         }
         
-        console.log('New borrow record created with ID:', insertResult.rows[0].id);
+        const newBorrowId = insertResult.rows[0].id;
+        console.log(`New borrow record created with ID: ${newBorrowId}`);
         
         // Update dummy_data
         console.log('Updating dummy_data status for item ID:', itemId);
@@ -108,13 +112,16 @@ export async function borrowHandler(req, res) {
           // Attempt to rollback the borrow record since item status update failed
           await query(
             'DELETE FROM borrows WHERE id = $1',
-            [insertResult.rows[0].id]
+            [newBorrowId]
           );
           continue;
         }
         
         console.log('dummy_data update result:', updateResult.rows);
-        processedItems.push(itemId);
+        processedItems.push({
+          itemId: itemId,
+          borrowId: newBorrowId
+        });
       } catch (itemError) {
         console.error(`Error processing item ${itemId}:`, itemError);
         failedItems.push({ id: itemId, reason: 'Processing error' });
@@ -460,6 +467,26 @@ export async function getBorrowerHistoryHandler(req, res) {
   }
 }
 
+export async function searchBorrowersHandler(req, res) {
+  const { query } = req.body;
+
+  try {
+    const result = await query(
+      `SELECT * FROM borrowers 
+       WHERE id::text ILIKE $1
+       OR name ILIKE $1
+       OR email ILIKE $1
+       OR phone_number ILIKE $1`,
+      [`%${query}%`]
+    );
+    
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error("Search error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
 export default async function handler(req, res) {
   const { action } = req.query;
   
@@ -482,6 +509,8 @@ export default async function handler(req, res) {
           return getItemBorrowHistoryHandler(req, res);
       case 'borrowerHistory':
           return getBorrowerHistoryHandler(req, res);
+      case 'searchBorrowers':
+          return searchBorrowersHandler(req, res);
       default:
           return res.status(400).json({ error: 'Invalid action' });
   }

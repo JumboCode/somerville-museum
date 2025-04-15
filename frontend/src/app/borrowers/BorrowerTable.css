@@ -90,3 +90,43 @@
     gap: 0.5rem;
   }
   
+  .loading-indicator {
+    text-align: center;
+    padding: 10px;
+    font-style: italic;
+    color: #666;
+  }
+  
+  .history-summary {
+    position: relative;
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .history-tooltip {
+    display: none;
+    position: absolute;
+    background: white;
+    border: 1px solid #ddd;
+    padding: 10px;
+    z-index: 100;
+    width: 300px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    left: 0;
+    top: 100%;
+  }
+  
+  .history-summary:hover .history-tooltip {
+    display: block;
+  }
+  
+  .history-item {
+    padding: 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #eee;
+    font-size: 0.9em;
+  }
+  
+  .history-item div {
+    margin: 3px 0;
+  }
