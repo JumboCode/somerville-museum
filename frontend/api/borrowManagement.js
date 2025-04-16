@@ -419,60 +419,12 @@ export async function overdueHandler(req, res) {
   }
 }
 
-// New method to get borrowing history for an item
-export async function getItemBorrowHistoryHandler(req, res) {
-  const { id } = req.query; // Item ID
-  
-  if (!id) {
-    return res.status(400).json({ error: "Missing item ID" });
-  }
-  
-  try {
-    const result = await query(`
-      SELECT b.*, br.name as borrower_name, br.email as borrower_email
-      FROM borrows b
-      JOIN borrowers br ON b.borrower_id = br.id
-      WHERE b.item_id = $1
-      ORDER BY b.id DESC
-    `, [id]);
-    
-    res.status(200).json(result.rows);
-  } catch (error) {
-    console.error("Error fetching item borrow history:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-}
-
-// New method to get borrowing history for a borrower
-export async function getBorrowerHistoryHandler(req, res) {
-  const { id } = req.query; // Borrower ID
-  
-  if (!id) {
-    return res.status(400).json({ error: "Missing borrower ID" });
-  }
-  
-  try {
-    const result = await query(`
-      SELECT b.*, d.name as item_name, d.id as item_id
-      FROM borrows b
-      JOIN dummy_data d ON b.item_id = d.id
-      WHERE b.borrower_id = $1
-      ORDER BY b.id DESC
-    `, [id]);
-    
-    res.status(200).json(result.rows);
-  } catch (error) {
-    console.error("Error fetching borrower history:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-}
-
 export async function searchBorrowersHandler(req, res) {
   const { query } = req.body;
 
   try {
     const result = await query(
-      `SELECT * FROM borrowers 
+      `SELECT id, name, email, phone_number FROM borrowers 
        WHERE id::text ILIKE $1
        OR name ILIKE $1
        OR email ILIKE $1
@@ -483,6 +435,49 @@ export async function searchBorrowersHandler(req, res) {
     res.status(200).json(result.rows);
   } catch (error) {
     console.error("Search error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+export async function getBorrowerHistoryHandler(req, res) {
+  const { id } = req.query;
+  
+  if (!id) {
+    return res.status(400).json({ error: "Missing borrower ID" });
+  }
+  
+  try {
+    const result = await query(`
+      SELECT 
+        b.id,
+        b.item_id,
+        d.name as item_name,
+        b.date_borrowed,
+        b.return_date,
+        b.date_returned,
+        b.notes,
+        b.approver
+      FROM borrows b
+      JOIN dummy_data d ON b.item_id = d.id
+      WHERE b.borrower_id = $1
+      ORDER BY b.date_borrowed DESC
+    `, [id]);
+    
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error("Error fetching borrower history:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+export async function getAllBorrowersHandler(req, res) {
+  try {
+    const result = await query(
+      `SELECT id, name, email, phone_number FROM borrowers ORDER BY name ASC`
+    );
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error("Error fetching all borrowers:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
@@ -511,6 +506,8 @@ export default async function handler(req, res) {
           return getBorrowerHistoryHandler(req, res);
       case 'searchBorrowers':
           return searchBorrowersHandler(req, res);
+      case 'getAllBorrowers':
+          return getAllBorrowersHandler(req, res);
       default:
           return res.status(400).json({ error: 'Invalid action' });
   }
