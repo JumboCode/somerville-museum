@@ -5,71 +5,89 @@ import "./BorrowerTable.css";
 import StylishButton from "../components/StylishButton";
 
 export default function BorrowerTable({ searchResults, onSelectBorrower }) {
-  const [borrowersWithHistory, setBorrowersWithHistory] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [allBorrowers, setAllBorrowers] = useState([]);
+  const [enhancedBorrowers, setEnhancedBorrowers] = useState([]);
+  const [loading, setLoading] = useState(true); // Start with loading true
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
+  // Format history summary for display
+  const formatHistorySummary = (history) => {
+    if (!history || history.length === 0) return "No history";
+    
+    const activeLoans = history.filter(loan => !loan.date_returned).length;
+    const totalLoans = history.length;
+    
+    return `${activeLoans} active / ${totalLoans} total`;
+  };
+
+  // Fetch and enhance borrower data with history
   useEffect(() => {
-    const fetchBorrowHistory = async () => {
-      if (!searchResults || searchResults.length === 0) return;
-      
-      setLoading(true);
+    const fetchAllBorrowers = async () => {
       try {
-        const borrowers = await Promise.all(
-          searchResults.map(async (borrower) => {
-            const response = await fetch(`../../../../api/borrowManagement?action=borrowerHistory&id=${borrower.id}`);
-            const history = await response.json();
-            return {
-              ...borrower,
-              borrowHistory: history // This will be an array of borrow records
-            };
-          })
-        );
-        setBorrowersWithHistory(borrowers);
+        const response = await fetch('/api/borrowManagement?action=getAllBorrowers');
+        if (!response.ok) throw new Error("Failed to fetch borrowers");
+        const data = await response.json();
+        setAllBorrowers(data);
       } catch (error) {
-        console.error("Error fetching borrow history:", error);
+        console.error("Error fetching all borrowers:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchBorrowHistory();
-  }, [searchResults]);
-
-  // Format borrow history for display
-  const formatBorrowHistory = (history) => {
-    if (!history || history.length === 0) return "No Borrowing History";
-    
-    return (
-      <div className="history-summary">
-        {history.length} item(s) borrowed
-        <div className="history-tooltip">
-          {history.map(record => (
-            <div key={record.id} className="history-item">
-              <div><strong>Item:</strong> {record.item_name || record.item_id}</div>
-              <div><strong>Borrowed:</strong> {new Date(record.date_borrowed).toLocaleDateString()}</div>
-              <div><strong>Due:</strong> {new Date(record.return_date).toLocaleDateString()}</div>
-              <div><strong>Status:</strong> {record.date_returned ? "Returned" : "Borrowed"}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
-
-  const borrowers = searchResults || [];
-  const totalPages = Math.ceil(borrowers.length / itemsPerPage);
+    fetchAllBorrowers();
+  }, []);
 
   useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(1);
-    }
-  }, [borrowers, itemsPerPage, totalPages]);
+    const enhanceBorrowersWithHistory = async () => {
+      const borrowersToEnhance = searchResults?.length > 0 ? searchResults : allBorrowers;
+      
+      if (!borrowersToEnhance || borrowersToEnhance.length === 0) {
+        setEnhancedBorrowers([]);
+        return;
+      }
 
+      setLoading(true);
+      try {
+        const enhanced = await Promise.all(
+          borrowersToEnhance.map(async (borrower) => {
+            try {
+              const response = await fetch(`/api/borrowManagement?action=borrowerHistory&id=${borrower.id}`);
+              if (!response.ok) throw new Error("Failed to fetch history");
+              const history = await response.json();
+              return { ...borrower, borrowHistory: history };
+            } catch (error) {
+              console.error(`Error fetching history for borrower ${borrower.id}:`, error);
+              return { ...borrower, borrowHistory: [] };
+            }
+          })
+        );
+        setEnhancedBorrowers(enhanced);
+      } catch (error) {
+        console.error("Error enhancing borrowers:", error);
+        setEnhancedBorrowers([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    enhanceBorrowersWithHistory();
+  }, [searchResults, allBorrowers]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(enhancedBorrowers.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentBorrowers = borrowers.slice(startIndex, startIndex + itemsPerPage);
+  const currentBorrowers = enhancedBorrowers.slice(startIndex, startIndex + itemsPerPage);
 
+  // Reset to page 1 if current page exceeds total pages
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [enhancedBorrowers, itemsPerPage, totalPages]);
+
+  // Pagination handlers
   const handleItemsPerPageChange = (event) => {
     const newItemsPerPage = Number(event.target.value);
     setItemsPerPage(newItemsPerPage);
@@ -84,33 +102,36 @@ export default function BorrowerTable({ searchResults, onSelectBorrower }) {
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   };
 
-  const buttons = Array.from({ length: totalPages }, (_, index) => index + 1);
-
+  const pageButtons = Array.from({ length: totalPages }, (_, index) => index + 1);
 
   return (
     <div className="tableContainer">
-      {loading && <div className="loading-indicator">Loading...</div>}
+      {loading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner"></div>
+          <p>Loading borrower data...</p>
+        </div>
+      )}
+
       <div className="tableContent">
         <table id="borrowerInfo">
           <thead>
             <tr>
               <th>Name</th>
               <th>Email</th>
-              <th>Phone Number</th>
-              <th>Borrow History</th>
+              <th>Phone</th>
+              <th>Borrow Activity</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {currentBorrowers.length > 0 ? (
-              currentBorrowers.map((borrower, index) => (
-                <tr key={index} onDoubleClick={() => onSelectBorrower(borrower)}>
+              currentBorrowers.map((borrower) => (
+                <tr key={borrower.id} onDoubleClick={() => onSelectBorrower(borrower)}>
                   <td>{borrower.name}</td>
                   <td>{borrower.email}</td>
                   <td>{borrower.phone_number}</td>
-                  <td>
-                    {formatBorrowHistory(borrower.borrowHistory)}
-                  </td>
+                  <td>{formatHistorySummary(borrower.borrowHistory)}</td>
                   <td onClick={() => onSelectBorrower(borrower)}>
                     <span className="three-dots">...</span>
                   </td>
@@ -119,7 +140,7 @@ export default function BorrowerTable({ searchResults, onSelectBorrower }) {
             ) : (
               <tr>
                 <td colSpan="5" style={{ textAlign: "center" }}>
-                  No borrowers found.
+                  {loading ? "Loading..." : "No borrowers found"}
                 </td>
               </tr>
             )}
@@ -153,7 +174,7 @@ export default function BorrowerTable({ searchResults, onSelectBorrower }) {
             disabled={currentPage === 1}
             styleType="style4"
           />
-          {buttons.map((number) => (
+          {pageButtons.map((number) => (
             <StylishButton
               className="pageNum"
               label={number}

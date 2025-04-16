@@ -19,44 +19,47 @@ import { useState, useEffect } from "react";
 export default function BorrowerSearchBar({ updateSearchResults }) {
     const [query, setQuery] = useState("");
 
-    // Fetch relevant search results when search query is changed
     useEffect(() => { 
         const fetchData = async () => {
-            // Don't search if query is empty
             if (query.trim() === "") {
                 updateSearchResults([]);
                 return;
             }
 
             try {
-                const response = await fetch(`../../../../api/borrowManagement`, {
+                const response = await fetch(`/api/borrowManagement?action=searchBorrowers`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        action: "searchBorrowers",
                         query: query
                     }),
                 });
 
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-
-                const data = await response.json();
-                updateSearchResults(data);  
+                if (!response.ok) throw new Error("Network response was not ok");
+                
+                const borrowers = await response.json();
+                
+                // Fetch history for each borrower
+                const borrowersWithHistory = await Promise.all(
+                    borrowers.map(async borrower => {
+                        const historyResponse = await fetch(
+                            `/api/borrowManagement?action=borrowerHistory&id=${borrower.id}`
+                        );
+                        const history = await historyResponse.json();
+                        return { ...borrower, borrowHistory: history };
+                    })
+                );
+                
+                updateSearchResults(borrowersWithHistory);
             } catch (error) {
                 console.error("Search error:", error);
                 updateSearchResults([]);
             }
         };
 
-        // Add debounce to prevent too many requests
-        const debounceTimer = setTimeout(() => {
-            fetchData();
-        }, 300);
-
+        const debounceTimer = setTimeout(fetchData, 300);
         return () => clearTimeout(debounceTimer);
     }, [query, updateSearchResults]);
 
@@ -67,11 +70,6 @@ export default function BorrowerSearchBar({ updateSearchResults }) {
                 placeholder="Search borrowers..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                onKeyDown={(e) => {
-                    if (e.key === "Escape") {
-                        setQuery("");
-                    }
-                }}
             />
         </div>
     );
