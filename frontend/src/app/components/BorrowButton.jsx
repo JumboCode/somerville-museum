@@ -5,8 +5,10 @@ import React, { useState, useEffect } from "react";
 import StylishButton from './StylishButton.jsx';
 import BorrowPopup from './BorrowPopup.jsx';
 
-const BorrowButton = ({ selectedItems = [], onSuccess }) => {
+const BorrowButton = ({ selectedItems = [], onSuccess, isValid }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState(""); 
   const [availableSelectedItems, setAvailableSelectedItems] = useState(selectedItems);
 
   // This function checks the validity of the selected items
@@ -29,7 +31,10 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
 
       const result = await response.json(); 
       if (result.message) {
-          alert(result.message);  
+          setAlertMessage(result.message);  
+          setIsAlertOpen(true); 
+      } else {
+        setIsOpen(true)
       }
 
       //reset available items after check
@@ -47,13 +52,8 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
     if(selectedItems == 0) {
       alert('No Items selected.'); 
     } else {
-        // Check the validity before opening the popup
-    const isValid = await handleValidity();
-      if (isValid) {
-        setIsOpen(true);  // Open the popup only if validity is true
-      } else {
-        alert('Some items are invalid. Please try again.');
-      }
+       // Check the validity 
+      handleValidity();
     }
   }
 
@@ -61,12 +61,29 @@ const BorrowButton = ({ selectedItems = [], onSuccess }) => {
     <div>
       <StylishButton
         label="Borrow"
-        styleType="style1"
+        styleType={isValid ? "style1" : "style6"}
         onClick={handleButtonClick}
+        disabled={!isValid}
       />
+      {isAlertOpen && (
+        <div className="alert-container">
+          <div className="alert-box">
+            <p> The following item(s) are not available:</p>
+            <h2>{alertMessage}</h2>
+            <div className="alert-row"> 
+              <StylishButton styleType="style1" onClick={() => setIsAlertOpen(false)}>Cancel</StylishButton>
+              <StylishButton styleType="style3" onClick={() => {
+                setIsAlertOpen(false); 
+                setIsOpen(true);
+              }}>Continue</StylishButton> 
+            </div> 
+          
+          </div>
+        </div>
+      )}
+
 
     {isOpen && (
-
         <div className="custom-popup-large">
           <BorrowPopup
             selectedItems={availableSelectedItems}
