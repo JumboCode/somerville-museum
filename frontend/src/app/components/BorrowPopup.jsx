@@ -29,7 +29,6 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
   const [borrowerEmail, setBorrowerEmail] = useState('');
   const [dateBorrowed, setDateBorrowed] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-
   const [returnWeeks, setReturnWeeks] = useState(''); // no selection initially
   const [returnDate, setReturnDate] = useState(""); // New state for return date
 
@@ -123,7 +122,7 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
 
     try {
       const response = await fetch('/api/borrowManagement?action=borrow', {
-        method: 'PUT',
+        method: 'POST', // Changed from PUT to POST
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           dateBorrowed,
@@ -136,9 +135,10 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
           selectedItems: borrowItems.map(item => item.id),
         }),
       });
-
+    
       if (!response.ok) {
         const errorText = await response.text();
+        console.error(`API error: ${response.status} ${errorText}`);
         throw new Error(`Fetch failed: ${response.status} ${errorText}`);
       }
 
@@ -180,7 +180,6 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
 
       const result = await response.json();
       setIsSuccessPopupVisible(true);
-      console.log("successful borrow"); 
 
       // if (onSuccess) {
       //   onSuccess();
@@ -255,42 +254,13 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
                     />
                 ))}
                 </div>
-                <div className="pagination-container">
-                  <div className="pagination">
-                      <StylishButton
-                        type="button"
-                        disabled={currentPage === 1}
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        styleType='style4'
-                        >
-                        {"<"}
-                      </StylishButton>
-                      {Array.from({ length: totalPages }, (_, index) => (
-                      <StylishButton
-                            key={index + 1}
-                            type="button"
-                            className={currentPage === index + 1 ? "active" : ""}
-                            onClick={() => handlePageChange(index + 1)}
-                            styleType={currentPage === index + 1 ? 'style5' : 'style4'}
-                        >
-                            {index + 1}
-                      </StylishButton>
-                      ))}
-                      <StylishButton
-                        type="button"
-                        disabled={currentPage === totalPages}
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        styleType='style4'
-                        >
-                      {">"}
-                      </StylishButton>
-                  </div>
-                </div>
+                
             </>
             ) : (
             <p>No items selected.</p>
             )}
         </div>
+        
         </div>
 
       <div className="dividerNew"></div>
@@ -415,7 +385,39 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
           </button>
           <button type="submit">Borrow</button>
         </div>
+        
       </form>
+      <div className="pagination-container">
+          <div className="pagination">
+              <StylishButton
+                type="button"
+                disabled={currentPage === 1}
+                onClick={() => handlePageChange(currentPage - 1)}
+                styleType='style4'
+                >
+                {"<"}
+              </StylishButton>
+              {Array.from({ length: totalPages }, (_, index) => (
+              <StylishButton
+                    key={index + 1}
+                    type="button"
+                    className={currentPage === index + 1 ? "active" : ""}
+                    onClick={() => handlePageChange(index + 1)}
+                    styleType={currentPage === index + 1 ? 'style5' : 'style4'}
+                >
+                    {index + 1}
+              </StylishButton>
+              ))}
+              <StylishButton
+                type="button"
+                disabled={currentPage === totalPages}
+                onClick={() => handlePageChange(currentPage + 1)}
+                styleType='style4'
+                >
+              {">"}
+              </StylishButton>
+          </div>
+                </div>
       {isSuccessPopupVisible && (
         <div className="success-popup-overlay">
           <div className="success-popup">

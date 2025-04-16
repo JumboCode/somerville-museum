@@ -17,11 +17,14 @@ import "./SettingsPage.css";
 import UserVerificationCard from "./userVerificationCard.jsx";
 import React, { useState, useEffect } from "react";
 import { useClerk, useUser } from "@clerk/nextjs";
-import ExportDataBtn from "./ExportDataBtn.jsx"; // Import the ExportDataBtn component
+import ExportDataBtn from "./ExportDataBtn.jsx";
+import { useGlobalContext } from './contexts/ToggleContext';
 
 export default function SettingsPage() {
     const [lightMode, setLightMode] = useState(false);
-    const [normalDataEntry, setNormalDataEntry] = useState(false);
+    const { isToggleEnabled, setIsToggleEnabled } = useGlobalContext(); // Use the global context
+    const [fading, setFading] = useState(false);
+    const [displayText, setDisplayText] = useState(isToggleEnabled ? 'Data Input' : 'Normal Data Entry');
     const { signOut } = useClerk();
     const { user } = useUser();
 
@@ -29,6 +32,11 @@ export default function SettingsPage() {
     const [approvals, setApprovals] = useState([]);
 
     const checkisAdmin = (value) => value == "user_2tB9Ny3ALEWuch9VvjlrQemjV8A";
+
+    // Update display text when component mounts to ensure it's in sync with context
+    useEffect(() => {
+        setDisplayText(isToggleEnabled ? 'Data Input' : 'Normal Data Entry');
+    }, [isToggleEnabled]);
 
     useEffect(() => {
         if (user) {
@@ -73,13 +81,25 @@ export default function SettingsPage() {
         window.location.href = "/reset_password"; // Redirects user to reset password page
     };
 
-    // console.log("Admin status:", isAdmin);
-    // console.log("Current approvals state:", approvals);
-    // console.log("user:", user);
+    const handleToggle = () => {
+        setFading(true);
+
+        // Directly use the current state to toggle
+        const newToggleState = !isToggleEnabled;
+        setIsToggleEnabled(newToggleState);
+
+        // Wait for fade out to complete before changing the text
+        setTimeout(() => {
+            setDisplayText(newToggleState ? 'Data Input' : 'Normal Data Entry');
+            setTimeout(() => {
+                setFading(false);
+            }, 25);
+        }, 100);
+    };
+
     console.log("firstName:", user?.firstName);
     console.log("lastName:", user?.lastName);
     console.log("email address:", user?.emailAddresses[0]?.emailAddress);
-
 
     return (
         <>
@@ -119,12 +139,12 @@ export default function SettingsPage() {
                                 <label className="switch">
                                     <input
                                         type="checkbox"
-                                        checked={normalDataEntry}
-                                        onChange={() => setNormalDataEntry(!normalDataEntry)}
+                                        checked={isToggleEnabled}
+                                        onChange={handleToggle}
                                     />
                                     <span className="slider round"></span>
                                 </label>
-                                <label>Normal Data Entry</label>
+                                <label className={fading ? 'fading' : ''}>{displayText}</label>
                                 <ExportDataBtn></ExportDataBtn>
                             </div>
                             <div className="toggle">
