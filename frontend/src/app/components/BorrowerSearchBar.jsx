@@ -13,60 +13,63 @@
  */
 
 "use client";
-
 import "./SearchBar.css";
 import { useState, useEffect } from "react"; 
 
 export default function BorrowerSearchBar({ updateSearchResults }) {
     const [query, setQuery] = useState("");
 
-    // Fetch relevant search results when search query is changed
     useEffect(() => { 
-        console.log(query)
         const fetchData = async () => {
+            if (query.trim() === "") {
+                updateSearchResults([]);
+                return;
+            }
+
             try {
-                const response = await fetch(`../../../../api/db`, {
+                const response = await fetch(`/api/borrowManagement?action=searchBorrowers`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    //use parameterized query to prevent sql injection :p
                     body: JSON.stringify({
-                        text: `SELECT * FROM borrowers
-                               WHERE id::text ILIKE $1
-                               OR name ILIKE $1
-                               OR email ILIKE $1
-                               OR phone_number ILIKE $1
-                               OR borrow_history::text ILIKE $1`,
-                        params: [`%${query}%`],
-                      }),
+                        query: query
+                    }),
                 });
 
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-
-                const data = await response.json();
-                // Update results on inventory page
-                updateSearchResults(data);  
+                if (!response.ok) throw new Error("Network response was not ok");
+                
+                const borrowers = await response.json();
+                
+                // Fetch history for each borrower
+                const borrowersWithHistory = await Promise.all(
+                    borrowers.map(async borrower => {
+                        const historyResponse = await fetch(
+                            `/api/borrowManagement?action=borrowerHistory&id=${borrower.id}`
+                        );
+                        const history = await historyResponse.json();
+                        return { ...borrower, borrowHistory: history };
+                    })
+                );
+                
+                updateSearchResults(borrowersWithHistory);
             } catch (error) {
-                console.log(error);
+                console.error("Search error:", error);
+                updateSearchResults([]);
             }
         };
-        fetchData();
-    }, [query]);
+
+        const debounceTimer = setTimeout(fetchData, 300);
+        return () => clearTimeout(debounceTimer);
+    }, [query, updateSearchResults]);
+
     return (
         <div className="Searchbar">
             <input 
                 type="text" 
-                placeholder="Search..."
+                placeholder="Search borrowers..."
                 value={query}
-                onChange={(e) => { setQuery(e.target.value); }}
-                onKeyDown={(e) => {
-                    if (e.key === "Backspace" || e.key === "Delete") {
-                        setQuery(e.target.value);
-                    }
-                }}
+                onChange={(e) => setQuery(e.target.value)}
             />
         </div>
     );
