@@ -49,7 +49,7 @@ export default function EditNoteButton() {
             setNoteValue(data.note); // Pre-fill the note input with the current note
             setError(null);
         } catch (error) {
-            console.log("I am here bro what the flip");
+            // console.log("I am here bro what the flip");
             setError(error.message);
         }
     };
