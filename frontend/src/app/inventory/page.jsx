@@ -48,20 +48,47 @@ function Inventory({
     const [filterResults, setFilterResults] = useState([]);
     
     const [refreshTable, setRefreshTable] = useState(false);
+    // const [searchPerformed, setSearchPerformed] = useState(false)
+
 
     // Called any time new filters/search results are applied to update displayed units
     useEffect(() => {
-        // console.log(filterResults.length)
-        // console.log(searchResults.length)
-        if (filterResults.length === 0 && searchResults.length === 0) return;
-        // Takes intersection of search results and filter results to get correct ones.
-        const filteredAndSearchResults = () => {
-            const filteredUnitIds = new Set(filterResults.map(unit => unit.id));
-            return searchResults.length > 0 
-            ? searchResults.filter(item => filteredUnitIds.has(item.id)) 
-            : filterResults;
-        }
-    }, [filterResults, searchResults]);
+        const updateResults = () => {
+            if (filterResults.length === 0 && searchResults.length === 0) {
+                setUnits(originalUnits);
+                setTotalPages(Math.ceil(originalUnits.length / unitsPerPage));
+                return;
+            }
+    
+            // If both filters and search are active, show intersection
+            if (filterResults.length > 0 && searchResults.length > 0) {
+                const filteredUnitIds = new Set(filterResults.map(unit => unit.id));
+                const intersection = searchResults.filter(item => filteredUnitIds.has(item.id));
+                setUnits(intersection);
+                setTotalPages(Math.ceil(intersection.length / unitsPerPage));
+            }
+            // If only search is active
+            else if (searchResults.length > 0) {
+                setUnits(searchResults);
+                setTotalPages(Math.ceil(searchResults.length / unitsPerPage));
+            }
+            // If only filters are active
+            else {
+                setUnits(filterResults);
+                setTotalPages(Math.ceil(filterResults.length / unitsPerPage));
+            }
+    
+            setCurrentPage(1); // always reset to page 1 on data change
+        };
+    
+        updateResults();
+    }, [
+        searchResults.length,
+        filterResults.length,
+        originalUnits.length,
+        unitsPerPage
+      ]);
+    
 
 
     const applyFilters = async (data) => {
@@ -141,7 +168,7 @@ function Inventory({
     
         // Filter by Time Period
         if (selectedFilters.time_period && selectedFilters.time_period.length > 0) {
-            console.log("Filtering by time period:", selectedFilters.time_period);
+            // console.log("Filtering by time period:", selectedFilters.time_period);
             filteredData = filteredData.filter(item => 
                 // Check if any of the selected time periods exist in the item's time_period array
                 selectedFilters.time_period.some(period => 
@@ -333,7 +360,7 @@ function Inventory({
   
 
     const handleReturnSuccess = () => {
-        console.log("Return operation successful, refreshing inventory...");
+        // console.log("Return operation sucwcessful, refreshing inventory...");
         setRefreshTable(prev => !prev); // Refresh table to show updated status
         setSelectedItems([]); // Clear selected items
         fetchData();
@@ -359,23 +386,26 @@ function Inventory({
         setSelectAllChecked(!selectAllChecked);
     };
 
-    // Make sure units is always an array before using slice
     const startIndex = (currentPage - 1) * unitsPerPage;
-    const currentUnits = units
-    .slice(startIndex, startIndex + unitsPerPage)
-    .map((unit, index) => {
-        const absoluteIndex = startIndex + index;
-        return (
-            <InventoryUnit
-                key={unit.id}
-                unit={unit}
-                onChange={handleCheckboxChange}
-                checked={selectedItems.some((item) => item?.id && unit?.id && item.id === unit.id)}
-                unitList={units}
-                index={absoluteIndex}
-            />
-        );
-    });
+
+        const currentUnits = units
+            .slice(startIndex, startIndex + unitsPerPage)
+            .filter(unit => unit?.id != null)
+            .map((unit, index) => {
+            const absoluteIndex = startIndex + index;
+                return (
+                    <InventoryUnit
+                    key={unit.id}
+                    unit={unit}
+                    onChange={handleCheckboxChange}
+                    checked={selectedItems.some((item) => item?.id && unit?.id && item.id === unit.id)}
+                    unitList={units}
+                    index={absoluteIndex}
+                    />
+                );
+        });
+  
+
 
 
         const [sortConfig, setSortConfig] = useState({
@@ -495,26 +525,23 @@ function Inventory({
                 <div className="Header">
                     <div className="Items">
                         <SearchBar updateSearchResults={setSearchResults} />
-                            <div className='buttons'> 
-                                <AddButton className='addBtn'> </AddButton>
-                                <BorrowButton className='brwBtn'
-                                    selectedItems={selectedItems}
-                                    isValid={selectedItems?.some(item => item.status === "Available")}
-                                    onSuccess={handleBorrowSuccess}>Borrow
-                                    
-                                </BorrowButton>
-                                <ReturnButton className='rtnBtn'
-                                    selectedItems={selectedItems}
-                                    isValid={selectedItems?.some(item => item.status === "Borrowed" || item.status === "Missing")}
-                                    onSuccess={handleReturnSuccess}>Return
-                                </ReturnButton>
-                                <DeleteItemButton
-                                    classname = 'delBtn'
-                                    selectedItems={selectedItems}
-                                    isChecked={selectedItems.length > 0}
-                                    >
-                                </DeleteItemButton>
-                            </div>
+                        <div className='buttons'> 
+                            <AddButton className='addBtn'> </AddButton>
+                            <BorrowButton className='brwBtn'
+                                selectedItems={selectedItems}
+                                onSuccess={handleBorrowSuccess}>Borrow
+                            </BorrowButton>
+                            <ReturnButton className='rtnBtn'
+                                selectedItems={selectedItems}
+                                onSuccess={handleReturnSuccess}>Return
+                            </ReturnButton>
+                            <DeleteItemButton
+                                classname = 'delBtn'
+                                selectedItems={selectedItems}
+                                isChecked={selectedItems.length > 0}
+                                >
+                            </DeleteItemButton>
+                        </div>
                     </div>
                     <div className="TableLabels">
                         <div className="SelectAll" id='SelectAll' onClick={handleSelectAllChange}>

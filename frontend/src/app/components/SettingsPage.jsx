@@ -2,12 +2,9 @@
  *
  *                     SettingsPage.jsx
  *
- *        Authors: Massimo Bottari, Elias Swartz
+ *        Authors: Massimo Bottari, Elias Swartz (Updated by Peter Morganelli)
  *           Date: 03/07/2025
  *
- *     Summary: Allows users to log out, change password, view account information,
- *              verify accounts (if admin), and toggle between light and dark mode.
- * 
  **************************************************************/
 
 "use client";
@@ -27,11 +24,12 @@ export default function SettingsPage() {
     const [displayText, setDisplayText] = useState(isToggleEnabled ? 'Data Input' : 'Normal Data Entry');
     const { signOut } = useClerk();
     const { user } = useUser();
+  const [normalDataEntry, setNormalDataEntry] = useState(false);
 
-    const [isAdmin, setIsAdmin] = useState(false);
-    const [approvals, setApprovals] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [approvals, setApprovals] = useState([]);
 
-    const checkisAdmin = (value) => value == "user_2tB9Ny3ALEWuch9VvjlrQemjV8A";
+  const checkisAdmin = (value) => value == "user_2tB9Ny3ALEWuch9VvjlrQemjV8A";
 
     // Update display text when component mounts to ensure it's in sync with context
     useEffect(() => {
@@ -45,145 +43,170 @@ export default function SettingsPage() {
             console.log("Admin status updated:", checkisAdmin(user?.id));
         }
     }, [user]);
+  useEffect(() => {
+    if (user) {
+      setIsAdmin(checkisAdmin(user?.id));
+    }
+  }, [user]);
 
-    // Load approvals from localStorage on page load
-    useEffect(() => {
-        const savedApprovals = localStorage.getItem("approvals");
-        if (savedApprovals) {
-            setApprovals(JSON.parse(savedApprovals));
-        }
-    }, []);
+  useEffect(() => {
+    const savedApprovals = localStorage.getItem("approvals");
+    if (savedApprovals) {
+      setApprovals(JSON.parse(savedApprovals));
+    }
+  }, []);
 
-    // Save approvals to localStorage whenever they change
-    useEffect(() => {
-        localStorage.setItem("approvals", JSON.stringify(approvals));
-    }, [approvals]);
+  useEffect(() => {
+    localStorage.setItem("approvals", JSON.stringify(approvals));
+  }, [approvals]);
 
-    const addVerificationBox = () => {
-        console.log("Adding new verification box...");
-        setApprovals((prev) => [
-            ...prev,
-            { id: Date.now(), name: `User ${prev.length + 1}`, email: `user${prev.length + 1}@example.com` }
-        ]);
-    };
+  const addVerificationBox = () => {
+    setApprovals((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        name: `User ${prev.length + 1}`,
+        email: `user${prev.length + 1}@example.com`,
+      },
+    ]);
+  };
 
-    const approveVerification = (id) => {
-        console.log(`User with ID ${id} approved.`);
-        setApprovals((prev) => prev.filter((approval) => approval.id !== id));
-    };
+  const approveVerification = (id) => {
+    setApprovals((prev) => prev.filter((approval) => approval.id !== id));
+  };
 
-    const denyVerification = (id) => {
-        console.log(`User with ID ${id} denied.`);
-        setApprovals((prev) => prev.filter((approval) => approval.id !== id));
-    };
+  const denyVerification = (id) => {
+    setApprovals((prev) => prev.filter((approval) => approval.id !== id));
+  };
 
-    const handleForgotPassword = () => {
-        window.location.href = "/reset_password"; // Redirects user to reset password page
-    };
+  const handleForgotPassword = () => {
+    window.location.href = "/reset_password";
+  };
 
-    const handleToggle = () => {
-        setFading(true);
+  return (
+    <>
+      <div className="settings-header">
+          <h1 className="settings-title">Settings</h1>
+      </div>
+      <div className="settings-page">
+        <div className="account-header">
+            <h2 className="account-subheading">Account Information & Options</h2>
+        </div>
+        <div className="body">
+          <div className="left-column">
+            <div className="profile-card">
+              <h2 className="profile-card-title">Profile</h2>
+              <div className="nameText">
+                <label htmlFor="first-name">First Name</label>
+                <label htmlFor="last-name">Last Name</label>
+              </div>
+              <div className="name">
+                <input
+                  type="text"
+                  id="first-name"
+                  value={user?.firstName || "Holden"}
+                  disabled
+                />
+                <input
+                  type="text"
+                  id="last-name"
+                  value={user?.lastName || "Kittleburger"}
+                  disabled
+                />
+              </div>
+              <form>
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  value={
+                    user?.emailAddresses?.[0]?.emailAddress ||
+                    "holdenlovesburgers@hotmail.com"
+                  }
+                  disabled
+                />
 
-        // Directly use the current state to toggle
-        const newToggleState = !isToggleEnabled;
-        setIsToggleEnabled(newToggleState);
+                <label htmlFor="password">Password</label>
+                <input type="password" id="password" value="************" disabled />
 
-        // Wait for fade out to complete before changing the text
-        setTimeout(() => {
-            setDisplayText(newToggleState ? 'Data Input' : 'Normal Data Entry');
-            setTimeout(() => {
-                setFading(false);
-            }, 25);
-        }, 100);
-    };
-
-    console.log("firstName:", user?.firstName);
-    console.log("lastName:", user?.lastName);
-    console.log("email address:", user?.emailAddresses[0]?.emailAddress);
-
-    return (
-        <>
-            <h1>Settings</h1>
-            <div className="body">
-                <div className="settings-container">
-                    <div className="cardHolders">
-                        <p className="subheading">Account Information & Options</p>
-
-                        <div className="profile-card">
-                            <h2>Profile</h2>
-                            <div className="nameText">
-                                <label htmlFor="first-name">First Name</label>
-                                <label htmlFor="last-name">Last Name</label>
-                            </div>
-                            <div className="name">
-                                <input type="text" id="first-name" value={user?.firstName || "Holden"} disabled />
-                                <input type="text" id="last-name" value={user?.lastName || "Kittleburger"} disabled />
-                            </div>
-                            <form>
-                                <label htmlFor="email">Email</label>
-                                <input type="email" id="email" value={user?.emailAddresses?.[0]?.emailAddress || "holdenlovesburgers@hotmail.com"} disabled />
-
-                                <label htmlFor="password">Password</label>
-                                <input type="password" id="password" value="************" disabled />
-
-                                <div className="change-password-container">
-                                    <a href="#" className="change-password" onClick={handleForgotPassword}>
-                                        Change Password
-                                    </a>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div className="options-card">
-                            <div className="toggle">
-                                <label className="switch">
-                                    <input
-                                        type="checkbox"
-                                        checked={isToggleEnabled}
-                                        onChange={handleToggle}
-                                    />
-                                    <span className="slider round"></span>
-                                </label>
-                                <label className={fading ? 'fading' : ''}>{displayText}</label>
-                                <ExportDataBtn></ExportDataBtn>
-                            </div>
-                            <div className="toggle">
-                                <label className="switch">
-                                    <input
-                                        type="checkbox"
-                                        checked={lightMode}
-                                        onChange={() => setLightMode(!lightMode)}
-                                    />
-                                    <span className="slider round"></span>
-                                </label>
-                                <label>Light Mode</label>
-                                <a href="#" className="logout" onClick={() => signOut()}>Logout ↪</a>
-                            </div>
-
-                            <button className="addv" onClick={addVerificationBox}>
-                                Temp Add Verify
-                            </button>
-                        </div>
-                    </div>
+                <div className="change-password-container">
+                  <a
+                    href="#"
+                    className="change-password"
+                    onClick={handleForgotPassword}
+                  >
+                    Change Password
+                  </a>
                 </div>
-
-                {isAdmin && approvals.length > 0 && (
-                    <div className="adminapprovals">
-                        <p className="subheading">New Account Approvals</p>
-                        <div className="approvalscontainer">
-                            {approvals.map((approval) => (
-                                <UserVerificationCard 
-                                    key={approval.id} 
-                                    name={approval.name} 
-                                    email={approval.email} 
-                                    onApprove={() => approveVerification(approval.id)} 
-                                    onDeny={() => denyVerification(approval.id)} 
-                                />
-                            ))}
-                        </div>
-                    </div>
-                )}
+              </form>
             </div>
-        </>
-    );
+
+            <div className="options-card">
+              <div className="toggle">
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={normalDataEntry}
+                    onChange={() => setNormalDataEntry(!normalDataEntry)}
+                  />
+                  <span className="slider round"></span>
+                </label>
+                <label>Normal Data Entry</label>
+                <ExportDataBtn />
+              </div>
+              <div className="toggle">
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={lightMode}
+                    onChange={() => setLightMode(!lightMode)}
+                  />
+                  <span className="slider round"></span>
+                </label>
+                <label>Light Mode</label>
+                <button className="logout" onClick={() => signOut()}>
+                  <span className="logout-btn-content">
+                    Logout
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      width="18"
+                      height="18"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      className="logout-icon"
+                    >
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                      <polyline points="16 17 21 12 16 7" />
+                      <line x1="21" x2="9" y1="12" y2="12" />
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {isAdmin && approvals.length > 0 && (
+            <div className="adminapprovals">
+              <p className="subheading">New Account Approvals</p>
+              <div className="approvalscontainer">
+                {approvals.map((approval) => (
+                  <UserVerificationCard
+                    key={approval.id}
+                    name={approval.name}
+                    email={approval.email}
+                    onApprove={() => approveVerification(approval.id)}
+                    onDeny={() => denyVerification(approval.id)}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </>
+  );
 }

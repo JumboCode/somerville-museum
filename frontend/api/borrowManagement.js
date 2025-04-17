@@ -420,7 +420,7 @@ export async function overdueHandler(req, res) {
 }
 
 export async function searchBorrowersHandler(req, res) {
-  const { query } = req.body;
+  const { ask } = req.body;
 
   try {
     const result = await query(
@@ -429,9 +429,8 @@ export async function searchBorrowersHandler(req, res) {
        OR name ILIKE $1
        OR email ILIKE $1
        OR phone_number ILIKE $1`,
-      [`%${query}%`]
+      [`%${ask}%`]
     );
-    
     res.status(200).json(result.rows);
   } catch (error) {
     console.error("Search error:", error);

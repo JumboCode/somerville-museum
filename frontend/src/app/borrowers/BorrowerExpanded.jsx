@@ -1,4 +1,6 @@
 "use client";
+
+
 import React, { useState, useEffect } from 'react';
 import "./BorrowerExpanded.css";
 import CloseButton from "../assets/CloseButton";
@@ -43,7 +45,6 @@ export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) 
     return date.toLocaleDateString();
   };
 
-  // Add Escape key listener
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
@@ -52,9 +53,7 @@ export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) 
     };
 
     document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
 
   if (!borrower) return null;

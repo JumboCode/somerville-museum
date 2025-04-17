@@ -19,6 +19,7 @@ export default function SearchBar({ updateSearchResults }) {
     // Fetch relevant search results when search query is changed
     useEffect(() => { 
         const fetchData = async () => {
+            console.log("Search query:", query);
             try {
                 const response = await fetch(`/api/itemManagement?action=search`, {
                     method: "PUT",
@@ -33,6 +34,7 @@ export default function SearchBar({ updateSearchResults }) {
                 }
 
                 const data = await response.json();
+                console.log( "Search results:", data);
                 updateSearchResults(data);  // Update results on inventory page
             } catch (error) {
                 console.log(error);

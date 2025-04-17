@@ -18,10 +18,8 @@ const Settings = () => {
   const { signOut } = useClerk();
 
   return (
-    <div className="container">
-      <div className="settings-page">
+    <div className="settings-container">
         <SettingsPage />
-      </div>
     </div>
   );
 };

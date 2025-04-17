@@ -20,7 +20,7 @@ StylishButton.propTypes = {
 };
 
 StylishButton.defaultProps = {
-  styleType: 'style1', //default to style option 1 if no style option is selected
+  styleType: 'style2', //default to style option 1 if no style option is selected
   onClick: null, //default to no onClick handler
 };
 
