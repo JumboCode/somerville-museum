@@ -33,7 +33,7 @@ export default function BorrowerSearchBar({ updateSearchResults }) {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        query: query
+                        ask: query
                     }),
                 });
 
@@ -64,7 +64,7 @@ export default function BorrowerSearchBar({ updateSearchResults }) {
     }, [query, updateSearchResults]);
 
     return (
-        <div className="Searchbar">
+        <div className="SearchbarTwo">
             <input 
                 type="text" 
                 placeholder="Search borrowers..."

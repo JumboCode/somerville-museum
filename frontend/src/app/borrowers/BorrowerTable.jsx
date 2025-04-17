@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import "../globals.css";
 import "./BorrowerTable.css";
 import StylishButton from "../components/StylishButton";
+import BorrowerExpanded from "./BorrowerExpanded";
 
 export default function BorrowerTable({ searchResults, onSelectBorrower }) {
   const [allBorrowers, setAllBorrowers] = useState([]);
@@ -10,6 +11,8 @@ export default function BorrowerTable({ searchResults, onSelectBorrower }) {
   const [loading, setLoading] = useState(true); // Start with loading true
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [selectedBorrowerIndex, setSelectedBorrowerIndex] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
 
   // Format history summary for display
   const formatHistorySummary = (history) => {
@@ -103,6 +106,15 @@ export default function BorrowerTable({ searchResults, onSelectBorrower }) {
   };
 
   const pageButtons = Array.from({ length: totalPages }, (_, index) => index + 1);
+  const handleSelectBorrower = (borrower) => {
+    const index = borrowers.findIndex(b => b.email === borrower.email); // Use unique field
+    if (index !== -1) {
+      setSelectedBorrowerIndex(index);
+      setShowPopup(true);
+    }
+  };
+
+  const buttons = Array.from({ length: totalPages }, (_, index) => index + 1);
 
   return (
     <div className="tableContainer">
@@ -192,6 +204,23 @@ export default function BorrowerTable({ searchResults, onSelectBorrower }) {
           />
         </div>
       </div>
+
+      {showPopup && selectedBorrowerIndex !== null && (
+        <BorrowerExpanded
+          borrower={borrowers[selectedBorrowerIndex]}
+          onClose={() => setShowPopup(false)}
+          onPrev={
+            selectedBorrowerIndex > 0
+              ? () => setSelectedBorrowerIndex((prev) => prev - 1)
+              : null
+          }
+          onNext={
+            selectedBorrowerIndex < borrowers.length - 1
+              ? () => setSelectedBorrowerIndex((prev) => prev + 1)
+              : null
+          }
+        />
+      )}
     </div>
   );
 }

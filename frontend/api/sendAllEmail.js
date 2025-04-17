@@ -15,7 +15,7 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: "Missing email type." });
         }
 
-        console.log(`Processing email of type: ${type}`);
+        // console.log(`Processing email of type: ${type}`);
 
         let recipients = [];
         let subject = "";
@@ -103,7 +103,7 @@ export default async function handler(req, res) {
 
         // Send the email
         const response = await sendEmail(recipients, subject, htmlContent);
-        console.log(`Email of type '${type}' sent successfully.`);
+        // console.log(`Email of type '${type}' sent successfully.`);
         res.status(200).json({ success: true, response });
 
     } catch (error) {
