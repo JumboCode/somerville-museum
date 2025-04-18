@@ -2,11 +2,13 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useClerk, useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import "../app.css";
 
 export default function LoginConfirmed() {
     const router = useRouter();
+    const { signOut } = useClerk();
 
     return (
         <div className="login-bg">
@@ -18,8 +20,8 @@ export default function LoginConfirmed() {
                     className={'returnButton'}
                     style={{ marginTop: "5vh" }}
                     type="button"
-                    onClick={() => {router.push("/settings")}}
-                    value={'Back to Settings'}
+                    onClick={() => {router.push("/login"), signOut()}}
+                    value={'Back to Login'}
                 />
             </div>
         </div>
