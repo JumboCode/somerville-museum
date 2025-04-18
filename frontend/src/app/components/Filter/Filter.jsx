@@ -25,7 +25,8 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
             options: ["One Size", "Small", "Medium", "Large"]
         }, 
         Time_Period: {
-            options: ["1800s - 1840s", "1750s - 1800s", "Post-1910s", "Pre-1700s"]
+            options: ["1800s - 1840s", "1750s - 1800s", "Post-1910s", "Pre-1700s"],
+            singleSelect: true
         },
     };
     const checkboxFields = {
@@ -142,18 +143,32 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
         });
     };
 
-    // Now enables multiple options to be selected
+    // Modified to handle both single-select and multi-select fields
     const handleOptionSelect = (label, option) => {
         const formattedLabel = label.toLowerCase().replaceAll(" ", "_");
-        const currentValues = selectedOptions[formattedLabel] || [];
-        const valueExists = currentValues.includes(option);
+        const isSingleSelect = fields[label]?.singleSelect;
         
-        updateFilters({
-            ...selectedOptions,
-            [formattedLabel]: valueExists 
-                ? currentValues.filter(item => item !== option)
-                : [...currentValues, option]
-        });
+        if (isSingleSelect) {
+            // For single-select fields (Time_Period)
+            const currentValue = selectedOptions[formattedLabel]?.[0];
+            const newValue = currentValue === option ? [] : [option];
+            
+            updateFilters({
+                ...selectedOptions,
+                [formattedLabel]: newValue
+            });
+        } else {
+            // For multi-select fields
+            const currentValues = selectedOptions[formattedLabel] || [];
+            const valueExists = currentValues.includes(option);
+            
+            updateFilters({
+                ...selectedOptions,
+                [formattedLabel]: valueExists 
+                    ? currentValues.filter(item => item !== option)
+                    : [...currentValues, option]
+            });
+        }
     };
     
     const updateCheckboxes = (field, value) => (e) => {
@@ -223,7 +238,7 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
                                         <li 
                                             key={option} 
                                             onClick={() => handleOptionSelect(label, option)}
-                                            className={selectedOptions[label.toLowerCase()].includes(option) ? 'selected' : ''}
+                                            className={selectedOptions[label.toLowerCase().replaceAll(" ", "_")].includes(option) ? 'selected' : ''}
                                         >
                                             {option}
                                         </li>
