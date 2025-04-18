@@ -178,9 +178,16 @@ const ReturnPopup = ({ units = [], onSuccess, onClose }) => {
                     </div>
                 </div>
             </div>
-            <div className="itemContainer">
+            {selectedUnits.length > 0 ? (
+              <> 
+              <div className="itemContainer">
                 {selectedUnits}
-            </div> 
+              </div> 
+              </>
+            ): (
+              <p>No items selected.</p>
+            )}
+            
             <div className="page-select">
                 <StylishButton className="leftBtn" label="&lt;" onClick={goToPreviousPage} disabled={currentPage === 1} styleType='style4' />
                 {buttons.map((number) => (
