@@ -91,7 +91,34 @@
         width: 520px;
         margin-bottom: 25px;
         font-weight: bold;
-    }
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+
+.subheading {
+    color: #000;
+
+    font-family: Akatab;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 20px;
+    margin-right: 13.5rem;
+}
+
+.profile-card, .options-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    margin-bottom: 15px;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+}
 
   
   
@@ -150,6 +177,7 @@
     padding-left: 15px;
     width: 100%;
     margin: 5px 0;
+    justify-content: space-between;
     
   }
   
@@ -183,6 +211,10 @@
   }
   
   .adminapprovals {
+    margin-right: 2.8rem;
+}
+
+.adminapprovals {
     text-align: left;
     height: 48vh;
     width: 25vw;
@@ -280,6 +312,14 @@
   }
   
   .switch input {
+    width: 40px;
+    height: 20px;
+    margin-left: 2rem;
+    
+}
+
+/* Hide Default Checkbox */
+.switch input {
     opacity: 0;
     width: 0;
     height: 0;
@@ -312,28 +352,77 @@
     background-color: #9A525F;
     transition: 0.4s;
     border-radius: 50%;
-  }
-  
-  input:checked + .slider {
-    background-color: #9A525F;
-    border-color: #9A525F;
-  }
-  
-  input:checked + .slider:before {
-    transform: translateX(18px);
-    background-color: #ffffff;
-  }
-  
-  .toggle:nth-of-type(2) label {
-    margin-right: 15.5rem;
-  }
-  
-  .toggle:nth-of-type(1) label {
-    margin-right: 10rem;
-  }
-  
-  .toggle:nth-of-type(2) .switch,
-  .toggle:nth-of-type(1) .switch {
-    margin-right: 0px;
-  }
-  
+}
+
+/* When Checkbox is Checked */
+input:checked + .slider {
+    background-color: #9A525F; /* Change to desired active color */
+}
+
+/* Move Toggle Circle to Right */
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+/* Fixes Toggle Switch Size */
+.switch {
+    width: 36px;
+    height: 18px;
+}
+
+/* Fixes Toggle Switch Circle */
+.slider:before {
+    height: 14px;
+    width: 14px;
+    left: 2px;
+    bottom: 2px;
+}
+
+/* Selects ONLY the second .toggle div and applies margin to its label */
+.toggle:nth-of-type(2) label {
+    margin-right: 12.2rem; /* Adjust as needed */
+}
+
+/* Selects ONLY the second .toggle div and applies margin to its label */
+.toggle:nth-of-type(1) label {
+    margin-right: 7rem; /* Adjust as needed */
+}
+
+/* Targets ONLY the second .toggle div and applies styles to its switch */
+.toggle:nth-of-type(2) .switch {
+    margin-right: 0px; /* Moves only the Light Mode switch further right */
+}
+
+.toggle:nth-of-type(1) .switch {
+    margin-right: 0px; /* Moves only the Light Mode switch further right */
+}
+
+.toggle {
+    display: flex;
+    align-items: center;  /* Keep everything in a row */
+    justify-content: space-between; /* Keep the row balanced */
+    width: 100%;
+}
+
+/* Ensure the switch stays properly aligned */
+
+
+.normal-data-entry {
+    color: #000;
+    font-family: Akatab;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1rem;
+}
+
+.light-mode {
+    color: #000;
+    font-family: Akatab;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1rem;
+}
+
+

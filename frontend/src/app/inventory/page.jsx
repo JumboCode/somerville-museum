@@ -15,6 +15,7 @@ import './inventory.css'
 import { useSearchParams } from 'next/navigation.js';
 import { Suspense } from 'react';
 import PropTypes from 'prop-types';
+import { useUser } from '@clerk/nextjs';
 
 Inventory.propTypes = {
     isFilterVisible: PropTypes.bool.isRequired,
@@ -46,6 +47,25 @@ function Inventory({
     const searchParams = useSearchParams();
     const filter = searchParams.get('filter');
     const [filterResults, setFilterResults] = useState([]);
+    const { isLoaded, user } = useUser();
+    const [isApproved, setIsApproved] = useState(null);
+
+    // Calculate validity for buttons based on selectedItems
+    const isBorrowValid = selectedItems.length > 0 && selectedItems.some(item => 
+        item.status === "Available"
+    );
+    
+    const isReturnValid = selectedItems.length > 0 && selectedItems.some(item => 
+        item.status === "Borrowed" || item.status === "Overdue"
+    );
+
+    // Check if permissions to view page
+    useEffect(() => {
+    if (isLoaded && user) {
+        const approved = user.publicMetadata?.approved === true;
+        setIsApproved(approved);
+    }
+    }, [isLoaded, user]);
     
     const [refreshTable, setRefreshTable] = useState(false);
 
@@ -194,7 +214,7 @@ function Inventory({
                 
                 if (response.ok) {
                     const itemIds = await response.json();
-                    console.log("Items matching date range:", itemIds); // Add this logging
+                    console.log("Items matching date range:", itemIds);
                     
                     // Ensure itemIds is an array before filtering
                     if (Array.isArray(itemIds)) {
@@ -353,14 +373,12 @@ function Inventory({
         updateFilteredUnits();
     }, [selectedFilters, originalUnits, unitsPerPage]);
 
-
     const handleBorrowSuccess = () => {
         setFilterResults([]); 
         setSearchResults([]); 
         setSelectedItems([]); 
         fetchData(); 
     };
-  
 
     const handleReturnSuccess = () => {
         // console.log("Return operation sucwcessful, refreshing inventory...");
@@ -401,10 +419,10 @@ function Inventory({
                 <InventoryUnit
                 key={unit.id}
                 unit={unit}
+                index={absoluteIndex}
+                unitList={units} // current page's units
                 onChange={handleCheckboxChange}
                 checked={selectedItems.some((item) => item?.id && unit?.id && item.id === unit.id)}
-                unitList={units}
-                index={absoluteIndex}
                 />
             );
     });
@@ -508,7 +526,17 @@ function Inventory({
     // an array of buttons for page selection
     const buttons = Array.from({ length: totalPages || 1 }, (_, index) => index + 1);
 
+    // Conditional rendering based on user approval
+    if (!isLoaded || isApproved === null) return null;
 
+    // If user is not approved, show an error message
+    if (!isApproved) {
+        return (
+        <div className="dashboard-container">
+            <p>You are not allowed to see this section. Please wait for approval from an administrator.</p>
+        </div>
+        );
+    }
 
     return (
         <>
@@ -523,19 +551,27 @@ function Inventory({
                         <SearchBar updateSearchResults={setSearchResults} />
                         <div className='buttons'> 
                             <AddButton className='addBtn'> </AddButton>
-                            <BorrowButton className='brwBtn'
+                            <BorrowButton 
+                                className='brwBtn'
                                 selectedItems={selectedItems}
-                                onSuccess={handleBorrowSuccess}>Borrow
+                                onSuccess={handleBorrowSuccess}
+                                isValid={isBorrowValid}
+                            >
+                                Borrow
                             </BorrowButton>
-                            <ReturnButton className='rtnBtn'
+                            <ReturnButton 
+                                className='rtnBtn'
                                 selectedItems={selectedItems}
-                                onSuccess={handleReturnSuccess}>Return
+                                onSuccess={handleReturnSuccess}
+                                isValid={isReturnValid}
+                            >
+                                Return
                             </ReturnButton>
                             <DeleteItemButton
-                                classname = 'delBtn'
+                                classname='delBtn'
                                 selectedItems={selectedItems}
                                 isChecked={selectedItems.length > 0}
-                                >
+                            >
                             </DeleteItemButton>
                         </div>
                     </div>
@@ -547,7 +583,7 @@ function Inventory({
                             Deselect All
                         </div>
                         <button className="IDLabel" onClick={() => requestSort('id')} id='SortTag'>
-                            ID 
+                            Item ID 
                             <SortIndicator 
                             active={sortConfig.key === 'id'} 
                             direction={sortConfig.direction}
@@ -574,8 +610,8 @@ function Inventory({
                             direction={sortConfig.direction}
                             />
                         </button>
-                        <div className="TagsLabel">Tags</div>
-                        </div>
+                        <div className="TagsLabel">Item Tags</div>
+                    </div>
                 </div>
 
                 <div className="ItemBarHolder">
@@ -618,6 +654,5 @@ function Inventory({
                 </div>
             </div>
         </>
-
     );
 }

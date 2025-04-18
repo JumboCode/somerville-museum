@@ -153,19 +153,26 @@ export default function InventoryUnit({ unit, onChange, checked, unitList, index
 
             </div>
             <div className="tags">
-                <div className="gender">{unit.gender}</div>
-                <div className="season">{unit.season}</div>
-                <div className="size">{unit.size}</div>
-                <div className="time">
-                    {Array.isArray(unit.time_period) && unit.time_period.length > 0 ? (
-                        unit.time_period.map((period, index) => (
-                            <span key={index}>{period}{index < unit.time_period.length - 1 ? ', ' : ''}</span>
-                        ))
-                    ) : (
-                        'No time periods available'
-                    )}
+                {unit.gender && (
+                    <div className="tag-box">{unit.gender}</div>
+                )}
+                {unit.season && unit.season.length > 0 && (
+                    <div className="tag-box">
+                    {Array.isArray(unit.season) ? unit.season.join(", ") : unit.season}
+                    </div>
+                )}
+                {unit.size && (
+                    <div className="tag-box">{unit.size}</div>
+                )}
+                {unit.time_period && unit.time_period.length > 0 ? (
+                    <div className="tag-box">
+                    {Array.isArray(unit.time_period) ? unit.time_period.join(", ") : unit.time_period}
+                    </div>
+                ) : (
+                    null
+                )}
                 </div>
-            </div>
+
             <div className="drop-down">
                 <button className="drop-downBtn" 
                         onClick={handleClick}

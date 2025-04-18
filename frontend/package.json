@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@clerk/clerk-js": "^5.54.2",
-    "@clerk/nextjs": "^6.12.2",
+    "@clerk/nextjs": "^6.14.1",
     "@neondatabase/serverless": "^0.10.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -39,7 +39,8 @@
     "uuid": "^10.0.0",
     "vercel": "^37.14.0",
     "web-vitals": "^2.1.4",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "xslx": "^1.0.0"
   },
   "devDependencies": {
     "eslint-config-next": "15.2.1"

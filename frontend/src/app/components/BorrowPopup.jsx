@@ -176,31 +176,12 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
         }
       }
 
-
       //EMAIL FOR BORROWED ITEMS ABOVE
 
-
-      const result = await response.json();
       setIsSuccessPopupVisible(true);
-
-      // if (onSuccess) {
-      //   onSuccess();
-      // }
     } catch (error) {
       console.error("Error submitting data:", error);
     }
-  };
-
-  const resetFields = () => {
-    setBorrowerFirstName('');
-    setBorrowItems([]);
-    setBorrowerLastName('');
-    setBorrowerEmail('');
-    setPhoneNumber('');
-    setReturnWeeks('');
-    setApprover('');
-    setNote('');
-    setCurrentPage(1);
   };
 
   const handleDelete = (item) => {
