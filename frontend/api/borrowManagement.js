@@ -296,7 +296,6 @@ export async function returnValidityHandler(req, res) {
         'SELECT * FROM dummy_data WHERE id = $1',
         [itemId]
       );
-
       const itemDetails = statusResult.rows[0]; // Get item details
 
       if (!itemDetails) {
@@ -314,7 +313,8 @@ export async function returnValidityHandler(req, res) {
       // Add the item to available items
       availableItems.push(itemDetails);
     }
-
+    console.log('Available items:', availableItems);
+    console.log('Unavailable items:', unavailableItems);
     // Build the response message
     let message = '';
     if (unavailableItems.length > 0) {
@@ -362,6 +362,89 @@ export async function borrowByDateRangeHandler(req, res) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
+
+export async function fetchBorrowerNameHandler(req, res) {
+  const { id } = req.query;  // Get borrower ID from query params
+
+  if (!id) {
+      return res.status(400).json({ error: "Missing borrower ID" });
+  }
+
+  try {
+      // Fetch the borrower email using the ID
+      const result = await query(`
+          SELECT name FROM borrowers WHERE id = $1
+      `, [id]);
+
+      if (result.rows.length === 0) {
+          return res.status(404).json({ error: "Borrower not found" });
+      }
+
+      res.status(200).json({ borrower_email: result.rows[0].email });
+  } catch (error) {
+      console.error("Error fetching borrower email:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+export async function groupReturnsByBorrowerHandler(req, res) {
+  const { returnedItems } = req.body;
+
+  if (!returnedItems || returnedItems.length === 0) {
+    return res.status(400).json({ error: "No items provided for return." });
+  }
+
+  try {
+    const result = await query(`
+      SELECT b.name AS borrower_name, 
+             b.email AS borrower_email,
+             d.id AS item_id, 
+             d.name AS item_name
+      FROM dummy_data d
+      JOIN borrowers b ON d.current_borrower = b.id
+      WHERE d.id = ANY($1::int[])
+    `, [returnedItems]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "No matching items or borrowers found." });
+    }
+
+    const groupedReturns = result.rows.reduce((acc, row) => {
+      const borrowerKey = `${row.borrower_name} (${row.borrower_email})`;
+      if (!acc[borrowerKey]) acc[borrowerKey] = [];
+      acc[borrowerKey].push(row.item_name);
+      return acc;
+    }, {});
+
+    console.log("Grouped returns:", groupedReturns);
+
+    // Send email to each borrower
+    for (const key of Object.keys(groupedReturns)) {
+      const matches = key.match(/^(.*) \((.*)\)$/);
+      const borrowerName = matches ? matches[1] : 'Unknown';
+      const borrowerEmail = matches ? matches[2] : 'Unknown';
+
+      await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/email?emailType=sendReturnEmail`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          borrower_name: borrowerName,
+          borrower_email: borrowerEmail,
+          returned_items: groupedReturns[key],
+        }),
+      });
+    }
+
+    res.status(200).json({ success: true, message: 'Emails sent to all borrowers.' });
+
+  } catch (error) {
+    console.error('Error grouping returns by borrower:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+
+
 
 export async function fetchBorrowerEmailHandler(req, res) {
   const { id } = req.query;  // Get borrower ID from query params
@@ -497,6 +580,10 @@ export default async function handler(req, res) {
           return borrowByDateRangeHandler(req, res);
       case 'fetchBorrowerEmail':
           return fetchBorrowerEmailHandler(req, res);
+      case 'fetchBorrowerName':
+          return fetchBorrowerNameHandler(req, res);
+      case 'fetchBorrowerId':
+          return fetchBorrowerIdHandler(req, res);
       case 'overdue':
           return overdueHandler(req, res);
       case 'itemBorrowHistory':
@@ -507,6 +594,8 @@ export default async function handler(req, res) {
           return searchBorrowersHandler(req, res);
       case 'getAllBorrowers':
           return getAllBorrowersHandler(req, res);
+      case 'groupReturnsByBorrower':
+            return groupReturnsByBorrowerHandler(req, res);
       default:
           return res.status(400).json({ error: 'Invalid action' });
   }

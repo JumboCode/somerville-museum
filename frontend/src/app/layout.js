@@ -44,7 +44,11 @@ export default function RootLayout({ children, currentPage }) {
 
 
   return (
-    <ClerkProvider>
+    <ClerkProvider
+        publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+        signInUrl="/login"
+        signUpUrl="/signup"
+    >
       <FilterProvider>
         <GlobalProvider>
             <html lang="en">
