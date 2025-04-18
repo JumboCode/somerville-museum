@@ -1,18 +1,21 @@
+:root {
+    --sm_font: 'Akatab';
+}
+
 body, html {
     height: 100%;
     margin: 0;
     display: flex;
     align-items: center; 
     justify-content: center; 
+    font-family: var(--sm_font);
 }
 
 .Table {
     /* margin: auto; */
     background: #F8F5F5;
     height: 95vh; /* Increase height to give more space */
-    width: calc(100% - 80px);
-    max-width: 100%;
-    margin: 0 auto;
+    width: auto;
     display: flex;
     flex-direction: column;
     align-items: center;

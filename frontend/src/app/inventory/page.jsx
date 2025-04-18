@@ -48,8 +48,11 @@ function Inventory({
     const [filterResults, setFilterResults] = useState([]);
     
     const [refreshTable, setRefreshTable] = useState(false);
-    // const [searchPerformed, setSearchPerformed] = useState(false)
 
+    const [sortConfig, setSortConfig] = useState({
+        key: null, // 'id', 'name', 'avail', 'con'
+        direction: 'asc' // 'asc' or 'desc'
+    });
 
     // Called any time new filters/search results are applied to update displayed units
     useEffect(() => {
@@ -378,120 +381,113 @@ function Inventory({
     };
 
     const handleSelectAllChange = () => {
-        if (selectAllChecked) {
-            setSelectedItems([]);
-        } else {
-            setSelectedItems([...units]);
-        }
+        setSelectedItems([...units]);
+        setSelectAllChecked(!selectAllChecked);
+    };
+
+    const handleDeselectAllChange = () => {
+        setSelectedItems([]);
         setSelectAllChecked(!selectAllChecked);
     };
 
     const startIndex = (currentPage - 1) * unitsPerPage;
 
-        const currentUnits = units
-            .slice(startIndex, startIndex + unitsPerPage)
-            .filter(unit => unit?.id != null)
-            .map((unit, index) => {
-            const absoluteIndex = startIndex + index;
-                return (
-                    <InventoryUnit
-                    key={unit.id}
-                    unit={unit}
-                    onChange={handleCheckboxChange}
-                    checked={selectedItems.some((item) => item?.id && unit?.id && item.id === unit.id)}
-                    unitList={units}
-                    index={absoluteIndex}
-                    />
-                );
+    const currentUnits = units
+        .slice(startIndex, startIndex + unitsPerPage)
+        .filter(unit => unit?.id != null)
+        .map((unit, index) => {
+        const absoluteIndex = startIndex + index;
+            return (
+                <InventoryUnit
+                key={unit.id}
+                unit={unit}
+                onChange={handleCheckboxChange}
+                checked={selectedItems.some((item) => item?.id && unit?.id && item.id === unit.id)}
+                unitList={units}
+                index={absoluteIndex}
+                />
+            );
+    });
+
+    const requestSort = (key) => {
+        let direction = 'asc';
+        if (sortConfig.key === key && sortConfig.direction === 'asc') {
+            direction = 'desc';
+        }
+        setSortConfig({ key, direction });
+        
+        // Call the appropriate sort function
+        if (sortingFunctions[key]) {
+            sortingFunctions[key](direction);
+        }
+    };
+    
+    const sortingFunctions = {
+        id: (direction) => sortByID(direction),
+        name: (direction) => sortByName(direction),
+        avail: (direction) => sortByAvail(direction),
+        con: (direction) => sortByCon(direction)
+    };
+    
+    // Updated sort functions
+    const sortByID = (direction = 'asc') => {
+        setUnits(prevUnits => {
+            if (!Array.isArray(prevUnits)) return [];
+            const sorted = [...prevUnits].sort((a, b) => a.id - b.id);
+            return direction === 'asc' ? sorted : sorted.reverse();
         });
-  
-
-
-
-        const [sortConfig, setSortConfig] = useState({
-            key: null, // 'id', 'name', 'avail', 'con'
-            direction: 'asc' // 'asc' or 'desc'
-          });
-
-        const requestSort = (key) => {
-            let direction = 'asc';
-            if (sortConfig.key === key && sortConfig.direction === 'asc') {
-              direction = 'desc';
-            }
-            setSortConfig({ key, direction });
-          
-            // Call the appropriate sort function
-            if (sortingFunctions[key]) {
-              sortingFunctions[key](direction);
-            }
-          };
-          
-          const sortingFunctions = {
-            id: (direction) => sortByID(direction),
-            name: (direction) => sortByName(direction),
-            avail: (direction) => sortByAvail(direction),
-            con: (direction) => sortByCon(direction)
-          };
-          
-          // Updated sort functions
-          const sortByID = (direction = 'asc') => {
-            setUnits(prevUnits => {
-              if (!Array.isArray(prevUnits)) return [];
-              const sorted = [...prevUnits].sort((a, b) => a.id - b.id);
-              return direction === 'asc' ? sorted : sorted.reverse();
-            });
-          };
-          
-          const sortByName = (direction = 'asc') => {
-            setUnits(prevUnits => {
-              if (!Array.isArray(prevUnits)) return [];
-              const sorted = [...prevUnits].sort((a, b) => a.name.localeCompare(b.name));
-              return direction === 'asc' ? sorted : sorted.reverse();
-            });
-          };
-          
-          const sortByAvail = (direction = 'asc') => {
-            const availability = ["Available", "Borrowed", "Overdue", "Missing"];
-            setUnits(prevUnits => {
-              if (!Array.isArray(prevUnits)) return [];
-              const sorted = [...prevUnits].sort((a, b) => 
-                availability.indexOf(a.status) - availability.indexOf(b.status)
-              );
-              return direction === 'asc' ? sorted : sorted.reverse();
-            });
-          };
-          
-          const sortByCon = (direction = 'asc') => {
-            const order = [
-              "Great",
-              "Good",
-              "Needs washing",
-              "Needs repair",
-              "Needs dry cleaning",
-              "Not usable"
-            ];
+    };
+    
+    const sortByName = (direction = 'asc') => {
+        setUnits(prevUnits => {
+            if (!Array.isArray(prevUnits)) return [];
+            const sorted = [...prevUnits].sort((a, b) => a.name.localeCompare(b.name));
+            return direction === 'asc' ? sorted : sorted.reverse();
+        });
+    };
+    
+    const sortByAvail = (direction = 'asc') => {
+        const availability = ["Available", "Borrowed", "Overdue", "Missing"];
+        setUnits(prevUnits => {
+            if (!Array.isArray(prevUnits)) return [];
+            const sorted = [...prevUnits].sort((a, b) => 
+            availability.indexOf(a.status) - availability.indexOf(b.status)
+            );
+            return direction === 'asc' ? sorted : sorted.reverse();
+        });
+    };
+    
+    const sortByCon = (direction = 'asc') => {
+        const order = [
+            "Great",
+            "Good",
+            "Needs washing",
+            "Needs repair",
+            "Needs dry cleaning",
+            "Not usable"
+        ];
+        
+        setUnits(prevUnits => {
+            if (!Array.isArray(prevUnits)) return [];
+            const sorted = [...prevUnits].sort((a, b) => {
+            // Handle null/undefined conditions
+            if (!a.condition) return 1; // Push nulls to end
+            if (!b.condition) return -1;
             
-            setUnits(prevUnits => {
-              if (!Array.isArray(prevUnits)) return [];
-              const sorted = [...prevUnits].sort((a, b) => {
-                // Handle null/undefined conditions
-                if (!a.condition) return 1; // Push nulls to end
-                if (!b.condition) return -1;
-                
-                // Function to get the highest-ranked condition for an item
-                const getHighestCondition = (conditions) => 
-                  conditions.reduce((best, c) =>
-                    order.indexOf(c) < order.indexOf(best) ? c : best, conditions[0]
-                  );
-              
-                const highestA = getHighestCondition(a.condition);
-                const highestB = getHighestCondition(b.condition);
-              
-                return order.indexOf(highestA) - order.indexOf(highestB);
-              });
-              return direction === 'asc' ? sorted : sorted.reverse();
+            // Function to get the highest-ranked condition for an item
+            const getHighestCondition = (conditions) => 
+                conditions.reduce((best, c) =>
+                order.indexOf(c) < order.indexOf(best) ? c : best, conditions[0]
+                );
+            
+            const highestA = getHighestCondition(a.condition);
+            const highestB = getHighestCondition(b.condition);
+            
+            return order.indexOf(highestA) - order.indexOf(highestB);
             });
-          };
+            return direction === 'asc' ? sorted : sorted.reverse();
+        });
+    };
 
     const goToPreviousPage = () => {
         setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
@@ -546,6 +542,9 @@ function Inventory({
                     <div className="TableLabels">
                         <div className="SelectAll" id='SelectAll' onClick={handleSelectAllChange}>
                             Select All
+                        </div>
+                        <div className="SelectAll" id='SelectAll' onClick={handleDeselectAllChange}>
+                            Deselect All
                         </div>
                         <button className="IDLabel" onClick={() => requestSort('id')} id='SortTag'>
                             ID 
