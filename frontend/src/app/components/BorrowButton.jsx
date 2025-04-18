@@ -1,7 +1,7 @@
 'use client'
 
 // import Popup from 'reactjs-popup';
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import StylishButton from './StylishButton.jsx';
 import BorrowPopup from './BorrowPopup.jsx';
 

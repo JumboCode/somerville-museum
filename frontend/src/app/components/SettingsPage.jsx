@@ -1,14 +1,12 @@
 /**************************************************************
  *
- *                     SettingsPage.jsx
+ * SettingsPage.jsx
  *
- *        Authors: Massimo Bottari, Elias Swartz (Updated by Peter Morganelli)
- *           Date: 03/07/2025
+ * Authors: Massimo Bottari, Elias Swartz (Updated by Peter Morganelli)
+ * Date: 03/07/2025
  *
  **************************************************************/
-
 "use client";
-
 import "../globals.css";
 import "./SettingsPage.css";
 import UserVerificationCard from "./userVerificationCard.jsx";
@@ -18,31 +16,31 @@ import ExportDataBtn from "./ExportDataBtn.jsx";
 import { useGlobalContext } from './contexts/ToggleContext';
 
 export default function SettingsPage() {
-    const [lightMode, setLightMode] = useState(false);
-    const { isToggleEnabled, setIsToggleEnabled } = useGlobalContext(); // Use the global context
-    const [fading, setFading] = useState(false);
-    const [displayText, setDisplayText] = useState(isToggleEnabled ? 'Data Input' : 'Normal Data Entry');
-    const { signOut } = useClerk();
-    const { user } = useUser();
+  const [lightMode, setLightMode] = useState(false);
+  const { isToggleEnabled, setIsToggleEnabled } = useGlobalContext(); // Use the global context
+  const [fading, setFading] = useState(false);
+  const [displayText, setDisplayText] = useState(isToggleEnabled ? 'Data Input' : 'Normal Data Entry');
+  const { signOut } = useClerk();
+  const { user } = useUser();
   const [normalDataEntry, setNormalDataEntry] = useState(false);
-
   const [isAdmin, setIsAdmin] = useState(false);
   const [approvals, setApprovals] = useState([]);
 
   const checkisAdmin = (value) => value == "user_2tB9Ny3ALEWuch9VvjlrQemjV8A";
 
-    // Update display text when component mounts to ensure it's in sync with context
-    useEffect(() => {
-        setDisplayText(isToggleEnabled ? 'Data Input' : 'Normal Data Entry');
-    }, [isToggleEnabled]);
+  // Update display text when component mounts to ensure it's in sync with context
+  useEffect(() => {
+    setDisplayText(isToggleEnabled ? 'Data Input' : 'Normal Data Entry');
+  }, [isToggleEnabled]);
 
-    useEffect(() => {
-        if (user) {
-            console.log("user id: " + user?.id);
-            setIsAdmin(checkisAdmin(user?.id));
-            console.log("Admin status updated:", checkisAdmin(user?.id));
-        }
-    }, [user]);
+  useEffect(() => {
+    if (user) {
+      console.log("user id: " + user?.id);
+      setIsAdmin(checkisAdmin(user?.id));
+      console.log("Admin status updated:", checkisAdmin(user?.id));
+    }
+  }, [user]);
+
   useEffect(() => {
     if (user) {
       setIsAdmin(checkisAdmin(user?.id));
@@ -55,6 +53,20 @@ export default function SettingsPage() {
       setApprovals(JSON.parse(savedApprovals));
     }
   }, []);
+
+  useEffect(() => {
+    const fetchUnapprovedUsers = async () => {
+      if (!isAdmin) return;
+      try {
+        const response = await fetch("/api/get-unapproved-users"); // Your serverless API
+        const data = await response.json();
+        setApprovals(data.users); // expected shape: [{ id, email, firstName, lastName }]
+      } catch (error) {
+        console.error("Error fetching unapproved users:", error);
+      }
+    };
+    fetchUnapprovedUsers();
+  }, [isAdmin]);
 
   useEffect(() => {
     localStorage.setItem("approvals", JSON.stringify(approvals));
@@ -71,8 +83,23 @@ export default function SettingsPage() {
     ]);
   };
 
-  const approveVerification = (id) => {
-    setApprovals((prev) => prev.filter((approval) => approval.id !== id));
+  const approveVerification = async (id) => {
+    try {
+      const res = await fetch("/api/approve-user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: id }),
+      });
+      if (!res.ok) {
+        throw new Error("Approval failed");
+      }
+      console.log(`User with ID ${id} approved.`);
+      setApprovals(prev => prev.filter(user => user.id !== id));
+    } catch (err) {
+      console.error("Approval error:", err);
+    }
   };
 
   const denyVerification = (id) => {
@@ -86,11 +113,11 @@ export default function SettingsPage() {
   return (
     <>
       <div className="settings-header">
-          <h1 className="settings-title">Settings</h1>
+        <h1 className="settings-title">Settings</h1>
       </div>
       <div className="settings-page">
         <div className="account-header">
-            <h2 className="account-subheading">Account Information & Options</h2>
+          <h2 className="account-subheading">Account Information & Options</h2>
         </div>
         <div className="body">
           <div className="left-column">
@@ -125,10 +152,8 @@ export default function SettingsPage() {
                   }
                   disabled
                 />
-
                 <label htmlFor="password">Password</label>
                 <input type="password" id="password" value="************" disabled />
-
                 <div className="change-password-container">
                   <a
                     href="#"
@@ -140,7 +165,6 @@ export default function SettingsPage() {
                 </div>
               </form>
             </div>
-
             <div className="options-card">
               <div className="toggle">
                 <label className="switch">
@@ -188,7 +212,6 @@ export default function SettingsPage() {
               </div>
             </div>
           </div>
-
           {isAdmin && approvals.length > 0 && (
             <div className="adminapprovals">
               <p className="subheading">New Account Approvals</p>

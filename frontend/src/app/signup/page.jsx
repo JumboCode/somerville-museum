@@ -130,7 +130,6 @@ export default function SignUp() {
         firstName: firstName,
         lastName: lastName,
       })
-      
 
       await signUp.prepareEmailAddressVerification({
         strategy: "email_code",
@@ -157,11 +156,6 @@ export default function SignUp() {
       alert("Invalid verification code. Try again.");
     }
   }
-  
-  
-  
-  
-  
 
   if (verifying) {
     return (

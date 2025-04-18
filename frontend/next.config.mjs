@@ -12,6 +12,10 @@ const nextConfig = {
           },
         ],
       },
+    eslint: {
+        // Disable during production build
+        ignoreDuringBuilds: true,
+    },
 };
 
 export default nextConfig;

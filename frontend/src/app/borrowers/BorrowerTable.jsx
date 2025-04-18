@@ -106,15 +106,15 @@ export default function BorrowerTable({ searchResults, onSelectBorrower }) {
   };
 
   const pageButtons = Array.from({ length: totalPages }, (_, index) => index + 1);
-  const handleSelectBorrower = (borrower) => {
-    const index = borrowers.findIndex(b => b.email === borrower.email); // Use unique field
-    if (index !== -1) {
-      setSelectedBorrowerIndex(index);
-      setShowPopup(true);
-    }
-  };
+  // const handleSelectBorrower = (borrower) => {
+  //   const index = borrowers.findIndex(b => b.email === borrower.email); // Use unique field
+  //   if (index !== -1) {
+  //     setSelectedBorrowerIndex(index);
+  //     setShowPopup(true);
+  //   }
+  // };
 
-  const buttons = Array.from({ length: totalPages }, (_, index) => index + 1);
+  // const buttons = Array.from({ length: totalPages }, (_, index) => index + 1);
 
   return (
     <div className="tableContainer">

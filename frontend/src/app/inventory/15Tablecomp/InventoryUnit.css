@@ -212,34 +212,26 @@
 }
 
 .tags {
-    padding-left: 4vw;
     display: flex;
-    align-items: center;
-    overflow-x: hidden;  
-    overflow-y: hidden;
-    justify-content: left;
-    height: 5vh;
-    width: 30vw; 
+    flex-wrap: nowrap;           /* 🔒 Prevents wrapping to next line */
     gap: 10px;
+    padding-left: 4vw;
+    width: 30vw;
+    align-items: center;
+    overflow-x: hidden;
 }
 
-.gender, .season, .size, .time {
-    display: flex;
-    width: vw;
-    height: 2vh;
-    padding: 2px 19px;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
+.tag-box {
+    display: inline-block;
+    max-width: 120px;
+    padding: 2px 10px;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     border-radius: 2px;
     border: 1px solid #8184A6;
     background: #FFF;
-    box-shadow: 0px 0.5px 2px 0px rgba(0, 0, 0, 0.25);
-    font-size: 0.7rem;
+    box-shadow: 0px 0.5px 2px rgba(0, 0, 0, 0.25);
+    text-align: center;
 }
-
-.tag {
-    font-size: 1.5vh; 
-}
-
-

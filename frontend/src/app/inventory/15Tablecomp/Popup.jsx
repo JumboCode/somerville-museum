@@ -1,4 +1,3 @@
-
 /**************************************************************
  *
  *                     Popup.jsx
@@ -252,16 +251,6 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
             <p style={{fontSize: "1.1em"}}>Mark Item as <span style={{ color: "red", fontWeight: "bold", fontSize: "1em"}}>Missing</span></p>
         </button>
     );
-
-    // useEffect(() => {
-    //     if (borrowers && borrowers.length > 0) {
-    //       console.log("borrowers:", borrowers[0].name);
-    //     }
-    //   }, [borrowers]);
-
-    //   console.log("tags log", unit.color); 
-    //   console.log("tags log", unit.condition); 
-
 
     useEffect(() => {
         if (!unit) return;

@@ -7,7 +7,6 @@
  * @authors Arietta M. Goshtasby & Shayne Sidman
  *  
  */
-import { useClerk } from "@clerk/nextjs";
 import SettingsPage from "../components/SettingsPage";
 import "../components/SettingsPage.css"
 import React from 'react';
@@ -15,11 +14,17 @@ import './settings.css';
 
 // No need to wrap with GlobalProvider here since it should be at the app level
 const Settings = () => {
-  const { signOut } = useClerk();
-
   return (
-    <div className="settings-container">
-        <SettingsPage />
+    <div className="container">
+      <div className="Settings-Title global-settings-title">
+        Settings
+      </div>
+
+      <div className="settings-content-wrapper">
+          <div className="settings-page">
+            <SettingsPage />
+          </div>
+      </div>
     </div>
   );
 };
