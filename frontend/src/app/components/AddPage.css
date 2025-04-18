@@ -708,3 +708,14 @@
 .statusMessage.error {
     color: #dc3545;
 }
+
+.char-counter {
+    float: right;
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: normal;
+}
+
+.char-counter.error {
+    color: rgb(255, 0, 0);
+}
