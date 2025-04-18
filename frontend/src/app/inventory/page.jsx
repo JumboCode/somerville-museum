@@ -101,7 +101,7 @@ function Inventory({
                 setTotalPages(Math.ceil(intersection.length / unitsPerPage));
             }
             // If only search is active
-            else if (searchResults.length > 0) {
+            else if (searchResults.length > 0 && !isSearchEmpty) {
                 setUnits(searchResults);
                 console.log("Only search active, showing search results");
                 setTotalPages(Math.ceil(searchResults.length / unitsPerPage));
