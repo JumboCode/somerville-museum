@@ -1,6 +1,15 @@
 .settings-container {
     display: flex;
     justify-content: center;
+}
+
+.settings-header {
+  position: fixed;
+  top: 1.5rem;
+  left: 8rem;
+  z-index: 100;
+}
+
 .containerUpper {
     justify-content: center;
     display: flex;
@@ -102,10 +111,11 @@
   }
 
   .container {
+    margin-top: 5rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    max-height: 100vh;
     background-color: #F8F5F5;
     position: relative; /* so Settings-Title is relative to this */
   }
@@ -134,4 +144,3 @@
     left: 16rem;
     z-index: 9999;  /* above everything */
   }
-}
