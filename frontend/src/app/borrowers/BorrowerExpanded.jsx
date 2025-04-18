@@ -1,6 +1,5 @@
 "use client";
 
-
 import React, { useState, useEffect } from 'react';
 import "./BorrowerExpanded.css";
 import CloseButton from "../assets/CloseButton";
@@ -8,7 +7,6 @@ import ArrowLeft from "../assets/ArrowLeft";
 import ArrowRight from "../assets/ArrowRight";
 
 export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) {
-  const [isClosing, setIsClosing] = useState(false);
   const [borrowHistory, setBorrowHistory] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -31,13 +29,6 @@ export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) 
     fetchBorrowHistory();
   }, [borrower]);
 
-  const handleClose = () => {
-    setIsClosing(true);
-    setTimeout(() => {
-      onClose();
-    }, 300);
-  };
-
   // Format date for display
   const formatDate = (dateString) => {
     if (!dateString) return "Not Returned";
@@ -49,18 +40,22 @@ export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) 
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
         onClose();
+      } else if (e.key === "ArrowLeft" && onPrev) {
+        onPrev();
+      } else if (e.key === "ArrowRight" && onNext) {
+        onNext();
       }
     };
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [onClose]);
+  }, [onClose, onPrev, onNext]);
 
   if (!borrower) return null;
 
   return (
-    <div className="popup-overlay" onClick={handleClose}>
-      <div className={`popup-anim-wrapper ${isClosing ? 'slide-out' : 'slide-in'}`}> 
+    <div className="popup-overlay" onClick={onClose}>
+      <div className="popup-anim-wrapper"> 
         <div className="popup" onClick={(e) => e.stopPropagation()}>
           <CloseButton className="close-btn" onClick={onClose} /> 
 
@@ -113,8 +108,22 @@ export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) 
           </div>
 
           <div className="navigation-arrows">
-            <ArrowLeft className="nav-arrow left-arrow" onClick={onPrev} />
-            <ArrowRight className="nav-arrow right-arrow" onClick={onNext}/>
+            {onPrev && (
+              <div className="nav-arrow left-arrow" onClick={(e) => {
+                e.stopPropagation();
+                onPrev();
+              }}>
+                <ArrowLeft />
+              </div>
+            )}
+            {onNext && (
+              <div className="nav-arrow right-arrow" onClick={(e) => {
+                e.stopPropagation();
+                onNext();
+              }}>
+                <ArrowRight />
+              </div>
+            )}
           </div>
         </div>
       </div>
