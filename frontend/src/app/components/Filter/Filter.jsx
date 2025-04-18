@@ -10,7 +10,7 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
     const { selectedFilters, setSelectedFilters } = useFilterContext();
     const fields = {
         Condition: {
-            options: ["Great", "Needs washing", "Needs repair", "Needs dry cleaning", "Not usable"]
+            options: ["Good", "Great", "Needs washing", "Needs repair", "Needs dry cleaning", "Not usable"]
         }, 
         Gender: {
             options: ["Male", "Female", "Unisex"]
