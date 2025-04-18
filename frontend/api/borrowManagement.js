@@ -323,7 +323,7 @@ export async function returnValidityHandler(req, res) {
     if (unavailableItems.length > 0) {
       message += `${unavailableItems
         .map((item) => `${item.id}`)
-        .join(', ')}. `;
+        .join(', ')} `;
     }
 
     // Send the response
