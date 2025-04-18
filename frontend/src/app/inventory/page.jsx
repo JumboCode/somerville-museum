@@ -445,6 +445,7 @@ function Inventory({
             direction = 'desc';
         }
         setSortConfig({ key, direction });
+        setCurrentPage(1); // Reset to page 1 on sort change
         
         // Call the appropriate sort function
         if (sortingFunctions[key]) {
