@@ -441,12 +441,14 @@ export default function AddPage() {
                                     </div>
                                 )}
                                 <input
+                                    key={images[0] ? "image-0" : `reset-${Date.now()}`} // This will reset when image is null
                                     type="file"
                                     id="file-input-0"
                                     accept="image/*"
                                     style={{ display: "none" }}
                                     onChange={(e) => handleFileInputChange(e, 0)}
                                 />
+
                             </div>
 
                             {/* Second image slot */}
@@ -491,12 +493,14 @@ export default function AddPage() {
                                     </div>
                                 )}
                                 <input
+                                    key={images[1] ? "image-1" : `reset-${Date.now()}`} // This will reset when image is null
                                     type="file"
                                     id="file-input-1"
                                     accept="image/*"
                                     style={{ display: "none" }}
                                     onChange={(e) => handleFileInputChange(e, 1)}
                                 />
+
                             </div>
                             
                             {errors.image && (
