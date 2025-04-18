@@ -104,12 +104,11 @@
 }
 
 .titleButton {
+  width: 100%;
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
-  gap: 1.25rem;
-  align-content: center;
   align-items: center;
+  position: relative;
 }
 
 .exit {
@@ -119,8 +118,9 @@
 
 .buttons {
   display: flex;
-  flex-direction: row;
-  align-items: baseline;
+  flex-shrink: 0;
+  margin-left: auto;
+  margin-right: 20px;
 }
 
 .imageContainer {
