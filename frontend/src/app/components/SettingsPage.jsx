@@ -112,9 +112,6 @@ export default function SettingsPage() {
 
   return (
     <>
-      <div className="settings-header">
-        <h1 className="settings-title">Settings</h1>
-      </div>
       <div className="settings-page">
         <div className="account-header">
           <h2 className="account-subheading">Account Information & Options</h2>
@@ -175,19 +172,10 @@ export default function SettingsPage() {
                   />
                   <span className="slider round"></span>
                 </label>
-                <label>Normal Data Entry</label>
+                <label>{normalDataEntry ? 'Data Input' : 'Normal Data Entry'}</label>
                 <ExportDataBtn />
               </div>
-              <div className="toggle">
-                <label className="switch">
-                  <input
-                    type="checkbox"
-                    checked={lightMode}
-                    onChange={() => setLightMode(!lightMode)}
-                  />
-                  <span className="slider round"></span>
-                </label>
-                <label>Light Mode</label>
+              <div className="toggle-logout">                  
                 <button className="logout" onClick={() => signOut()}>
                   <span className="logout-btn-content">
                     Logout
