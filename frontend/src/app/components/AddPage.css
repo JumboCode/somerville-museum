@@ -13,12 +13,12 @@
     width: 100vw;
     height: 100vh;
     margin: 0;
-    padding: 0;
 }
 
 .main {
     width: 100vw;
     height: 100vh;
+
 }
 
 .column {
@@ -40,6 +40,8 @@
 .left {
     display: flex;
     padding-top: 2rem;
+    padding-left: 1.5vw;
+
     flex-direction: column;
     width: 40%;
     margin-left: 2rem;
@@ -84,26 +86,8 @@
     gap: 3vw;
 }
 
-/* Image upload section styling */
-.image-upload {
-    margin: 1.3rem 0;
-    position: relative;
-}
-
-.drop-zone-container {
-    display: flex;
-    gap: 1rem;
-    width: 100%;
-    margin-bottom: 0.5rem;
-    position: relative;
-}
-
-.drop-zone-container.error-border .drop-zone {
-    border-color: red;
-}
-
-.drop-zone {
-    width: 50%;
+#drop-zone {
+    width: 36.5vw;
     height: 30vh;
     border: 1px solid var(--sm_red);
     border-radius: 4px;
@@ -440,9 +424,9 @@
 
 .textBoxRow {
     display: flex;
-    gap: 1.8rem;
+    gap: 1.3rem;
     justify-content: center;
-    width: 100%;
+    width: auto;
     margin-top: 1rem;
 }
 
@@ -488,6 +472,7 @@
     outline: none;
     line-height: 3.5vh;
 }
+
 
 .notesName {
     color: #000;
