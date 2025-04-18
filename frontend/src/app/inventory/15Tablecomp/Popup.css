@@ -257,3 +257,20 @@
     border-bottom: none; 
 }
 
+.status-toggle {
+  all: unset;             
+  color: red;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.status-toggle span {
+  font-weight: bold;
+  font-size: 1em;
+}
+
+.status-toggle:hover {
+  opacity: 0.6;
+  text-decoration: underline;
+}

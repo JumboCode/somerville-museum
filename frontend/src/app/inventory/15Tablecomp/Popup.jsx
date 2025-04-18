@@ -241,14 +241,14 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
     // Set the status missing/found status statement based on the status
     const statusStatement = status === "Missing" ? (
         <button 
-            style={{ border: "none", background: "none", color: "red", textDecoration: "underline"}}
+            className="status-toggle"
             onClick={() => onOptionSelect("Available")}>
-            <p style={{fontSize: "1.1em"}}>Mark Item as <span style={{ color: "red", fontWeight: "bold", fontSize: "1em"}}>Found</span></p>
+            <p className="status-toggle">Mark Item as <span>Found</span></p>
             </button>
     ) : (
-        <button style={{ border: "none", background: "none", color: "red", textDecoration: "underline"}}
+        <button className="status-toggle"
             onClick={() => onOptionSelect("Missing")}>
-            <p style={{fontSize: "1.1em"}}>Mark Item as <span style={{ color: "red", fontWeight: "bold", fontSize: "1em"}}>Missing</span></p>
+            <p style={{fontSize: "1.1em"}}>Mark Item as <span>Missing</span></p>
         </button>
     );
 
