@@ -49,6 +49,7 @@ function Inventory({
     const [filterResults, setFilterResults] = useState([]);
     const { isLoaded, user } = useUser();
     const [isApproved, setIsApproved] = useState(null);
+    const [isSearchEmpty, setIsSearchEmpty] = useState(true);
 
     // Calculate validity for buttons based on selectedItems
     const isBorrowValid = selectedItems.length > 0 && selectedItems.some(item => 
@@ -77,9 +78,17 @@ function Inventory({
     // Called any time new filters/search results are applied to update displayed units
     useEffect(() => {
         const updateResults = () => {
-            if (filterResults.length === 0 && searchResults.length === 0) {
+            if (filterResults.length === 0 && searchResults.length === 0 && isSearchEmpty) {
                 setUnits(originalUnits);
+                console.log("No filters or search results, showing all units");
                 setTotalPages(Math.ceil(originalUnits.length / unitsPerPage));
+                return;
+            }
+
+            if (filterResults.length === 0 && searchResults.length === 0 && !isSearchEmpty) {
+                setUnits([]);
+                console.log("No search results, showing no units");
+                setTotalPages(Math.ceil(0));
                 return;
             }
     
@@ -88,16 +97,19 @@ function Inventory({
                 const filteredUnitIds = new Set(filterResults.map(unit => unit.id));
                 const intersection = searchResults.filter(item => filteredUnitIds.has(item.id));
                 setUnits(intersection);
+                console.log("Both filters and search active, showing intersection");
                 setTotalPages(Math.ceil(intersection.length / unitsPerPage));
             }
             // If only search is active
             else if (searchResults.length > 0) {
                 setUnits(searchResults);
+                console.log("Only search active, showing search results");
                 setTotalPages(Math.ceil(searchResults.length / unitsPerPage));
             }
             // If only filters are active
             else {
                 setUnits(filterResults);
+                console.log("Only filters active, showing filter results");
                 setTotalPages(Math.ceil(filterResults.length / unitsPerPage));
             }
     
@@ -548,7 +560,7 @@ function Inventory({
             <div className={`Table ${isFilterVisible ? 'shrink' : ''}`}>
                 <div className="Header">
                     <div className="Items">
-                        <SearchBar updateSearchResults={setSearchResults} />
+                        <SearchBar updateSearchResults={setSearchResults} updateEmptySearchBar={setIsSearchEmpty}/>
                         <div className='buttons'> 
                             <AddButton className='addBtn'> </AddButton>
                             <BorrowButton 
