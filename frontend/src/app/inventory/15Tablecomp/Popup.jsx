@@ -422,52 +422,56 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
 
                 {/* Horizontal diver */}
                 <div id = "divider"></div>
-                
-                {/* Borrow Title and Return Button */}
-                <div className="borrowerTitle">
-                    <h3>Borrower Information</h3>
-                    <div className="returnButton">
-                        <Link href={`/return?id=${id}`}>
-                            <StylishButton
-                                styleType={"style1"}
-                                label={"Return"}>
-                            </StylishButton>
-                        </Link>
-                    </div>
-                </div>
-
-                {/* Borrower Info */}
-                <div id="currentBorrowerContainer">
-                    <table id="currentBorrower">
-                        <thead>
-                            <tr>
-                            <th><strong>Current Borrower</strong></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                            <td><strong>Name: </strong>{currBorrower !== null ? currBorrower.name : "N/A"}</td>
-                            <td><strong>Date Borrowed: </strong>{currBorrower !== null ? currBorrower.date_borrowed : "N/A"}</td>
-                            </tr>
-                            <tr>
-                            <td><strong>Email: </strong>{currBorrower !== null ? currBorrower.email : "N/A"}</td>
-                            <td><strong>Return Date: </strong>{currBorrower !== null ? currBorrower.return_date : "N/A"}</td>
-                            </tr>
-                            <tr>
-                            <td><strong>Cell: </strong>{currBorrower !== null ? currBorrower.phone_number : "N/A"}</td>
-                            <td><strong>Approved By: </strong>{currBorrower !== null ? currBorrower.approved_by : "N/A"}</td>
-                            </tr>
-                        </tbody>
-                        </table>
-
-                    {/* Borrow's Notes */}
-                    <div className="noteSection"> 
-                        <p><strong>Notes</strong></p>
-                        <textarea readOnly className="noteBox" value={currBorrower !== null ? currBorrower.notes : ""} />
+               
+                   {/* Borrower Info */}
+                    {currBorrower && (
+                        <> 
+                        <div className="borrowerTitle">
+                        <h3>Borrower Information</h3>
+                        <div className="returnButton">
+                            <Link href={`/return?id=${id}`}>
+                                <StylishButton
+                                    styleType={"style1"}
+                                    label={"Return"}>
+                                </StylishButton>
+                            </Link>
+                        </div>
                     </div>
 
-                </div>
+                    <div id="currentBorrowerContainer">
+                        <table id="currentBorrower">
+                            <thead>
+                                <tr>
+                                <th><strong>Current Borrower</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                <td><strong>Name: </strong>{currBorrower !== null ? currBorrower.name : "N/A"}</td>
+                                <td><strong>Date Borrowed: </strong>{currBorrower !== null ? currBorrower.date_borrowed : "N/A"}</td>
+                                </tr>
+                                <tr>
+                                <td><strong>Email: </strong>{currBorrower !== null ? currBorrower.email : "N/A"}</td>
+                                <td><strong>Return Date: </strong>{currBorrower !== null ? currBorrower.return_date : "N/A"}</td>
+                                </tr>
+                                <tr>
+                                <td><strong>Cell: </strong>{currBorrower !== null ? currBorrower.phone_number : "N/A"}</td>
+                                <td><strong>Approved By: </strong>{currBorrower !== null ? currBorrower.approved_by : "N/A"}</td>
+                                </tr>
+                            </tbody>
+                            </table>
+    
+                        {/* Borrow's Notes */}
+                        <div className="noteSection"> 
+                            <p><strong>Notes</strong></p>
+                            <textarea readOnly className="noteBox" value={currBorrower !== null ? currBorrower.notes : ""} />
+                        </div>
+    
+                    </div>
+                    </>
+                )}
 
+             
                 {/* Borrow History Table */}
                 <div id="borrowerHistoryContainer">
                     <p id="borrowerHistorytitle">Borrower History</p> 
