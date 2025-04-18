@@ -40,6 +40,8 @@ export default function AddPage() {
     const [statusType, setStatusType] = useState("");
     const [activeDragIndex, setActiveDragIndex] = useState(null); // Tracks which slot is being dragged over
 
+    const [charCount, setCharCount] = useState(0);
+
     // Define all of the options for buttons and dropdowns
     const garmentOptions = [
         { label: "Gowns/dresses", value: "Gowns/dresses" },
@@ -367,6 +369,7 @@ export default function AddPage() {
         setCondition([]);
         setSelectedColors([]);
         setImages([null, null]);
+        setCharCount(0);
     };
 
     // TOGGLE FUNCTIONALITY
@@ -619,13 +622,25 @@ export default function AddPage() {
 
                         <div className={`notesName`}>
                             Notes
+                            <span className={`char-counter ${
+                                charCount == 500 ? 'error' : ''
+                            }`}>
+                                {charCount}/500 characters
+                            </span>
                         </div>
 
                         <div className="notesTextBox">
-                            <textarea placeholder="Extra item information not captured by tags (i.e. fabric type, or where it was bought from)."
-                            id = "notesTB"
-                            value={notesText}
-                            onChange={(e) => setNotesText(e.target.value)}
+                            <textarea 
+                                placeholder="Extra item information not captured by tags (i.e. fabric type, or where it was bought from)."
+                                id="notesTB"
+                                value={notesText}
+                                onChange={(e) => {
+                                    if (e.target.value.length <= 500) {
+                                        setNotesText(e.target.value);
+                                        setCharCount(e.target.value.length);
+                                    }
+                                }}
+                                maxLength={500}
                             />
                         </div>
                     </div>
