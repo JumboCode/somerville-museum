@@ -152,6 +152,9 @@ export async function updateIDHandler(req, res) {
 
     try {
         const result = await query(queryText, queryParams);
+        console.log('queryText:', queryText);
+        console.log('queryParams:', queryParams);
+        console.log('Search results:', result.rows);
         res.status(200).json(result.rows);
     } catch (error) {
         console.error('Error fetching entry:', error);
