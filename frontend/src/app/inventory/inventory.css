@@ -4,6 +4,7 @@
 
 body, html {
     height: 100%;
+    width: 100%;
     margin: 0;
     display: flex;
     align-items: center; 
@@ -15,7 +16,7 @@ body, html {
     /* margin: auto; */
     background: #F8F5F5;
     height: 95vh; /* Increase height to give more space */
-    width: auto;
+    width: 100%; /* Increase width to give more space */
     display: flex;
     flex-direction: column;
     align-items: center;
