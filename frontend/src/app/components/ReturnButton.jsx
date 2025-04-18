@@ -42,7 +42,6 @@ const ReturnButton = ( {selectedItems = [], onSuccess, isValid } ) => {
               setIsAlertOpen(true); 
           } else {
             setIsPopupVisible(true); 
-
           }
     
           // Reset available items after check
