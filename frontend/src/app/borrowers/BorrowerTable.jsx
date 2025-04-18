@@ -106,15 +106,28 @@ export default function BorrowerTable({ searchResults, onSelectBorrower }) {
   };
 
   const pageButtons = Array.from({ length: totalPages }, (_, index) => index + 1);
-  // const handleSelectBorrower = (borrower) => {
-  //   const index = borrowers.findIndex(b => b.email === borrower.email); // Use unique field
-  //   if (index !== -1) {
-  //     setSelectedBorrowerIndex(index);
-  //     setShowPopup(true);
-  //   }
-  // };
+  
+  // Handle the selection of a borrower
+  const handleSelectBorrower = (borrower) => {
+    const index = currentBorrowers.findIndex(b => b.id === borrower.id);
+    if (index !== -1) {
+      setSelectedBorrowerIndex(index);
+      setShowPopup(true);
+    }
+  };
 
-  // const buttons = Array.from({ length: totalPages }, (_, index) => index + 1);
+  // Handle navigation between borrowers in the popup
+  const handlePrevBorrower = () => {
+    if (selectedBorrowerIndex > 0) {
+      setSelectedBorrowerIndex(selectedBorrowerIndex - 1);
+    }
+  };
+
+  const handleNextBorrower = () => {
+    if (selectedBorrowerIndex < currentBorrowers.length - 1) {
+      setSelectedBorrowerIndex(selectedBorrowerIndex + 1);
+    }
+  };
 
   return (
     <div className="tableContainer">
@@ -139,12 +152,12 @@ export default function BorrowerTable({ searchResults, onSelectBorrower }) {
           <tbody>
             {currentBorrowers.length > 0 ? (
               currentBorrowers.map((borrower) => (
-                <tr key={borrower.id} onDoubleClick={() => onSelectBorrower(borrower)}>
+                <tr key={borrower.id} onDoubleClick={() => handleSelectBorrower(borrower)}>
                   <td>{borrower.name}</td>
                   <td>{borrower.email}</td>
                   <td>{borrower.phone_number}</td>
                   <td>{formatHistorySummary(borrower.borrowHistory)}</td>
-                  <td onClick={() => onSelectBorrower(borrower)}>
+                  <td onClick={() => handleSelectBorrower(borrower)}>
                     <span className="three-dots">...</span>
                   </td>
                 </tr>
@@ -207,18 +220,10 @@ export default function BorrowerTable({ searchResults, onSelectBorrower }) {
 
       {showPopup && selectedBorrowerIndex !== null && (
         <BorrowerExpanded
-          borrower={borrowers[selectedBorrowerIndex]}
+          borrower={currentBorrowers[selectedBorrowerIndex]}
           onClose={() => setShowPopup(false)}
-          onPrev={
-            selectedBorrowerIndex > 0
-              ? () => setSelectedBorrowerIndex((prev) => prev - 1)
-              : null
-          }
-          onNext={
-            selectedBorrowerIndex < borrowers.length - 1
-              ? () => setSelectedBorrowerIndex((prev) => prev + 1)
-              : null
-          }
+          onPrev={selectedBorrowerIndex > 0 ? handlePrevBorrower : null}
+          onNext={selectedBorrowerIndex < currentBorrowers.length - 1 ? handleNextBorrower : null}
         />
       )}
     </div>
