@@ -1,18 +1,3 @@
-/**************************************************************
- *
- *                     AddPage.jsx
- *
- *        Authors: Dan Glorioso & Massimo Bottari
- *           Date: 02/01/2025
- *
- *     Summary: The AddPage component is a form that allows users to
- *     add new items to the inventory. It has error checking for empty fields,
- *     and featured multi-select dropdowns for garment type, time period, 
- *     season, condition, and color. It also has a drag-and-drop image upload
- *     feature.
- * 
- **************************************************************/
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -27,7 +12,7 @@ export default function AddPage() {
 
     // Left column state variables
     const [dragOver, setDragOver] = useState(false);
-    const [preview, setPreview] = useState(null);
+    const [images, setImages] = useState([null, null]); // Array to hold 2 images
 
     // Right column state variables
     const { isToggleEnabled } = useGlobalContext(); // TOGGLE FUNCTIONALITY
@@ -53,6 +38,7 @@ export default function AddPage() {
     const [errors, setErrors] = useState({});
     const [statusMessage, setStatusMessage] = useState("");
     const [statusType, setStatusType] = useState("");
+    const [activeDragIndex, setActiveDragIndex] = useState(null); // Tracks which slot is being dragged over
 
     // Define all of the options for buttons and dropdowns
     const garmentOptions = [
@@ -112,13 +98,18 @@ export default function AddPage() {
         { name: "White", hex: "#FFFFFF", border: "#c9c9c9" },
         { name: "Gray", hex: "#8E8E93" },
         { name: "Black", hex: "#000000" },
-      ];
+    ];
 
     // Function to handle and update file selection
-    const handleFileSelect = (file) => {
+    const handleFileSelect = (file, index) => {
         if (file && file.type.startsWith("image/")) {
             const reader = new FileReader();
-            reader.onload = (e) => setPreview(e.target.result);
+            reader.onload = (e) => {
+                // Create a new array with the updated image at the specified index
+                const newImages = [...images];
+                newImages[index] = e.target.result;
+                setImages(newImages);
+            };
             reader.readAsDataURL(file);
             
             // Clear any image upload error if it exists
@@ -131,17 +122,25 @@ export default function AddPage() {
     };
 
     // Function to handle drag-and-drop file upload
-    const handleDrop = (event) => {
+    const handleDrop = (event, index) => {
         event.preventDefault();
         setDragOver(false);
+        setActiveDragIndex(null);
         const file = event.dataTransfer.files[0];
-        handleFileSelect(file);
+        handleFileSelect(file, index);
     };
 
     // Function to handle file input change
-    const handleFileInputChange = (event) => {
+    const handleFileInputChange = (event, index) => {
         const file = event.target.files[0];
-        handleFileSelect(file);
+        handleFileSelect(file, index);
+    };
+
+    // Function to remove an image
+    const handleRemoveImage = (index) => {
+        const newImages = [...images];
+        newImages[index] = null;
+        setImages(newImages);
     };
 
     // Function to deal with a number input to format as a $ amount
@@ -165,10 +164,10 @@ export default function AddPage() {
         if (priceText === "") return;
     
         // Convert to a fixed two-decimal format
-        const formattedValue = parseFloat(priceText).toFixed(2);
+        const numericValue = parseFloat(priceText.replace('$', ''));
     
         // Check is input is valid before setting state
-        if (!isNaN(formattedValue)) {
+        if (!isNaN(numericValue)) {
             setPriceText(`$${numericValue.toFixed(2)}`);
         }
     };
@@ -229,9 +228,11 @@ export default function AddPage() {
 
     const handleSubmit = () => {
         
-            setStatusMessage("Submitting...");
-            setStatusType("neutral");
+        setStatusMessage("Submitting...");
+        setStatusType("neutral");
 
+        // Combine images into an array for the API
+        const imageArray = images.filter(img => img !== null);
 
         const newItem = {
             id: isToggleEnabled ? manualIdText : idText,
@@ -252,7 +253,7 @@ export default function AddPage() {
             date_added: isToggleEnabled ? manualDateText : placeholderDate, 
             current_borrower: null,
             borrow_history: null,
-            image: preview
+            images: imageArray
         };
 
         let newErrors = {};
@@ -272,7 +273,7 @@ export default function AddPage() {
             if (!newItem.id) newErrors.id = true;
         }
         if (!newItem.name) newErrors.name = true;
-        if (!preview) newErrors.image = true;
+        if (imageArray.length === 0) newErrors.image = true;
 
         // If any errors exist, update state and show alert
         if (Object.keys(newErrors).length > 0) {
@@ -311,6 +312,7 @@ export default function AddPage() {
                         setStatusMessage("An item with this ID already exists.");
                         setStatusType("error");
                     } else {
+                        const data = await response.json();
                         alert(`Error: ${data.error || "Request failed."}`);
                     }
                     return;
@@ -350,7 +352,7 @@ export default function AddPage() {
         setSelectedSeason([]);
         setCondition([]);
         setSelectedColors([]);
-        setPreview(null);
+        setImages([null, null]);
     };
 
     // TOGGLE FUNCTIONALITY
@@ -390,43 +392,121 @@ export default function AddPage() {
                         Add Item
                     </div>
 
-                    {/* Drag-and-drop image upload section */}
+                    {/* Image upload section */}
                     <div className="image-upload">
-                        <div
-                            id="drop-zone"
-                            className={`drop-zone ${dragOver ? "dragover" : ""} ${errors.image ? "error-border" : ""}`}
-                            onClick={() => document.getElementById("file-input").click()}
-                            onDragOver={(event) => {
-                                event.preventDefault();
-                                setDragOver(true);
-                            }}
-                            onDragLeave={() => setDragOver(false)}
-                            onDrop={handleDrop}
+                        <div 
+                            className={`drop-zone-container ${errors.image ? "error-border" : ""}`}
+                        >
+                            {/* First image slot */}
+                            <div
+                                className={`drop-zone ${activeDragIndex === 0 ? "dragover" : ""} ${images[0] ? "has-image" : ""}`}
+                                onClick={() => !images[0] && document.getElementById("file-input-0").click()}
+                                onDragOver={(event) => {
+                                    event.preventDefault();
+                                    setActiveDragIndex(0);
+                                }}
+                                onDragLeave={() => setActiveDragIndex(null)}
+                                onDrop={(event) => handleDrop(event, 0)}
                             >
-                            <div className="upload-icon-and-text">
-                            <img src="/icons/upload.svg" className="upload-icon" />
-                                <p style={{color: "#9B525F"}}>
-                                    Upload image*
-                                </p>
-                                {errors.image && (
-                                    <p className="error-text" style={{marginTop: "5px"}}>
-                                        Image is required
-                                    </p>
+                                {!images[0] ? (
+                                    <div className="upload-icon-and-text">
+                                        <img src="/icons/upload.svg" className="upload-icon" alt="Upload" />
+                                        <p style={{ color: "#9B525F" }}>
+                                            Upload image 1*
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div className="image-preview-container">
+                                        <button 
+                                            className="remove-image-btn" 
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleRemoveImage(0);
+                                            }}
+                                        >
+                                            {/* <!-- https://feathericons.dev/?search=trash2&iconset=feather --> */}
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" className="main-grid-item-icon" fill="none" stroke="#7B3F4C" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                                                <polyline points="3 6 5 6 21 6" />
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                                <line x1="10" x2="10" y1="11" y2="17" />
+                                                <line x1="14" x2="14" y1="11" y2="17" />
+                                            </svg>
+
+                                        </button>
+                                        <img
+                                            src={images[0]}
+                                            alt="Preview"
+                                            className="preview"
+                                        />
+                                    </div>
                                 )}
-                            </div>
-                            <input
-                                type="file"
-                                id="file-input"
-                                accept="image/*"
-                                style={{ display: "none" }}
-                                onChange={handleFileInputChange}
-                            />
-                            {preview && (
-                                <img
-                                src={preview}
-                                alt="Preview"
-                                className="preview"
+                                <input
+                                    key={images[0] ? "image-0" : `reset-${Date.now()}`} // This will reset when image is null
+                                    type="file"
+                                    id="file-input-0"
+                                    accept="image/*"
+                                    style={{ display: "none" }}
+                                    onChange={(e) => handleFileInputChange(e, 0)}
                                 />
+
+                            </div>
+
+                            {/* Second image slot */}
+                            <div
+                                className={`drop-zone ${activeDragIndex === 1 ? "dragover" : ""} ${images[1] ? "has-image" : ""}`}
+                                onClick={() => !images[1] && document.getElementById("file-input-1").click()}
+                                onDragOver={(event) => {
+                                    event.preventDefault();
+                                    setActiveDragIndex(1);
+                                }}
+                                onDragLeave={() => setActiveDragIndex(null)}
+                                onDrop={(event) => handleDrop(event, 1)}
+                            >
+                                {!images[1] ? (
+                                    <div className="upload-icon-and-text">
+                                        <img src="/icons/upload.svg" className="upload-icon" alt="Upload" />
+                                        <p style={{ color: "#9B525F" }}>
+                                            Upload image 2
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div className="image-preview-container">
+                                        <button 
+                                            className="remove-image-btn" 
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleRemoveImage(1);
+                                            }}
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" className="main-grid-item-icon" fill="none" stroke="#7B3F4C" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                                                <polyline points="3 6 5 6 21 6" />
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                                <line x1="10" x2="10" y1="11" y2="17" />
+                                                <line x1="14" x2="14" y1="11" y2="17" />
+                                            </svg>
+                                        </button>
+                                        <img
+                                            src={images[1]}
+                                            alt="Preview"
+                                            className="preview"
+                                        />
+                                    </div>
+                                )}
+                                <input
+                                    key={images[1] ? "image-1" : `reset-${Date.now()}`} // This will reset when image is null
+                                    type="file"
+                                    id="file-input-1"
+                                    accept="image/*"
+                                    style={{ display: "none" }}
+                                    onChange={(e) => handleFileInputChange(e, 1)}
+                                />
+
+                            </div>
+                            
+                            {errors.image && (
+                                <p className="error-text image-error-text">
+                                    At least one image is required
+                                </p>
                             )}
                         </div>
 
