@@ -13,7 +13,7 @@
 import "./SearchBar.css";
 import { useState, useEffect } from "react"; 
 
-export default function SearchBar({ updateSearchResults }) {
+export default function SearchBar({ updateSearchResults, updateEmptySearchBar }) {
     const [query, setQuery] = useState("");
 
     // Fetch relevant search results when search query is changed
@@ -36,6 +36,11 @@ export default function SearchBar({ updateSearchResults }) {
                 const data = await response.json();
                 console.log( "Search results:", data);
                 updateSearchResults(data);  // Update results on inventory page
+                if (query === "") {
+                    updateEmptySearchBar(true); // Update empty search bar state
+                } else {
+                    updateEmptySearchBar(false); // Update empty search bar state
+                }
             } catch (error) {
                 console.log(error);
             }
