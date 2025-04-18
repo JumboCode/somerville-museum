@@ -146,29 +146,37 @@ export default function AddPage() {
     // Function to deal with a number input to format as a $ amount
     const handlePriceChange = (e) => {
         let value = e.target.value;
-    
+        
         // Remove any non-numeric characters except dot
         value = value.replace(/[^0-9.]/g, "");
-    
+        
         // Ensure only one decimal point
         const parts = value.split(".");
         if (parts.length > 2) {
             value = parts[0] + "." + parts.slice(1).join("");
         }
-    
-        setPriceText(value ? `$${value}` : "");
+        
+        // Update state without $ symbol for easier processing
+        setPriceText(value);
     };
 
     // Function to format price as currency
     const formatPrice = () => {
-        if (priceText === "") return;
-    
-        // Convert to a fixed two-decimal format
-        const numericValue = parseFloat(priceText.replace('$', ''));
-    
-        // Check is input is valid before setting state
+        if (priceText === "") {
+            setPriceText("");
+            return;
+        }
+        
+        // Convert to number
+        const numericValue = parseFloat(priceText);
+        
+        // Check if input is valid before setting state
         if (!isNaN(numericValue)) {
+            // Format with 2 decimal places and add $ symbol
             setPriceText(`$${numericValue.toFixed(2)}`);
+        } else {
+            // If invalid, clear the input
+            setPriceText("");
         }
     };
     
@@ -227,12 +235,18 @@ export default function AddPage() {
     };
 
     const handleSubmit = () => {
-        
         setStatusMessage("Submitting...");
         setStatusType("neutral");
-
-        // Combine images into an array for the API
-        const imageArray = images.filter(img => img !== null);
+    
+        // Check if price is valid when not empty
+        if (priceText && priceText !== "$0.00") {
+            const numericValue = parseFloat(priceText.replace('$', ''));
+            if (isNaN(numericValue)) {
+                setStatusMessage("Please enter a valid price.");
+                setStatusType("error");
+                return;
+            }
+        }
 
         const newItem = {
             id: isToggleEnabled ? manualIdText : idText,
@@ -581,19 +595,25 @@ export default function AddPage() {
                                 </div>
                             </div>
                             <div className="allPrice">
-                                <div className={`priceName`}>
+                                <div className={`priceName ${errors.price ? "error-text" : ""}`}>
                                     Price
                                 </div>
                                 <div className="priceInput">
-                                <input 
-                                    type="text"
-                                    placeholder="$0.00"
-                                    id="priceTB"
-                                    value={priceText}
-                                    onChange={(e) => handlePriceChange(e)}
-                                    onBlur={formatPrice}
-                                />
+                                    <input 
+                                        type="text"
+                                        placeholder="$0.00"
+                                        id="priceTB"
+                                        value={priceText}
+                                        onChange={(e) => handlePriceChange(e)}
+                                        onBlur={formatPrice}
+                                        className={errors.price ? "error-border" : ""}
+                                    />
                                 </div>
+                                {errors.price && (
+                                    <p className="error-text" style={{marginTop: "5px"}}>
+                                        Please enter a valid price
+                                    </p>
+                                )}
                             </div>
                         </div>
 
