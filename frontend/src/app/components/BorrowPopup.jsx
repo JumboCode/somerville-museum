@@ -94,6 +94,10 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
   
 
   const handleSubmit = async (e) => {
+
+    if (selectedItems === 0) {
+      
+    }
         e.preventDefault();
 
     if (!isEmailValid) {
