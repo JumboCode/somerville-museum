@@ -12,11 +12,11 @@ const ReturnButton = ( {selectedItems = [], onSuccess, isValid } ) => {
     const [alertMessage, setAlertMessage] = useState(""); 
 
     const handleSubmit = async (e) => {
-        if(selectedItems == 0) {
-            alert('No Items selected.'); 
-        } else {
-            handleValidity();
-        }
+      if(!isValid || selectedItems == 0) {
+          return; 
+      } 
+        handleValidity();
+        
     }
 
     async function handleValidity() {

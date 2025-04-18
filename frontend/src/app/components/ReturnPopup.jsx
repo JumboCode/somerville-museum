@@ -103,8 +103,11 @@ const ReturnPopup = ({ units = [], onSuccess, onClose }) => {
         // } catch (error) {
         //     console.error("Error returning data:", error);
         // }
+        if (selectedUnits == 0) {
+          alert('No items selected.'); 
+        } else {
 
-        try {
+          try {
             // 1. Send Emails first
             const emailResponse = await fetch('/api/borrowManagement?action=groupReturnsByBorrower', {
               method: 'POST',
@@ -144,6 +147,10 @@ const ReturnPopup = ({ units = [], onSuccess, onClose }) => {
         } catch (error) {
             console.error("Error returning data:", error);
         }
+
+        }
+
+        
     };
 
     const goToPreviousPage = () => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
