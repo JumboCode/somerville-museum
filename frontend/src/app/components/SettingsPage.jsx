@@ -26,7 +26,7 @@ export default function SettingsPage() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [approvals, setApprovals] = useState([]);
 
-  const checkisAdmin = (value) => value == "user_2tB9Ny3ALEWuch9VvjlrQemjV8A";
+  const checkisAdmin = (value) => value === process.env.NEXT_PUBLIC_ADMIN_CLERK_ID;
 
   // Update display text when component mounts to ensure it's in sync with context
   useEffect(() => {
@@ -128,13 +128,13 @@ export default function SettingsPage() {
                 <input
                   type="text"
                   id="first-name"
-                  value={user?.firstName || "Holden"}
+                  value={user?.firstName || ""}
                   disabled
                 />
                 <input
                   type="text"
                   id="last-name"
-                  value={user?.lastName || "Kittleburger"}
+                  value={user?.lastName || ""}
                   disabled
                 />
               </div>
@@ -145,7 +145,7 @@ export default function SettingsPage() {
                   id="email"
                   value={
                     user?.emailAddresses?.[0]?.emailAddress ||
-                    "holdenlovesburgers@hotmail.com"
+                    ""
                   }
                   disabled
                 />
