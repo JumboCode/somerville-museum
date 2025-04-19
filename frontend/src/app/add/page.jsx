@@ -7,7 +7,7 @@ import "../components/AddPage.css"
 const Add = () => {
     return (
         <div className="add-page">
-        <AddPage />
+            <AddPage />
         </div>
     );
 };
