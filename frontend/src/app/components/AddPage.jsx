@@ -7,12 +7,14 @@ import { MultiSelect } from 'primereact/multiselect';
 import StylishButton from './StylishButton.jsx';
 import Link from 'next/link';
 import { useGlobalContext } from './contexts/ToggleContext';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function AddPage() {
 
     // Left column state variables
     const [dragOver, setDragOver] = useState(false);
-    const [images, setImages] = useState([null, null]); // Array to hold 2 images
+    const [preview, setPreview] = useState([]);
+    const [imageID, setImageID] = useState([]); // For image UUIDs
 
     // Right column state variables
     const { isToggleEnabled } = useGlobalContext(); // TOGGLE FUNCTIONALITY
@@ -103,20 +105,17 @@ export default function AddPage() {
     ];
 
     // Function to handle and update file selection
-    const handleFileSelect = (file, index) => {
+    const handleFileSelect = (file) => {
         if (file && file.type.startsWith("image/")) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                // Create a new array with the updated image at the specified index
-                const newImages = [...images];
-                newImages[index] = e.target.result;
-                setImages(newImages);
-            };
-            reader.readAsDataURL(file);
-            
-            // Clear any image upload error if it exists
-            if (errors.image) {
-                setErrors({...errors, image: false});
+            if (preview.length < 2) {
+                const reader = new FileReader();
+                reader.onload = (e) => setPreview([...preview, e.target.result]);
+                reader.readAsDataURL(file);
+
+                // Generate UUID for uploaded image
+                setImageID([...imageID, uuidv4()]);
+            } else {
+                alert("You can only upload 2 images per item.");
             }
         } else {
             alert("Please upload a valid image file.");
@@ -124,25 +123,18 @@ export default function AddPage() {
     };
 
     // Function to handle drag-and-drop file upload
-    const handleDrop = (event, index) => {
+    const handleDrop = (event) => {
         event.preventDefault();
         setDragOver(false);
         setActiveDragIndex(null);
         const file = event.dataTransfer.files[0];
-        handleFileSelect(file, index);
+        handleFileSelect(file);
     };
 
     // Function to handle file input change
-    const handleFileInputChange = (event, index) => {
+    const handleFileInputChange = (event) => {
         const file = event.target.files[0];
-        handleFileSelect(file, index);
-    };
-
-    // Function to remove an image
-    const handleRemoveImage = (index) => {
-        const newImages = [...images];
-        newImages[index] = null;
-        setImages(newImages);
+        handleFileSelect(file);
     };
 
     // Function to deal with a number input to format as a $ amount
@@ -265,11 +257,11 @@ export default function AddPage() {
             condition: condition.length > 0 ? condition : null,
             color: selectedColors.length > 0 ? selectedColors : null,
             status: "Available", // Default status
-            // authenticity_level: null,
+            location: null,
             date_added: isToggleEnabled ? manualDateText : placeholderDate, 
             current_borrower: null,
             borrow_history: null,
-            images: imageArray
+            image_keys: imageID
         };
 
         let newErrors = {};
@@ -289,7 +281,6 @@ export default function AddPage() {
             if (!newItem.id) newErrors.id = true;
         }
         if (!newItem.name) newErrors.name = true;
-        if (imageArray.length === 0) newErrors.image = true;
 
         // If any errors exist, update state and show alert
         if (Object.keys(newErrors).length > 0) {
@@ -302,6 +293,8 @@ export default function AddPage() {
         // If no errors, clear previous errors and proceed
         setErrors({});
 
+        
+        
         // Validate date format if toggle is enabled
         if (isToggleEnabled) {
             // Allow blank inputs in addition to valid date formats
@@ -312,14 +305,45 @@ export default function AddPage() {
             }
         }
 
-        // Send a POST request to the add API with body data
-        const addItemDB = async (newItem) => {
+        // Upload image and corresponding id to upload endpoint 
 
+        const uploadImages = async () => {    
+
+            try {
+                const response = await fetch(`/api/upload`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ fileNames: imageID, fileContents: preview }),
+                });
+        
+                const data = await response.json();
+
+                if (!response.ok) {
+                    setStatusMessage("An error uploading image occurred. Please try again.");
+                    setStatusType("error");
+                    return;
+                }
+                
+            } catch (error) {
+                setStatusMessage("An error uploading image occurred. Please try again.");
+                setStatusType("error");
+                return;
+            }
+        };
+
+        // Call the serverless route
+        uploadImages();
+
+        // Convert newItem params to JSON object
+        const body = JSON.stringify(newItem);
+
+        // Send a POST request to the add API with body data
+        const addItemDB = async () => {
             try {
                 const response = await fetch(`/api/itemManagement?action=add`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(newItem)
+                    body
                 });
 
                 if (!response.ok) {
@@ -346,7 +370,7 @@ export default function AddPage() {
         };
 
         // Call the function to send the API request
-        addItemDB(newItem);
+        addItemDB();
 
         // Reset form fields
         resetForm();
@@ -368,8 +392,8 @@ export default function AddPage() {
         setSelectedSeason([]);
         setCondition([]);
         setSelectedColors([]);
-        setImages([null, null]);
-        setCharCount(0);
+        setPreview([]);
+        setImageID([null, null]);
     };
 
     // TOGGLE FUNCTIONALITY
@@ -409,154 +433,70 @@ export default function AddPage() {
                         Add Item
                     </div>
 
-                    {/* Image upload section */}
-                    <div className="image-upload">
-                        <div 
-                            className={`drop-zone-container ${errors.image ? "error-border" : ""}`}
-                        >
-                            {/* First image slot */}
-                            <div
-                                className={`drop-zone ${activeDragIndex === 0 ? "dragover" : ""} ${images[0] ? "has-image" : ""}`}
-                                onClick={() => !images[0] && document.getElementById("file-input-0").click()}
-                                onDragOver={(event) => {
-                                    event.preventDefault();
-                                    setActiveDragIndex(0);
-                                }}
-                                onDragLeave={() => setActiveDragIndex(null)}
-                                onDrop={(event) => handleDrop(event, 0)}
-                            >
-                                {!images[0] ? (
-                                    <div className="upload-icon-and-text">
-                                        <img src="/icons/upload.svg" className="upload-icon" alt="Upload" />
-                                        <p style={{ color: "#9B525F" }}>
-                                            Upload image 1*
-                                        </p>
-                                    </div>
-                                ) : (
-                                    <div className="image-preview-container">
-                                        <button 
-                                            className="remove-image-btn" 
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleRemoveImage(0);
-                                            }}
-                                        >
-                                            {/* <!-- https://feathericons.dev/?search=trash2&iconset=feather --> */}
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" className="main-grid-item-icon" fill="none" stroke="#7B3F4C" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
-                                                <polyline points="3 6 5 6 21 6" />
-                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                                <line x1="10" x2="10" y1="11" y2="17" />
-                                                <line x1="14" x2="14" y1="11" y2="17" />
-                                            </svg>
+                {/* Drag-and-drop image upload section */}
+                <div className="image-upload">
+                    <div
+                        id="drop-zone"
+                        className={`drop-zone ${dragOver ? "dragover" : ""}`}
+                        onClick={() => document.getElementById("file-input").click()}
+                        onDragOver={(event) => {
+                            event.preventDefault();
+                            setDragOver(true);
+                        }}
+                        onDragLeave={() => setDragOver(false)}
+                        onDrop={handleDrop}>
+                        {preview.length === 0 && 
+                            <div className="upload-icon-and-text">
+                                <img src="/icons/upload.svg" className="upload-icon" />
+                                <p style={{color: "#9B525F"}}>Upload image*</p>
+                            </div>}
 
-                                        </button>
-                                        <img
-                                            src={images[0]}
-                                            alt="Preview"
-                                            className="preview"
-                                        />
-                                    </div>
-                                )}
-                                <input
-                                    key={images[0] ? "image-0" : `reset-${Date.now()}`} // This will reset when image is null
-                                    type="file"
-                                    id="file-input-0"
-                                    accept="image/*"
-                                    style={{ display: "none" }}
-                                    onChange={(e) => handleFileInputChange(e, 0)}
+                            <input
+                                type="file"
+                                id="file-input"
+                                accept="image/*"
+                                style={{ display: "none" }}
+                                onChange={handleFileInputChange}
                                 />
 
-                            </div>
-
-                            {/* Second image slot */}
-                            <div
-                                className={`drop-zone ${activeDragIndex === 1 ? "dragover" : ""} ${images[1] ? "has-image" : ""}`}
-                                onClick={() => !images[1] && document.getElementById("file-input-1").click()}
-                                onDragOver={(event) => {
-                                    event.preventDefault();
-                                    setActiveDragIndex(1);
+                        {preview.length > 0 &&
+                        preview.map((image, index) => (
+                            <div key={index} className="image-preview-container">
+                            <button
+                                className="remove-image-btn"
+                                onClick={(e) => {
+                                e.stopPropagation();
+                                const updatedPreviews = [...preview];
+                                const updatedIDs = [...imageID];
+                                updatedPreviews.splice(index, 1);
+                                updatedIDs.splice(index, 1);
+                                setPreview(updatedPreviews);
+                                setImageID(updatedIDs);
                                 }}
-                                onDragLeave={() => setActiveDragIndex(null)}
-                                onDrop={(event) => handleDrop(event, 1)}
+                                aria-label="Remove image"
                             >
-                                {!images[1] ? (
-                                    <div className="upload-icon-and-text">
-                                        <img src="/icons/upload.svg" className="upload-icon" alt="Upload" />
-                                        <p style={{ color: "#9B525F" }}>
-                                            Upload image 2
-                                        </p>
-                                    </div>
-                                ) : (
-                                    <div className="image-preview-container">
-                                        <button 
-                                            className="remove-image-btn" 
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleRemoveImage(1);
-                                            }}
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" className="main-grid-item-icon" fill="none" stroke="#7B3F4C" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
-                                                <polyline points="3 6 5 6 21 6" />
-                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                                                <line x1="10" x2="10" y1="11" y2="17" />
-                                                <line x1="14" x2="14" y1="11" y2="17" />
-                                            </svg>
-                                        </button>
-                                        <img
-                                            src={images[1]}
-                                            alt="Preview"
-                                            className="preview"
-                                        />
-                                    </div>
-                                )}
-                                <input
-                                    key={images[1] ? "image-1" : `reset-${Date.now()}`} // This will reset when image is null
-                                    type="file"
-                                    id="file-input-1"
-                                    accept="image/*"
-                                    style={{ display: "none" }}
-                                    onChange={(e) => handleFileInputChange(e, 1)}
-                                />
-
+                                ×
+                            </button>
+                            <img src={image} alt="Preview" className="preview" />
                             </div>
-                            
-                            {errors.image && (
-                                <p className="error-text image-error-text">
-                                    At least one image is required
-                                </p>
-                            )}
-                        </div>
+                        ))}
 
-                        <div className="textBoxRow">
-                            
-                        {/* Item Name Text Entry */}
-                        <div className="inputGroup">
-                            <h3 htmlFor="itemTB" className={errors.name ? "error-text" : ""}>
-                                Item Name*
-                            </h3>
-                            <input
-                                className="itemTextBox"
-                                placeholder="Enter Name"
-                                id="itemTB"
-                                value={itemText}
-                                onChange={(e) => setItemText(e.target.value)}
-                            />
-                        </div>
-
-                        {/* Location Text Entry */}
-                        <div className="inputGroup">
-                            <label htmlFor="locationTB" className="textLabel">Location</label>
-                            <input
-                                className="locationTextBox"
-                                placeholder=""
-                                id="locationTB"
-                                value={locationText}
-                                onChange={(e) => setLocationText(e.target.value)}
-                            />
-                        </div>
                     </div>
 
-                        
+                        <div className={`itemName ${errors.name ? "error-text" : ""}`}>
+                        Item Name*
+                        </div>
+
+                        {/* Item Name Text Entry */}
+                        <label htmlFor="textBox"></label>
+                        <div className="itemTextBox">
+                        <textarea placeholder=""
+                        id = "itemTB"
+                        value={itemText}
+                        onChange={(e) => setItemText(e.target.value)}
+                        />
+                        </div>
+
                         {/* ID, Date Added, and Price Text Entries */}
                         <div className="textBoxRow">
                             <div className="allID">
@@ -675,7 +615,7 @@ export default function AddPage() {
                                 {isToggleEnabled ? "Time Period" : "Time Period*"}
                                 <span style={{fontWeight: "400"}}> (Max of 2)</span>
                             </h3>                            
-                                <MultiSelect
+                            <MultiSelect
                                     value={timePeriods.filter(period => selectedTimePeriod.includes(period.name))} // Sync selected values
                                     options={timePeriods}
                                     onChange={(e) => handleTimePeriodSelect(e.value || [])}
