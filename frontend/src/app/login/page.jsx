@@ -200,7 +200,7 @@ export default function Signin() {
             placeholder="Email"
             onChange={typeEmail}
             className="inputBox"
-            style={{ borderColor: errorBorder }}
+            style={{ borderColor: errorBorder, padding: "0 0 0 4%" }}
           />
         </div>
         <div className="inputContainer password">
@@ -211,7 +211,7 @@ export default function Signin() {
             placeholder="Password"
             onChange={typePassword}
             className="inputBox"
-            style={{ borderColor: errorBorder }}
+            style={{ borderColor: errorBorder, padding: "0 0 0 4%" }}
             autoComplete="current-password"
           />
           <span className={"eyecon"} onClick={handlePassToggle}>
