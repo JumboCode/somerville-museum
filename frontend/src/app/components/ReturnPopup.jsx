@@ -103,9 +103,9 @@ const ReturnPopup = ({ units = [], onSuccess, onClose }) => {
         // } catch (error) {
         //     console.error("Error returning data:", error);
         // }
-        if (selectedUnits == 0) {
-          alert('No items selected.'); 
-        } else {
+        // if (selectedUnits == 0) {
+        //   alert('No items selected.'); 
+        // } else {
 
           try {
             // 1. Send Emails first
@@ -148,7 +148,7 @@ const ReturnPopup = ({ units = [], onSuccess, onClose }) => {
             console.error("Error returning data:", error);
         }
 
-        }
+        // }
 
         
     };
