@@ -77,11 +77,23 @@ function Inventory({
     // Called any time new filters/search results are applied to update displayed units
     useEffect(() => {
         const updateResults = () => {
-            if (filterResults.length === 0 && searchResults.length === 0) {
-                setUnits(originalUnits);
-                setTotalPages(Math.ceil(originalUnits.length / unitsPerPage));
+            const isSearchActive = searchResults.length > 0;
+
+            if (!isSearchActive) {
+                const source = filterResults.length > 0 ? filterResults : originalUnits;
+                setUnits(source);
+                setTotalPages(Math.ceil(source.length / unitsPerPage));
+                setCurrentPage(1);
                 return;
             }
+
+            if (searchResults.length === 0) {
+                // If no search, show filtered data (or full if filters inactive)
+                const source = filterResults.length > 0 ? filterResults : originalUnits;
+                setUnits(source);
+                setTotalPages(Math.ceil(source.length / unitsPerPage));
+                return;
+            }              
     
             // If both filters and search are active, show intersection
             if (filterResults.length > 0 && searchResults.length > 0) {
@@ -264,26 +276,26 @@ function Inventory({
                 // console.log("Processed data:", updatedData);
 
                 setOriginalUnits(updatedData);
-                setUnits(updatedData);
+                // setUnits(updatedData);
                 setTotalPages(Math.ceil(updatedData.length / unitsPerPage));
 
-                if (selectedFilters.status?.length > 0 || 
-                    selectedFilters.condition?.length > 0 ||
-                    selectedFilters.gender?.length > 0 ||
-                    selectedFilters.color?.length > 0 ||
-                    selectedFilters.garment_type?.length > 0 ||
-                    selectedFilters.size?.length > 0 ||
-                    selectedFilters.season?.length > 0 ||
-                    selectedFilters.time_period?.length > 0 ||
-                    (selectedFilters.return_date?.start && selectedFilters.return_date?.end)) {
-                    // Use await here since applyFilters is async
-                    const filteredData = await applyFilters(updatedData);
-                    setUnits(filteredData);
-                    setTotalPages(Math.ceil(filteredData.length / unitsPerPage));
-                } else {
-                    setUnits(updatedData);
-                    setTotalPages(Math.ceil(updatedData.length / unitsPerPage));
-                }
+                // if (selectedFilters.status?.length > 0 || 
+                //     selectedFilters.condition?.length > 0 ||
+                //     selectedFilters.gender?.length > 0 ||
+                //     selectedFilters.color?.length > 0 ||
+                //     selectedFilters.garment_type?.length > 0 ||
+                //     selectedFilters.size?.length > 0 ||
+                //     selectedFilters.season?.length > 0 ||
+                //     selectedFilters.time_period?.length > 0 ||
+                //     (selectedFilters.return_date?.start && selectedFilters.return_date?.end)) {
+                //     // Use await here since applyFilters is async
+                //     const filteredData = await applyFilters(updatedData);
+                //     setUnits(filteredData);
+                //     setTotalPages(Math.ceil(filteredData.length / unitsPerPage));
+                // } else {
+                //     setUnits(updatedData);
+                //     setTotalPages(Math.ceil(updatedData.length / unitsPerPage));
+                // }
 
             } else {
                 console.error("failed to fetch data");
@@ -299,8 +311,22 @@ function Inventory({
 
     // Initial data fetch
     useEffect(() => {
-        fetchData();
-    }, []);
+        
+        if (!selectedFilters) return;
+
+        const hasAnyFilters = Object.entries(selectedFilters).some(([key, value]) => {
+          if (key === 'return_date') {
+            return value?.start && value?.end;
+          }
+          return Array.isArray(value) && value.length > 0;
+        });
+      
+        // Wait for filters to be applied before fetching
+        if (hasAnyFilters || !filter) {
+          fetchData();
+        }
+    }, [selectedFilters, filter]);
+      
 
     // manage filters if someone is navigating here from clicking one of the links
     // in the dashboard
@@ -321,18 +347,18 @@ function Inventory({
                 };
                 setSelectedFilters(newFilters);
                 
-                // If we already have data, apply the filter immediately
-                if (originalUnits.length > 0) {
-                    // Use await here since applyFilters is async
-                    const filteredData = await applyFilters(originalUnits);
-                    setUnits(filteredData);
-                    setTotalPages(Math.ceil(filteredData.length / unitsPerPage));
-                }
+                // // If we already have data, apply the filter immediately
+                // if (originalUnits.length > 0) {
+                //     // Use await here since applyFilters is async
+                //     const filteredData = await applyFilters(originalUnits);
+                //     setUnits(filteredData);
+                //     setTotalPages(Math.ceil(filteredData.length / unitsPerPage));
+                // }
             }
         };
         
         applyFilterFromUrl();
-    }, [filter, setSelectedFilters, originalUnits, unitsPerPage]);
+    }, [filter]); //[filter, setSelectedFilters, originalUnits, unitsPerPage]);
 
     // Filter effect
     useEffect(() => {
