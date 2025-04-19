@@ -13,9 +13,9 @@ import User from "../../assets/User.jsx";
 
 const initialNavigationItems = [
   { id: 'dashboard', icon: Pie, label: 'Dashboard', href: '/dashboard' },
-  { id: 'inventory', icon: Brick, label: 'Inventory', href: '/inventory' },
-  { id: 'settings', icon: Gear, label: '', isSettings: true, href: '/settings' },
   { id: 'borrowers', icon: User, label: 'Borrowers', href: '/borrowers' },
+  { id: 'inventory', icon: Brick, label: 'Inventory', href: '/inventory' },
+  { id: 'settings', icon: Gear, label: '', isSettings: true, href: '/settings' }
 ];
 
 
