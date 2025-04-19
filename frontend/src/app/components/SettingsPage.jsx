@@ -35,9 +35,7 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (user) {
-      console.log("user id: " + user?.id);
       setIsAdmin(checkisAdmin(user?.id));
-      console.log("Admin status updated:", checkisAdmin(user?.id));
     }
   }, [user]);
 
@@ -95,7 +93,6 @@ export default function SettingsPage() {
       if (!res.ok) {
         throw new Error("Approval failed");
       }
-      console.log(`User with ID ${id} approved.`);
       setApprovals(prev => prev.filter(user => user.id !== id));
     } catch (err) {
       console.error("Approval error:", err);
