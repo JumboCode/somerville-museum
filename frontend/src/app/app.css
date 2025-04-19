@@ -206,16 +206,20 @@
 
 .errorLabel {
   color: rgba(255, 44, 44, 1);
-  margin-bottom: 10px;
   padding: 0.5rem;
   border: 5px;
   max-width: max-content;
-  display: flex;
   align-self: flex-start;
-  flex-flow: column nowrap;
   border-radius: 5px;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.errorText {
+  color: rgba(255, 44, 44, 1);
 }
 
 .remember-pwd {
@@ -326,7 +330,6 @@
   background-color: rgba(255, 44, 44, 0.2);
   border-radius: 5px;
   align-self: flex-start;
-  padding: 1.5%;
 }
 
 .no-error {
