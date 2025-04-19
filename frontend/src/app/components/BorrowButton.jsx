@@ -49,12 +49,12 @@ const BorrowButton = ({ selectedItems = [], onSuccess, isValid }) => {
 
   // This function is triggered when the button is clicked
   const handleButtonClick = async () => {
-    if(selectedItems == 0) {
-      alert('No Items selected.'); 
-    } else {
+    if(!isValid || selectedItems == 0) {
+      return; 
+    } 
        // Check the validity 
       handleValidity();
-    }
+
   }
 
   return (
