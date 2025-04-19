@@ -9,15 +9,24 @@
  */
 
 "use client";
-
 import "./SearchBar.css";
-import { useState, useEffect } from "react"; 
+import { useState, useEffect, useRef } from "react";
 
 export default function SearchBar({ updateSearchResults }) {
     const [query, setQuery] = useState("");
+    const isFirstRender = useRef(true);
+
 
     // Fetch relevant search results when search query is changed
-    useEffect(() => { 
+    useEffect(() => {
+        const trimmed = query.trim();
+        if (trimmed === "") {
+            updateSearchResults([]); // ensures nothing overrides filters
+            return;
+        }
+    
+        const controller = new AbortController(); // optional: cancel on unmount or rapid typing
+    
         const fetchData = async () => {
             console.log("Search query:", query);
             try {
@@ -27,21 +36,31 @@ export default function SearchBar({ updateSearchResults }) {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({ searchQuery: query }),
+                    signal: controller.signal
                 });
-
+    
                 if (!response.ok) {
                     throw new Error("Network response was not ok");
                 }
-
+    
                 const data = await response.json();
-                console.log( "Search results:", data);
-                updateSearchResults(data);  // Update results on inventory page
+                console.log("Search results:", data);
+                updateSearchResults(data);
             } catch (error) {
-                console.log(error);
+                if (error.name !== "AbortError") {
+                    console.log(error);
+                }
             }
         };
+    
         fetchData();
+    
+        return () => {
+            controller.abort();
+        };
     }, [query]);
+    
+    
 
     return (
         <div className="Searchbar">
