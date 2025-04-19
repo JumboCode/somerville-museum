@@ -6,8 +6,6 @@ export default async function handler(req, res) {
 
     const { userId } = req.body;
 
-    console.log("Approving user with ID:", userId);
-
     const response = await fetch(`https://api.clerk.dev/v1/users/${userId}`, {
         method: "PATCH",
         headers: {
