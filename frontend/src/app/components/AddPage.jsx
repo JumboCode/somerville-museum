@@ -15,7 +15,6 @@ export default function AddPage() {
     const [dragOver, setDragOver] = useState(false);
     const [preview, setPreview] = useState([]);
     const [imageID, setImageID] = useState([]); // For image UUIDs
-    const [images, setImages]   = useState([null, null]); // For image previews
 
     // Right column state variables
     const { isToggleEnabled } = useGlobalContext(); // TOGGLE FUNCTIONALITY
@@ -414,6 +413,7 @@ export default function AddPage() {
                     <div className="title">
                         Add Item
                     </div>
+
                 {/* Drag-and-drop image upload section */}
                 <div className="image-upload">
                     <div
@@ -440,12 +440,29 @@ export default function AddPage() {
                                 onChange={handleFileInputChange}
                                 />
 
-                        {preview.length > 0 && preview.map((image, key) => (
-                        <div key={key} className="image">
-                            <img src={image} alt="Preview" className="preview"/>
-                        </div>
+                        {preview.length > 0 &&
+                        preview.map((image, index) => (
+                            <div key={index} className="image-preview-container">
+                            <button
+                                className="remove-image-btn"
+                                onClick={(e) => {
+                                e.stopPropagation();
+                                const updatedPreviews = [...preview];
+                                const updatedIDs = [...imageID];
+                                updatedPreviews.splice(index, 1);
+                                updatedIDs.splice(index, 1);
+                                setPreview(updatedPreviews);
+                                setImageID(updatedIDs);
+                                }}
+                                aria-label="Remove image"
+                            >
+                                ×
+                            </button>
+                            <img src={image} alt="Preview" className="preview" />
+                            </div>
                         ))}
-                        </div>
+
+                    </div>
 
                         <div className={`itemName ${errors.name ? "error-text" : ""}`}>
                         Item Name*
@@ -561,7 +578,7 @@ export default function AddPage() {
                                 {isToggleEnabled ? "Time Period" : "Time Period*"}
                                 <span style={{fontWeight: "400"}}> (Max of 2)</span>
                             </h3>                            
-                                <MultiSelect
+                            <MultiSelect
                                     value={timePeriods.filter(period => selectedTimePeriod.includes(period.name))} // Sync selected values
                                     options={timePeriods}
                                     onChange={(e) => handleTimePeriodSelect(e.value || [])}
