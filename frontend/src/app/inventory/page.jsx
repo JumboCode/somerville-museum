@@ -57,7 +57,7 @@ function Inventory({
     );
     
     const isReturnValid = selectedItems.length > 0 && selectedItems.some(item => 
-        item.status === "Borrowed" || item.status === "Overdue"
+        item.status === "Borrowed" || item.status === "Overdue" || item.status === "Missing"
     );
 
     // Check if permissions to view page
