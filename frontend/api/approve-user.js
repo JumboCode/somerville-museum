@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     const response = await fetch(`https://api.clerk.dev/v1/users/${userId}`, {
         method: "PATCH",
         headers: {
-            Authorization: `Bearer sk_test_wGcUTzeo4CJJ2iVUObnFRmkbaPT6pzAXcnonlv8q8w`,
+            Authorization: `Bearer ` + process.env.NEXT_PUBLIC_CLERK_SECRET_KEY,
             "Content-Type": "application/json",
         },
         
