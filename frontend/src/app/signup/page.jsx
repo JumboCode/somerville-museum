@@ -110,7 +110,6 @@ export default function SignUp() {
     if (password !== confirmPassword) {
       setError("Passwords don't match.");
       if (errorBG === '#FFFFFF') handleCreateError();
-      resetFields();
       return false;
     }
 
@@ -136,7 +135,7 @@ export default function SignUp() {
       })
       setVerifying(true)
     } catch (err) {
-      console.error(err)
+      setError(err.message);
     }
   }
 
@@ -195,21 +194,20 @@ export default function SignUp() {
           </div>
           <div className="clothing-database-small">CLOTHING DATABASE</div>
         </div>
+        <div
+            className="errorLabel"
+            style={{
+              backgroundColor: error ? "rgba(255, 44, 44, 0.2)" : "#FFFFFF",
+              minHeight: "24px",
+              color: error ? "red" : "#FFFFFF",
+              padding: "4px 8px",
+              transition: "all 0.2s ease",
+            }}
+          >
+            <div className="errorText">{error || "‎"}</div>
+          </div>
         <div className={'namesContainer'}>
           <div className={'inputContainer'}>
-            <label
-              className="errorLabel"
-              style={{
-                backgroundColor: error ? "rgba(255, 44, 44, 0.2)" : "#FFFFFF",
-                minHeight: "24px",
-                color: error ? "red" : "#FFFFFF",
-                padding: "4px 8px",
-                display: "block",
-                transition: "all 0.2s ease",
-              }}
-            >
-              {error || "‎"}
-            </label>
             <input
               value={firstName}
               placeholder="First Name"
