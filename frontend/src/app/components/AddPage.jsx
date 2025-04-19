@@ -445,41 +445,51 @@ export default function AddPage() {
                         }}
                         onDragLeave={() => setDragOver(false)}
                         onDrop={handleDrop}>
-                        {preview.length === 0 && 
-                            <div className="upload-icon-and-text">
-                                <img src="/icons/upload.svg" className="upload-icon" />
-                                <p style={{color: "#9B525F"}}>Upload image*</p>
-                            </div>}
-
-                            <input
-                                type="file"
-                                id="file-input"
-                                accept="image/*"
-                                style={{ display: "none" }}
-                                onChange={handleFileInputChange}
-                                />
-
-                        {preview.length > 0 &&
-                        preview.map((image, index) => (
+                        {preview.length === 0 ? (
+                        <div className="upload-icon-and-text">
+                            <img src="/icons/upload.svg" className="upload-icon" />
+                            <p style={{ color: "#9B525F" }}>Upload image*</p>
+                        </div>
+                        ) : (
+                        <div className="upload-content">
+                            {preview.map((image, index) => (
                             <div key={index} className="image-preview-container">
-                            <button
+                                <button
                                 className="remove-image-btn"
                                 onClick={(e) => {
-                                e.stopPropagation();
-                                const updatedPreviews = [...preview];
-                                const updatedIDs = [...imageID];
-                                updatedPreviews.splice(index, 1);
-                                updatedIDs.splice(index, 1);
-                                setPreview(updatedPreviews);
-                                setImageID(updatedIDs);
+                                    e.stopPropagation();
+                                    const updatedPreviews = [...preview];
+                                    const updatedIDs = [...imageID];
+                                    updatedPreviews.splice(index, 1);
+                                    updatedIDs.splice(index, 1);
+                                    setPreview(updatedPreviews);
+                                    setImageID(updatedIDs);
                                 }}
                                 aria-label="Remove image"
-                            >
+                                >
                                 ×
-                            </button>
-                            <img src={image} alt="Preview" className="preview" />
+                                </button>
+                                <img src={image} alt={`Preview ${index + 1}`} className="preview" />
                             </div>
-                        ))}
+                            ))}
+
+                            {preview.length < 2 && (
+                            <div className="upload-icon-and-text">
+                                <img src="/icons/upload.svg" className="upload-icon" />
+                                <p style={{ color: "#9B525F" }}>Upload second image</p>
+                            </div>
+                            )}
+                        </div>
+                        )}
+
+                        <input
+                        type="file"
+                        id="file-input"
+                        accept="image/*"
+                        style={{ display: "none" }}
+                        onChange={handleFileInputChange}
+                        />
+
 
                     </div>
 
