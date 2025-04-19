@@ -104,6 +104,18 @@ const Dashboard = () => {
         season: [],
         return_date: { start: null, end: null }
       });
+    } else {  // Selecting total items -> no need to set status to anything
+      setSelectedFilters({
+        condition: [],
+        gender: [],
+        color: [],
+        garment_type: [],
+        size: [],
+        time_period: [],
+        status: [],
+        season: [],
+        return_date: { start: null, end: null }
+      });
     }
     router.push('/inventory');
   };
