@@ -262,6 +262,9 @@ export async function borrowValidityHandler(req, res) {
       availableItems.push(itemDetails);
     }
 
+    console.log('Available items:', availableItems);
+    console.log('Unavailable items:', unavailableItems);
+
     // Build the response message
     let message = '';
     if (unavailableItems.length > 0) {
@@ -305,7 +308,7 @@ export async function returnValidityHandler(req, res) {
       }
 
       // If the item is not borrowed, add to unavailable items
-      if (itemDetails.status !== 'Borrowed') {
+      if (itemDetails.status == 'Available') {
         unavailableItems.push(itemDetails);
         continue; // Skip to the next item
       }
@@ -320,7 +323,7 @@ export async function returnValidityHandler(req, res) {
     if (unavailableItems.length > 0) {
       message += `${unavailableItems
         .map((item) => `${item.id}`)
-        .join(', ')}. `;
+        .join(', ')} `;
     }
 
     // Send the response
@@ -389,6 +392,7 @@ export async function fetchBorrowerNameHandler(req, res) {
 
 export async function groupReturnsByBorrowerHandler(req, res) {
   const { returnedItems } = req.body;
+  console.log("reached", returnedItems);
 
   if (!returnedItems || returnedItems.length === 0) {
     return res.status(400).json({ error: "No items provided for return." });
