@@ -29,8 +29,6 @@ export async function handlefetchBorrowerEmail(req, res) {
 
 
 export async function handlesendBorrowedEmail(req, res) {
-    // console.log("Email API received request:", req.method);
-
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Method Not Allowed" });
     }
@@ -38,14 +36,10 @@ export async function handlesendBorrowedEmail(req, res) {
     try {
         const { recipientEmail, recipientName, items } = req.body;
 
-        // console.log("Received email request data:", { recipientEmail, recipientName, items });
-
         if (!recipientEmail || !items || items.length === 0) {
             console.error("ERROR: Missing required fields.");
             return res.status(400).json({ error: "Missing required fields." });
         }
-
-        // console.log("Sending email to:", recipientEmail);
 
         const itemList = items.map((item) => `- ${item}`).join("<br/>");
 
@@ -74,7 +68,6 @@ export async function handlesendBorrowedEmail(req, res) {
             ],
         });
 
-        // console.log("Mailjet API Response:", response.body);
         res.status(200).json({ success: true, response: response.body });
 
     } catch (error) {
@@ -98,8 +91,6 @@ export async function handlesendOverdueEmail(req, res) {
             GROUP BY borrower_name, borrower_email, due_date
         `);
 
-        // console.log("Overdue items:", result);
-
         // SEND EMAIL TO EACH BORROWER WITH OVERDUE ITEMS
         for (const { borrower_name, borrower_email, due_date, items } of result) {
             const itemList = items.map((item) => `<li>${item}</li>`).join("");
@@ -119,8 +110,6 @@ export async function handlesendOverdueEmail(req, res) {
                     },
                 ],
             });
-
-            // console.log(`Overdue email sent to ${borrower_email}:`, response.body);
         }
 
         res.status(200).json({ success: true, message: "Overdue emails sent." });
@@ -143,7 +132,6 @@ export async function handlesendReturnEmail(req, res) {
             return res.status(400).json({ error: "Missing required fields." });
         }
 
-        // console.log(`Sending return confirmation email to ${borrower_email}...`);
 
         // Format returned items list
         const itemList = returned_items.map((item) => `<li>${item}</li>`).join("");
@@ -164,7 +152,6 @@ export async function handlesendReturnEmail(req, res) {
             ],
         });
 
-        // console.log(`Return confirmation email sent to ${borrower_email}:`, response.body);
         res.status(200).json({ success: true, message: "Return confirmation email sent." });
     } catch (error) {
         console.error("Error sending return confirmation email:", error);

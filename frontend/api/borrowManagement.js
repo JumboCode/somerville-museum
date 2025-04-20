@@ -2,9 +2,6 @@ import { query } from './db.js';
 
 export async function borrowHandler(req, res) {
   let message; 
-  console.log('Borrow handler started');
-  console.log('Request method:', req.method);
-  console.log('Request body:', req.body);
   
   // Check if request method is valid
   if (req.method !== 'POST') {
@@ -16,31 +13,25 @@ export async function borrowHandler(req, res) {
    
   // Validate required fields
   if (!selectedItems || selectedItems.length === 0) {
-    console.log('No items selected - early return');
     return res.status(400).json({message: "No items selected."}); 
   }
 
   if (!dateBorrowed || !borrowerName || !borrowerEmail || !dueDate) {
-    console.log('Missing required fields');
     return res.status(400).json({message: "Missing required fields."});
   }
         
   try {
-    console.log('Checking for existing borrower with email:', borrowerEmail);
     // Check for existing borrower
     const existingBorrowerResult = await query(
       `SELECT * FROM borrowers WHERE email = $1`, [borrowerEmail]
     );
-    console.log('Existing borrower query result:', existingBorrowerResult.rows);
 
     let borrowerId; 
  
     // If borrower doesn't exist, create new borrower
     if (existingBorrowerResult.rows.length > 0) {
       borrowerId = existingBorrowerResult.rows[0].id; 
-      console.log('Using existing borrower with ID:', borrowerId);
     } else {
-      console.log('Creating new borrower');
       const newBorrowerResult = await query(
         `INSERT INTO borrowers (name, email, phone_number) VALUES ($1, $2, $3) RETURNING id`,
         [borrowerName, borrowerEmail, phoneNumber]
@@ -52,7 +43,6 @@ export async function borrowHandler(req, res) {
       }
       
       borrowerId = newBorrowerResult.rows[0].id;
-      console.log('New borrower created with ID:', borrowerId);
     }
     
     // Track successfully processed items
@@ -60,7 +50,6 @@ export async function borrowHandler(req, res) {
     const failedItems = [];
     
     for (const itemId of selectedItems) {
-      console.log('Processing item ID:', itemId);
       
       try {
         // Check if item is available
@@ -83,7 +72,6 @@ export async function borrowHandler(req, res) {
         }
         
         // Always create a new borrow record for history purposes - let the database handle ID autoincrement
-        console.log('Creating new borrow record for item:', itemId);
         const insertResult = await query(
           'INSERT INTO borrows (borrower_id, item_id, date_borrowed, return_date, date_returned, approver, notes) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id',
           [borrowerId, itemId, dateBorrowed, dueDate, null, approver, note]
@@ -96,10 +84,8 @@ export async function borrowHandler(req, res) {
         }
         
         const newBorrowId = insertResult.rows[0].id;
-        console.log(`New borrow record created with ID: ${newBorrowId}`);
         
         // Update dummy_data
-        console.log('Updating dummy_data status for item ID:', itemId);
         const updateResult = await query(
           `UPDATE dummy_data SET status = $1, current_borrower = $2 WHERE id = $3 RETURNING id`,
           ['Borrowed', borrowerId, itemId]
@@ -117,7 +103,6 @@ export async function borrowHandler(req, res) {
           continue;
         }
         
-        console.log('dummy_data update result:', updateResult.rows);
         processedItems.push({
           itemId: itemId,
           borrowId: newBorrowId
@@ -136,7 +121,6 @@ export async function borrowHandler(req, res) {
         message += `Failed to borrow ${failedItems.length} item(s).`;
       }
       
-      console.log('Borrowing process completed with status:', message);
       res.status(200).json({ 
         message, 
         success: true, 
@@ -145,7 +129,6 @@ export async function borrowHandler(req, res) {
       });
     } else {
       message = 'Failed to borrow any items.';
-      console.log('Borrowing process failed - no items processed');
       res.status(400).json({ 
         message, 
         success: false,
@@ -262,9 +245,6 @@ export async function borrowValidityHandler(req, res) {
       availableItems.push(itemDetails);
     }
 
-    console.log('Available items:', availableItems);
-    console.log('Unavailable items:', unavailableItems);
-
     // Build the response message
     let message = '';
     if (unavailableItems.length > 0) {
@@ -316,8 +296,7 @@ export async function returnValidityHandler(req, res) {
       // Add the item to available items
       availableItems.push(itemDetails);
     }
-    console.log('Available items:', availableItems);
-    console.log('Unavailable items:', unavailableItems);
+
     // Build the response message
     let message = '';
     if (unavailableItems.length > 0) {
@@ -392,7 +371,6 @@ export async function fetchBorrowerNameHandler(req, res) {
 
 export async function groupReturnsByBorrowerHandler(req, res) {
   const { returnedItems } = req.body;
-  console.log("reached", returnedItems);
 
   if (!returnedItems || returnedItems.length === 0) {
     return res.status(400).json({ error: "No items provided for return." });
@@ -419,8 +397,6 @@ export async function groupReturnsByBorrowerHandler(req, res) {
       acc[borrowerKey].push(row.item_name);
       return acc;
     }, {});
-
-    console.log("Grouped returns:", groupedReturns);
 
     // Send email to each borrower
     for (const key of Object.keys(groupedReturns)) {

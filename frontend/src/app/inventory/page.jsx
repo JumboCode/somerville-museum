@@ -101,19 +101,16 @@ function Inventory({
                 const filteredUnitIds = new Set(filterResults.map(unit => unit.id));
                 const intersection = searchResults.filter(item => filteredUnitIds.has(item.id));
                 setUnits(intersection);
-                console.log("Both filters and search active, showing intersection");
                 setTotalPages(Math.ceil(intersection.length / unitsPerPage));
             }
             // If only search is active
             else if (searchResults.length > 0 && !isSearchEmpty) {
                 setUnits(searchResults);
-                console.log("Only search active, showing search results");
                 setTotalPages(Math.ceil(searchResults.length / unitsPerPage));
             }
             // If only filters are active
             else {
                 setUnits(filterResults);
-                console.log("Only filters active, showing filter results");
                 setTotalPages(Math.ceil(filterResults.length / unitsPerPage));
             }
     
@@ -230,7 +227,6 @@ function Inventory({
                 
                 if (response.ok) {
                     const itemIds = await response.json();
-                    console.log("Items matching date range:", itemIds);
                     
                     // Ensure itemIds is an array before filtering
                     if (Array.isArray(itemIds)) {
@@ -337,7 +333,6 @@ function Inventory({
     useEffect(() => {
         const applyFilterFromUrl = async () => {
             if (filter) {
-                console.log("Setting filter from URL:", filter);
                 const newFilters = {
                     condition: [],
                     gender: [],
@@ -367,13 +362,8 @@ function Inventory({
     // Filter effect
     useEffect(() => {
         const updateFilteredUnits = async () => {
-            console.log("Filter effect triggered");
-            console.log("Current originalUnits:", originalUnits);
-            console.log("Current selectedFilters:", selectedFilters);
-            
             // Only proceed if we have data
             if (originalUnits.length === 0) {
-                console.log("No data available yet, waiting for data fetch");
                 return;
             }
             
@@ -385,7 +375,6 @@ function Inventory({
             });
             
             if (!hasActiveFilters) {
-                console.log("No filters active, showing all units");
                 setUnits(originalUnits);
                 setTotalPages(Math.ceil(originalUnits.length / unitsPerPage));
                 return;
@@ -393,7 +382,6 @@ function Inventory({
 
             // Use await here since applyFilters is async
             const filteredUnits = await applyFilters(originalUnits);
-            console.log("After applying filters:", filteredUnits);
             
             setUnits(filteredUnits);
             setCurrentPage(1);

@@ -50,7 +50,6 @@ export default function InventoryUnit({ unit, onChange, checked, unitList, index
     //CALL BACK FOR PREPOPUP
     const handlePopupOption = (option) => {
         if (option === "expand") {
-            console.log("in expand " + isPopupVisible)
             setIsPopupVisible(true);
         } else if (option === "Missing" || option === "Available") {
             setAsMissingFound(option);
@@ -96,10 +95,6 @@ export default function InventoryUnit({ unit, onChange, checked, unitList, index
         if (!unit) {
             return null; // Don't render anything if `unit` is undefined
         }
-
-    if(checked) {
-        console.log("Items Checked?", checked);
-    }
 
     const getHighestCondition = (conditions) => 
         conditions.reduce((best, c) =>
