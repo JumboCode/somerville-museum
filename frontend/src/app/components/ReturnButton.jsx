@@ -4,12 +4,14 @@ import React, { useState, useEffect } from "react";
 import "./ReturnButton.css"
 import ReturnPopup from "./ReturnPopup.jsx"
 import StylishButton from './StylishButton.jsx';
+import { useGlobalContext } from './contexts/ToggleContext';
 
 const ReturnButton = ( {selectedItems = [], onSuccess, isValid } ) => {
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [borrowedSelectedItems, setBorrowedSelectedItems] = useState(selectedItems); 
     const [isAlertOpen, setIsAlertOpen] = useState(false);
-    const [alertMessage, setAlertMessage] = useState(""); 
+    const [alertMessage, setAlertMessage] = useState("");
+    const { setIsFiltersHidden } = useGlobalContext(); // TOGGLE FILTERS 
 
     const handleSubmit = async (e) => {
         if(selectedItems == 0) {
@@ -41,6 +43,7 @@ const ReturnButton = ( {selectedItems = [], onSuccess, isValid } ) => {
               setAlertMessage(result.message); 
               setIsAlertOpen(true); 
           } else {
+            setIsFiltersHidden(true);
             setIsPopupVisible(true); 
 
           }
@@ -61,6 +64,7 @@ const ReturnButton = ( {selectedItems = [], onSuccess, isValid } ) => {
       }
 
     const handleClosePopup = () => {
+        setIsFiltersHidden(false);
         setIsPopupVisible(false);
 
     }

@@ -10,6 +10,7 @@ import Brick from '../../assets/Brick.jsx';
 import Logo from '../../assets/Logo.jsx';
 import styles from './NavBar.module.css';
 import User from "../../assets/User.jsx";
+import { useGlobalContext } from '../contexts/ToggleContext';
 
 const initialNavigationItems = [
   { id: 'dashboard', icon: Pie, label: 'Dashboard', href: '/dashboard' },
@@ -18,11 +19,11 @@ const initialNavigationItems = [
   { id: 'borrowers', icon: User, label: 'Borrowers', href: '/borrowers' },
 ];
 
-
 const NavigationBar = ({ onFilterToggle }) => {
   const pathname = usePathname();
   const [navigationItems, setNavigationItems] = useState(initialNavigationItems);
   const [isMounted, setIsMounted] = useState(false);
+  const { isFiltersHidden } = useGlobalContext(); // TOGGLE FILTERS 
 
   useEffect(() => {
     setIsMounted(true);
@@ -43,7 +44,7 @@ const NavigationBar = ({ onFilterToggle }) => {
   const filteredNavigationItems = () => {
     const items = [...navigationItems];
     // Conditionally add the Filter item below Inventory and above Settings
-    if (pathname === '/inventory') {
+    if (pathname === '/inventory' && !isFiltersHidden) {
       const filterItem = {
         id: 'filter',
         icon: Filter,
