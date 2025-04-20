@@ -28,7 +28,6 @@ export default function SearchBar({ updateSearchResults, updateEmptySearchBar })
         const controller = new AbortController(); // optional: cancel on unmount or rapid typing
     
         const fetchData = async () => {
-            console.log("Search query:", query);
             try {
                 const response = await fetch(`/api/itemManagement?action=search`, {
                     method: "PUT",
@@ -44,18 +43,15 @@ export default function SearchBar({ updateSearchResults, updateEmptySearchBar })
                 }
     
                 const data = await response.json();
-                console.log( "Search results:", data);
                 updateSearchResults(data);  // Update results on inventory page
                 if (query === "") {
                     updateEmptySearchBar(true); // Update empty search bar state
                 } else {
                     updateEmptySearchBar(false); // Update empty search bar state
                 }
-                /* console.log("Search results:", data);
-                updateSearchResults(data); */
             } catch (error) {
                 if (error.name !== "AbortError") {
-                    console.log(error);
+                    console.error(error);
                 }
             }
         };

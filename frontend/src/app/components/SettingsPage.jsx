@@ -26,7 +26,7 @@ export default function SettingsPage() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [approvals, setApprovals] = useState([]);
 
-  const checkisAdmin = (value) => value == "user_2tB9Ny3ALEWuch9VvjlrQemjV8A";
+  const checkisAdmin = (value) => value === process.env.NEXT_PUBLIC_ADMIN_CLERK_ID;
 
   // Update display text when component mounts to ensure it's in sync with context
   useEffect(() => {
@@ -35,9 +35,7 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (user) {
-      console.log("user id: " + user?.id);
       setIsAdmin(checkisAdmin(user?.id));
-      console.log("Admin status updated:", checkisAdmin(user?.id));
     }
   }, [user]);
 
@@ -95,7 +93,6 @@ export default function SettingsPage() {
       if (!res.ok) {
         throw new Error("Approval failed");
       }
-      console.log(`User with ID ${id} approved.`);
       setApprovals(prev => prev.filter(user => user.id !== id));
     } catch (err) {
       console.error("Approval error:", err);
@@ -128,13 +125,13 @@ export default function SettingsPage() {
                 <input
                   type="text"
                   id="first-name"
-                  value={user?.firstName || "Holden"}
+                  value={user?.firstName || ""}
                   disabled
                 />
                 <input
                   type="text"
                   id="last-name"
-                  value={user?.lastName || "Kittleburger"}
+                  value={user?.lastName || ""}
                   disabled
                 />
               </div>
@@ -145,7 +142,7 @@ export default function SettingsPage() {
                   id="email"
                   value={
                     user?.emailAddresses?.[0]?.emailAddress ||
-                    "holdenlovesburgers@hotmail.com"
+                    ""
                   }
                   disabled
                 />

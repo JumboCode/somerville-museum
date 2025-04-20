@@ -133,16 +133,13 @@ export default function Signin() {
         
         //LOGIC FOR SIGNING IN APPROVAL CHECK HERE
       
-        console.log("Login successful. Storing to localStorage...");
   
         if (rememberMe) {
           localStorage.setItem("rememberedEmail", email);
           localStorage.setItem("rememberedPassword", password);
-          console.log("Saved email and password to localStorage.");
         } else {
           localStorage.removeItem("rememberedEmail");
           localStorage.removeItem("rememberedPassword");
-          console.log("Cleared localStorage.");
         }
       
         await setActive({ session: result.createdSessionId });
