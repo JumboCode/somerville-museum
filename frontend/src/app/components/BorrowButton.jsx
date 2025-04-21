@@ -4,13 +4,14 @@
 import React, { useState } from "react";
 import StylishButton from './StylishButton.jsx';
 import BorrowPopup from './BorrowPopup.jsx';
-
+import { useGlobalContext } from "./contexts/ToggleContext.js";
 const BorrowButton = ({ selectedItems = [], onSuccess, isValid }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState(""); 
   const [availableSelectedItems, setAvailableSelectedItems] = useState(selectedItems);
-
+  const { setIsFiltersHidden } = useGlobalContext(); // TOGGLE FILTERS 
+  
   // This function checks the validity of the selected items
   async function handleValidity() {
 
@@ -34,6 +35,7 @@ const BorrowButton = ({ selectedItems = [], onSuccess, isValid }) => {
           setAlertMessage(result.message);  
           setIsAlertOpen(true); 
       } else {
+        setIsFiltersHidden(true)
         setIsOpen(true)
       }
 
@@ -87,7 +89,7 @@ const BorrowButton = ({ selectedItems = [], onSuccess, isValid }) => {
         <div className="custom-popup-large">
           <BorrowPopup
             selectedItems={availableSelectedItems}
-            onClose={() => setIsOpen(false)}
+            onClose={() => {setIsOpen(false), setIsFiltersHidden(false)}}
             onSuccess={() => {
               if (onSuccess) onSuccess();
               setIsOpen(false); // Close the popup

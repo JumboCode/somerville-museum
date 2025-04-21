@@ -23,7 +23,7 @@ import BorrowPopupSearchBar from './BorrowPopupSearchBar.jsx'
 import StylishButton from './StylishButton';
 
 const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
-  const { isToggleEnabled } = useGlobalContext(); // TOGGLE FUNCTIONALITY
+  const { isToggleEnabled, setIsFiltersHidden } = useGlobalContext(); // TOGGLE FUNCTIONALITY
   const { user } = useUser(); // Get the current user
   const [borrowerFirstName, setBorrowerFirstName] = useState('');
   const [borrowItems, setBorrowItems] = useState(selectedItems);

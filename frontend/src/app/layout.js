@@ -41,6 +41,7 @@ export default function RootLayout({ children, currentPage }) {
     const toggleFilterVisibility = () => {
         setIsFilterVisible(prev => !prev);
     };
+    
 
 
   return (
