@@ -370,7 +370,11 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                         </tr>
                         <tr>
                             <td><strong>Date Added: </strong>{date_added}</td>
-                            <td><strong>Season: </strong>{season}</td>
+                            <td><strong>Season: </strong>
+                                <span style={{ display: "inline-flex", gap: "8px", flexWrap: "wrap" }}>
+                                    {Array.isArray(season) ? season.join(", ") : season}
+                                </span>
+                            </td>
                         </tr>
                         <tr>
                         <td>
@@ -388,9 +392,7 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                             <td>
                                 <strong>Color: </strong>
                                 <span style={{ display: "inline-flex", gap: "8px", flexWrap: "wrap" }}>
-                                    {Array.isArray(color)? color.map((c, i) => (
-                                        <span key={i}> {c} </span>
-                                     )) : color}
+                                    {Array.isArray(color) ? color.join(", ") : color}
                                 </span>
                                                                 
                                 </td>
@@ -403,12 +405,23 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                                     {status}
                                 </span>
                             </td>
-                            <td><strong>Garment Type: </strong>{garment_type}</td>
+                            <td>
+                                <strong>Garment Type: </strong>
+                                <span style={{ display: "inline-flex", gap: "8px", flexWrap: "wrap" }}>
+                                    {Array.isArray(garment_type) ? garment_type.join(", ") : garment_type}
+                                </span>
+                                
+                            </td>
                         </tr>
 
                         <tr>
                             <td>{statusStatement}</td>
-                            <td><strong>Time Period: </strong>{time_period}</td>
+                            <td>
+                                <strong>Time Period: </strong>
+                                <span style={{ display: "inline-flex", gap: "8px", flexWrap: "wrap" }}>
+                                    {Array.isArray(time_period) ? time_period.join(", ") : time_period}
+                                </span>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
