@@ -12,8 +12,53 @@ export default function PrePopup({ unit, onClose, onOptionSelect, position, stat
         onOptionSelect("expand"); 
     };
 
-    const handleFoundClick = () => {
+    const handleFoundClick = async() => {
         onOptionSelect("Available"); 
+
+        try {
+            // 1. Send Emails first
+            const emailResponse = await fetch('/api/borrowManagement?action=groupReturnsByBorrower', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ returnedItems: [unit.id] }),
+            });
+        
+            if (!emailResponse.ok) {
+                throw new Error(`Group API error: ${emailResponse.status} - ${emailResponse.statusText}`);
+            }
+        
+            const emailResult = await emailResponse.json();
+            console.log(emailResult.message);  // Should log: Emails sent to all borrowers.
+        
+            // 2. THEN update DB
+            const returnResponse = await fetch('/api/borrowManagement?action=return', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    selectedItems: [unit.id],
+                    notes_id: [],
+                    notes_content: [],
+                }),
+            });
+        
+            if (!returnResponse.ok) {
+                throw new Error(`Fetch error: ${returnResponse.status} - ${returnResponse.statusText}`);
+            }
+        
+            const returnResult = await returnResponse.json();
+            
+            // Show success popup instead of alert
+            setIsSuccessPopupVisible(true);
+            
+            // Don't immediately reload - this will happen when user confirms in popup
+        
+        }    catch (error) {
+                if (error.message.includes("404") || error.message.includes("No borrower")) {
+                    console.info("No borrower to notify — skipping email step.");
+                } else {
+                    console.error("Unexpected error:", error);
+                }
+            }
     };
 
     const handleMissingClick = () => {
