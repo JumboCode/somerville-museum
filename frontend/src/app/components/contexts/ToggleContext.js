@@ -5,9 +5,10 @@ const GlobalContext = createContext();
 // Create a Provider component
 export const GlobalProvider = ({ children }) => {
     const [isToggleEnabled, setIsToggleEnabled] = useState(false);
+    const [isFiltersHidden, setIsFiltersHidden] = useState(false);
 
     return (
-        <GlobalContext.Provider value={{ isToggleEnabled, setIsToggleEnabled }}>
+        <GlobalContext.Provider value={{ isToggleEnabled, setIsToggleEnabled, isFiltersHidden, setIsFiltersHidden }}>
             {children}
         </GlobalContext.Provider>
     );
