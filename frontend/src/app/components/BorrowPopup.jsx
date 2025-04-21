@@ -11,7 +11,7 @@
 
 'use client'
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 // import Popup from 'reactjs-popup';
 import BorrowUnit from './BorrowUnit';
 import './BorrowPopup.css';
@@ -23,7 +23,7 @@ import BorrowPopupSearchBar from './BorrowPopupSearchBar.jsx'
 import StylishButton from './StylishButton';
 
 const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
-  const { isToggleEnabled } = useGlobalContext(); // TOGGLE FUNCTIONALITY
+  const { isToggleEnabled, setIsFiltersHidden } = useGlobalContext(); // TOGGLE FUNCTIONALITY
   const { user } = useUser(); // Get the current user
   const [borrowerFirstName, setBorrowerFirstName] = useState('');
   const [borrowItems, setBorrowItems] = useState(selectedItems);
@@ -94,7 +94,11 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
   
 
   const handleSubmit = async (e) => {
-        e.preventDefault();
+
+    if (selectedItems === 0) {
+      setIsBorrowConfirmValid(false); 
+    }
+      e.preventDefault();
 
     if (!isEmailValid) {
       alert("Please enter a valid email in the format XXX@domain.YYY");
@@ -379,7 +383,17 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
           <button type="cancel" onClick={onClose}>
             Cancel
           </button>
-          <button type="submit">Borrow</button>
+          <button 
+            type="submit"
+            disabled={borrowItems.length === 0}
+            style={{
+              opacity: borrowItems.length === 0 ? 0.5 : 1,
+              cursor: borrowItems.length === 0 ? "not-allowed" : "pointer"
+            }}
+          >
+            Borrow
+          </button>
+
         </div>
         
       </form>

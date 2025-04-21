@@ -132,11 +132,16 @@ export async function updateIDHandler(req, res) {
   }
 
   export async function searchHandler(req, res) {
+
     const searchQuery = req.body.searchQuery;
 
     const isNumeric = !isNaN(searchQuery) && searchQuery.trim() !== '';
     const parsedNumber = parseInt(searchQuery);
 
+    if (!searchQuery || searchQuery.trim() === "") {
+        return res.status(200).json([]);
+      }
+      
     const queryText = `
         SELECT dummy_data.* 
         FROM dummy_data 

@@ -10,7 +10,8 @@ const ReturnPopup = ({ units = [], onSuccess, onClose }) => {
     const buttons = Array.from({ length: totalPages }, (_, index) => index + 1); 
     const [notes, setNotes] = useState({});
     const [selectedUnits, setSelectedUnits] = useState([]);
-    const [isSuccessPopupVisible, setIsSuccessPopupVisible] = useState(false); 
+    const [isSuccessPopupVisible, setIsSuccessPopupVisible] = useState(false);
+     
 
 
     useEffect(() => {
@@ -103,8 +104,11 @@ const ReturnPopup = ({ units = [], onSuccess, onClose }) => {
         // } catch (error) {
         //     console.error("Error returning data:", error);
         // }
+        // if (selectedUnits == 0) {
+        //   alert('No items selected.'); 
+        // } else {
 
-        try {
+          try {
             // 1. Send Emails first
             const emailResponse = await fetch('/api/borrowManagement?action=groupReturnsByBorrower', {
               method: 'POST',
@@ -144,6 +148,10 @@ const ReturnPopup = ({ units = [], onSuccess, onClose }) => {
         } catch (error) {
             console.error("Error returning data:", error);
         }
+
+        // }
+
+        
     };
 
     const goToPreviousPage = () => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
@@ -178,9 +186,16 @@ const ReturnPopup = ({ units = [], onSuccess, onClose }) => {
                     </div>
                 </div>
             </div>
-            <div className="itemContainer">
+            {selectedUnits.length > 0 ? (
+              <> 
+              <div className="itemContainer">
                 {selectedUnits}
-            </div> 
+              </div> 
+              </>
+            ): (
+              <p>No items selected.</p>
+            )}
+            
             <div className="page-select">
                 <StylishButton className="leftBtn" label="&lt;" onClick={goToPreviousPage} disabled={currentPage === 1} styleType='style4' />
                 {buttons.map((number) => (

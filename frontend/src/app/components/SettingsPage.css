@@ -7,13 +7,6 @@
  **************************************************************/
 
 /* Place Settings title at the true top-left */
-.settings-header {
-    position: fixed;
-    top: 20px;
-    left: 140px;
-    z-index: 100;
-  }
-
 .settings-page {
   display: flex;
   flex-direction: column;
@@ -172,13 +165,24 @@ h1 {
   
   .toggle {
     display: flex;
+    flex-direction: row;
     align-items: center;
     gap: 10px;
     padding-left: 15px;
     width: 100%;
     margin: 5px 0;
     justify-content: space-between;
-    
+  }
+
+  .toggle-logout {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 10px;
+    padding-left: 15px;
+    width: 100%;
+    margin: 5px 0;
+    justify-content: space-between;
   }
   
   .toggle-label {
@@ -196,8 +200,8 @@ h1 {
     cursor: pointer;
     padding: 0;
     margin-top: 10px;
-    display: inline-flex;
-    align-items: center;
+    margin-right: 2rem;
+    align-self: flex-end;
   }
   
   .logout-btn-content {
@@ -348,7 +352,7 @@ h1 {
     height: 14px;
     width: 14px;
     left: 1px;
-    bottom: 1px;
+    top: 1px;
     background-color: #9A525F;
     transition: 0.4s;
     border-radius: 50%;
@@ -361,7 +365,7 @@ input:checked + .slider {
 
 /* Move Toggle Circle to Right */
 input:checked + .slider:before {
-    transform: translateX(20px);
+    transform: translateX(18px);
 }
 
 /* Fixes Toggle Switch Size */
