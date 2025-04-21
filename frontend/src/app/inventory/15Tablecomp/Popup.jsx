@@ -424,8 +424,8 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                 <div id = "divider"></div>
                
                    {/* Borrower Info */}
-                    {currBorrower && (
-                        <> 
+                   {status !== "Available" && (
+                        <>
                         <div className="borrowerTitle">
                         <h3>Borrower Information</h3>
                         <div className="returnButton">
@@ -468,8 +468,10 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                         </div>
     
                     </div>
+
                     </>
                 )}
+                   
 
              
                 {/* Borrow History Table */}

@@ -15,17 +15,18 @@ import './settings.css';
 // No need to wrap with GlobalProvider here since it should be at the app level
 const Settings = () => {
   return (
-    <div className="container">
-      <div className="Settings-Title global-settings-title">
-        Settings
+    <>
+      <div className="settings-header">
+        <h1 className="settings-title">Settings</h1>
       </div>
-
-      <div className="settings-content-wrapper">
-          <div className="settings-page">
-            <SettingsPage />
-          </div>
+      <div className="container">
+        <div className="settings-content-wrapper">
+            <div className="settings-page">
+              <SettingsPage />
+            </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
