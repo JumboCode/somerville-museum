@@ -49,6 +49,7 @@ function Inventory({
     const [filterResults, setFilterResults] = useState([]);
     const { isLoaded, user } = useUser();
     const [isApproved, setIsApproved] = useState(null);
+    const [isSearchEmpty, setIsSearchEmpty] = useState(true);
 
     // Calculate validity for buttons based on selectedItems
     const isBorrowValid = selectedItems.length > 0 && selectedItems.some(item => 
@@ -56,7 +57,7 @@ function Inventory({
     );
     
     const isReturnValid = selectedItems.length > 0 && selectedItems.some(item => 
-        item.status === "Borrowed" || item.status === "Overdue"
+        item.status === "Borrowed" || item.status === "Overdue" || item.status === "Missing"
     );
 
     // Check if permissions to view page
@@ -77,11 +78,23 @@ function Inventory({
     // Called any time new filters/search results are applied to update displayed units
     useEffect(() => {
         const updateResults = () => {
-            if (filterResults.length === 0 && searchResults.length === 0) {
-                setUnits(originalUnits);
-                setTotalPages(Math.ceil(originalUnits.length / unitsPerPage));
+            const isSearchActive = searchResults.length > 0;
+
+            if (!isSearchActive) {
+                const source = filterResults.length > 0 ? filterResults : originalUnits;
+                setUnits(source);
+                setTotalPages(Math.ceil(source.length / unitsPerPage));
+                setCurrentPage(1);
                 return;
             }
+
+            if (searchResults.length === 0) {
+                // If no search, show filtered data (or full if filters inactive)
+                const source = filterResults.length > 0 ? filterResults : originalUnits;
+                setUnits(source);
+                setTotalPages(Math.ceil(source.length / unitsPerPage));
+                return;
+            }              
     
             // If both filters and search are active, show intersection
             if (filterResults.length > 0 && searchResults.length > 0) {
@@ -91,7 +104,7 @@ function Inventory({
                 setTotalPages(Math.ceil(intersection.length / unitsPerPage));
             }
             // If only search is active
-            else if (searchResults.length > 0) {
+            else if (searchResults.length > 0 && !isSearchEmpty) {
                 setUnits(searchResults);
                 setTotalPages(Math.ceil(searchResults.length / unitsPerPage));
             }
@@ -214,7 +227,6 @@ function Inventory({
                 
                 if (response.ok) {
                     const itemIds = await response.json();
-                    console.log("Items matching date range:", itemIds);
                     
                     // Ensure itemIds is an array before filtering
                     if (Array.isArray(itemIds)) {
@@ -264,26 +276,26 @@ function Inventory({
                 // console.log("Processed data:", updatedData);
 
                 setOriginalUnits(updatedData);
-                setUnits(updatedData);
+                // setUnits(updatedData);
                 setTotalPages(Math.ceil(updatedData.length / unitsPerPage));
 
-                if (selectedFilters.status?.length > 0 || 
-                    selectedFilters.condition?.length > 0 ||
-                    selectedFilters.gender?.length > 0 ||
-                    selectedFilters.color?.length > 0 ||
-                    selectedFilters.garment_type?.length > 0 ||
-                    selectedFilters.size?.length > 0 ||
-                    selectedFilters.season?.length > 0 ||
-                    selectedFilters.time_period?.length > 0 ||
-                    (selectedFilters.return_date?.start && selectedFilters.return_date?.end)) {
-                    // Use await here since applyFilters is async
-                    const filteredData = await applyFilters(updatedData);
-                    setUnits(filteredData);
-                    setTotalPages(Math.ceil(filteredData.length / unitsPerPage));
-                } else {
-                    setUnits(updatedData);
-                    setTotalPages(Math.ceil(updatedData.length / unitsPerPage));
-                }
+                // if (selectedFilters.status?.length > 0 || 
+                //     selectedFilters.condition?.length > 0 ||
+                //     selectedFilters.gender?.length > 0 ||
+                //     selectedFilters.color?.length > 0 ||
+                //     selectedFilters.garment_type?.length > 0 ||
+                //     selectedFilters.size?.length > 0 ||
+                //     selectedFilters.season?.length > 0 ||
+                //     selectedFilters.time_period?.length > 0 ||
+                //     (selectedFilters.return_date?.start && selectedFilters.return_date?.end)) {
+                //     // Use await here since applyFilters is async
+                //     const filteredData = await applyFilters(updatedData);
+                //     setUnits(filteredData);
+                //     setTotalPages(Math.ceil(filteredData.length / unitsPerPage));
+                // } else {
+                //     setUnits(updatedData);
+                //     setTotalPages(Math.ceil(updatedData.length / unitsPerPage));
+                // }
 
             } else {
                 console.error("failed to fetch data");
@@ -299,15 +311,28 @@ function Inventory({
 
     // Initial data fetch
     useEffect(() => {
-        fetchData();
-    }, []);
+        
+        if (!selectedFilters) return;
+
+        const hasAnyFilters = Object.entries(selectedFilters).some(([key, value]) => {
+          if (key === 'return_date') {
+            return value?.start && value?.end;
+          }
+          return Array.isArray(value) && value.length > 0;
+        });
+      
+        // Wait for filters to be applied before fetching
+        if (hasAnyFilters || !filter) {
+          fetchData();
+        }
+    }, [selectedFilters, filter]);
+      
 
     // manage filters if someone is navigating here from clicking one of the links
     // in the dashboard
     useEffect(() => {
         const applyFilterFromUrl = async () => {
             if (filter) {
-                console.log("Setting filter from URL:", filter);
                 const newFilters = {
                     condition: [],
                     gender: [],
@@ -321,29 +346,24 @@ function Inventory({
                 };
                 setSelectedFilters(newFilters);
                 
-                // If we already have data, apply the filter immediately
-                if (originalUnits.length > 0) {
-                    // Use await here since applyFilters is async
-                    const filteredData = await applyFilters(originalUnits);
-                    setUnits(filteredData);
-                    setTotalPages(Math.ceil(filteredData.length / unitsPerPage));
-                }
+                // // If we already have data, apply the filter immediately
+                // if (originalUnits.length > 0) {
+                //     // Use await here since applyFilters is async
+                //     const filteredData = await applyFilters(originalUnits);
+                //     setUnits(filteredData);
+                //     setTotalPages(Math.ceil(filteredData.length / unitsPerPage));
+                // }
             }
         };
         
         applyFilterFromUrl();
-    }, [filter, setSelectedFilters, originalUnits, unitsPerPage]);
+    }, [filter]); //[filter, setSelectedFilters, originalUnits, unitsPerPage]);
 
     // Filter effect
     useEffect(() => {
         const updateFilteredUnits = async () => {
-            console.log("Filter effect triggered");
-            console.log("Current originalUnits:", originalUnits);
-            console.log("Current selectedFilters:", selectedFilters);
-            
             // Only proceed if we have data
             if (originalUnits.length === 0) {
-                console.log("No data available yet, waiting for data fetch");
                 return;
             }
             
@@ -355,7 +375,6 @@ function Inventory({
             });
             
             if (!hasActiveFilters) {
-                console.log("No filters active, showing all units");
                 setUnits(originalUnits);
                 setTotalPages(Math.ceil(originalUnits.length / unitsPerPage));
                 return;
@@ -363,7 +382,6 @@ function Inventory({
 
             // Use await here since applyFilters is async
             const filteredUnits = await applyFilters(originalUnits);
-            console.log("After applying filters:", filteredUnits);
             
             setUnits(filteredUnits);
             setCurrentPage(1);
@@ -433,6 +451,7 @@ function Inventory({
             direction = 'desc';
         }
         setSortConfig({ key, direction });
+        setCurrentPage(1); // Reset to page 1 on sort change
         
         // Call the appropriate sort function
         if (sortingFunctions[key]) {
@@ -548,7 +567,7 @@ function Inventory({
             <div className={`Table ${isFilterVisible ? 'shrink' : ''}`}>
                 <div className="Header">
                     <div className="Items">
-                        <SearchBar updateSearchResults={setSearchResults} />
+                        <SearchBar updateSearchResults={setSearchResults} updateEmptySearchBar={setIsSearchEmpty}/>
                         <div className='buttons'> 
                             <AddButton className='addBtn'> </AddButton>
                             <BorrowButton 
