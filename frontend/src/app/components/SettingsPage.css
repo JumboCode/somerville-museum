@@ -360,12 +360,13 @@ h1 {
 
 /* When Checkbox is Checked */
 input:checked + .slider {
-    background-color: #9A525F; /* Change to desired active color */
+    background-color: #9A525F;
 }
 
 /* Move Toggle Circle to Right */
 input:checked + .slider:before {
     transform: translateX(18px);
+    background-color: #ffffff;
 }
 
 /* Fixes Toggle Switch Size */
