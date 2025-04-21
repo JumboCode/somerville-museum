@@ -402,7 +402,11 @@
 }
 
 
-.notesName {
+.notesName { 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
     color: #000;
     font-family: Akatab;
     font-size: 1.2rem;
