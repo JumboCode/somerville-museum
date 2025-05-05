@@ -95,7 +95,7 @@ export default function EditPage({ unit, onClose }) {
         { name: "Not usable" },
         { name: "Great" },
         { name: "Good"}
-    ]
+    ];
     const colors = [
         { name: "Red", hex: "#FF3B30" },
         { name: "Orange", hex: "#FF9500" },
@@ -109,7 +109,6 @@ export default function EditPage({ unit, onClose }) {
         { name: "Gray", hex: "#8E8E93" },
         { name: "Black", hex: "#000000" },
       ];
-    const cancelOrSubmit = ["Cancel", "Submit"];
 
     // Fetch placeholder for current date
     const [placeholderDate, setPlaceholderDate] = useState('');
@@ -204,19 +203,19 @@ export default function EditPage({ unit, onClose }) {
         setconditionOption(selectedNames);
     };
 
-    const handleTimePeriodSelect = (selectedTimePeriods) => {    
-        // Ensure selectedTimePeriods is always an array
-        if (!Array.isArray(selectedTimePeriods)) {
-            setSelectedTimePeriod([]);
-            return;
-        }
+    // const handleTimePeriodSelect = (selectedTimePeriods) => {    
+    //     // Ensure selectedTimePeriods is always an array
+    //     if (!Array.isArray(selectedTimePeriods)) {
+    //         setSelectedTimePeriod([]);
+    //         return;
+    //     }
     
-        // Extract only names
-        const selectedNames = selectedTimePeriods.map(item => item?.name || "");
+    //     // Extract only names
+    //     const selectedNames = selectedTimePeriods.map(item => item?.name || "");
     
-        // Update state
-        setSelectedTimePeriod(selectedNames.filter(name => name !== ""));
-    };
+    //     // Update state
+    //     setSelectedTimePeriod(selectedNames.filter(name => name !== ""));
+    // };
 
     const handleSeasonSelect = (season) => {
         setSelectedSeason((prevSelected) => {
@@ -254,6 +253,8 @@ export default function EditPage({ unit, onClose }) {
     
             // Parse response as JSON
             const data = await response.json();
+
+            console.log("Data retrieved: ", data);
     
             // Populate state with retrieved data
             setIDText(data.id);
@@ -289,7 +290,6 @@ export default function EditPage({ unit, onClose }) {
         }
     }, []);
     
-
     const handleSubmit = () => {
         setStatusMessage("Updating...");
         setStatusType("neutral");
@@ -376,22 +376,6 @@ export default function EditPage({ unit, onClose }) {
         };
     
         updateItem();
-    };    
-
-    // Reset form fields
-    const resetForm = () => {
-        setIDText("");
-        setItemText("");
-        setPriceText("");
-        setNotesText("");
-        setSelectedGarment("");
-        setSelectedTimePeriod([]);
-        setAgeSelection(null);
-        setGenderSelection(null);
-        setSelectedSize([]);
-        setSelectedSeason([]);
-        setconditionOption([]);
-        setSelectedColors([]);
     };
 
     return (
