@@ -443,6 +443,37 @@ export default function EditPage({ unit }) {
         // Call the uploader unconditionally, skip if no new images
         uploadImages();
 
+        const deleteImages = async () => {
+            // Identify removed image IDs
+            const deletedImageIDs = prevImageID.filter(id => !imageID.includes(id));
+        
+            if (deletedImageIDs.length === 0) {
+                console.log("No images to delete.");
+                return;
+            }
+        
+            try {
+                // Delete each file individually
+                for (const fileName of deletedImageIDs) {
+                    const response = await fetch(`/api/images?action=delete`, {
+                        method: "DELETE",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ fileName }),
+                    });
+        
+                    if (!response.ok) {
+                        const data = await response.json();
+                        console.error("Failed to delete:", data);
+                    }
+                }
+            } catch (error) {
+                console.error("Error during image deletion:", error);
+            }
+        };
+        
+        // Call the delete function unconditionally, skip if no images to delete
+        deleteImages();
+
         // Convert newItem params to JSON object
         const body = JSON.stringify(newItem);
 
