@@ -282,7 +282,7 @@ export default function EditPage({ unit }) {
             setImageID(data.image_keys || []);
 
         // Fetch available image keys from Cloudflare R2
-        const imagesResponse = await fetch('/api/get-images');
+        const imagesResponse = await fetch('/api/images?action=get');
         if (!imagesResponse.ok) {
             throw new Error('Failed to fetch image list');
         }
@@ -402,7 +402,7 @@ export default function EditPage({ unit }) {
             }
 
             try {
-                const response = await fetch(`/api/upload`, {
+                const response = await fetch(`/api/images?action=upload`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ fileNames: newImageIDs, fileContents: newPreviews }),

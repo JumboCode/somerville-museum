@@ -305,7 +305,7 @@ export default function AddPage() {
         // Upload image and corresponding id to upload endpoint 
         const uploadImages = async () => {    
             try {
-                const response = await fetch(`/api/upload`, {
+                const response = await fetch(`/api/images?action=upload`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ fileNames: imageID, fileContents: preview }),
