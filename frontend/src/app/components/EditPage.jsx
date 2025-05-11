@@ -64,8 +64,8 @@ export default function EditPage({ unit, onClose }) {
     const timePeriods = [
         { name: "Post-1920s" },
         { name: "Pre-1700s" },
-        { name: "1750s - 1800s" },
-        { name: "1800s - 1840s" }
+        { name: "1750s-1800s" },
+        { name: "1800s-1840s" }
     ];
     const ageOptions = [
         { value: "Youth", label: "Youth" },
@@ -253,8 +253,6 @@ export default function EditPage({ unit, onClose }) {
     
             // Parse response as JSON
             const data = await response.json();
-
-            console.log("Data retrieved: ", data);
     
             // Populate state with retrieved data
             setIDText(data.id);
