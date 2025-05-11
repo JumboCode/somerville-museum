@@ -3,7 +3,8 @@
  *                     EditPage.jsx
  *
  *        Authors: Dan Glorioso & Massimo Bottari
- *           Date: 02/01/2025
+ *        Created: 02/01/2025
+ *       Modified: 05/11/2025 by DG
  *
  *     Summary: A component that allows users to edit an existing item in the
  *              database. It fetches the current data for the item, populates 
@@ -20,18 +21,21 @@ import { Dropdown } from 'primereact/dropdown';
 import { MultiSelect } from 'primereact/multiselect';
 import StylishButton from './StylishButton';
 import Link from 'next/link';
-
+import { useGlobalContext } from './contexts/ToggleContext';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function EditPage({ unit }) {
     // Left column state variables
     const [dragOver, setDragOver] = useState(false);
     const [preview, setPreview] = useState([]);
     const [imageID, setImageID] = useState([]); // For image UUIDs
+    const [prevImageID, setPrevImageID] = useState([]); // For previous image UUIDs
 
     // Extract the unit details
     const { id, name, age_group, gender, color, season, garment_type, size, time_period, condition, cost, notes} = unit; 
 
     // Right column state variables
+    const { isToggleEnabled } = useGlobalContext(); // TOGGLE FUNCTIONALITY
     const [idText, setIDText] = useState(id);
     const [itemText, setItemText] = useState(name);
     const [priceText, setPriceText] = useState(cost);
@@ -298,10 +302,10 @@ export default function EditPage({ unit }) {
             return null;
         }));
         
-
         // Filter out null values and update preview state with actual File objects
         setPreview(previewImageURLs.filter(url => url !== null));
         setImageID(data.image_keys || []);
+        setPrevImageID(data.image_keys || []);
 
         } catch (error) {
             console.error('Error fetching item data:', error);
@@ -320,7 +324,7 @@ export default function EditPage({ unit }) {
         if (itemId) {
             retrieveItem(itemId);
         }
-    });
+    }, []);
     
     const handleSubmit = () => {
         setStatusMessage("Updating...");
@@ -341,25 +345,31 @@ export default function EditPage({ unit }) {
             color: selectedColors.length > 0 ? selectedColors : null,
             status: "Available",
             location: null,
-            date_added: placeholderDate,
+            date_added: isToggleEnabled ? manualDateText : placeholderDate, 
             current_borrower: null,
-            borrow_history: null
+            borrow_history: null,
+            image_keys: imageID
         };
     
         let newErrors = {};
     
-        // Required fields check
+        // Check for missing required fields and set error flags
+        if (!isToggleEnabled) {
+            if (!newItem.garment_type) newErrors.garment_type = true;
+            if (!newItem.time_period) newErrors.time_period = true;
+            if (!newItem.age_group) newErrors.age_group = true;
+            if (!newItem.gender) newErrors.gender = true;
+            if (!newItem.size) newErrors.size = true;
+            if (!newItem.season) newErrors.season = true;
+            if (!newItem.condition) newErrors.condition = true;
+            if (!newItem.color) newErrors.color = true;
+        }
+        else {
+            if (!newItem.id) newErrors.id = true;
+        }
         if (!newItem.name) newErrors.name = true;
-        if (!newItem.garment_type) newErrors.garment_type = true;
-        if (!newItem.time_period) newErrors.time_period = true;
-        if (!newItem.age_group) newErrors.age_group = true;
-        if (!newItem.gender) newErrors.gender = true;
-        if (!newItem.size) newErrors.size = true;
-        if (!newItem.season) newErrors.season = true;
-        if (!newItem.condition) newErrors.condition = true;
-        if (!newItem.color) newErrors.color = true;
-        if (!newItem.date_added) newErrors.date_added = true;
-    
+
+        // If any errors exist, update state and show alert
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             setStatusMessage("Please fill out all required fields.");
@@ -379,31 +389,42 @@ export default function EditPage({ unit }) {
             }
         }
 
-        // Upload image and corresponding id to upload endpoint 
-        const uploadImages = async () => {    
+        // Upload only images that are not already in prevImageID
+        const uploadImages = async () => {
+            // Identify which image IDs are new
+            const newImageIDs = imageID.filter(id => !prevImageID.includes(id));
+            const newPreviews = preview.filter((_, idx) => !prevImageID.includes(imageID[idx]));
+
+            // If no new images, skip upload
+            if (newImageIDs.length === 0) {
+                console.log("No new images to upload.");
+                return;
+            }
+
             try {
                 const response = await fetch(`/api/upload`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ fileNames: imageID, fileContents: preview }),
+                    body: JSON.stringify({ fileNames: newImageIDs, fileContents: newPreviews }),
                 });
-        
-                const data = await response.json();
 
                 if (!response.ok) {
+                    const data = await response.json();
+                    console.error(data);
                     setStatusMessage("An error uploading image occurred. Please try again.");
                     setStatusType("error");
                     return;
                 }
-                
+
             } catch (error) {
+                console.error(error);
                 setStatusMessage("An error uploading image occurred. Please try again.");
                 setStatusType("error");
                 return;
             }
         };
 
-        // Call the serverless route
+        // Call the uploader unconditionally, skip if no new images
         uploadImages();
 
         // Convert newItem params to JSON object
@@ -447,33 +468,6 @@ export default function EditPage({ unit }) {
     
         updateItem();
     };
-
-    // TOGGLE FUNCTIONALITY
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // Fetch next available ID
-                const response = await fetch('/api/inventoryQueries?action=getNextAvailableId');
-                const data = await response.json();
-                if (response.ok) {
-                    setIDText(data.nextId);
-                } else {
-                    console.error(data.error);
-                }
-
-                // Set placeholder date
-                const today = new Date();
-                const month = String(today.getMonth() + 1).padStart(2, '0'); 
-                const day = String(today.getDate()).padStart(2, '0');
-                const year = today.getFullYear();
-                setPlaceholderDate(`${month}/${day}/${year}`);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-
-        fetchData();
-    }, []);
 
     return (
         <div className="main">

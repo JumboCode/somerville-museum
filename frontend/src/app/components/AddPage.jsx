@@ -10,7 +10,6 @@ import { useGlobalContext } from './contexts/ToggleContext';
 import { v4 as uuidv4 } from 'uuid';
 
 export default function AddPage() {
-
     // Left column state variables
     const [dragOver, setDragOver] = useState(false);
     const [preview, setPreview] = useState([]);
