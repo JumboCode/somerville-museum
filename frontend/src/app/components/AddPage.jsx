@@ -293,8 +293,6 @@ export default function AddPage() {
         // If no errors, clear previous errors and proceed
         setErrors({});
 
-        
-        
         // Validate date format if toggle is enabled
         if (isToggleEnabled) {
             // Allow blank inputs in addition to valid date formats
@@ -306,9 +304,7 @@ export default function AddPage() {
         }
 
         // Upload image and corresponding id to upload endpoint 
-
         const uploadImages = async () => {    
-
             try {
                 const response = await fetch(`/api/upload`, {
                     method: "POST",

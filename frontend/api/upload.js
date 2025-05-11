@@ -1,6 +1,6 @@
 /**************************************************************
  *
- *                     add.js
+ *                     upload.js
  *
  *        Authors: Dan Glorioso & Shayne Sidmnan
  *           Date: 03/07/2025

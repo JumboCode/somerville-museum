@@ -346,7 +346,7 @@
 
 .textBoxRow {
     display: flex;
-    gap: 1.3rem;
+    gap: 1.8rem;
     justify-content: center;
     margin-top: 1rem;
 }

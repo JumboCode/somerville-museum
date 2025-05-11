@@ -22,10 +22,11 @@ import StylishButton from './StylishButton';
 import Link from 'next/link';
 
 
-export default function EditPage({ unit, onClose }) {
+export default function EditPage({ unit }) {
     // Left column state variables
     const [dragOver, setDragOver] = useState(false);
-    const [preview, setPreview] = useState(null);
+    const [preview, setPreview] = useState([]);
+    const [imageID, setImageID] = useState([]); // For image UUIDs
 
     // Extract the unit details
     const { id, name, age_group, gender, color, season, garment_type, size, time_period, condition, cost, notes} = unit; 
@@ -49,6 +50,7 @@ export default function EditPage({ unit, onClose }) {
     const [errors, setErrors] = useState({});
     const [statusMessage, setStatusMessage] = useState("");
     const [statusType, setStatusType] = useState("");
+    const [activeDragIndex, setActiveDragIndex] = useState(null); // Tracks which slot is being dragged over
 
     // Define all of the options for buttons and dropdowns
     const garmentOptions = [
@@ -123,14 +125,18 @@ export default function EditPage({ unit, onClose }) {
     // Function to handle and update file selection
     const handleFileSelect = (file) => {
         if (file && file.type.startsWith("image/")) {
-            const reader = new FileReader();
-            reader.onload = (e) => setPreview(e.target.result);
-            reader.readAsDataURL(file);
-            setStatusMessage("Image uploaded successfully.");
-            setStatusType("success");
+            if (preview.length < 2) {
+                const reader = new FileReader();
+                reader.onload = (e) => setPreview([...preview, e.target.result]);
+                reader.readAsDataURL(file);
+
+                // Generate UUID for uploaded image
+                setImageID([...imageID, uuidv4()]);
+            } else {
+                alert("You can only upload 2 images per item.");
+            }
         } else {
-            setStatusMessage("Error: Invalid file type. Please upload an image.");
-            setStatusType("error");
+            alert("Please upload a valid image file.");
         }
     };
 
@@ -138,6 +144,7 @@ export default function EditPage({ unit, onClose }) {
     const handleDrop = (event) => {
         event.preventDefault();
         setDragOver(false);
+        setActiveDragIndex(null);
         const file = event.dataTransfer.files[0];
         handleFileSelect(file);
     };
@@ -188,20 +195,20 @@ export default function EditPage({ unit, onClose }) {
         }
     };
 
-    const handleConditionSelect = (selectedConditions) => {
+    // const handleConditionSelect = (selectedConditions) => {
     
-        // Ensure selectedconditionOptions is always an array
-        if (!Array.isArray(selectedconditionOptions)) {
-            setconditionOption([]);
-            return;
-        }
+    //     // Ensure selectedconditionOptions is always an array
+    //     if (!Array.isArray(selectedconditionOptions)) {
+    //         setconditionOption([]);
+    //         return;
+    //     }
     
-        // Extract only names, handling undefined values safely
-        const selectedNames = selectedconditionOptions.map(item => item?.name || "").filter(name => name !== "");
+    //     // Extract only names, handling undefined values safely
+    //     const selectedNames = selectedconditionOptions.map(item => item?.name || "").filter(name => name !== "");
     
-        // Update state
-        setconditionOption(selectedNames);
-    };
+    //     // Update state
+    //     setconditionOption(selectedNames);
+    // };
 
     // const handleTimePeriodSelect = (selectedTimePeriods) => {    
     //     // Ensure selectedTimePeriods is always an array
@@ -238,7 +245,6 @@ export default function EditPage({ unit, onClose }) {
     
         try {
             const response = await fetch(`/api/itemManagement?action=retrieve&id=${idText}`);
-            // console.log("idtext: " + idText);
     
             // Custom error handling for no item found
             if (response.status === 428) {
@@ -253,6 +259,7 @@ export default function EditPage({ unit, onClose }) {
     
             // Parse response as JSON
             const data = await response.json();
+            console.log("Retrieved item data:", data);
     
             // Populate state with retrieved data
             setIDText(data.id);
@@ -268,7 +275,34 @@ export default function EditPage({ unit, onClose }) {
             setSelectedSeason(data.season || []);
             setSelectedSize(data.size || []);
             setconditionOption(data.condition || []);
-    
+            setImageID(data.image_keys || []);
+
+        // Fetch available image keys from Cloudflare R2
+        const imagesResponse = await fetch('/api/get-images');
+        if (!imagesResponse.ok) {
+            throw new Error('Failed to fetch image list');
+        }
+
+        const { images } = await imagesResponse.json();
+
+        // Construct URLs for the item's image keys and fetch actual image data
+        const previewImageURLs = await Promise.all((data.image_keys || []).map(async (key) => {
+            if (images.includes(key)) {
+                const imageData = await fetch(`https://upload-r2-assets.somerville-museum1.workers.dev/${key}`);
+                const blob = await imageData.blob();
+        
+                // Create a blob URL instead of a File
+                const imageUrl = URL.createObjectURL(blob);
+                return imageUrl;
+            }
+            return null;
+        }));
+        
+
+        // Filter out null values and update preview state with actual File objects
+        setPreview(previewImageURLs.filter(url => url !== null));
+        setImageID(data.image_keys || []);
+
         } catch (error) {
             console.error('Error fetching item data:', error);
             setStatusMessage("Error fetching item data. Please try again.");
@@ -286,7 +320,7 @@ export default function EditPage({ unit, onClose }) {
         if (itemId) {
             retrieveItem(itemId);
         }
-    }, []);
+    });
     
     const handleSubmit = () => {
         setStatusMessage("Updating...");
@@ -334,15 +368,53 @@ export default function EditPage({ unit, onClose }) {
         }
     
         setErrors({});
-    
+
+        // Validate date format if toggle is enabled
+        if (isToggleEnabled) {
+            // Allow blank inputs in addition to valid date formats
+            const regex = /^(0?[1-9]|1[0-2])\/(0?[1-9]|[12]\d|3[01])\/\d{2,4}$/;
+            if (manualDateText && !regex.test(manualDateText)) {
+                alert("Please enter a valid date in the format mm/dd/yyyy.");
+                return;
+            }
+        }
+
+        // Upload image and corresponding id to upload endpoint 
+        const uploadImages = async () => {    
+            try {
+                const response = await fetch(`/api/upload`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ fileNames: imageID, fileContents: preview }),
+                });
+        
+                const data = await response.json();
+
+                if (!response.ok) {
+                    setStatusMessage("An error uploading image occurred. Please try again.");
+                    setStatusType("error");
+                    return;
+                }
+                
+            } catch (error) {
+                setStatusMessage("An error uploading image occurred. Please try again.");
+                setStatusType("error");
+                return;
+            }
+        };
+
+        // Call the serverless route
+        uploadImages();
+
+        // Convert newItem params to JSON object
+        const body = JSON.stringify(newItem);
+
         const updateItem = async () => {
             try {
                 const response = await fetch(`../../api/itemManagement?action=updateItem`, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(newItem),
+                    headers: { "Content-Type": "application/json" },
+                    body
                 });
     
                 const data = await response.json();
@@ -376,6 +448,33 @@ export default function EditPage({ unit, onClose }) {
         updateItem();
     };
 
+    // TOGGLE FUNCTIONALITY
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Fetch next available ID
+                const response = await fetch('/api/inventoryQueries?action=getNextAvailableId');
+                const data = await response.json();
+                if (response.ok) {
+                    setIDText(data.nextId);
+                } else {
+                    console.error(data.error);
+                }
+
+                // Set placeholder date
+                const today = new Date();
+                const month = String(today.getMonth() + 1).padStart(2, '0'); 
+                const day = String(today.getDate()).padStart(2, '0');
+                const year = today.getFullYear();
+                setPlaceholderDate(`${month}/${day}/${year}`);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     return (
         <div className="main">
             <div className="column">
@@ -386,37 +485,63 @@ export default function EditPage({ unit, onClose }) {
                         Edit Item
                     </div>
 
-                    {/* Drag-and-drop image upload section */}
-                    <div className="image-upload">
-                        <div
-                            id="drop-zone"
-                            className={`drop-zone ${dragOver ? "dragover" : ""}`}
-                            onClick={() => document.getElementById("file-input").click()}
-                            onDragOver={(event) => {
-                                event.preventDefault();
-                                setDragOver(true);
-                            }}
-                            onDragLeave={() => setDragOver(false)}
-                            onDrop={handleDrop}
-                            >
-                            <div className="upload-icon-and-text">
+                {/* Drag-and-drop image upload section */}
+                <div className="image-upload">
+                    <div
+                        id="drop-zone"
+                        className={`drop-zone ${dragOver ? "dragover" : ""}`}
+                        onClick={() => document.getElementById("file-input").click()}
+                        onDragOver={(event) => {
+                            event.preventDefault();
+                            setDragOver(true);
+                        }}
+                        onDragLeave={() => setDragOver(false)}
+                        onDrop={handleDrop}>
+                        {preview.length === 0 ? (
+                        <div className="upload-icon-and-text">
                             <img src="/icons/upload.svg" className="upload-icon" />
-                                <p style={{color: "#9B525F"}}>Upload image*</p>
+                            <p style={{ color: "#9B525F" }}>Upload image*</p>
+                        </div>
+                        ) : (
+                        <div className="upload-content">
+                            {preview.map((image, index) => (
+                            <div key={index} className="image-preview-container">
+                                <button
+                                className="remove-image-btn"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    const updatedPreviews = [...preview];
+                                    const updatedIDs = [...imageID];
+                                    updatedPreviews.splice(index, 1);
+                                    updatedIDs.splice(index, 1);
+                                    setPreview(updatedPreviews);
+                                    setImageID(updatedIDs);
+                                }}
+                                aria-label="Remove image"
+                                >
+                                ×
+                                </button>
+                                <img src={image} alt={`Preview ${index + 1}`} className="preview" />
                             </div>
-                            <input
-                                type="file"
-                                id="file-input"
-                                accept="image/*"
-                                style={{ display: "none" }}
-                                onChange={handleFileInputChange}
-                            />
-                            {preview && (
-                                <img
-                                src={preview}
-                                alt="Preview"
-                                className="preview"
-                                />
+                            ))}
+
+                            {preview.length < 2 && (
+                            <div className="upload-icon-and-text">
+                                <img src="/icons/upload.svg" className="upload-icon" />
+                                <p style={{ color: "#9B525F" }}>Upload second image</p>
+                            </div>
                             )}
+                        </div>
+                        )}
+
+                        <input
+                        type="file"
+                        id="file-input"
+                        accept="image/*"
+                        style={{ display: "none" }}
+                        onChange={handleFileInputChange}
+                        />
+
                         </div>
                         <div className={`itemName ${errors.name ? "error-text" : ""}`}>
                             Item Name*
