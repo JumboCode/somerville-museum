@@ -108,16 +108,17 @@ export default function AddPage() {
 
     // Function to handle and update file selection
     const handleFileSelect = (file) => {
-        if (!file) return;
-
-        console.log("File selected:", file);
-        console.log("File size:", file.size);
-
+        if (!file) {
+            alert("Please upload a valid image file.");
+            return;
+        }
+        
         if (!file.type.startsWith("image/")) {
             alert("Please upload a valid image file.");
             return;
         }
-
+        
+        // File size check based on global var
         if (file.size > MAX_FILE_SIZE_BYTES) {
             alert(`File "${file.name}" exceeds the ${MAX_FILE_SIZE_MB}MB limit.`);
             return;
