@@ -3,7 +3,8 @@
  *                     EditPage.jsx
  *
  *        Authors: Dan Glorioso & Massimo Bottari
- *           Date: 02/01/2025
+ *        Created: 02/01/2025
+ *       Modified: 05/11/2025 by DG
  *
  *     Summary: A component that allows users to edit an existing item in the
  *              database. It fetches the current data for the item, populates 
@@ -20,17 +21,24 @@ import { Dropdown } from 'primereact/dropdown';
 import { MultiSelect } from 'primereact/multiselect';
 import StylishButton from './StylishButton';
 import Link from 'next/link';
+import { useGlobalContext } from './contexts/ToggleContext';
+import { v4 as uuidv4 } from 'uuid';
 
+const MAX_FILE_SIZE_MB = 5;
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
-export default function EditPage({ unit, onClose }) {
+export default function EditPage({ unit }) {
     // Left column state variables
     const [dragOver, setDragOver] = useState(false);
-    const [preview, setPreview] = useState(null);
+    const [preview, setPreview] = useState([]);
+    const [imageID, setImageID] = useState([]); // For image UUIDs
+    const [prevImageID, setPrevImageID] = useState([]); // For previous image UUIDs
 
     // Extract the unit details
     const { id, name, age_group, gender, color, season, garment_type, size, time_period, condition, cost, notes} = unit; 
 
     // Right column state variables
+    const { isToggleEnabled } = useGlobalContext(); // TOGGLE FUNCTIONALITY
     const [idText, setIDText] = useState(id);
     const [itemText, setItemText] = useState(name);
     const [priceText, setPriceText] = useState(cost);
@@ -49,6 +57,7 @@ export default function EditPage({ unit, onClose }) {
     const [errors, setErrors] = useState({});
     const [statusMessage, setStatusMessage] = useState("");
     const [statusType, setStatusType] = useState("");
+    const [activeDragIndex, setActiveDragIndex] = useState(null); // Tracks which slot is being dragged over
 
     // Define all of the options for buttons and dropdowns
     const garmentOptions = [
@@ -64,8 +73,8 @@ export default function EditPage({ unit, onClose }) {
     const timePeriods = [
         { name: "Post-1920s" },
         { name: "Pre-1700s" },
-        { name: "1750s - 1800s" },
-        { name: "1800s - 1840s" }
+        { name: "1750s-1800s" },
+        { name: "1800s-1840s" }
     ];
     const ageOptions = [
         { value: "Youth", label: "Youth" },
@@ -95,7 +104,7 @@ export default function EditPage({ unit, onClose }) {
         { name: "Not usable" },
         { name: "Great" },
         { name: "Good"}
-    ]
+    ];
     const colors = [
         { name: "Red", hex: "#FF3B30" },
         { name: "Orange", hex: "#FF9500" },
@@ -109,7 +118,6 @@ export default function EditPage({ unit, onClose }) {
         { name: "Gray", hex: "#8E8E93" },
         { name: "Black", hex: "#000000" },
       ];
-    const cancelOrSubmit = ["Cancel", "Submit"];
 
     // Fetch placeholder for current date
     const [placeholderDate, setPlaceholderDate] = useState('');
@@ -121,24 +129,42 @@ export default function EditPage({ unit, onClose }) {
         setPlaceholderDate(`${month}/${day}/${year}`);
     }, []);
 
-    // Function to handle and update file selection
+// Function to handle and update file selection
     const handleFileSelect = (file) => {
-        if (file && file.type.startsWith("image/")) {
-            const reader = new FileReader();
-            reader.onload = (e) => setPreview(e.target.result);
-            reader.readAsDataURL(file);
-            setStatusMessage("Image uploaded successfully.");
-            setStatusType("success");
-        } else {
-            setStatusMessage("Error: Invalid file type. Please upload an image.");
-            setStatusType("error");
+        if (!file) {
+            alert("Please upload a valid image file.");
+            return;
         }
+
+        if (!file.type.startsWith("image/")) {
+            alert("Please upload a valid image file.");
+            return;
+        }
+
+        // File size check based on global var
+        if (file.size > MAX_FILE_SIZE_BYTES) {
+            alert(`File "${file.name}" exceeds the ${MAX_FILE_SIZE_MB}MB limit.`);
+            return;
+        }
+
+        if (preview.length >= 2) {
+            alert("You can only upload 2 images per item.");
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => setPreview(prev => [...prev, e.target.result]);
+        reader.readAsDataURL(file);
+
+        // Generate UUID for uploaded image
+        setImageID(prev => [...prev, uuidv4()]);
     };
 
     // Function to handle drag-and-drop file upload
     const handleDrop = (event) => {
         event.preventDefault();
         setDragOver(false);
+        setActiveDragIndex(null);
         const file = event.dataTransfer.files[0];
         handleFileSelect(file);
     };
@@ -189,34 +215,34 @@ export default function EditPage({ unit, onClose }) {
         }
     };
 
-    const handleConditionSelect = (selectedConditions) => {
+    // const handleConditionSelect = (selectedConditions) => {
     
-        // Ensure selectedconditionOptions is always an array
-        if (!Array.isArray(selectedconditionOptions)) {
-            setconditionOption([]);
-            return;
-        }
+    //     // Ensure selectedconditionOptions is always an array
+    //     if (!Array.isArray(selectedconditionOptions)) {
+    //         setconditionOption([]);
+    //         return;
+    //     }
     
-        // Extract only names, handling undefined values safely
-        const selectedNames = selectedconditionOptions.map(item => item?.name || "").filter(name => name !== "");
+    //     // Extract only names, handling undefined values safely
+    //     const selectedNames = selectedconditionOptions.map(item => item?.name || "").filter(name => name !== "");
     
-        // Update state
-        setconditionOption(selectedNames);
-    };
+    //     // Update state
+    //     setconditionOption(selectedNames);
+    // };
 
-    const handleTimePeriodSelect = (selectedTimePeriods) => {    
-        // Ensure selectedTimePeriods is always an array
-        if (!Array.isArray(selectedTimePeriods)) {
-            setSelectedTimePeriod([]);
-            return;
-        }
+    // const handleTimePeriodSelect = (selectedTimePeriods) => {    
+    //     // Ensure selectedTimePeriods is always an array
+    //     if (!Array.isArray(selectedTimePeriods)) {
+    //         setSelectedTimePeriod([]);
+    //         return;
+    //     }
     
-        // Extract only names
-        const selectedNames = selectedTimePeriods.map(item => item?.name || "");
+    //     // Extract only names
+    //     const selectedNames = selectedTimePeriods.map(item => item?.name || "");
     
-        // Update state
-        setSelectedTimePeriod(selectedNames.filter(name => name !== ""));
-    };
+    //     // Update state
+    //     setSelectedTimePeriod(selectedNames.filter(name => name !== ""));
+    // };
 
     const handleSeasonSelect = (season) => {
         setSelectedSeason((prevSelected) => {
@@ -239,7 +265,6 @@ export default function EditPage({ unit, onClose }) {
     
         try {
             const response = await fetch(`/api/itemManagement?action=retrieve&id=${idText}`);
-            // console.log("idtext: " + idText);
     
             // Custom error handling for no item found
             if (response.status === 428) {
@@ -254,6 +279,7 @@ export default function EditPage({ unit, onClose }) {
     
             // Parse response as JSON
             const data = await response.json();
+            console.log("Retrieved item data:", data);
     
             // Populate state with retrieved data
             setIDText(data.id);
@@ -269,7 +295,34 @@ export default function EditPage({ unit, onClose }) {
             setSelectedSeason(data.season || []);
             setSelectedSize(data.size || []);
             setconditionOption(data.condition || []);
-    
+            setImageID(data.image_keys || []);
+
+        // Fetch available image keys from Cloudflare R2
+        const imagesResponse = await fetch('/api/images?action=get');
+        if (!imagesResponse.ok) {
+            throw new Error('Failed to fetch image list');
+        }
+
+        const { images } = await imagesResponse.json();
+
+        // Construct URLs for the item's image keys and fetch actual image data
+        const previewImageURLs = await Promise.all((data.image_keys || []).map(async (key) => {
+            if (images.includes(key)) {
+                const imageData = await fetch(`https://upload-r2-assets.somerville-museum1.workers.dev/${key}`);
+                const blob = await imageData.blob();
+        
+                // Create a blob URL instead of a File
+                const imageUrl = URL.createObjectURL(blob);
+                return imageUrl;
+            }
+            return null;
+        }));
+        
+        // Filter out null values and update preview state with actual File objects
+        setPreview(previewImageURLs.filter(url => url !== null));
+        setImageID(data.image_keys || []);
+        setPrevImageID(data.image_keys || []);
+
         } catch (error) {
             console.error('Error fetching item data:', error);
             setStatusMessage("Error fetching item data. Please try again.");
@@ -289,7 +342,6 @@ export default function EditPage({ unit, onClose }) {
         }
     }, []);
     
-
     const handleSubmit = () => {
         setStatusMessage("Updating...");
         setStatusType("neutral");
@@ -309,25 +361,31 @@ export default function EditPage({ unit, onClose }) {
             color: selectedColors.length > 0 ? selectedColors : null,
             status: "Available",
             location: null,
-            date_added: placeholderDate,
+            date_added: isToggleEnabled ? manualDateText : placeholderDate, 
             current_borrower: null,
-            borrow_history: null
+            borrow_history: null,
+            image_keys: imageID
         };
     
         let newErrors = {};
     
-        // Required fields check
+        // Check for missing required fields and set error flags
+        if (!isToggleEnabled) {
+            if (!newItem.garment_type) newErrors.garment_type = true;
+            if (!newItem.time_period) newErrors.time_period = true;
+            if (!newItem.age_group) newErrors.age_group = true;
+            if (!newItem.gender) newErrors.gender = true;
+            if (!newItem.size) newErrors.size = true;
+            if (!newItem.season) newErrors.season = true;
+            if (!newItem.condition) newErrors.condition = true;
+            if (!newItem.color) newErrors.color = true;
+        }
+        else {
+            if (!newItem.id) newErrors.id = true;
+        }
         if (!newItem.name) newErrors.name = true;
-        if (!newItem.garment_type) newErrors.garment_type = true;
-        if (!newItem.time_period) newErrors.time_period = true;
-        if (!newItem.age_group) newErrors.age_group = true;
-        if (!newItem.gender) newErrors.gender = true;
-        if (!newItem.size) newErrors.size = true;
-        if (!newItem.season) newErrors.season = true;
-        if (!newItem.condition) newErrors.condition = true;
-        if (!newItem.color) newErrors.color = true;
-        if (!newItem.date_added) newErrors.date_added = true;
-    
+
+        // If any errors exist, update state and show alert
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             setStatusMessage("Please fill out all required fields.");
@@ -336,15 +394,95 @@ export default function EditPage({ unit, onClose }) {
         }
     
         setErrors({});
-    
+
+        // Validate date format if toggle is enabled
+        if (isToggleEnabled) {
+            // Allow blank inputs in addition to valid date formats
+            const regex = /^(0?[1-9]|1[0-2])\/(0?[1-9]|[12]\d|3[01])\/\d{2,4}$/;
+            if (manualDateText && !regex.test(manualDateText)) {
+                alert("Please enter a valid date in the format mm/dd/yyyy.");
+                return;
+            }
+        }
+
+        // Upload only images that are not already in prevImageID
+        const uploadImages = async () => {
+            // Identify which image IDs are new
+            const newImageIDs = imageID.filter(id => !prevImageID.includes(id));
+            const newPreviews = preview.filter((_, idx) => !prevImageID.includes(imageID[idx]));
+
+            // If no new images, skip upload
+            if (newImageIDs.length === 0) {
+                console.log("No new images to upload.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/images?action=upload`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ fileNames: newImageIDs, fileContents: newPreviews }),
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    console.error(data);
+                    setStatusMessage("An error uploading image occurred. Please try again.");
+                    setStatusType("error");
+                    return;
+                }
+
+            } catch (error) {
+                console.error(error);
+                setStatusMessage("An error uploading image occurred. Please try again.");
+                setStatusType("error");
+                return;
+            }
+        };
+
+        // Call the uploader unconditionally, skip if no new images
+        uploadImages();
+
+        const deleteImages = async () => {
+            // Identify removed image IDs
+            const deletedImageIDs = prevImageID.filter(id => !imageID.includes(id));
+        
+            if (deletedImageIDs.length === 0) {
+                console.log("No images to delete.");
+                return;
+            }
+        
+            try {
+                // Delete each file individually
+                for (const fileName of deletedImageIDs) {
+                    const response = await fetch(`/api/images?action=delete`, {
+                        method: "DELETE",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ fileName }),
+                    });
+        
+                    if (!response.ok) {
+                        const data = await response.json();
+                        console.error("Failed to delete:", data);
+                    }
+                }
+            } catch (error) {
+                console.error("Error during image deletion:", error);
+            }
+        };
+        
+        // Call the delete function unconditionally, skip if no images to delete
+        deleteImages();
+
+        // Convert newItem params to JSON object
+        const body = JSON.stringify(newItem);
+
         const updateItem = async () => {
             try {
                 const response = await fetch(`../../api/itemManagement?action=updateItem`, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(newItem),
+                    headers: { "Content-Type": "application/json" },
+                    body
                 });
     
                 const data = await response.json();
@@ -376,22 +514,6 @@ export default function EditPage({ unit, onClose }) {
         };
     
         updateItem();
-    };    
-
-    // Reset form fields
-    const resetForm = () => {
-        setIDText("");
-        setItemText("");
-        setPriceText("");
-        setNotesText("");
-        setSelectedGarment("");
-        setSelectedTimePeriod([]);
-        setAgeSelection(null);
-        setGenderSelection(null);
-        setSelectedSize([]);
-        setSelectedSeason([]);
-        setconditionOption([]);
-        setSelectedColors([]);
     };
 
     return (
@@ -404,37 +526,63 @@ export default function EditPage({ unit, onClose }) {
                         Edit Item
                     </div>
 
-                    {/* Drag-and-drop image upload section */}
-                    <div className="image-upload">
-                        <div
-                            id="drop-zone"
-                            className={`drop-zone ${dragOver ? "dragover" : ""}`}
-                            onClick={() => document.getElementById("file-input").click()}
-                            onDragOver={(event) => {
-                                event.preventDefault();
-                                setDragOver(true);
-                            }}
-                            onDragLeave={() => setDragOver(false)}
-                            onDrop={handleDrop}
-                            >
-                            <div className="upload-icon-and-text">
+                {/* Drag-and-drop image upload section */}
+                <div className="image-upload">
+                    <div
+                        id="drop-zone"
+                        className={`drop-zone ${dragOver ? "dragover" : ""}`}
+                        onClick={() => document.getElementById("file-input").click()}
+                        onDragOver={(event) => {
+                            event.preventDefault();
+                            setDragOver(true);
+                        }}
+                        onDragLeave={() => setDragOver(false)}
+                        onDrop={handleDrop}>
+                        {preview.length === 0 ? (
+                        <div className="upload-icon-and-text">
                             <img src="/icons/upload.svg" className="upload-icon" />
-                                <p style={{color: "#9B525F"}}>Upload image*</p>
+                            <p style={{ color: "#9B525F" }}>Upload image*</p>
+                        </div>
+                        ) : (
+                        <div className="upload-content">
+                            {preview.map((image, index) => (
+                            <div key={index} className="image-preview-container">
+                                <button
+                                className="remove-image-btn"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    const updatedPreviews = [...preview];
+                                    const updatedIDs = [...imageID];
+                                    updatedPreviews.splice(index, 1);
+                                    updatedIDs.splice(index, 1);
+                                    setPreview(updatedPreviews);
+                                    setImageID(updatedIDs);
+                                }}
+                                aria-label="Remove image"
+                                >
+                                ×
+                                </button>
+                                <img src={image} alt={`Preview ${index + 1}`} className="preview" />
                             </div>
-                            <input
-                                type="file"
-                                id="file-input"
-                                accept="image/*"
-                                style={{ display: "none" }}
-                                onChange={handleFileInputChange}
-                            />
-                            {preview && (
-                                <img
-                                src={preview}
-                                alt="Preview"
-                                className="preview"
-                                />
+                            ))}
+
+                            {preview.length < 2 && (
+                            <div className="upload-icon-and-text">
+                                <img src="/icons/upload.svg" className="upload-icon" />
+                                <p style={{ color: "#9B525F" }}>Upload second image</p>
+                            </div>
                             )}
+                        </div>
+                        )}
+
+                        <input
+                        type="file"
+                        id="file-input"
+                        accept="image/*"
+                        style={{ display: "none" }}
+                        onChange={handleFileInputChange}
+                        />
+
                         </div>
                         <div className={`itemName ${errors.name ? "error-text" : ""}`}>
                             Item Name*
