@@ -121,7 +121,6 @@
     object-fit: contain;
     border-radius: 6px;
 }
-  
 
 .image {
     margin: 1vw;
@@ -669,8 +668,6 @@
     background-color: #7B3F4C;
     color: #fff;
   }
-  
-  
 
 .upload-content {
     display: flex;

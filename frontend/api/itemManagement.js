@@ -208,6 +208,8 @@ export async function updateItemHandler(req, res) {
             location,
             date_added,
             current_borrower,
+            borrow_history = [],
+            image_keys = []
         } = req.body;
 
         if (!id) {
@@ -242,18 +244,19 @@ export async function updateItemHandler(req, res) {
                     location = $13,
                     date_added = $14,
                     current_borrower = $15,
-                    notes = $16
+                    notes = $16,
+                    image_keys = $17
                 WHERE id = $1
                 RETURNING *`,
-                [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, notes]
+                [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, notes, image_keys]
             );
             return res.status(200).json({ message: "Item successfully updated", item: result.rows[0] });
         } else {
             // If the ID does not exist, insert a new entry
             result = await query(
                 `INSERT INTO dummy_data 
-                (id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, notes)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+                (id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, notes, image_keys)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
                 RETURNING *`,
                 [id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, notes]
             );

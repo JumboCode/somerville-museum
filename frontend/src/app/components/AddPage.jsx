@@ -9,8 +9,10 @@ import Link from 'next/link';
 import { useGlobalContext } from './contexts/ToggleContext';
 import { v4 as uuidv4 } from 'uuid';
 
-export default function AddPage() {
+const MAX_FILE_SIZE_MB = 5;
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
+export default function AddPage() {
     // Left column state variables
     const [dragOver, setDragOver] = useState(false);
     const [preview, setPreview] = useState([]);
@@ -106,20 +108,33 @@ export default function AddPage() {
 
     // Function to handle and update file selection
     const handleFileSelect = (file) => {
-        if (file && file.type.startsWith("image/")) {
-            if (preview.length < 2) {
-                const reader = new FileReader();
-                reader.onload = (e) => setPreview([...preview, e.target.result]);
-                reader.readAsDataURL(file);
-
-                // Generate UUID for uploaded image
-                setImageID([...imageID, uuidv4()]);
-            } else {
-                alert("You can only upload 2 images per item.");
-            }
-        } else {
+        if (!file) {
             alert("Please upload a valid image file.");
+            return;
         }
+        
+        if (!file.type.startsWith("image/")) {
+            alert("Please upload a valid image file.");
+            return;
+        }
+        
+        // File size check based on global var
+        if (file.size > MAX_FILE_SIZE_BYTES) {
+            alert(`File "${file.name}" exceeds the ${MAX_FILE_SIZE_MB}MB limit.`);
+            return;
+        }
+
+        if (preview.length >= 2) {
+            alert("You can only upload 2 images per item.");
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => setPreview(prev => [...prev, e.target.result]);
+        reader.readAsDataURL(file);
+
+        // Generate UUID for uploaded image
+        setImageID(prev => [...prev, uuidv4()]);
     };
 
     // Function to handle drag-and-drop file upload
@@ -293,8 +308,6 @@ export default function AddPage() {
         // If no errors, clear previous errors and proceed
         setErrors({});
 
-        
-        
         // Validate date format if toggle is enabled
         if (isToggleEnabled) {
             // Allow blank inputs in addition to valid date formats
@@ -306,11 +319,9 @@ export default function AddPage() {
         }
 
         // Upload image and corresponding id to upload endpoint 
-
         const uploadImages = async () => {    
-
             try {
-                const response = await fetch(`/api/upload`, {
+                const response = await fetch(`/api/images?action=upload`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ fileNames: imageID, fileContents: preview }),
