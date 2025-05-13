@@ -178,6 +178,7 @@ export default function Signin() {
         </div>
         <div className="inputContainer">
           <label
+            suppressHydrationWarning
             className="errorLabel"
             style={{
               backgroundColor: error ? "rgba(255, 44, 44, 0.2)" : "#FFFFFF",
@@ -230,9 +231,7 @@ export default function Signin() {
             className="textButton"
             onClick={() => router.push("/reset_password")}
           >
-            <strong>
-              <p className="tiny">Forgot password?</p>
-            </strong>
+            <strong className="tiny">Forgot password?</strong>
           </button>
         </div>
         <div className="inputContainer login-button">
