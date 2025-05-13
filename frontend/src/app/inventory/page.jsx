@@ -557,6 +557,40 @@ function Inventory({
         );
     }
 
+    //generate an array of page numbers to display (max 7 buttons)
+    const visiblePageNumbers = (() => {
+        if (totalPages <= 7) {
+            return Array.from({ length: totalPages }, (_, i) => i + 1);
+        }
+        const pages = [];
+        pages.push(1);
+        let start = currentPage - 2;
+        let end = currentPage + 2;
+        if (start < 2) {
+            start = 2;
+            end = start + 4;
+        }
+        if (end > totalPages - 1) {
+            end = totalPages - 1;
+            start = end - 4;
+            if (start < 2) start = 2;
+        }
+        for (let i = start; i <= end; i++) {
+            pages.push(i);
+        }
+        pages.push(totalPages);
+        return pages;
+    })();
+
+    //compute pagination buttons with gap indicators
+    const paginationButtons = [];
+    for (let i = 0; i < visiblePageNumbers.length; i++) {
+        if (i > 0 && visiblePageNumbers[i] - visiblePageNumbers[i - 1] > 1) {
+            paginationButtons.push('gap');
+        }
+        paginationButtons.push(visiblePageNumbers[i]);
+    }
+
     return (
         <>
             <Filter 
@@ -604,29 +638,29 @@ function Inventory({
                         <button className="IDLabel" onClick={() => requestSort('id')} id='SortTag'>
                             Item ID 
                             <SortIndicator 
-                            active={sortConfig.key === 'id'} 
-                            direction={sortConfig.direction}
+                                active={sortConfig.key === 'id'} 
+                                direction={sortConfig.direction}
                             />
                         </button>
                         <button className='ItemLabel' onClick={() => requestSort('name')} id='SortTag'>
                             Item Name
                             <SortIndicator 
-                            active={sortConfig.key === 'name'} 
-                            direction={sortConfig.direction}
+                                active={sortConfig.key === 'name'} 
+                                direction={sortConfig.direction}
                             />
                         </button>
                         <button className="AvaiLabel" onClick={() => requestSort('avail')} id='SortTag'>
                             Status
                             <SortIndicator 
-                            active={sortConfig.key === 'avail'} 
-                            direction={sortConfig.direction}
+                                active={sortConfig.key === 'avail'} 
+                                direction={sortConfig.direction}
                             />
                         </button>
                         <button className="ConLabel" onClick={() => requestSort('con')} id='SortTag'>
                             Condition
                             <SortIndicator 
-                            active={sortConfig.key === 'con'} 
-                            direction={sortConfig.direction}
+                                active={sortConfig.key === 'con'} 
+                                direction={sortConfig.direction}
                             />
                         </button>
                         <div className="TagsLabel">Item Tags</div>
@@ -649,20 +683,24 @@ function Inventory({
                     </div>
                     <div className="page-selection">
                         <StylishButton className="leftBtn" 
-                                        label = "&lt;" 
+                                        label="&lt;" 
                                         onClick={goToPreviousPage} 
                                         disabled={currentPage === 1}
                                         styleType='style4'>
                         </StylishButton>
-                        {buttons.map((number) => (
-                            <StylishButton className="pageNum" 
-                                            label={number} 
-                                            key={number} 
-                                            onClick={() => setCurrentPage(number)}
-                                            styleType={currentPage === number ? 'style5' : 'style4'}>
-                            </StylishButton>
-                        ))}
-
+                        {paginationButtons.map((item, index) => {
+                            if (item === 'gap') {
+                                return <span key={`gap-${index}`} className="pageGap">...</span>;
+                            }
+                            return (
+                                <StylishButton className="pageNum" 
+                                                label={item} 
+                                                key={item} 
+                                                onClick={() => setCurrentPage(item)}
+                                                styleType={currentPage === item ? 'style5' : 'style4'}>
+                                </StylishButton>
+                            );
+                        })}
                         <StylishButton className="rightBtn" 
                                         label="&gt;"
                                         onClick={goToNextPage} 
