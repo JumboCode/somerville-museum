@@ -15,75 +15,49 @@
   gap: 1vh;
 }
   
-  /* Big bold Settings title */
-  .settings-title {
-    font-size: 36px;
-    font-weight: bold;
-    color: black;
-    margin: 0;
-  }
-  
-  .account-header {
-    align-self: flex-start;
-  }
-  
-  .account-subheading {
-    font-size: 18px;
-    font-weight: bold; /* Made it bold */
-    color: black;
-    margin: 0;
-  }
-  
-  
-  .profile-card-title {
-    text-align: center;
-    font-size: 35px;
-    font-weight: bold;
-    color: black;
-    margin-bottom: 25px;
-  }
-  
-  .body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    align-items: flex-start;
-    flex-direction: row;
-  }
-  
-  
-  .body p {
-    color: #000000;
-    font-size: 1.2em;
-  }
-  
-  .settings-container {
-    text-align: center;
-  }
-  
-  .subheading {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 20px;
-  }
-  
-    .profile-card {
-        background: white;
-        padding: 40px 40px 30px 40px; /* Reduced bottom padding */
-        border-radius: 12px;
-        box-shadow: 0px .1rem .3rem 0px rgba(0, 0, 0, 0.25);
-        width: 520px;
-        margin-bottom: 25px;
-        font-weight: bold;
-    }
+/* Big bold Settings title */
+.settings-title {
+  font-size: 36px;
+  font-weight: bold;
+  color: black;
+  margin: 0;
+}
 
-    .options-card {
-        background: white;
-        padding: 40px;
-        border-radius: 12px;
-        box-shadow: 0px .1rem .3rem 0px rgba(0, 0, 0, 0.25);
-        width: 520px;
-        margin-bottom: 25px;
-        font-weight: bold;
+.account-header {
+  align-self: flex-start;
+}
+
+.account-subheading {
+  font-size: 18px;
+  font-weight: bold; /* Made it bold */
+  color: black;
+  margin: 0;
+}
+
+
+.profile-card-title {
+  text-align: center;
+  font-size: 35px;
+  font-weight: bold;
+  color: black;
+  margin-bottom: 25px;
+}
+
+.body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+}
+
+
+/* .body p {
+  color: #000000;
+  font-size: 1.2em;
+} */
+
+.settings-container {
+  text-align: center;
 }
 
 h1 {
@@ -95,12 +69,26 @@ h1 {
     color: #000;
 
     font-family: Akatab;
-    font-size: 24px;
+    font-size: 18px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
     margin-bottom: 20px;
     margin-right: 13.5rem;
+}
+
+.adminapprovals {
+  text-align: left;
+  height: 48vh;
+  width: 48vw;
+  margin-left: 5%;
+  align-items: left;
+  justify-content: left;
+}
+
+.approvalscontainer {
+  width: 50%;
+  margin: 2%;
 }
 
 .profile-card, .options-card {
@@ -112,8 +100,6 @@ h1 {
     margin-bottom: 15px;
     box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
 }
-
-  
   
   form {
     display: flex;
@@ -212,21 +198,6 @@ h1 {
   
   .logout-icon {
     stroke: black;
-  }
-  
-  .adminapprovals {
-    margin-right: 2.8rem;
-}
-
-.adminapprovals {
-    text-align: left;
-    height: 48vh;
-    width: 25vw;
-  }
-  
-  .approvalscontainer {
-    width: 90%;
-    margin: 20px auto;
   }
   
   .newaccountapprovalbutton {
