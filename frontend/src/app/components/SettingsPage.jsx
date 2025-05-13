@@ -54,10 +54,13 @@ export default function SettingsPage() {
 
   useEffect(() => {
     const fetchUnapprovedUsers = async () => {
+      console.log("Is admin:", isAdmin);
       if (!isAdmin) return;
       try {
-        const response = await fetch("/api/get-unapproved-users"); // Your serverless API
+        const response = await fetch("/api/approval?action=unapproved"); // Your serverless API
+        // const response = await fetch("/api/get-unapproved-users")
         const data = await response.json();
+        console.log("All users:", response);
         setApprovals(data.users); // expected shape: [{ id, email, firstName, lastName }]
       } catch (error) {
         console.error("Error fetching unapproved users:", error);
@@ -83,7 +86,7 @@ export default function SettingsPage() {
 
   const approveVerification = async (id) => {
     try {
-      const res = await fetch("/api/approve-user", {
+      const res = await fetch("/api/approval?action=approve", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -115,6 +118,7 @@ export default function SettingsPage() {
         </div>
         <div className="body">
           <div className="left-column">
+            {user && (
             <div className="profile-card">
               <h2 className="profile-card-title">Profile</h2>
               <div className="nameText">
@@ -159,6 +163,7 @@ export default function SettingsPage() {
                 </div>
               </form>
             </div>
+            )}
             <div className="options-card">
               <div className="toggle">
                 <label className="switch">
