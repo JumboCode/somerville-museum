@@ -116,17 +116,13 @@ export default function BorrowerTable({ searchResults, onSelectBorrower }) {
     }
   };
 
-  // Handle navigation between borrowers in the popup
+  // Handle navigation between borrowers in the popup across all borrowers
   const handlePrevBorrower = () => {
-    if (selectedBorrowerIndex > 0) {
-      setSelectedBorrowerIndex(selectedBorrowerIndex - 1);
-    }
+    setSelectedBorrowerIndex((prevIndex) => Math.max(prevIndex - 1, 0));
   };
 
   const handleNextBorrower = () => {
-    if (selectedBorrowerIndex < currentBorrowers.length - 1) {
-      setSelectedBorrowerIndex(selectedBorrowerIndex + 1);
-    }
+    setSelectedBorrowerIndex((prevIndex) => Math.min(prevIndex + 1, allBorrowers.length - 1));
   };
 
   return (
