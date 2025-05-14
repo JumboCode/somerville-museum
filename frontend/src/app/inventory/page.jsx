@@ -637,7 +637,7 @@ function Inventory({
                         <div className="SelectAll" id='SelectAll' onClick={handleSelectAllChange}>
                             Select All
                         </div>
-                        <div className="SelectAll" id='SelectAll' onClick={handleDeselectAllChange}>
+                        <div className="SelectAll" id='DeselectAll' onClick={handleDeselectAllChange}>
                             Deselect All
                         </div>
                         <button className="IDLabel" onClick={() => requestSort('id')} id='SortTag'>
