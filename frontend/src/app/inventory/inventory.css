@@ -66,68 +66,90 @@ body, html {
     display: flex;
     justify-content: flex-start;
     padding-bottom: 1vh;
-    width: 90%;
+    width: 100%;
     padding-right: 10%;
     padding-left: 0px;
     position: absolute;
     bottom: 0;
-    gap: 2vh;
+    /* gap: 2vh; */
     font-size: 1rem;
     margin-top: 2vh;
     align-content: flex-start;
+    flex-direction: row;
+}
+
+.leftSectionP {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 16.5%;
+    justify-content: space-between;
+}
+
+#SelectAll {
+    color: #007BFF;  
+    text-decoration: underline;  
+    cursor: pointer;
+    width: 45%;
+}
+
+#DeselectAll {
+    color: #007BFF;  
+    text-decoration: underline;  
+    cursor: pointer;  
+    width: 55%;
+}
+
+.centerSectionP {
+    display: flex;
+    flex-direction: row;
+    align-items: left;
+    width: 72%;
 }
 
 .IDLabel {
-    padding-left:5.5vw;
+    /* padding-left:5.5vw; */
+    padding-left: 5%;
+    width: 22%;
     color: #333;
     background-color: transparent;
     border: transparent;
-}
-
-.IDOnClick {
-    padding-left: 5.5vw;
-    color: #9B525F;
 }
 
 .ItemLabel {
-    padding-left: 5vw;
+    /* padding-left: 5vw; */
+    width: 33%;
     color: #333;
     background-color: transparent;
     border: transparent;
-}
-
-
-.ItemOnClick {
-    padding-left: 8.5%;
-    color: #9B525F;
 }
 
 .AvaiLabel {
-    padding-left: 7.5vw;
+    /* padding-left: 7.5vw; */
+    width: 34%;
     color: #333;
     background-color: transparent;
     border: transparent;
-}
-
-.AvailOnClick {
-    padding-left: 6vw;
-    color: #9B525F;
 }
 
 .ConLabel {
-    padding-left: 5.5vw;
+    /* padding-left: 5.5vw; */
+    width: 40%;
     color: #333;
     background-color: transparent;
     border: transparent;
 }
 
-.ConOnClick {
-    padding-left: 4vw;
-    color: #9B525F;
+.rightSectionP {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 40%;
 }
 
 .TagsLabel {
-    padding-left: 7vw;
+    /* padding-left: 7vw; */
+    width: 100%;
     color: #333;
     background-color: transparent;
     font-size: small;
@@ -135,7 +157,7 @@ body, html {
     align-items: flex-end;
 }
 
-#SortTag, #SelectAll {
+#SortTag, #SelectAll, #DeselectAll {
     cursor: pointer;
     background: none; 
     border: none;
@@ -157,17 +179,15 @@ body, html {
     color: #1c1c1c;
 }
 
-#SelectAll {
-    color: #007BFF;  
-    text-decoration: underline;  
-    cursor: pointer;  
-}
-
 #SelectAll:hover {
     color: #0056b3;  
     text-decoration: underline;  
 }
 
+#DeselectAll:hover {
+    color: #0056b3;  
+    text-decoration: underline;  
+}
 
 .ItemBarHolder {
     background-color: white;
