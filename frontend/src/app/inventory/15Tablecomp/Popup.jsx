@@ -16,6 +16,7 @@ import "./InventoryUnit.css";
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import ReturnButton from "../../components/ReturnButton";
 
 export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } ) {
     const [isClosing, setIsClosing] = useState(false);
@@ -45,15 +46,15 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
 
     const fetchBorrowers = async () => {
         try {
-            // console.log("testing populating borrower data");
+            // console.log("fetching borrowers start");
             // console.log(id);
-            const response = await fetch(`../../../../api/db`, {
+            const response = await fetch(`/api/db`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    text: 'SELECT current_borrower, borrow_history FROM dummy_data WHERE id = $1',
+                    text: 'SELECT current_borrower FROM dummy_data WHERE id = $1',
                     params: [id]
                 })
             });
@@ -61,18 +62,16 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
             if (response.ok) {
                 const data = await response.json();
 
+                // console.log("current borrower fetch: ", data);
+
                 const currBorrower = data[0].current_borrower;
-                const borrowHistory = data[0].borrow_history;
+                // const borrowHistory = data[0].borrow_history;
                 if (currBorrower !== null) {
                     fetchCurrBorrower(currBorrower);
                 } else {
                     setCurrBorrower(null);
                 }
-                if (borrowHistory !== null) {
-                    fetchBorrowHistory(borrowHistory);
-                } else {
-                    setBorrowerHistory([]);
-                }
+                fetchBorrowHistory();
                 // console.log(data);
                 // console.log(currBorrower);
                 // console.log(borrowHistory);
@@ -84,26 +83,28 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
         }
     };
 
-    const fetchBorrowHistory = async (borrowHistory) => {
+    const fetchBorrowHistory = async () => {
         // Fetching from borrows table
         try {
             // console.log("testing populating borrower history data");
+            // console.log("fetching borrow history")
             // console.log(borrowHistory);
-            const response = await fetch(`../../../../api/db`, {
+            const response = await fetch(`/api/db`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    text: 'SELECT date_borrowed, date_returned, approver, notes FROM borrows WHERE borrower_id = ANY($1) AND item_id = $2',
-                    params: [borrowHistory, id]
+                    text: 'SELECT date_borrowed, date_returned, approver, notes FROM borrows WHERE Item_id = $1',
+                    params: [id]
                 })
             });
 
+            // console.log("fetching borrow history response: ", response);
+
             if (response.ok) {
                 const data = await response.json();
-                // console.log("borrower history data: ");
-                // console.log(data);
+                // console.log("borrowHistoryData: ", data);
 
                 const borrowData = data.map((borrow) => {
                     return {
@@ -131,7 +132,8 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
         try {
             // console.log("testing populating borrower data");
             // console.log(id);
-            const response = await fetch(`../../../../api/db`, {
+            // console.log("fetching currBorrower's info: ", currBorrower);
+            const response = await fetch(`/api/db`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -151,7 +153,7 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                     phone_number: data[0].phone_number,
                 };
 
-                setCurrBorrower(borrowData);
+                // setCurrBorrower("currBorrower data", borrowData);
                 // console.log("borrowData: ");
                 // console.log(borrowData);
                 
@@ -162,9 +164,11 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
             console.error(error);
         }
 
+        // console.log("fetching item data for CurrBorrower: ", currBorrower);
+
         // Fetching from borrows table
         try {
-            const response = await fetch(`../../../../api/db`, {
+            const response = await fetch(`/api/db`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -185,6 +189,8 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                     approved_by: data[0].approver,
                     notes: data[0].notes,
                 };
+
+                // console.log("Curr item data: ", borrowData);
 
                 setCurrBorrower(borrowData);
                 // console.log("borrowData: ");
@@ -269,7 +275,7 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                     {/* Title and arrow buttons */}
                     <div className="titleButton">
                         <h2>{name}</h2>
-                            <div className="buttons">
+                            <div className="buttonsP">
                                 {/* Left arrow button */}
                                 <StylishButton
                                     styleType={"style7"}
@@ -314,34 +320,34 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                     )}
                 </div>
 
-<div className="imageSelection">
-    {/* Left arrow button */}
-    <StylishButton
-        styleType={"style4"}
-        onClick={() => setSelectedImage((selectedImage - 1 + image_keys.length) % image_keys.length)}
-    >
-            <img src="/icons/arrow-left.svg" className="arrowIcon" alt="Next" />
-    </StylishButton>
-  {image_keys &&
-    image_keys.map((key, index) => (
-      <StylishButton
-        key={index}
-        styleType={selectedImage === index ? 'style5' : 'style4'}
-        onClick={() => setSelectedImage(index)}
-        label={`${index + 1}`}
-      />
-    ))}
+                <div className="imageSelection">
+                    {image_keys && image_keys.length > 1 && (
+                        <StylishButton
+                        styleType={"style4"}
+                        onClick={() => setSelectedImage((selectedImage - 1 + image_keys.length) % image_keys.length)}
+                        >
+                        <img src="/icons/arrow-left.svg" className="arrowIcon" alt="Next" />
+                        </StylishButton>
+                    )}
+                    {image_keys &&
+                        image_keys.map((key, index) => (
+                        <StylishButton
+                            key={index}
+                            styleType={selectedImage === index ? 'style5' : 'style4'}
+                            onClick={() => setSelectedImage(index)}
+                            label={`${index + 1}`}
+                        />
+                        ))}
 
-    {/* Right arrow button */}
-    <StylishButton
-        styleType={"style4"}
-        onClick={() => setSelectedImage((selectedImage + 1) % image_keys.length)}
-    >
-        <img src="/icons/arrow-right.svg" className="arrowIcon" alt="Next" />
-    </StylishButton>
-</div>
-
-
+                    {image_keys && image_keys.length > 1 && (
+                        <StylishButton
+                        styleType={"style4"}
+                        onClick={() => setSelectedImage((selectedImage + 1) % image_keys.length)}
+                        >
+                        <img src="/icons/arrow-right.svg" className="arrowIcon" alt="Next" />
+                        </StylishButton>
+                    )}
+                </div>
                 {/* Info Title and Edit Button */}
                 <div className="infoHeader">
                     <h3>Item Information</h3>
@@ -365,7 +371,7 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                             <td><strong>Age Group: </strong>{age_group}</td>
                         </tr>
                         <tr>
-                            <td><strong>Cost: </strong>${cost}</td>
+                            <td><strong>Cost: </strong>{cost !== null ? `$${cost}` : "N/A"}</td>
                             <td><strong>Sex: </strong>{gender}</td>
                         </tr>
                         <tr>
@@ -441,14 +447,20 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                         <>
                         <div className="borrowerTitle">
                         <h3>Borrower Information</h3>
-                        <div className="returnButton">
-                            <Link href={`/return?id=${id}`}>
-                                <StylishButton
-                                    styleType={"style1"}
-                                    label={"Return"}>
-                                </StylishButton>
-                            </Link>
-                        </div>
+                        {/* <div className="returnButtonP">
+                            <ReturnButton
+                                onClick={() => {
+                                        // Close the popup first
+                                        closePopup();
+                                        // Delay the rest of the action so that the popup finishes closing
+                                        setTimeout(() => {
+                                            // (Optional) Additional actions can be executed here if needed
+                                        }, 210);
+                                    }}
+                                selectedItems={[unit]}
+                                onSuccess={() => {}}
+                                isValid={true}/>
+                        </div> */}
                     </div>
 
                     <div id="currentBorrowerContainer">
@@ -492,13 +504,19 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                     <p id="borrowerHistorytitle">Borrower History</p> 
                     <table id="borrowerHistory">
                         <tbody>
-                            {borrowerHistory.map((borrower, index) => (
-                                <tr key={index + 1}>
-                                    <td>{borrower.dateBorrowed || "N/A"} - {borrower.dateReturned || "N/A"}</td>
-                                    <td>{borrower.approver || "N/A"}</td>
-                                    <td>{borrower.notes || "N/A"}</td>
+                            {borrowerHistory && borrowerHistory.length > 0 ? (
+                                borrowerHistory.map((borrower, index) => (
+                                    <tr key={index + 1}>
+                                        <td>{borrower.dateBorrowed || "N/A"} - {borrower.dateReturned || "N/A"}</td>
+                                        <td>{borrower.approver || "N/A"}</td>
+                                        <td>{borrower.notes || "N/A"}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td>N/A</td>
                                 </tr>
-                            ))}
+                            )}
                         </tbody>
                     </table>
                 </div>

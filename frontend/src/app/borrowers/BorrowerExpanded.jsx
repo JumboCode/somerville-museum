@@ -5,6 +5,7 @@ import "./BorrowerExpanded.css";
 import CloseButton from "../assets/CloseButton";
 import ArrowLeft from "../assets/ArrowLeft";
 import ArrowRight from "../assets/ArrowRight";
+import StylishButton from "../components/StylishButton";
 
 export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) {
   const [borrowHistory, setBorrowHistory] = useState([]);
@@ -16,7 +17,7 @@ export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) 
       
       setLoading(true);
       try {
-        const response = await fetch(`../../../../api/borrowManagement?action=borrowerHistory&id=${borrower.id}`);
+        const response = await fetch(`/api/borrowManagement?action=borrowerHistory&id=${borrower.id}`);
         const data = await response.json();
         setBorrowHistory(data);
       } catch (error) {
@@ -31,7 +32,7 @@ export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) 
 
   // Format date for display
   const formatDate = (dateString) => {
-    if (!dateString) return "Not Returned";
+    if (!dateString) return "N/A";
     const date = new Date(dateString);
     return date.toLocaleDateString();
   };
@@ -57,14 +58,35 @@ export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) 
     <div className="popup-overlay" onClick={onClose}>
       <div className="popup-anim-wrapper"> 
         <div className="popup" onClick={(e) => e.stopPropagation()}>
-          <CloseButton className="close-btn" onClick={onClose} /> 
-
-          <br />
-          <h2>{borrower.name}</h2>
-          <br />
-          <p><strong>Email:</strong> {borrower.email}</p>
-          <br />
-          <p><strong>Cell:</strong> {borrower.phone_number}</p>
+          <div className="TitleTop" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
+            <h2 style={{ margin: 0 }}>{borrower.name}</h2>
+            <div className="buttonsB">
+              {/* Left arrow button */}
+              <StylishButton
+                  styleType={"style7"}
+                  onClick={onPrev}
+              >
+                <img src="/icons/arrow-left.svg" className="arrowIcon" alt="Previous" />
+              </StylishButton>
+              {/* Right arrow button */}
+              <StylishButton
+                  styleType={"style7"}
+                  onClick={onNext}
+              >
+                <img src="/icons/arrow-right.svg" className="arrowIcon" alt="Next" />
+              </StylishButton>
+              <div className="exit">
+                <StylishButton
+                    styleType={"style7"}
+                    onClick={onClose}
+                >
+                  <img src="/icons/close.svg" className="closeIcon" alt="Close" />
+                </StylishButton>
+              </div>
+            </div>
+          </div> 
+          <p style={{ marginTop: ".5rem" }}><strong>Email:</strong> {borrower.email}</p>
+          <p style={{ marginTop: ".5rem" }}><strong>Cell:</strong> {borrower.phone_number}</p>
           
           <div style={{ marginTop: "1rem" }}>
             <strong>Borrow History:</strong>
@@ -75,9 +97,9 @@ export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) 
                 <thead>
                   <tr>
                     <th>Item</th>
-                    <th>Borrow Date</th>
-                    <th>Due Date</th>
-                    <th>Return Date</th>
+                    <th>Borrowed</th>
+                    <th>Due</th>
+                    <th>Returned</th>
                     <th>Status</th>
                   </tr>
                 </thead>
@@ -104,25 +126,6 @@ export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) 
               </table>
             ) : (
               <p>No Borrowing History</p>
-            )}
-          </div>
-
-          <div className="navigation-arrows">
-            {onPrev && (
-              <div className="nav-arrow left-arrow" onClick={(e) => {
-                e.stopPropagation();
-                onPrev();
-              }}>
-                <ArrowLeft />
-              </div>
-            )}
-            {onNext && (
-              <div className="nav-arrow right-arrow" onClick={(e) => {
-                e.stopPropagation();
-                onNext();
-              }}>
-                <ArrowRight />
-              </div>
             )}
           </div>
         </div>
