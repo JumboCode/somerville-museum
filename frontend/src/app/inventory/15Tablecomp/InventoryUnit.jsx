@@ -6,7 +6,7 @@ import PrePopup from "./PrePopup";
 import Image from "next/image"
 import "./InventoryUnit.css";
 
-export default function InventoryUnit({ unit, onChange, checked, unitList, index }) {
+export default function InventoryUnit({ unit, onChange, checked, unitList, index, currPopup, setCurrPopup }) {
 
     const { id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, authenticity_level, location, date_added, borrow_history, notes, image_keys} = unit; 
     const [isPopupVisible, setIsPopupVisible] = useState(false);
@@ -17,6 +17,7 @@ export default function InventoryUnit({ unit, onChange, checked, unitList, index
     const handleDoubleClick = () => {
         setIsPopupVisible(true);
         setIsPrePopupVisible(false);
+        setCurrPopup('view');
     }
 
     const handleClick = () => {
@@ -44,6 +45,7 @@ export default function InventoryUnit({ unit, onChange, checked, unitList, index
             event.target.closest('.unit') === null
         ) {
             setTimeout(() => setIsPrePopupVisible(false), 100); // Delay to allow re-opening
+            setCurrPopup(null);
         } 
     };
 
@@ -51,6 +53,7 @@ export default function InventoryUnit({ unit, onChange, checked, unitList, index
     const handlePopupOption = (option) => {
         if (option === "expand") {
             setIsPopupVisible(true);
+            setCurrPopup('view');
         } else if (option === "Missing" || option === "Available") {
             setAsMissingFound(option);
         } 
@@ -59,7 +62,7 @@ export default function InventoryUnit({ unit, onChange, checked, unitList, index
 
     const setAsMissingFound = async (option) => {
         try {
-            const response = await fetch(`../../../api/db`, {
+            const response = await fetch(`/api/db`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -135,19 +138,19 @@ export default function InventoryUnit({ unit, onChange, checked, unitList, index
                 </div>
             </div>
             <div className="center-section">
-                <div className="id"> {unit.id} </div>
-                <div className="name">{unit.name}</div>
-                <div className="status">
+                <div className="idU"> {unit.id} </div>
+                <div className="nameU">{unit.name}</div>
+                <div className="statusU">
                     <div className={`circle1 ${unit.status}`} ></div>
                     {unit.status}
                 </div>
-                <div className="condition">
+                <div className="conditionU">
                     <div className={`circle2 ${getHighestCondition(Array.isArray(unit.condition) ? unit.condition : [unit.condition])}`} ></div>
                         {getHighestCondition(Array.isArray(unit.condition) ? unit.condition : [unit.condition])}
                 </div>
 
             </div>
-            <div className="tags">
+            <div className="tagsU">
                 {unit.gender && (
                     <div className="tag-box">{unit.gender}</div>
                 )}

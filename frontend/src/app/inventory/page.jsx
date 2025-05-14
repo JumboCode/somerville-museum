@@ -50,6 +50,8 @@ function Inventory({
     const { isLoaded, user } = useUser();
     const [isApproved, setIsApproved] = useState(null);
     const [isSearchEmpty, setIsSearchEmpty] = useState(true);
+    const [activePopup, setActivePopup] = useState(null); // 'view' | 'return' | null
+
 
     // Calculate validity for buttons based on selectedItems
     const isBorrowValid = selectedItems.length > 0 && selectedItems.some(item => 
@@ -441,6 +443,8 @@ function Inventory({
                 unitList={units} // current page's units
                 onChange={handleCheckboxChange}
                 checked={selectedItems.some((item) => item?.id && unit?.id && item.id === unit.id)}
+                currPopup={activePopup}
+                setCurrPopup={setActivePopup}
                 />
             );
     });
@@ -617,6 +621,7 @@ function Inventory({
                                 selectedItems={selectedItems}
                                 onSuccess={handleReturnSuccess}
                                 isValid={isReturnValid}
+                                onClick={() => setActivePopup('return')}
                             >
                                 Return
                             </ReturnButton>
@@ -629,41 +634,47 @@ function Inventory({
                         </div>
                     </div>
                     <div className="TableLabels">
-                        <div className="SelectAll" id='SelectAll' onClick={handleSelectAllChange}>
-                            Select All
+                        <div className="leftSectionP">
+                            <div className="SelectAll" id='SelectAll' onClick={handleSelectAllChange}>
+                                Select All
+                            </div>
+                            <div className="SelectAll" id='DeselectAll' onClick={handleDeselectAllChange}>
+                                Deselect All
+                            </div>
                         </div>
-                        <div className="SelectAll" id='SelectAll' onClick={handleDeselectAllChange}>
-                            Deselect All
+                        <div className="centerSectionP">
+                            <button className="IDLabel" onClick={() => requestSort('id')} id='SortTag'>
+                                Item ID 
+                                <SortIndicator 
+                                    active={sortConfig.key === 'id'} 
+                                    direction={sortConfig.direction}
+                                />
+                            </button>
+                            <button className='ItemLabel' onClick={() => requestSort('name')} id='SortTag'>
+                                Item Name
+                                <SortIndicator 
+                                    active={sortConfig.key === 'name'} 
+                                    direction={sortConfig.direction}
+                                />
+                            </button>
+                            <button className="AvaiLabel" onClick={() => requestSort('avail')} id='SortTag'>
+                                Status
+                                <SortIndicator 
+                                    active={sortConfig.key === 'avail'} 
+                                    direction={sortConfig.direction}
+                                />
+                            </button>
+                            <button className="ConLabel" onClick={() => requestSort('con')} id='SortTag'>
+                                Condition
+                                <SortIndicator 
+                                    active={sortConfig.key === 'con'} 
+                                    direction={sortConfig.direction}
+                                />
+                            </button>
                         </div>
-                        <button className="IDLabel" onClick={() => requestSort('id')} id='SortTag'>
-                            Item ID 
-                            <SortIndicator 
-                                active={sortConfig.key === 'id'} 
-                                direction={sortConfig.direction}
-                            />
-                        </button>
-                        <button className='ItemLabel' onClick={() => requestSort('name')} id='SortTag'>
-                            Item Name
-                            <SortIndicator 
-                                active={sortConfig.key === 'name'} 
-                                direction={sortConfig.direction}
-                            />
-                        </button>
-                        <button className="AvaiLabel" onClick={() => requestSort('avail')} id='SortTag'>
-                            Status
-                            <SortIndicator 
-                                active={sortConfig.key === 'avail'} 
-                                direction={sortConfig.direction}
-                            />
-                        </button>
-                        <button className="ConLabel" onClick={() => requestSort('con')} id='SortTag'>
-                            Condition
-                            <SortIndicator 
-                                active={sortConfig.key === 'con'} 
-                                direction={sortConfig.direction}
-                            />
-                        </button>
-                        <div className="TagsLabel">Item Tags</div>
+                        <div className="rightSectionP">
+                            <div className="TagsLabel">Item Tags</div>
+                        </div>
                     </div>
                 </div>
 

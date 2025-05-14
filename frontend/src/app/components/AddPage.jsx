@@ -243,7 +243,7 @@ export default function AddPage() {
         });
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         setStatusMessage("Submitting...");
         setStatusType("neutral");
     
@@ -380,17 +380,39 @@ export default function AddPage() {
             setStatusType("success");
         };
 
-        // Call the function to send the API request
-        addItemDB();
+        // Call the function to send the API request and wait for it to finish
+        await addItemDB();
 
         // Reset form fields
         resetForm();
     };
 
-    const resetForm = () => {
+    const updateIdAndPlaceholder = async () => {
+        try {
+            // Fetch next available ID
+            const response = await fetch('/api/inventoryQueries?action=getNextAvailableId');
+            const data = await response.json();
+            if (response.ok) {
+                setIDText(data.nextId);
+            } else {
+                console.error(data.error);
+            }
+
+            // Set placeholder date
+            const today = new Date();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); 
+            const day = String(today.getDate()).padStart(2, '0');
+            const year = today.getFullYear();
+            setPlaceholderDate(`${month}/${day}/${year}`);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+    const resetForm = async () => {
         // Reset form fields (states)
         setIDText("");
-        setPlaceholderDate("");
+        setManualDateText("");
         setItemText("");
         setLocationText(""); 
         setPriceText("");
@@ -405,33 +427,13 @@ export default function AddPage() {
         setSelectedColors([]);
         setPreview([]);
         setImageID([null, null]);
+
+        await updateIdAndPlaceholder(); 
     };
 
-    // TOGGLE FUNCTIONALITY
+    // TOGGLE FUNCTIONALITY: call updateIdAndPlaceholder on mount
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // Fetch next available ID
-                const response = await fetch('/api/inventoryQueries?action=getNextAvailableId');
-                const data = await response.json();
-                if (response.ok) {
-                    setIDText(data.nextId);
-                } else {
-                    console.error(data.error);
-                }
-
-                // Set placeholder date
-                const today = new Date();
-                const month = String(today.getMonth() + 1).padStart(2, '0'); 
-                const day = String(today.getDate()).padStart(2, '0');
-                const year = today.getFullYear();
-                setPlaceholderDate(`${month}/${day}/${year}`);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-
-        fetchData();
+        updateIdAndPlaceholder();
     }, []);
 
     return (
