@@ -646,7 +646,7 @@ export default function EditPage({ unit }) {
                         <div className="notesTextBox">
                             <textarea placeholder="Extra item information not captured by tags (i.e. fabric type, or where it was bought from)."
                             id = "notesTB"
-                            value={notesText}
+                            value={notesText || ""}
                             onChange={(e) => setNotesText(e.target.value)}
                             />
                         </div>
