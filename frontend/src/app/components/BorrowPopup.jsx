@@ -229,25 +229,58 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
         </div>
 
         {/* Left column of items to borrow */}
-        <div className="borrowItemsContent">
-            {borrowItems.length > 0 ? (
-            <>
-                <div className="borrowed-items-container">
-                {getCurrentPageItems().map((item) => (
-                    <BorrowUnit
-                    key={item.id}
-                    item={item}
-                    onDelete={handleDelete}
-                    />
-                ))}
-                </div>
-                
-            </>
-            ) : (
-            <p>No items selected.</p>
-            )}
+        <div className="leftWrapper">
+          <div className="borrowItemsContent">
+              {borrowItems.length > 0 ? (
+              <>
+                  <div className="borrowed-items-container">
+                  {getCurrentPageItems().map((item) => (
+                      <BorrowUnit
+                      key={item.id}
+                      item={item}
+                      onDelete={handleDelete}
+                      />
+                  ))}
+                  </div>
+                  
+              </>
+              ) : (
+              <p>No items selected.</p>
+              )}
+          </div>
         </div>
-        
+
+        <div className="pagination-container">
+            <div className="pagination">
+                <StylishButton
+                  type="button"
+                  disabled={currentPage === 1}
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  styleType='style4'
+                  >
+                  {"<"}
+                </StylishButton>
+                {Array.from({ length: totalPages }, (_, index) => (
+                <StylishButton
+                      key={index + 1}
+                      type="button"
+                      className={currentPage === index + 1 ? "active" : ""}
+                      onClick={() => handlePageChange(index + 1)}
+                      styleType={currentPage === index + 1 ? 'style5' : 'style4'}
+                  >
+                      {index + 1}
+                </StylishButton>
+                ))}
+                <StylishButton
+                  type="button"
+                  disabled={currentPage === totalPages}
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  styleType='style4'
+                  >
+                {">"}
+                </StylishButton>
+            </div>
+          </div>
         </div>
 
       <div className="dividerNew"></div>
@@ -397,37 +430,6 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
         </div>
         
       </form>
-      <div className="pagination-container">
-          <div className="pagination">
-              <StylishButton
-                type="button"
-                disabled={currentPage === 1}
-                onClick={() => handlePageChange(currentPage - 1)}
-                styleType='style4'
-                >
-                {"<"}
-              </StylishButton>
-              {Array.from({ length: totalPages }, (_, index) => (
-              <StylishButton
-                    key={index + 1}
-                    type="button"
-                    className={currentPage === index + 1 ? "active" : ""}
-                    onClick={() => handlePageChange(index + 1)}
-                    styleType={currentPage === index + 1 ? 'style5' : 'style4'}
-                >
-                    {index + 1}
-              </StylishButton>
-              ))}
-              <StylishButton
-                type="button"
-                disabled={currentPage === totalPages}
-                onClick={() => handlePageChange(currentPage + 1)}
-                styleType='style4'
-                >
-              {">"}
-              </StylishButton>
-          </div>
-                </div>
       {isSuccessPopupVisible && (
         <div className="success-popup-overlay">
           <div className="success-popup">
