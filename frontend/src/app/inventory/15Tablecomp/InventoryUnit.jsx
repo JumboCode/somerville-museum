@@ -138,19 +138,19 @@ export default function InventoryUnit({ unit, onChange, checked, unitList, index
                 </div>
             </div>
             <div className="center-section">
-                <div className="id"> {unit.id} </div>
-                <div className="name">{unit.name}</div>
-                <div className="status">
+                <div className="idU"> {unit.id} </div>
+                <div className="nameU">{unit.name}</div>
+                <div className="statusU">
                     <div className={`circle1 ${unit.status}`} ></div>
                     {unit.status}
                 </div>
-                <div className="condition">
+                <div className="conditionU">
                     <div className={`circle2 ${getHighestCondition(Array.isArray(unit.condition) ? unit.condition : [unit.condition])}`} ></div>
                         {getHighestCondition(Array.isArray(unit.condition) ? unit.condition : [unit.condition])}
                 </div>
 
             </div>
-            <div className="tags">
+            <div className="tagsU">
                 {unit.gender && (
                     <div className="tag-box">{unit.gender}</div>
                 )}

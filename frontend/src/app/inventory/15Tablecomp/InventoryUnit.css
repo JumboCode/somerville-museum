@@ -24,15 +24,6 @@
     flex-direction: row;
 }
 
-.left-section {
-    display: flex;
-    align-items: center;
-    gap: 1vh;
-    margin-left: 1vh;
-    width:6.5vw;
-    justify-content: space-around;
-}
-
 .checkbox-input {
     display: flex;
     width: 1rem;
@@ -87,15 +78,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover; /* Scales the image to cover the container without distortion */
-}
-
-.center-section {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 50vw;
-    z-index: 100;
-    font-size: 0.85rem;
 }
 
 .circle1 {
@@ -157,30 +139,58 @@
     text-align: left;
 }
 
-.id {
-    padding-left: 4.5vw;
-}
-
-.name {
-    padding-right: 0.75vw;
-}
-
-.status {
+.left-section {
     display: flex;
     align-items: center;
-    gap: 1.5vh;
-    justify-content: center;
-    padding-right: 3.5vw;
+    gap: 1vh;
+    margin-left: 1vh;
+    width:13%;
+    justify-content: space-around;
 }
 
-.condition {
+.center-section {
     display: flex;
-    align-items: center;
+    flex-direction: row;
+    align-items: left;
+    width: 65%;
+    z-index: 100;
+    font-size: 0.85rem;
+}
+
+.idU {
+    /* padding-left: 4.5vw; */
+    padding-left: 7%;
+    width: 20%;
+}
+
+.nameU {
+    /* padding-right: 0.75vw; */
+    width: 30%;
+}
+
+.statusU {
+    display: flex;
     gap: 1.5vh;
-    justify-content: center;
+    /* padding-right: 3.5vw; */
+    width: 30%;
+}
+
+.conditionU {
+    display: flex;
+    gap: 1.5vh;
     text-wrap: nowrap;
     justify-content: flex-start;
-    padding-right: 0.75vw;
+    /* padding-right: 0.75vw; */
+    width: 35%;
+}
+
+.tagsU {
+    display: flex;
+    flex-wrap: nowrap;           /* 🔒 Prevents wrapping to next line */
+    gap: 10px;
+    /* padding-left: 4vw; */
+    width: 40%;
+    overflow-x: hidden;
 }
 
 .drop-down {
@@ -212,19 +222,9 @@
     appearance: none;
 }
 
-.tags {
-    display: flex;
-    flex-wrap: nowrap;           /* 🔒 Prevents wrapping to next line */
-    gap: 10px;
-    padding-left: 4vw;
-    width: 30vw;
-    align-items: center;
-    overflow-x: hidden;
-}
-
 .tag-box {
     display: inline-block;
-    max-width: 120px;
+    max-width: 150px;
     padding: 2px 10px;
     font-size: 0.7rem;
     white-space: nowrap;
