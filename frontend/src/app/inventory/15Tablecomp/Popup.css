@@ -187,7 +187,7 @@
 .noteBox {
   width: 100%;
   height: auto;
-  min-height: 20vh;
+  min-height: 12vh;
   resize: none;
   background-color: #fff;
   border: 1px solid #9B525F;
@@ -204,7 +204,7 @@
   justify-content: space-between;
 }
 
-.returnButton {
+.returnButtonP {
   display: block;
 }
 

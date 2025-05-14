@@ -45,15 +45,15 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
 
     const fetchBorrowers = async () => {
         try {
-            // console.log("testing populating borrower data");
+            // console.log("fetching borrowers start");
             // console.log(id);
-            const response = await fetch(`../../../../api/db`, {
+            const response = await fetch(`/api/db`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    text: 'SELECT current_borrower, borrow_history FROM dummy_data WHERE id = $1',
+                    text: 'SELECT current_borrower FROM dummy_data WHERE id = $1',
                     params: [id]
                 })
             });
@@ -61,18 +61,16 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
             if (response.ok) {
                 const data = await response.json();
 
+                // console.log("current borrower fetch: ", data);
+
                 const currBorrower = data[0].current_borrower;
-                const borrowHistory = data[0].borrow_history;
+                // const borrowHistory = data[0].borrow_history;
                 if (currBorrower !== null) {
                     fetchCurrBorrower(currBorrower);
                 } else {
                     setCurrBorrower(null);
                 }
-                if (borrowHistory !== null) {
-                    fetchBorrowHistory(borrowHistory);
-                } else {
-                    setBorrowerHistory([]);
-                }
+                fetchBorrowHistory();
                 // console.log(data);
                 // console.log(currBorrower);
                 // console.log(borrowHistory);
@@ -84,26 +82,28 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
         }
     };
 
-    const fetchBorrowHistory = async (borrowHistory) => {
+    const fetchBorrowHistory = async () => {
         // Fetching from borrows table
         try {
             // console.log("testing populating borrower history data");
+            // console.log("fetching borrow history")
             // console.log(borrowHistory);
-            const response = await fetch(`../../../../api/db`, {
+            const response = await fetch(`/api/db`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    text: 'SELECT date_borrowed, date_returned, approver, notes FROM borrows WHERE borrower_id = ANY($1) AND item_id = $2',
-                    params: [borrowHistory, id]
+                    text: 'SELECT date_borrowed, date_returned, approver, notes FROM borrows WHERE Item_id = $1',
+                    params: [id]
                 })
             });
 
+            // console.log("fetching borrow history response: ", response);
+
             if (response.ok) {
                 const data = await response.json();
-                // console.log("borrower history data: ");
-                // console.log(data);
+                // console.log("borrowHistoryData: ", data);
 
                 const borrowData = data.map((borrow) => {
                     return {
@@ -131,7 +131,8 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
         try {
             // console.log("testing populating borrower data");
             // console.log(id);
-            const response = await fetch(`../../../../api/db`, {
+            // console.log("fetching currBorrower's info: ", currBorrower);
+            const response = await fetch(`/api/db`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -151,7 +152,7 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                     phone_number: data[0].phone_number,
                 };
 
-                setCurrBorrower(borrowData);
+                // setCurrBorrower("currBorrower data", borrowData);
                 // console.log("borrowData: ");
                 // console.log(borrowData);
                 
@@ -161,6 +162,8 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
         } catch (error) {
             console.error(error);
         }
+
+        // console.log("fetching item data for CurrBorrower: ", currBorrower);
 
         // Fetching from borrows table
         try {
@@ -185,6 +188,8 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                     approved_by: data[0].approver,
                     notes: data[0].notes,
                 };
+
+                // console.log("Curr item data: ", borrowData);
 
                 setCurrBorrower(borrowData);
                 // console.log("borrowData: ");
@@ -441,7 +446,7 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                         <>
                         <div className="borrowerTitle">
                         <h3>Borrower Information</h3>
-                        <div className="returnButton">
+                        <div className="returnButtonP">
                             <Link href={`/return?id=${id}`}>
                                 <StylishButton
                                     styleType={"style1"}
