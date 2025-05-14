@@ -164,7 +164,7 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
 
         // Fetching from borrows table
         try {
-            const response = await fetch(`../../../../api/db`, {
+            const response = await fetch(`/api/db`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -269,7 +269,7 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                     {/* Title and arrow buttons */}
                     <div className="titleButton">
                         <h2>{name}</h2>
-                            <div className="buttons">
+                            <div className="buttonsP">
                                 {/* Left arrow button */}
                                 <StylishButton
                                     styleType={"style7"}
@@ -314,34 +314,34 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                     )}
                 </div>
 
-<div className="imageSelection">
-    {/* Left arrow button */}
-    <StylishButton
-        styleType={"style4"}
-        onClick={() => setSelectedImage((selectedImage - 1 + image_keys.length) % image_keys.length)}
-    >
-            <img src="/icons/arrow-left.svg" className="arrowIcon" alt="Next" />
-    </StylishButton>
-  {image_keys &&
-    image_keys.map((key, index) => (
-      <StylishButton
-        key={index}
-        styleType={selectedImage === index ? 'style5' : 'style4'}
-        onClick={() => setSelectedImage(index)}
-        label={`${index + 1}`}
-      />
-    ))}
+                <div className="imageSelection">
+                    {image_keys && image_keys.length > 1 && (
+                        <StylishButton
+                        styleType={"style4"}
+                        onClick={() => setSelectedImage((selectedImage - 1 + image_keys.length) % image_keys.length)}
+                        >
+                        <img src="/icons/arrow-left.svg" className="arrowIcon" alt="Next" />
+                        </StylishButton>
+                    )}
+                    {image_keys &&
+                        image_keys.map((key, index) => (
+                        <StylishButton
+                            key={index}
+                            styleType={selectedImage === index ? 'style5' : 'style4'}
+                            onClick={() => setSelectedImage(index)}
+                            label={`${index + 1}`}
+                        />
+                        ))}
 
-    {/* Right arrow button */}
-    <StylishButton
-        styleType={"style4"}
-        onClick={() => setSelectedImage((selectedImage + 1) % image_keys.length)}
-    >
-        <img src="/icons/arrow-right.svg" className="arrowIcon" alt="Next" />
-    </StylishButton>
-</div>
-
-
+                    {image_keys && image_keys.length > 1 && (
+                        <StylishButton
+                        styleType={"style4"}
+                        onClick={() => setSelectedImage((selectedImage + 1) % image_keys.length)}
+                        >
+                        <img src="/icons/arrow-right.svg" className="arrowIcon" alt="Next" />
+                        </StylishButton>
+                    )}
+                </div>
                 {/* Info Title and Edit Button */}
                 <div className="infoHeader">
                     <h3>Item Information</h3>
@@ -365,7 +365,7 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                             <td><strong>Age Group: </strong>{age_group}</td>
                         </tr>
                         <tr>
-                            <td><strong>Cost: </strong>${cost}</td>
+                            <td><strong>Cost: </strong>{cost !== null ? `$${cost}` : "N/A"}</td>
                             <td><strong>Sex: </strong>{gender}</td>
                         </tr>
                         <tr>
