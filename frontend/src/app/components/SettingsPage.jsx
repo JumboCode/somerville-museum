@@ -22,7 +22,7 @@ export default function SettingsPage() {
   const [displayText, setDisplayText] = useState(isToggleEnabled ? 'Data Input' : 'Normal Data Entry');
   const { signOut } = useClerk();
   const { user } = useUser();
-  const [normalDataEntry, setNormalDataEntry] = useState(false);
+  // const [normalDataEntry, setNormalDataEntry] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [approvals, setApprovals] = useState([]);
 
@@ -32,6 +32,15 @@ export default function SettingsPage() {
   useEffect(() => {
     setDisplayText(isToggleEnabled ? 'Data Input' : 'Normal Data Entry');
   }, [isToggleEnabled]);
+
+  const handleToggle = () => {
+    setFading(true);
+
+    setTimeout(() => {
+      setIsToggleEnabled(!isToggleEnabled);
+      setFading(false);
+    }, 300); // Match the duration of your CSS transition
+  }
 
   useEffect(() => {
     if (user) {
@@ -169,12 +178,12 @@ export default function SettingsPage() {
                 <label className="switch">
                   <input
                     type="checkbox"
-                    checked={normalDataEntry}
-                    onChange={() => setNormalDataEntry(!normalDataEntry)}
+                    checked={isToggleEnabled}
+                    onChange={handleToggle}
                   />
                   <span className="slider round"></span>
                 </label>
-                <label>{normalDataEntry ? 'Data Input' : 'Normal Data Entry'}</label>
+                <label>{isToggleEnabled ? 'Data Input' : 'Normal Data Entry'}</label>
                 <ExportDataBtn />
               </div>
               <div className="toggle-logout">                  
