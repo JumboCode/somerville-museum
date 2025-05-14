@@ -16,6 +16,7 @@ import "./InventoryUnit.css";
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import ReturnButton from "../../components/ReturnButton";
 
 export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } ) {
     const [isClosing, setIsClosing] = useState(false);
@@ -446,14 +447,20 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                         <>
                         <div className="borrowerTitle">
                         <h3>Borrower Information</h3>
-                        <div className="returnButtonP">
-                            <Link href={`/return?id=${id}`}>
-                                <StylishButton
-                                    styleType={"style1"}
-                                    label={"Return"}>
-                                </StylishButton>
-                            </Link>
-                        </div>
+                        {/* <div className="returnButtonP">
+                            <ReturnButton
+                                onClick={() => {
+                                        // Close the popup first
+                                        closePopup();
+                                        // Delay the rest of the action so that the popup finishes closing
+                                        setTimeout(() => {
+                                            // (Optional) Additional actions can be executed here if needed
+                                        }, 210);
+                                    }}
+                                selectedItems={[unit]}
+                                onSuccess={() => {}}
+                                isValid={true}/>
+                        </div> */}
                     </div>
 
                     <div id="currentBorrowerContainer">
@@ -497,13 +504,19 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                     <p id="borrowerHistorytitle">Borrower History</p> 
                     <table id="borrowerHistory">
                         <tbody>
-                            {borrowerHistory.map((borrower, index) => (
-                                <tr key={index + 1}>
-                                    <td>{borrower.dateBorrowed || "N/A"} - {borrower.dateReturned || "N/A"}</td>
-                                    <td>{borrower.approver || "N/A"}</td>
-                                    <td>{borrower.notes || "N/A"}</td>
+                            {borrowerHistory && borrowerHistory.length > 0 ? (
+                                borrowerHistory.map((borrower, index) => (
+                                    <tr key={index + 1}>
+                                        <td>{borrower.dateBorrowed || "N/A"} - {borrower.dateReturned || "N/A"}</td>
+                                        <td>{borrower.approver || "N/A"}</td>
+                                        <td>{borrower.notes || "N/A"}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td>N/A</td>
                                 </tr>
-                            ))}
+                            )}
                         </tbody>
                     </table>
                 </div>

@@ -50,6 +50,8 @@ function Inventory({
     const { isLoaded, user } = useUser();
     const [isApproved, setIsApproved] = useState(null);
     const [isSearchEmpty, setIsSearchEmpty] = useState(true);
+    const [activePopup, setActivePopup] = useState(null); // 'view' | 'return' | null
+
 
     // Calculate validity for buttons based on selectedItems
     const isBorrowValid = selectedItems.length > 0 && selectedItems.some(item => 
@@ -441,6 +443,8 @@ function Inventory({
                 unitList={units} // current page's units
                 onChange={handleCheckboxChange}
                 checked={selectedItems.some((item) => item?.id && unit?.id && item.id === unit.id)}
+                currPopup={activePopup}
+                setCurrPopup={setActivePopup}
                 />
             );
     });
@@ -617,6 +621,7 @@ function Inventory({
                                 selectedItems={selectedItems}
                                 onSuccess={handleReturnSuccess}
                                 isValid={isReturnValid}
+                                onClick={() => setActivePopup('return')}
                             >
                                 Return
                             </ReturnButton>
