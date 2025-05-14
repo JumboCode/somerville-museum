@@ -21,6 +21,7 @@
     flex-shrink: 0;
     outline: 1px solid #9B525F;
     background: #FFF;
+    flex-direction: row;
 }
 
 .left-section {
