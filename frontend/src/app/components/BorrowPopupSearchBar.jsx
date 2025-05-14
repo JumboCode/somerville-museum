@@ -1,6 +1,6 @@
 "use client";
 
-import "./SearchBar.css";
+import "./BorrowPopupSearchBar.css";
 import { useState, useEffect } from "react"; 
 
 export default function BorrowPopupSearchBar({ onSelect }) {
@@ -57,7 +57,7 @@ export default function BorrowPopupSearchBar({ onSelect }) {
           {results.map((borrower) => {
             const [firstName = "", lastName = ""] = borrower.name.split(" ");
             return (
-              <li key={borrower.id} onClick={() => {
+              <div className="borrower" key={borrower.id} onClick={() => {
                 setQuery(borrower.name);
                 setResults([]);
                 onSelect?.({
@@ -68,7 +68,7 @@ export default function BorrowPopupSearchBar({ onSelect }) {
                 });
               }}>
                 {borrower.name} — {borrower.email}
-              </li>
+              </div>
             );
           })}
         </ul>
