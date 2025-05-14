@@ -634,41 +634,47 @@ function Inventory({
                         </div>
                     </div>
                     <div className="TableLabels">
-                        <div className="SelectAll" id='SelectAll' onClick={handleSelectAllChange}>
-                            Select All
+                        <div className="leftSectionP">
+                            <div className="SelectAll" id='SelectAll' onClick={handleSelectAllChange}>
+                                Select All
+                            </div>
+                            <div className="SelectAll" id='DeselectAll' onClick={handleDeselectAllChange}>
+                                Deselect All
+                            </div>
                         </div>
-                        <div className="SelectAll" id='DeselectAll' onClick={handleDeselectAllChange}>
-                            Deselect All
+                        <div className="centerSectionP">
+                            <button className="IDLabel" onClick={() => requestSort('id')} id='SortTag'>
+                                Item ID 
+                                <SortIndicator 
+                                    active={sortConfig.key === 'id'} 
+                                    direction={sortConfig.direction}
+                                />
+                            </button>
+                            <button className='ItemLabel' onClick={() => requestSort('name')} id='SortTag'>
+                                Item Name
+                                <SortIndicator 
+                                    active={sortConfig.key === 'name'} 
+                                    direction={sortConfig.direction}
+                                />
+                            </button>
+                            <button className="AvaiLabel" onClick={() => requestSort('avail')} id='SortTag'>
+                                Status
+                                <SortIndicator 
+                                    active={sortConfig.key === 'avail'} 
+                                    direction={sortConfig.direction}
+                                />
+                            </button>
+                            <button className="ConLabel" onClick={() => requestSort('con')} id='SortTag'>
+                                Condition
+                                <SortIndicator 
+                                    active={sortConfig.key === 'con'} 
+                                    direction={sortConfig.direction}
+                                />
+                            </button>
                         </div>
-                        <button className="IDLabel" onClick={() => requestSort('id')} id='SortTag'>
-                            Item ID 
-                            <SortIndicator 
-                                active={sortConfig.key === 'id'} 
-                                direction={sortConfig.direction}
-                            />
-                        </button>
-                        <button className='ItemLabel' onClick={() => requestSort('name')} id='SortTag'>
-                            Item Name
-                            <SortIndicator 
-                                active={sortConfig.key === 'name'} 
-                                direction={sortConfig.direction}
-                            />
-                        </button>
-                        <button className="AvaiLabel" onClick={() => requestSort('avail')} id='SortTag'>
-                            Status
-                            <SortIndicator 
-                                active={sortConfig.key === 'avail'} 
-                                direction={sortConfig.direction}
-                            />
-                        </button>
-                        <button className="ConLabel" onClick={() => requestSort('con')} id='SortTag'>
-                            Condition
-                            <SortIndicator 
-                                active={sortConfig.key === 'con'} 
-                                direction={sortConfig.direction}
-                            />
-                        </button>
-                        <div className="TagsLabel">Item Tags</div>
+                        <div className="rightSectionP">
+                            <div className="TagsLabel">Item Tags</div>
+                        </div>
                     </div>
                 </div>
 
