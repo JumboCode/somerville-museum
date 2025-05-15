@@ -3,6 +3,7 @@ import "./ReturnButton.css";
 import { useState, useEffect } from "react";
 import StylishButton from "./StylishButton.jsx";
 import ItemBoxes from "./ReturnItemBoxes.jsx";
+import { useGlobalContext } from './contexts/ToggleContext';
 
 const ReturnPopup = ({ units = [], onSuccess, onClose }) => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -12,6 +13,11 @@ const ReturnPopup = ({ units = [], onSuccess, onClose }) => {
     const [activeUnits, setActiveUnits] = useState(units || []);
     const totalPages = activeUnits && activeUnits.length ? Math.ceil(activeUnits.length / 3) : 1;
     const buttons = Array.from({ length: totalPages }, (_, index) => index + 1); 
+    const {setIsFiltersHidden} = useGlobalContext();
+
+    useEffect(() => {
+        setIsFiltersHidden(false);
+      }, [setIsFiltersHidden]);
 
       useEffect(() => {
         // Update selectedUnits when activeUnits or currentPage changes
