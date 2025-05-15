@@ -95,7 +95,7 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    text: 'SELECT date_borrowed, date_returned, approver, notes FROM borrows WHERE Item_id = $1',
+                    text: 'SELECT b.date_borrowed, b.date_returned, b.notes, br.name FROM borrows b JOIN borrowers br ON b.borrower_id = br.id WHERE b.item_id = $1',
                     params: [id]
                 })
             });
@@ -110,13 +110,12 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                     return {
                         dateBorrowed: borrow.date_borrowed,
                         dateReturned: borrow.date_returned,
-                        approver: borrow.approver,
                         notes: borrow.notes,
+                        name: borrow.name,
                     };
                 });
+
                 setBorrowerHistory(borrowData);
-                // console.log("borrowHistoryData: ");
-                // console.log(borrowData);
                 
             } else {
                 console.error("Failed to fetch borrower data");
@@ -508,7 +507,7 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                                 borrowerHistory.map((borrower, index) => (
                                     <tr key={index + 1}>
                                         <td>{borrower.dateBorrowed || "N/A"} - {borrower.dateReturned || "N/A"}</td>
-                                        <td>{borrower.approver || "N/A"}</td>
+                                        <td>{borrower.name || "N/A"}</td>
                                         <td>{borrower.notes || "N/A"}</td>
                                     </tr>
                                 ))
