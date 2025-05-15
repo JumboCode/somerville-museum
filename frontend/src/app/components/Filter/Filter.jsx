@@ -5,9 +5,11 @@ import Calendar from '../../assets/Calendar.jsx';
 import Reset from '../../assets/Reset.jsx';
 import Dropdown from '../../assets/Dropdown.jsx';
 import CalendarPicker from '../Calendar/CalendarPicker.jsx';
+import { useGlobalContext } from '../contexts/ToggleContext';
 
 const FilterComponent = ({ isVisible, onClose, className }) => {
     const { selectedFilters, setSelectedFilters } = useFilterContext();
+
     const fields = {
         Condition: {
             options: ["Good", "Great", "Needs washing", "Needs repair", "Needs dry cleaning", "Not usable"]
@@ -57,6 +59,7 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
     const checkboxRefs = useRef({});
     const calendarRef = useRef(null);
     const calendarPickerContainerRef = useRef(null);
+    const isFilterHidden = useGlobalContext();
     
     // Keep selectedOptions in sync with selectedFilters
     useEffect(() => {
@@ -181,7 +184,20 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
         });
     };
 
-    // Format date range display text
+    // Ensure the filter popup is closed if not visible on the sidebar
+    // const onCloseRef = useRef(onClose);
+    // useEffect(() => {
+    //     onCloseRef.current = onClose;
+    // }, [onClose]);
+
+    // const prevIsFilterHidden = useRef(isFilterHidden);
+    // useEffect(() => {
+    //     if (!prevIsFilterHidden.current && isFilterHidden) {
+    //         onCloseRef.current && onCloseRef.current();
+    //     }
+    //     prevIsFilterHidden.current = isFilterHidden;
+    // }, [isFilterHidden]);
+
     const getDateRangeText = () => {
         if (dateRange.start && dateRange.end) {
             return `${dateRange.start} - ${dateRange.end}`;
