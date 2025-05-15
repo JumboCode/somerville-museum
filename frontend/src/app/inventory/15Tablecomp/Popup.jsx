@@ -28,7 +28,7 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
     
 
     // Extract the unit details
-    const { id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, borrow_history, notes, image_keys} = unit; 
+    const { id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, borrow_history, notes, image_keys} = unit; 
 
     // Close container if anywhere but the container is clicked
     const handleContainerClick = (e) => {
@@ -244,18 +244,24 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
     }, [id]);
 
     // Set the status missing/found status statement based on the status
-    const statusStatement = status === "Missing" ? (
-        <button 
-            className="status-toggle"
-            onClick={() => onOptionSelect("Available")}>
-            <p className="status-toggle">Mark Item as <span>Found</span></p>
+    const statusStatement = 
+        status === "Missing" ? 
+            (currBorrower === null ? (
+                <button 
+                    className="status-toggle"
+                    onClick={() => onOptionSelect("Available")}
+                >
+                    <p className="status-toggle">Mark Item as <span>Found</span></p>
+                </button>
+            ) : null)
+        : (
+            <button 
+                className="status-toggle"
+                onClick={() => onOptionSelect("Missing")}
+            >
+                <p style={{fontSize: "1.1em"}}>Mark Item as <span>Missing</span></p>
             </button>
-    ) : (
-        <button className="status-toggle"
-            onClick={() => onOptionSelect("Missing")}>
-            <p style={{fontSize: "1.1em"}}>Mark Item as <span>Missing</span></p>
-        </button>
-    );
+        );
 
     useEffect(() => {
         if (!unit) return;
