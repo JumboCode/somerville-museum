@@ -50,6 +50,10 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
   }
 
   useEffect(() => {
+    setIsFiltersHidden(false);
+  }, [setIsFiltersHidden]);
+
+  useEffect(() => {
     if (user) {
       const name =
         user.firstName && user.lastName
