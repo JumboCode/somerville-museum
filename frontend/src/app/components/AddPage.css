@@ -149,6 +149,12 @@
     padding: 0.5rem;
 }
 
+.name-and-location-title {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+}
+
 .itemName {
     color: #000;
     font-family: Akatab;
@@ -157,6 +163,39 @@
     font-weight: 700;
     line-height: normal;
     margin-bottom: .4rem;
+    width: 55%;
+    margin-right: 1.5rem;
+}
+
+.itemLocation {
+    color: #000;
+    font-family: Akatab;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: .4rem;
+    width: 45%;
+}
+
+.name-and-location {
+    display: flex;
+    width: 100%;
+}
+
+.name-and-location {
+    display: flex;
+    justify-content: left;
+    align-items: left;
+}
+
+.itemTextBox {
+    width: 55%;
+    margin-right: 1.5rem;
+}
+
+.locationTextBox {
+    width: 45%;
 }
 
 .itemTextBox textarea{
@@ -167,7 +206,26 @@
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    gap: 1rem;
+    flex: 1 0 0;
+    align-self: stretch;
+    border-radius: .2rem;
+    border: 1px solid var(--sm_red);
+    background: #FFF;
+    box-shadow: 0px .1rem .2rem 0px rgba(0, 0, 0, 0.25);
+    resize: none;
+    overflow: hidden;
+    line-height: 4vh;
+    outline: none;
+}
+
+.locationTextBox textarea{
+    display: flex;
+    padding: .5rem;
+    width: stretch;
+    height: 6vh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
     flex: 1 0 0;
     align-self: stretch;
     border-radius: .2rem;

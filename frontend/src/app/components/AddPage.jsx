@@ -272,7 +272,7 @@ export default function AddPage() {
             condition: condition.length > 0 ? condition : null,
             color: selectedColors.length > 0 ? selectedColors : null,
             status: "Available", // Default status
-            location: null,
+            // location: null,
             date_added: isToggleEnabled ? manualDateText : placeholderDate, 
             current_borrower: null,
             borrow_history: null,
@@ -505,19 +505,32 @@ export default function AddPage() {
 
 
                     </div>
-
-                        <div className={`itemName ${errors.name ? "error-text" : ""}`}>
-                        Item Name*
+                        <div className="name-and-location-title">
+                            <div className={`itemName ${errors.name ? "error-text" : ""}`}>
+                            Item Name*
+                            </div>
+                            <div className={`itemLocation`}>
+                            Location
+                            </div>
                         </div>
-
-                        {/* Item Name Text Entry */}
-                        <label htmlFor="textBox"></label>
-                        <div className="itemTextBox">
-                        <textarea placeholder=""
-                        id = "itemTB"
-                        value={itemText}
-                        onChange={(e) => setItemText(e.target.value)}
-                        />
+                            <div className="name-and-location">
+                                {/* Item Name Text Entry */}
+                                <label htmlFor="textBox"></label>
+                                <div className="itemTextBox">
+                                <textarea placeholder=""
+                                id = "itemTB"
+                                value={itemText}
+                                onChange={(e) => setItemText(e.target.value)}
+                                />
+                                </div>
+                                <div className="locationTextBox">
+                                        <textarea 
+                                            placeholder="Location"
+                                            id="locationTB"
+                                            value={locationText}
+                                            onChange={(e) => setLocationText(e.target.value)}
+                                        />
+                                </div>
                         </div>
 
                         {/* ID, Date Added, and Price Text Entries */}
