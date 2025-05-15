@@ -388,9 +388,9 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                             </td>
                         </tr>
                         <tr>
-                        <td>
+                        <td style={{verticalAlign: "top", paddingTop: "5px"}}>
                             <strong>Condition: </strong>
-                            <span style={{ display: "inline-flex", gap: "10px", flexWrap: "wrap" }}>
+                            <span style={{ display: "inline-flex", gap: "10px", flexWrap: "wrap"}}>
                                 {(Array.isArray(condition) ? condition : [condition]).map((cond, i) => (
                                 <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
                                     <div className={`circle2 ${cond}`}></div>
@@ -399,14 +399,13 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                                 ))}
                             </span>
                             </td>
-
-                            <td>
-                                <strong>Color: </strong>
-                                <span style={{ display: "inline-flex", gap: "8px", flexWrap: "wrap" }}>
-                                    {Array.isArray(color) ? color.join(", ") : color}
+                            <td style={{verticalAlign: "top", paddingTop: "5px"}}>
+                                <strong>Time Period: </strong>
+                                <span style={{ display: "inline-flex", gap: "8px", flexWrap: "wrap", verticalAlign: "top" }}>
+                                    {Array.isArray(time_period) ? time_period.join(", ") : time_period}
                                 </span>
-                                                                
-                                </td>
+                            </td>
+                            
                         </tr>
                         <tr>
                             <td>
@@ -428,11 +427,16 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                         <tr>
                             <td>{statusStatement}</td>
                             <td>
-                                <strong>Time Period: </strong>
+                                <strong>Color: </strong>
                                 <span style={{ display: "inline-flex", gap: "8px", flexWrap: "wrap" }}>
-                                    {Array.isArray(time_period) ? time_period.join(", ") : time_period}
+                                    {Array.isArray(color) ? color.join(", ") : color}
                                 </span>
-                            </td>
+                                                                
+                                </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><strong>Location: </strong>{location}</td>
                         </tr>
                     </tbody>
                 </table>
