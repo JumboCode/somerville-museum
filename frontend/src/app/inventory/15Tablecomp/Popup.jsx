@@ -319,7 +319,7 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                             src={`https://upload-r2-assets.somerville-museum1.workers.dev/${image_keys[selectedImage]}`}
                             fill
                             alt="No image found"
-                            style={{ objectFit: "cover" }}  // Ensures the image covers the container
+                            style={{ objectFit: "contain" }}  // Ensures the image fits the container
                         />
                         </div>
                     )}

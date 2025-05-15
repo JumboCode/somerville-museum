@@ -126,12 +126,14 @@
   
   .borrowed-item-box {
     background-color: #E3CECE;
-    padding: 0.75rem 1rem;
+    /* padding: 0.75rem 1rem; */
+    border-radius: 4px;
+    padding: 0.5rem .5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 12vh;
+    height: 13vh;
     box-sizing: border-box;
     margin-bottom: 0.80rem;
     position: relative;
@@ -141,7 +143,8 @@
   .borrow-image {
     border: 2.5px solid #9b525f;
     position: relative;
-    width: 20%;
+    width: 15%;
+    aspect-ratio: 1 / 1;
   }
 
   .borrow-image::after {
@@ -191,7 +194,15 @@
     -webkit-appearance: none; 
     -moz-appearance: none;    
     appearance: none;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
   }
+
+  .delete-button:hover {
+    background-color: #E3CECE;
+    color: #FFF;
+    transform: scale(1.1);
+    cursor: pointer;
+}
   
   .form-row {
     display: flex;
