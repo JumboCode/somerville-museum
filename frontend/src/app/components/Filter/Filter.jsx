@@ -25,7 +25,7 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
             options: ["One Size", "Small", "Medium", "Large"]
         }, 
         Time_Period: {
-            options: ["1800s - 1840s", "1750s - 1800s", "Post-1910s", "Pre-1700s"],
+            options: ["1800s-1840s", "1750s-1800s", "Post-1920s", "Pre-1700s"],
             singleSelect: true
         },
     };
