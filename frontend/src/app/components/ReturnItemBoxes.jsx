@@ -60,8 +60,8 @@ export default function ItemBoxes({ unit, onNotesChange, itemId, onClose }) {
                 )}
             </div>
                 <div className="itemInfo">
-                    <p>{unit.name}</p>
-                    <p>ID #{unit.id}</p>
+                    <h2>{unit.name}</h2>
+                    <h2>ID #{unit.id}</h2>
                 </div>
                 <button className="exitBtn" 
                     onClick={onClose}>
@@ -71,10 +71,10 @@ export default function ItemBoxes({ unit, onNotesChange, itemId, onClose }) {
                 </button>
             </div>
             <div className="notesWrapper">
-                <p>Notes</p>
+                <h3>Notes</h3>
                 <form>
-                    <input type="text" className="notesTextbox" name="notes" 
-                        value = {notes} onChange = {handleNotesChange}></input>
+                    <textarea className="notesTextbox" name="notes" 
+                        value = {notes} onChange = {handleNotesChange}></textarea>
                 </form>
             </div>
 
