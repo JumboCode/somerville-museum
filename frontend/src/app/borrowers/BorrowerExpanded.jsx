@@ -96,6 +96,7 @@ export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) 
               <table id="borrowerHistory">
                 <thead>
                   <tr>
+                    <th>ID</th>
                     <th>Item</th>
                     <th>Borrowed</th>
                     <th>Due</th>
@@ -107,6 +108,7 @@ export default function BorrowerExpanded({ borrower, onClose, onPrev, onNext }) 
                   {borrowHistory.map((record) => (
                     <React.Fragment key={record.id}>
                       <tr>
+                        <td>{record.id}</td>
                         <td>{record.item_name || `Item ${record.item_id}`}</td>
                         <td>{formatDate(record.date_borrowed)}</td>
                         <td>{formatDate(record.return_date)}</td>

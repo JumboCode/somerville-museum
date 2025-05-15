@@ -28,7 +28,7 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
     
 
     // Extract the unit details
-    const { id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, borrow_history, notes, image_keys} = unit; 
+    const { id, name, status, age_group, gender, color, season, garment_type, size, time_period, condition, cost, location, date_added, current_borrower, borrow_history, notes, image_keys} = unit; 
 
     // Close container if anywhere but the container is clicked
     const handleContainerClick = (e) => {
@@ -95,7 +95,7 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    text: 'SELECT date_borrowed, date_returned, approver, notes FROM borrows WHERE Item_id = $1',
+                    text: 'SELECT b.date_borrowed, b.date_returned, b.notes, br.name FROM borrows b JOIN borrowers br ON b.borrower_id = br.id WHERE b.item_id = $1',
                     params: [id]
                 })
             });
@@ -110,13 +110,12 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                     return {
                         dateBorrowed: borrow.date_borrowed,
                         dateReturned: borrow.date_returned,
-                        approver: borrow.approver,
                         notes: borrow.notes,
+                        name: borrow.name,
                     };
                 });
+
                 setBorrowerHistory(borrowData);
-                // console.log("borrowHistoryData: ");
-                // console.log(borrowData);
                 
             } else {
                 console.error("Failed to fetch borrower data");
@@ -245,18 +244,24 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
     }, [id]);
 
     // Set the status missing/found status statement based on the status
-    const statusStatement = status === "Missing" ? (
-        <button 
-            className="status-toggle"
-            onClick={() => onOptionSelect("Available")}>
-            <p className="status-toggle">Mark Item as <span>Found</span></p>
+    const statusStatement = 
+        status === "Missing" ? 
+            (currBorrower === null ? (
+                <button 
+                    className="status-toggle"
+                    onClick={() => onOptionSelect("Available")}
+                >
+                    <p className="status-toggle">Mark Item as <span>Found</span></p>
+                </button>
+            ) : null)
+        : (
+            <button 
+                className="status-toggle"
+                onClick={() => onOptionSelect("Missing")}
+            >
+                <p style={{fontSize: "1.1em"}}>Mark Item as <span>Missing</span></p>
             </button>
-    ) : (
-        <button className="status-toggle"
-            onClick={() => onOptionSelect("Missing")}>
-            <p style={{fontSize: "1.1em"}}>Mark Item as <span>Missing</span></p>
-        </button>
-    );
+        );
 
     useEffect(() => {
         if (!unit) return;
@@ -383,9 +388,9 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                             </td>
                         </tr>
                         <tr>
-                        <td>
+                        <td style={{verticalAlign: "top", paddingTop: "5px"}}>
                             <strong>Condition: </strong>
-                            <span style={{ display: "inline-flex", gap: "10px", flexWrap: "wrap" }}>
+                            <span style={{ display: "inline-flex", gap: "10px", flexWrap: "wrap"}}>
                                 {(Array.isArray(condition) ? condition : [condition]).map((cond, i) => (
                                 <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
                                     <div className={`circle2 ${cond}`}></div>
@@ -394,14 +399,13 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                                 ))}
                             </span>
                             </td>
-
-                            <td>
-                                <strong>Color: </strong>
-                                <span style={{ display: "inline-flex", gap: "8px", flexWrap: "wrap" }}>
-                                    {Array.isArray(color) ? color.join(", ") : color}
+                            <td style={{verticalAlign: "top", paddingTop: "5px"}}>
+                                <strong>Time Period: </strong>
+                                <span style={{ display: "inline-flex", gap: "8px", flexWrap: "wrap", verticalAlign: "top" }}>
+                                    {Array.isArray(time_period) ? time_period.join(", ") : time_period}
                                 </span>
-                                                                
-                                </td>
+                            </td>
+                            
                         </tr>
                         <tr>
                             <td>
@@ -423,11 +427,16 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                         <tr>
                             <td>{statusStatement}</td>
                             <td>
-                                <strong>Time Period: </strong>
+                                <strong>Color: </strong>
                                 <span style={{ display: "inline-flex", gap: "8px", flexWrap: "wrap" }}>
-                                    {Array.isArray(time_period) ? time_period.join(", ") : time_period}
+                                    {Array.isArray(color) ? color.join(", ") : color}
                                 </span>
-                            </td>
+                                                                
+                                </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><strong>Location: </strong>{location}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -508,7 +517,7 @@ export default function Popup( { onClose, onOptionSelect, unitList, unitIndex } 
                                 borrowerHistory.map((borrower, index) => (
                                     <tr key={index + 1}>
                                         <td>{borrower.dateBorrowed || "N/A"} - {borrower.dateReturned || "N/A"}</td>
-                                        <td>{borrower.approver || "N/A"}</td>
+                                        <td>{borrower.name || "N/A"}</td>
                                         <td>{borrower.notes || "N/A"}</td>
                                     </tr>
                                 ))

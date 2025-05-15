@@ -169,6 +169,7 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
                 recipientEmail: borrowerEmail,
                 recipientName: `${borrowerFirstName} ${borrowerLastName}`,
                 items: itemNames,
+                returnDate: dueDate,
             }),
         });
 
