@@ -1,5 +1,15 @@
+/**
+ * @fileoverview All API routes for managing borrow and return operations
+ * 
+ * @file api/borrowManagement.js
+ * @date 16 February, 2025
+ * @authors JumboCode Team
+ *  
+ */
+
 import { query } from './db.js';
 
+/* all backend logic for when an item is borrowed */
 export async function borrowHandler(req, res) {
   let message; 
   
@@ -142,6 +152,7 @@ export async function borrowHandler(req, res) {
   }
 }
 
+/* all backend logic for when an item is returned */
 export async function returnHandler(req, res) {
   const { selectedItems } = req.body;
   const { notes_id } = req.body;
@@ -212,6 +223,7 @@ export async function returnHandler(req, res) {
   }
 }
 
+/* check if the selected items can be borrowed */
 export async function borrowValidityHandler(req, res) {
   const { selectedItems } = req.body;
 
@@ -265,6 +277,7 @@ export async function borrowValidityHandler(req, res) {
   }
 }
 
+/* check if the selected items can be returned */
 export async function returnValidityHandler(req, res) {
   const { selectedItems } = req.body;
 
@@ -317,58 +330,7 @@ export async function returnValidityHandler(req, res) {
   }
 }
 
-export async function borrowByDateRangeHandler(req, res) {
-  const { startDate, endDate } = req.body;
-  
-  try {
-    // Parse dates to ensure correct format for comparison
-    const parsedStartDate = new Date(startDate);
-    const parsedEndDate = new Date(endDate);
-    
-    // Format dates in ISO format for SQL query
-    const formattedStartDate = parsedStartDate.toISOString().split('T')[0];
-    const formattedEndDate = parsedEndDate.toISOString().split('T')[0];
-    
-    // Query items with return dates within the specified range
-    const result = await query(
-      'SELECT b.*, d.name as item_name, br.name as borrower_name FROM borrows b ' +
-      'JOIN dummy_data d ON b.item_id = d.id ' +
-      'JOIN borrowers br ON b.borrower_id = br.id ' +
-      'WHERE TO_DATE(b.return_date, \'MM/DD/YYYY\') BETWEEN TO_DATE($1, \'YYYY-MM-DD\') AND TO_DATE($2, \'YYYY-MM-DD\')',
-      [formattedStartDate, formattedEndDate]
-    );
-    
-    res.status(200).json(result.rows);
-  } catch (error) {
-    console.error("Database query error:", error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-}
-
-export async function fetchBorrowerNameHandler(req, res) {
-  const { id } = req.query;  // Get borrower ID from query params
-
-  if (!id) {
-      return res.status(400).json({ error: "Missing borrower ID" });
-  }
-
-  try {
-      // Fetch the borrower email using the ID
-      const result = await query(`
-          SELECT name FROM borrowers WHERE id = $1
-      `, [id]);
-
-      if (result.rows.length === 0) {
-          return res.status(404).json({ error: "Borrower not found" });
-      }
-
-      res.status(200).json({ borrower_email: result.rows[0].email });
-  } catch (error) {
-      console.error("Error fetching borrower email:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-  }
-}
-
+/* handle return logic like emails with a bunch of items by their borrower */
 export async function groupReturnsByBorrowerHandler(req, res) {
   const { returnedItems } = req.body;
 
@@ -423,38 +385,9 @@ export async function groupReturnsByBorrowerHandler(req, res) {
   }
 }
 
-
-
-
-export async function fetchBorrowerEmailHandler(req, res) {
-  const { id } = req.query;  // Get borrower ID from query params
-
-  if (!id) {
-      return res.status(400).json({ error: "Missing borrower ID" });
-  }
-
-  try {
-      // Fetch the borrower email using the ID
-      const result = await query(`
-          SELECT email FROM borrowers WHERE id = $1
-      `, [id]);
-
-      if (result.rows.length === 0) {
-          return res.status(404).json({ error: "Borrower not found" });
-      }
-
-      res.status(200).json({ borrower_email: result.rows[0].email });
-  } catch (error) {
-      console.error("Error fetching borrower email:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-  }
-}
-
-
+/* update all items to be overdue once their date has passed */
+/* done through crons job in vercel.json */
 export async function overdueHandler(req, res) {
-  // if (req.method !== 'GET') {
-  //   return res.status(405).json({ message: 'Method Not Allowed' });
-  // }
 
   try {
     // Get the current date
@@ -482,6 +415,7 @@ export async function overdueHandler(req, res) {
   }
 }
 
+/* query all borrowers based off search parameters */
 export async function searchBorrowersHandler(req, res) {
   const { ask } = req.body;
 
@@ -501,6 +435,7 @@ export async function searchBorrowersHandler(req, res) {
   }
 }
 
+/* get a borrower's history */
 export async function getBorrowerHistoryHandler(req, res) {
   const { id } = req.query;
   
@@ -532,6 +467,7 @@ export async function getBorrowerHistoryHandler(req, res) {
   }
 }
 
+/* get all borrowers for borrower table */
 export async function getAllBorrowersHandler(req, res) {
   try {
     const result = await query(
@@ -544,6 +480,7 @@ export async function getAllBorrowersHandler(req, res) {
   }
 }
 
+/* switch statement to handle all cases */
 export default async function handler(req, res) {
   const { action } = req.query;
   
@@ -556,18 +493,8 @@ export default async function handler(req, res) {
           return borrowValidityHandler(req, res);
       case 'returnValidity':
           return returnValidityHandler(req, res);
-      case 'borrowByDateRange':
-          return borrowByDateRangeHandler(req, res);
-      case 'fetchBorrowerEmail':
-          return fetchBorrowerEmailHandler(req, res);
-      case 'fetchBorrowerName':
-          return fetchBorrowerNameHandler(req, res);
-      case 'fetchBorrowerId':
-          return fetchBorrowerIdHandler(req, res);
       case 'overdue':
           return overdueHandler(req, res);
-      case 'itemBorrowHistory':
-          return getItemBorrowHistoryHandler(req, res);
       case 'borrowerHistory':
           return getBorrowerHistoryHandler(req, res);
       case 'searchBorrowers':

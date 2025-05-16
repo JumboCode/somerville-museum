@@ -8,7 +8,6 @@
  *  
  */
 import localFont from "next/font/local";
-import './components/Popup.css';
 import "./globals.css"
 import { ClerkProvider } from '@clerk/nextjs'
 import React, { useState, useEffect } from 'react';
