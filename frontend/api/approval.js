@@ -1,6 +1,13 @@
+/**
+ * @fileoverview Backend API routes for approving new users who have signed up
+ * 
+ * @file api/approval.js
+ * @date 16 February, 2025
+ * @authors Massimo Bottari & Dan Glorioso & Elias Swartz
+ *  
+ */
 
-
-
+/* changes new user's metadata on clerk so they can view the site */
 export async function approveHandler(req, res) {
     if (req.method !== "POST") {
         return res.status(405).end("Method Not Allowed");
@@ -30,6 +37,7 @@ export async function approveHandler(req, res) {
     res.status(200).json({ message: "User approved" });
 }
 
+/* fetches all unapproved users and their info */
 export async function unapprovedHandler(req, res) {
     console.log("Testing unapproved handler");
     try {
@@ -73,8 +81,6 @@ export default async function handler(req, res) {
   switch(action) {
       case 'approve':
           return approveHandler(req, res);
-      case 'check':
-          return checkHandler(req, res);
       case 'unapproved':
           return unapprovedHandler(req, res);
       default:

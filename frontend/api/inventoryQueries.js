@@ -1,3 +1,12 @@
+/**
+ * @fileoverview All API routes for managing borrow and return operations
+ * 
+ * @file api/inventoryQueries.js
+ * @date 16 February, 2025
+ * @authors JumboCode Team
+ *  
+ */
+
 import { query } from './db.js';
 
 export async function selectByNameHandler(req, res) {
