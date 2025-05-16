@@ -28,7 +28,6 @@ export default function PrePopup({ unit, onClose, onOptionSelect, position, stat
             }
         
             const emailResult = await emailResponse.json();
-            console.log(emailResult.message);  // Should log: Emails sent to all borrowers.
         
             // 2. THEN update DB
             const returnResponse = await fetch('/api/borrowManagement?action=return', {
