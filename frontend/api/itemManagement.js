@@ -1,3 +1,12 @@
+/**
+ * @fileoverview All API routes for the CRUD operations on items
+ * 
+ * @file api/itemManagement.js
+ * @date 16 February, 2025
+ * @authors JumboCode Team
+ *  
+ */
+
 import { query } from './db.js';
 
 // Handler for adding a new item
@@ -93,45 +102,8 @@ export async function retrieveItemHandler(req, res) {
     }
 }
 
-// Handler for updating item IDs (previously updateID.js)
-export async function updateIDHandler(req, res) {
-    const { id, newId, data } = req.body;
-
-    if (!id || !newId || !data) {
-        return res.status(400).json({ message: 'ID, new ID, and data are required' });
-    }
-
-    try {
-        const existingRecord = await query("SELECT * FROM dummy_data WHERE id = $1", [newId]);
-
-      if (existingRecord.rowCount > 0) {
-        if (newId != id) {
-            // Case 1: New ID already exists, and it's not the same as the current ID
-            return res.status(404).json({ message: 'Error: Trying to overwrite an existing ID. Update aborted.' });
-        }
-        else{
-            // Case 2: New ID already exists, and it's the same as the current ID
-            const updateResult = await query("UPDATE dummy_data SET name = $1, note = $2, tags = $3 WHERE id = $4", [data.name, data.note, data.tags, id]);
-            return res.status(200).json({ message: 'ID updated successfully', rowCount: updateResult.rowCount });
-        }
-      }
-      else {
-        // Case 3: New ID does not exist and it needs to be created
-        const insertResult = await query("INSERT INTO dummy_data (id, name, tags, note) VALUES ($1, $2, $3, $4)", [newId, data.name, data.tags, data.note]);
-        
-        // Also update any references in the borrows table
-        await query("UPDATE borrows SET item_id = $1 WHERE item_id = $2", [newId, id]);
-        
-        const deleteOld = await query("DELETE FROM dummy_data WHERE id = $1", [id]);
-        return res.status(201).json({ message: 'New record created and old record deleted.' });
-      }  
-    } catch (error) {
-      console.error('Error querying the database:', error);
-      return res.status(500).send('Internal Server Error');
-    }
-  }
-
-  export async function searchHandler(req, res) {
+/* query all items based off search input */
+export async function searchHandler(req, res) {
 
     const searchQuery = req.body.searchQuery;
 
@@ -162,26 +134,6 @@ export async function updateIDHandler(req, res) {
         console.error('Error fetching entry:', error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
-}
-
-
-export async function updateTagsHandler(req, res) {
-  const { id, tags } = req.body;
-
-  if (!Array.isArray(tags)) {
-        return res.status(400).send('Tags must be an array');
-  }
-  const tagsString = `{${tags.join(',')}}`;
-  try {
-    const result = await query("UPDATE dummy_data SET tags = $1 WHERE id = $2 RETURNING *", [tagsString, id]);
-    if (result.rowCount === 0) {
-        res.status(404).send("Item not found");
-    }
-    res.status(200).json(result.rows[0]); // Send the result back to the frontend
-  } catch (error) {
-    console.error("Database query error:", error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
 }
 
 export async function updateItemHandler(req, res) {
@@ -278,12 +230,8 @@ export default async function handler(req, res) {
             return addHandler(req, res);
         case 'retrieve':
             return retrieveItemHandler(req, res);
-        case 'update':
-            return updateIDHandler(req, res);
         case 'search':
             return searchHandler(req, res);
-        case 'updateTags':
-            return updateTagsHandler(req, res);
         case 'updateItem':
             return updateItemHandler(req, res);
         default:
