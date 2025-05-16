@@ -39,7 +39,6 @@ const ExportDataBtn = () => {
             }
             
             const inventoryData = await inventoryResponse.json();
-            // console.log("Inventory data:", inventoryData);
 
             if (!Array.isArray(inventoryData)) {
                 throw new Error("Invalid inventory data format");
@@ -85,7 +84,6 @@ const ExportDataBtn = () => {
                 }
                 
                 const borrowerData = await borrowerResponse.json();
-                // console.log("Borrower data:", borrowerData);
                 
                 // Create a map for fast lookup
                 borrowerMap = borrowerData.reduce((map, borrower) => {
