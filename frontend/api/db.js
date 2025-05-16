@@ -1,4 +1,13 @@
-// frontend/api/db.js
+/**
+ * @fileoverview Simple full base query of the database's items with parameters
+ *               for additional filtering.
+ * 
+ * @file api/db.js
+ * @date 16 February, 2025
+ * @authors Zack White
+ *  
+ */
+
 import pg from 'pg';
 const { Pool } = pg;
 import 'dotenv/config';
