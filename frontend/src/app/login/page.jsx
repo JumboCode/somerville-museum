@@ -13,8 +13,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSignIn, useAuth } from "@clerk/nextjs";
 import { useClerk } from "@clerk/nextjs";
-import Eyecon from "../components/Eyecon";
-import EyeconOff from "../components/EyeconOff";
+import Eyecon from "../assets/Eyecon";
+import EyeconOff from "../assets/EyeconOff";
 import Checkbox from "../components/Checkbox";
 import Image from "next/image";
 import "../app.css";
@@ -118,9 +118,6 @@ export default function Signin() {
   const signInWithEmail = async () => {
     if (!onButtonClick()) return;
   
-    // console.log("Attempting sign in with:", email, password);
-    // console.log("Remember Me checked:", rememberMe);
-  
     try {
       const result = await signIn.create({
         identifier: email,
@@ -129,11 +126,6 @@ export default function Signin() {
       
       if (result.status === "complete") {
         //LOGIC FOR SIGNING IN APPROVAL CHECK HERE
-          
-        
-        //LOGIC FOR SIGNING IN APPROVAL CHECK HERE
-      
-  
         if (rememberMe) {
           localStorage.setItem("rememberedEmail", email);
           localStorage.setItem("rememberedPassword", password);
@@ -149,7 +141,6 @@ export default function Signin() {
 
         router.push("/login_confirmed");
       } else {
-        // console.log("Sign in not complete yet:", result);
       }
     } catch (err) {
       console.error("Sign-in error:", err);

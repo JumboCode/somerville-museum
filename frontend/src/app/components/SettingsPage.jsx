@@ -63,13 +63,11 @@ export default function SettingsPage() {
 
   useEffect(() => {
     const fetchUnapprovedUsers = async () => {
-      console.log("Is admin:", isAdmin);
       if (!isAdmin) return;
       try {
         const response = await fetch("/api/approval?action=unapproved"); // Your serverless API
         // const response = await fetch("/api/get-unapproved-users")
         const data = await response.json();
-        console.log("All users:", response);
         setApprovals(data.users); // expected shape: [{ id, email, firstName, lastName }]
       } catch (error) {
         console.error("Error fetching unapproved users:", error);

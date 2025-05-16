@@ -130,26 +130,19 @@ function Inventory({
 
 
     const applyFilters = async (data) => {
-        // console.log("Starting filter application with data:", data);
-        // console.log("Current selectedFilters:", selectedFilters);
         
         if (!Array.isArray(data)) return [];
         let filteredData = [...data];
     
         // Filter by Status
         if (selectedFilters.status && selectedFilters.status.length > 0) {
-            // console.log("Before status filter:", filteredData.length);
-            // console.log("Filtering by status:", selectedFilters.status);
             filteredData = filteredData.filter(item => {
-                // console.log("Item status:", item.status);
                 return selectedFilters.status.includes(item.status);
             });
-            // console.log("After status filter:", filteredData.length);
         }
     
         // Filter by Condition
         if (selectedFilters.condition && selectedFilters.condition.length > 0) {
-            // console.log("Filtering by condition:", selectedFilters.condition);
             filteredData = filteredData.filter(item => 
                 item.condition &&
                 selectedFilters.condition.some(condition => 
@@ -160,7 +153,6 @@ function Inventory({
     
         // Filter by Gender
         if (selectedFilters.gender && selectedFilters.gender.length > 0) {
-            // console.log("Filtering by gender:", selectedFilters.gender);
             filteredData = filteredData.filter(item => 
                 selectedFilters.gender.includes(item.gender)
             );
@@ -168,7 +160,6 @@ function Inventory({
     
         // Filter by Color
         if (selectedFilters.color && selectedFilters.color.length > 0) {
-            // console.log("Filtering by color:", selectedFilters.color);
             filteredData = filteredData.filter(item => 
                 // Check if any of the selected colors exist in the item's color array
                 selectedFilters.color.some(color => 
@@ -179,7 +170,6 @@ function Inventory({
     
         // Filter by Garment Type
         if (selectedFilters.garment_type && selectedFilters.garment_type.length > 0) {
-            // console.log("Filtering by garment type:", selectedFilters.garment_type);
             filteredData = filteredData.filter(item => 
                 selectedFilters.garment_type.includes(item.garment_type)
             );
@@ -187,7 +177,6 @@ function Inventory({
     
         // Filter by Size
         if (selectedFilters.size && selectedFilters.size.length > 0) {
-            // console.log("Filtering by size:", selectedFilters.size);
             filteredData = filteredData.filter(item => 
                 selectedFilters.size.includes(item.size)
             );
@@ -195,7 +184,6 @@ function Inventory({
     
         // Filter by Season
         if (selectedFilters.season && selectedFilters.season.length > 0) {
-            // console.log("Filtering by season:", selectedFilters.season);
             filteredData = filteredData.filter(item => 
                 // Check if any of the selected seasons exist in the item's season array
                 selectedFilters.season.some(season => 
@@ -206,7 +194,6 @@ function Inventory({
     
         // Filter by Time Period
         if (selectedFilters.time_period && selectedFilters.time_period.length > 0) {
-            // console.log("Filtering by time period:", selectedFilters.time_period);
             filteredData = filteredData.filter(item => 
                 // Check if any of the selected time periods exist in the item's time_period array
                 selectedFilters.time_period.some(period => 
@@ -248,7 +235,6 @@ function Inventory({
             }
         }
     
-        // console.log("Final filtered results:", filteredData);
         return filteredData;
     };
 
@@ -267,7 +253,6 @@ function Inventory({
             if (response.ok) {
                 const data = await response.json();
                 const inventoryData = Array.isArray(data) ? data : [];
-                // console.log("Fetched data:", data);
                 const currentDate = new Date();
                 const updatedData = inventoryData.map((item) => {
                     if (item.status === "Borrowed" && item.dueDate && new Date(item.dueDate) < currentDate) {
@@ -275,29 +260,9 @@ function Inventory({
                     }
                     return item;
                 });
-                // console.log("Processed data:", updatedData);
 
                 setOriginalUnits(updatedData);
-                // setUnits(updatedData);
                 setTotalPages(Math.ceil(updatedData.length / unitsPerPage));
-
-                // if (selectedFilters.status?.length > 0 || 
-                //     selectedFilters.condition?.length > 0 ||
-                //     selectedFilters.gender?.length > 0 ||
-                //     selectedFilters.color?.length > 0 ||
-                //     selectedFilters.garment_type?.length > 0 ||
-                //     selectedFilters.size?.length > 0 ||
-                //     selectedFilters.season?.length > 0 ||
-                //     selectedFilters.time_period?.length > 0 ||
-                //     (selectedFilters.return_date?.start && selectedFilters.return_date?.end)) {
-                //     // Use await here since applyFilters is async
-                //     const filteredData = await applyFilters(updatedData);
-                //     setUnits(filteredData);
-                //     setTotalPages(Math.ceil(filteredData.length / unitsPerPage));
-                // } else {
-                //     setUnits(updatedData);
-                //     setTotalPages(Math.ceil(updatedData.length / unitsPerPage));
-                // }
 
             } else {
                 console.error("failed to fetch data");
@@ -401,7 +366,6 @@ function Inventory({
     };
 
     const handleReturnSuccess = () => {
-        // console.log("Return operation sucwcessful, refreshing inventory...");
         setRefreshTable(prev => !prev); // Refresh table to show updated status
         setSelectedItems([]); // Clear selected items
         fetchData();

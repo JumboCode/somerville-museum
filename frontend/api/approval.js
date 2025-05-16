@@ -39,7 +39,6 @@ export async function approveHandler(req, res) {
 
 /* fetches all unapproved users and their info */
 export async function unapprovedHandler(req, res) {
-    console.log("Testing unapproved handler");
     try {
         const response = await fetch("https://api.clerk.dev/v1/users", {
             headers: {
@@ -50,8 +49,6 @@ export async function unapprovedHandler(req, res) {
         if (!response.ok) {
             throw new Error(`Clerk API error: ${response.statusText}`);
         }
-
-        console.log("Response from Clerk API:", response);
 
         const allUsers = await response.json();
 
@@ -75,8 +72,6 @@ export async function unapprovedHandler(req, res) {
 
 export default async function handler(req, res) {
   const { action } = req.query;
-
-  console.log("Action:", action);
   
   switch(action) {
       case 'approve':
