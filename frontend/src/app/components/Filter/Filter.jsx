@@ -184,20 +184,6 @@ const FilterComponent = ({ isVisible, onClose, className }) => {
         });
     };
 
-    // Ensure the filter popup is closed if not visible on the sidebar
-    // const onCloseRef = useRef(onClose);
-    // useEffect(() => {
-    //     onCloseRef.current = onClose;
-    // }, [onClose]);
-
-    // const prevIsFilterHidden = useRef(isFilterHidden);
-    // useEffect(() => {
-    //     if (!prevIsFilterHidden.current && isFilterHidden) {
-    //         onCloseRef.current && onCloseRef.current();
-    //     }
-    //     prevIsFilterHidden.current = isFilterHidden;
-    // }, [isFilterHidden]);
-
     const getDateRangeText = () => {
         if (dateRange.start && dateRange.end) {
             return `${dateRange.start} - ${dateRange.end}`;
