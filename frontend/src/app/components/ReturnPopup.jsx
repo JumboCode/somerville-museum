@@ -46,7 +46,6 @@ const ReturnPopup = ({ units = [], onSuccess, onClose }) => {
           }
         
           const emailResult = await emailResponse.json();
-          console.log(emailResult.message);  
         
           // 2. THEN update DB with active unit ids only
           const returnResponse = await fetch('/api/borrowManagement?action=return', {
