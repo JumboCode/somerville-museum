@@ -1,33 +1,18 @@
+/**
+ * @fileoverview All API routes dealing with sending the emails
+ * 
+ * @file api/email.js
+ * @date 16 February, 2025
+ * @authors Massimo Bottari and Elias Swartz
+ *  
+ */
+
 import Mailjet from "node-mailjet";
 import { query } from './db.js';
 
 const mailjet = Mailjet.apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE);
 
-export async function handlefetchBorrowerEmail(req, res) {
-    const { id } = req.query;  // Get borrower ID from query params
-
-    if (!id) {
-        return res.status(400).json({ error: "Missing borrower ID" });
-    }
-
-    try {
-        // Fetch the borrower email using the ID
-        const result = await query(`
-            SELECT email FROM borrowers WHERE id = $1
-        `, [id]);
-
-        if (result.rows.length === 0) {
-            return res.status(404).json({ error: "Borrower not found" });
-        }
-
-        res.status(200).json({ borrower_email: result.rows[0].email });
-    } catch (error) {
-        console.error("Error fetching borrower email:", error);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-}
-
-
+/* send the automatic borrow email */
 export async function handlesendBorrowedEmail(req, res) {
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Method Not Allowed" });
@@ -80,7 +65,7 @@ export async function handlesendBorrowedEmail(req, res) {
     }
 }
 
-
+/* send the email for overdue items */
 export async function handlesendOverdueEmail(req, res) {
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Method Not Allowed" });
@@ -123,6 +108,7 @@ export async function handlesendOverdueEmail(req, res) {
     }
 }
 
+/* send email for when an item is 5 days from being due */
 export async function handlesendReminderEmail(req, res) {
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Method Not Allowed" });
@@ -185,7 +171,7 @@ export async function handlesendReminderEmail(req, res) {
     }
 }
 
-
+/* send email for when item is returned */
 export async function handlesendReturnEmail(req, res) {
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Method Not Allowed" });
@@ -230,11 +216,11 @@ export async function handlesendReturnEmail(req, res) {
 
 
 async function handleReminderEmail(req, res) {
-    // Find items due in the next 3 days
+    // Find items due in the next 5 days
     const result = await query(`
         SELECT borrower_name, borrower_email, due_date, json_agg(item_name) AS items
         FROM borrowed_items 
-        WHERE due_date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '3 days'
+        WHERE due_date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '5 days'
         GROUP BY borrower_name, borrower_email, due_date
     `);
 
@@ -246,11 +232,31 @@ async function handleReminderEmail(req, res) {
             to: { email: borrower_email, name: borrower_name },
             subject: "Reminder: Your Borrowed Items Are Due Soon",
             htmlContent: `
-                <p>Hi there!</p>
-                <p>This email is to remind you that the item(s) listed below are due to be returned to the Somerville Museum by <b>${due_date}</b>:</p>
-                <ul>${itemList}</ul>
-                <p>Before returning, please review and act on the applicable guidelines below.</p>
-                <p>Please reach out to <a href="mailto:info@somervillemuseum.org">info@somervillemuseum.org</a> to find an appropriate date and time to return your items, or if you have any questions.</p>
+                <p>Hi ${borrower_name}!</p>
+                            <p>This email is to remind you that the following item(s) to be reutned to the Somerville Museum by <b>${due_date}</b>:</p>
+                            <ul>${itemList}</ul>
+                            <p>Before returning, please review and act on the applicable guidelines below.
+                           Please contact <a href="mailto:info@somervillemuseum.org">info@somervillemuseum.org</a> to arrange your return.</p>
+                        <p><b>Guidelines:</b></p>
+                        <p>
+                            Please return your items in the same or better condition than when you received them. 
+                            If changes in condition have occurred, please let us know. Some issues that arise include 
+                            the loss of a button or hook.  Please try to find these items and keep these with the garment 
+                            when you return it. 
+                        </p>
+                        <p>
+                            White or off-white garments made out of cotton, such as socks, shirts, or women’s shirts 
+                            or chemise, should be cleaned before returning.  These objects can be washed in a washing 
+                            machine on delicate cycle with a fragrance-free detergent and dried in a dryer on low heat. 
+                            Do not overheat or some shrinking may occur. Hang these items on hangers when taking them out 
+                            of the dryer to reduce wrinkling until you have time to bring them back to the Museum. When 
+                            folding them to fit in your bag, try to smooth out the wrinkles.
+                        </p>
+                        <p>
+                            Garment items that are often missed in returns include: socks and accessories such as belts, 
+                            pockets, fichu or neckerchiefs, pins, jewelry, bobby pins and safety pins.  Please return 
+                            everything to avoid us having to track you down.  Thank you!
+                        </p>
             `
         });
     }
@@ -287,8 +293,6 @@ function formatItemList(items) {
     return items.map((item) => `<li>${item}</li>`).join("");
 }
 
-
-
 export default async function handler(req, res) {
 
     if (req.method !== "POST") {
@@ -300,8 +304,6 @@ export default async function handler(req, res) {
     switch (emailType) {
         case 'reminder':
             return handleReminderEmail(req, res);
-        case 'fetchBorrowerEmail':
-            return handlefetchBorrowerEmail(req, res);
         case 'sendBorrowedEmail':
             return handlesendBorrowedEmail(req, res);
         case 'sendOverdueEmail':
