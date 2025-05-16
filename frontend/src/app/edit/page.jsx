@@ -27,7 +27,6 @@ const EditContent = () => {
 
     useEffect(() => {
         async function loadItem() {
-            // console.log(unitId);
             try {
                 const response = await fetch(`../../../api/db`, {
                     method: 'POST',

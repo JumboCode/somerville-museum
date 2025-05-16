@@ -157,13 +157,6 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
 
       const itemNames = borrowItems.map(item => item.name);
 
-      // // Debugging: Log the request payload
-      // console.log("Sending email request:", {
-      //     recipientEmail: borrowerEmail,
-      //     recipientName: `${borrowerFirstName} ${borrowerLastName}`,
-      //     items: itemNames,
-      // });
-
       // Make the API call
       if (!isToggleEnabled) {
         const emailResponse = await fetch('/api/email?emailType=sendBorrowedEmail', { 

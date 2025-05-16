@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react'
 import { useSignUp, useAuth } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
 import Image from "next/image";
-import Eyecon from "../components/Eyecon";
-import EyeconOff from "../components/EyeconOff";
+import Eyecon from "../assets/Eyecon";
+import EyeconOff from "../assets/EyeconOff";
 import "../app.css"
 
 export default function SignUp() {

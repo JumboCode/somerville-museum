@@ -84,17 +84,6 @@ const BarGraph = ({ data }) => {
         .call(xAxis)
         .select(".domain") // Hide x-axis base line
 
-    // // ** Add a permanent top dotted line **
-    // chart.append("line")
-    //     .attr("x1", 0)
-    //     .attr("x2", width) // Full width
-    //     .attr("y1", 0) // Top of the graph
-    //     .attr("y2", 0) // Stays at the top
-    //     .style("stroke", "gray")
-    //     .style("strokeWidth", 1)
-    //     .style("stroke-dasharray", "2,2") // Dotted effect
-    //     .style("opacity", 0.4); // Slightly visible
-
     chart.append("g")
         .call(axisLeft(yScale).tickValues(range(0, yMax + tickInterval, tickInterval))) // Adjust interval dynamically
         .attr("class", "bar-label")
@@ -192,12 +181,9 @@ const BarGraph = ({ data }) => {
 
 
     return (
-        // <div className="barGraphContainer">
-        //     <h2 className="barGraphTitle">Status</h2>
             <div>
                 <svg className="svgContainer" ref={svgRef}></svg>
             </div>
-        // </div>
     ); 
 };
 

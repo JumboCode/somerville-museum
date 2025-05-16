@@ -279,7 +279,6 @@ export default function EditPage({ unit }) {
     
             // Parse response as JSON
             const data = await response.json();
-            console.log("Retrieved item data:", data);
     
             // Populate state with retrieved data
             setIDText(data.id);
@@ -413,7 +412,6 @@ export default function EditPage({ unit }) {
 
             // If no new images, skip upload
             if (newImageIDs.length === 0) {
-                console.log("No new images to upload.");
                 return;
             }
 
@@ -448,7 +446,6 @@ export default function EditPage({ unit }) {
             const deletedImageIDs = prevImageID.filter(id => !imageID.includes(id));
         
             if (deletedImageIDs.length === 0) {
-                console.log("No images to delete.");
                 return;
             }
         
