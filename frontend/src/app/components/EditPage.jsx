@@ -215,35 +215,6 @@ export default function EditPage({ unit }) {
         }
     };
 
-    // const handleConditionSelect = (selectedConditions) => {
-    
-    //     // Ensure selectedconditionOptions is always an array
-    //     if (!Array.isArray(selectedconditionOptions)) {
-    //         setconditionOption([]);
-    //         return;
-    //     }
-    
-    //     // Extract only names, handling undefined values safely
-    //     const selectedNames = selectedconditionOptions.map(item => item?.name || "").filter(name => name !== "");
-    
-    //     // Update state
-    //     setconditionOption(selectedNames);
-    // };
-
-    // const handleTimePeriodSelect = (selectedTimePeriods) => {    
-    //     // Ensure selectedTimePeriods is always an array
-    //     if (!Array.isArray(selectedTimePeriods)) {
-    //         setSelectedTimePeriod([]);
-    //         return;
-    //     }
-    
-    //     // Extract only names
-    //     const selectedNames = selectedTimePeriods.map(item => item?.name || "");
-    
-    //     // Update state
-    //     setSelectedTimePeriod(selectedNames.filter(name => name !== ""));
-    // };
-
     const handleSeasonSelect = (season) => {
         setSelectedSeason((prevSelected) => {
             if (prevSelected.includes(season)) {
@@ -337,7 +308,7 @@ export default function EditPage({ unit }) {
         const urlParams = new URLSearchParams(window.location.search);
         const itemId = urlParams.get('id');
         if (itemId) {
-            retrieveItem(itemId);
+            retrieveItem();
         }
     }, []);
     
