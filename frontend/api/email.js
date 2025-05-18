@@ -12,6 +12,8 @@ import { query } from './db.js';
 
 const mailjet = Mailjet.apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE);
 
+const sendEmailAddr = "somerville.museum1@gmail.com"
+
 /* send the automatic borrow email */
 export async function handlesendBorrowedEmail(req, res) {
     if (req.method !== "POST") {
@@ -32,7 +34,7 @@ export async function handlesendBorrowedEmail(req, res) {
             Messages: [
                 {
                     From: {
-                        Email: "somerville.museum1@gmail.com",  // Replace with verified sender email
+                        Email: sendEmailAddr,
                         Name: "Somerville Museum",
                     },
                     To: [
@@ -87,7 +89,7 @@ export async function handlesendOverdueEmail(req, res) {
             const response = await mailjet.post("send", { version: "v3.1" }).request({
                 Messages: [
                     {
-                        From: { Email: "somerville.museum1@gmail.com", Name: "Somerville Museum" },
+                        From: { Email: sendEmailAddr, Name: "Somerville Museum" },
                         To: [{ Email: borrower_email, Name: borrower_name }],
                         Subject: "Overdue Notice: Your Borrowed Items Are Past Due",
                         HTMLPart: `
@@ -130,7 +132,7 @@ export async function handlesendReminderEmail(req, res) {
             const response = await mailjet.post("send", { version: "v3.1" }).request({
                 Messages: [
                     {
-                        From: { Email: "somerville.museum1@gmail.com", Name: "Somerville Museum" },
+                        From: { Email: sendEmailAddr, Name: "Somerville Museum" },
                         To: [{ Email: borrower_email, Name: borrower_name }],
                         Subject: "Reminder: Your Borrowed Items Are Due Soon",
                         HTMLPart: `
@@ -191,7 +193,7 @@ export async function handlesendReturnEmail(req, res) {
         const response = await mailjet.post("send", { version: "v3.1" }).request({
             Messages: [
                 {
-                    From: { Email: "somerville.museum1@gmail.com", Name: "Somerville Museum" },
+                    From: { Email: sendEmailAddr, Name: "Somerville Museum" },
                     To: [{ Email: borrower_email, Name: borrower_name }],
                     Subject: "Confirmation: Your Items Have Been Returned",
                     HTMLPart: `
@@ -271,7 +273,7 @@ async function sendEmail({ to, subject, htmlContent }) {
         Messages: [
             {
                 From: {
-                    Email: "somerville.museum1@gmail.com",
+                    Email: sendEmailAddr,
                     Name: "Somerville Museum",
                 },
                 To: [
