@@ -118,7 +118,7 @@ export async function borrowHandler(req, res) {
           borrowId: newBorrowId
         });
       } catch (itemError) {
-        console.error(`Error processing item ${itemId}:`, itemError);
+        console.error(`Error processing item`, itemError);
         failedItems.push({ id: itemId, reason: 'Processing error' });
       }
     }
@@ -157,6 +157,11 @@ export async function returnHandler(req, res) {
   const { selectedItems } = req.body;
   const { notes_id } = req.body;
   const { notes_content } = req.body;
+
+  if (!Array.isArray(notes_content)) {
+    console.error('notes_content is not an array');
+    return res.status(400).json({ error: 'notes_content must be an array' });
+  }
 
   try {
     // Arrays to keep track of items 

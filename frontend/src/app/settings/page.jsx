@@ -20,7 +20,11 @@ const Settings = () => {
       <div className="settings-header">
         <h1 className="settings-title">Settings</h1>
       </div>
+<<<<<<< HEAD
       <div className="containerSettings">
+=======
+      <div className="containerS">
+>>>>>>> 35dd92777be9c96bb74d0b87fdf1da3bf587f146
         <div className="settings-content-wrapper">
             <div className="settings-page">
               <SettingsPage />
