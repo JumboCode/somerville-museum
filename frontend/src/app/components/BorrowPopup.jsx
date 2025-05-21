@@ -218,7 +218,7 @@ const BorrowPopup = ({ selectedItems = [], onClose, onSuccess }) => {
   };
 
   return (
-    <div className="container">
+    <div className="containerBorrow">
       
       {/* Top header */}
       <div className="borrowItemsHeader">

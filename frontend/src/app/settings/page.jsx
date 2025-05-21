@@ -20,7 +20,7 @@ const Settings = () => {
       <div className="settings-header">
         <h1 className="settings-title">Settings</h1>
       </div>
-      <div className="container">
+      <div className="containerSettings">
         <div className="settings-content-wrapper">
             <div className="settings-page">
               <SettingsPage />
