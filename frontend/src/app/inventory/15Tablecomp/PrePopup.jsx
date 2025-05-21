@@ -79,8 +79,8 @@ export default function PrePopup({ unit, onClose, onOptionSelect, position, stat
 
     return (
         <div className="Popup" 
-              style = {{top: position.top, right: position.right}}
-              ref={popupRef}>
+             style={{ top: position.top, right: `calc(${position.right} + 9px)` }}
+             ref={popupRef}>
             <div className="Buttons">
                 <div className="editBtn">
                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21" fill="none">
