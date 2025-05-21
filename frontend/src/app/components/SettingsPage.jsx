@@ -123,7 +123,7 @@ export default function SettingsPage() {
         <div className="account-header">
           <h2 className="account-subheading">Account Information & Options</h2>
         </div>
-        <div className="body">
+        <div className="bodySettings">
           <div className="left-column">
             {user && (
             <div className="profile-card">
@@ -146,7 +146,7 @@ export default function SettingsPage() {
                   disabled
                 />
               </div>
-              <form>
+              <form className="profile-form">
                 <label htmlFor="email">Email</label>
                 <input
                   type="email"
