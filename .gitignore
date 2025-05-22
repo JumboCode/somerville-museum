@@ -9,6 +9,7 @@ frontend/.next
 .env
 
 frontend/.clerk
+.clerk
 
 # testing
 /coverage
