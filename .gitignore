@@ -8,6 +8,8 @@ frontend/.next
 .yarn/install-state.gz
 .env
 
+frontend/.clerk
+
 # testing
 /coverage
 
