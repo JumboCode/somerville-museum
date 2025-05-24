@@ -214,6 +214,74 @@ export async function handlesendReturnEmail(req, res) {
 }
 
 
+export async function handlesendDueEmails(req, res) {
+    if (req.method !== "POST") {
+        return res.status(405).json({ error: "Method Not Allowed" });
+    }
+
+    try {
+        const result = await query(`
+            SELECT borrower_name, borrower_email, due_date, json_agg(item_name) AS items
+            FROM borrowed_items
+            WHERE due_date < CURRENT_DATE + INTERVAL '5 days'
+            GROUP BY borrower_name, borrower_email, due_date
+        `);
+
+        for (const { borrower_name, borrower_email, due_date, items } of result) {
+            const isOverdue = new Date(due_date) < new Date(); // JS comparison
+            const itemList = items.map((item) => `<li>${item}</li>`).join("");
+
+            const subject = isOverdue
+                ? "Overdue Notice: Your Borrowed Items Are Past Due"
+                : "Reminder: Your Borrowed Items Are Due Soon";
+
+            const HTMLPart = isOverdue
+                ? `
+                    <p>Hi ${borrower_name}!</p>
+                    <p>This email is to remind you that the item(s) listed below are <b>OVERDUE</b>:</p>
+                    <ul>${itemList}</ul>
+                    <p>Please contact <a href="mailto:info@somervillemuseum.org">info@somervillemuseum.org</a> to arrange a return.</p>
+                `
+                : `
+                    <p>Hi ${borrower_name}!</p>
+                    <p>This email is to remind you that the following item(s) should be returned by <b>${due_date}</b>:</p>
+                    <ul>${itemList}</ul>
+                    <p>Please contact <a href="mailto:info@somervillemuseum.org">info@somervillemuseum.org</a> to arrange your return.</p>
+                    <p><b>Guidelines:</b></p>
+                    <p>
+                        Please return your items in the same or better condition than when you received them.
+                        If something is damaged or missing (e.g., buttons, hooks), let us know and return what you can.
+                    </p>
+                    <p>
+                        White cotton items (e.g., socks, shirts) should be washed on delicate with fragrance-free detergent,
+                        dried on low heat, and hung promptly to reduce wrinkling.
+                    </p>
+                    <p>
+                        Don’t forget accessories like belts, pins, jewelry, etc. Thank you!
+                    </p>
+                `;
+
+            await mailjet.post("send", { version: "v3.1" }).request({
+                Messages: [
+                    {
+                        From: { Email: sendEmailAddr, Name: "Somerville Museum" },
+                        To: [{ Email: borrower_email, Name: borrower_name }],
+                        Subject: subject,
+                        HTMLPart: HTMLPart,
+                    },
+                ],
+            });
+        }
+
+        res.status(200).json({ success: true, message: "Due and overdue emails sent." });
+
+    } catch (error) {
+        console.error("Error sending due emails:", error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+}
+
+
 /*---------------------------functions below not from elias + massimo----------*/
 
 
@@ -312,6 +380,8 @@ export default async function handler(req, res) {
             return handlesendOverdueEmail(req, res);
         case 'sendReturnEmail':
             return handlesendReturnEmail(req, res);
+        case 'sendDueEmails':
+            return handlesendDueEmails(req, res);
         default:
             return res.status(400).json({ error: "Invalid email type." });
     }

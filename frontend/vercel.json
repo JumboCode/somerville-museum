@@ -5,11 +5,7 @@
             "schedule": "0 0 * * *"
           },
           {
-            "path": "/api/email?action=reminder.js",
-            "schedule": "0 0 * * *"
-          },
-          {
-            "path": "/api/email?action=sendOverdueEmail.js",
+            "path": "/api/email?emailType=sendDueEmails",
             "schedule": "0 0 * * *"
           }
         ]
