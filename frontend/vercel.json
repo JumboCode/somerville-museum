@@ -3,6 +3,14 @@
           {
             "path": "/api/borrowManagement?action=overdue.js",
             "schedule": "0 0 * * *"
+          },
+          {
+            "path": "/api/email?action=reminder.js",
+            "schedule": "0 0 * * *"
+          },
+          {
+            "path": "/api/email?action=sendOverdueEmail.js",
+            "schedule": "0 0 * * *"
           }
         ]
       }
