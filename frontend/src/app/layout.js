@@ -55,10 +55,8 @@ export default function RootLayout({ children, currentPage }) {
                 <head>
                     <title>Database</title>
                     <meta name="description" content="Database for the Somerville Museum" />
-                    {/* favicon svg */}
-                    <link rel="icon" type="image/svg+xml" href="/sm-logo.svg" />
-                    {/* favicon png as backup */}
-                    <link rel="icon" type="image/png" sizes="32x32" href="/sm-logo.png" />
+                    {/* favicon */}
+                    <link rel="icon" href="/favicon.ico" />
                 </head>
                 <body>
                     <div className="app-layout">
