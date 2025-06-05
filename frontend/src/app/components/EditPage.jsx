@@ -190,7 +190,7 @@ export default function EditPage({ unit }) {
     
         setPriceText(value ? `$${value}` : "");
     };
-
+    
     // Function to format price as currency
     const formatPrice = () => {
         if (priceText === "") return;
@@ -227,6 +227,21 @@ export default function EditPage({ unit }) {
                 return prevSelected; 
             }
         });
+    };
+
+    const handleconditionOptionSelect = (selectedConditions) => {
+    
+        // Ensure selectedConditions is always an array
+        if (!Array.isArray(selectedConditions)) {
+            setconditionOption([]); // Set to empty array if selection is cleared
+            return;
+        }
+    
+        // Extract only names, handling undefined values safely
+        const selectedNames = selectedConditions.map(item => item?.name || "").filter(name => name !== "");
+    
+        // Update state
+        setconditionOption(selectedNames);
     };
 
     // Fetch data from the API about the item to edit
